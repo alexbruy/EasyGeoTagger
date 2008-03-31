@@ -1,5 +1,7 @@
 #include "egtexifio.h"
 
+#include "egtlogger.h"
+
 #include <image.hpp>
 #include <exif.hpp>
 #include <cassert>
@@ -9,6 +11,7 @@
 
 QString EgtExifIO::buildPath(const QModelIndex& theIndex)
 {
+  EgtDebug("buildPath()");
   if(!theIndex.isValid()) { return ""; }
   
   if(!theIndex.parent().isValid())
@@ -25,6 +28,7 @@ QString EgtExifIO::buildPath(const QModelIndex& theIndex)
 
 bool EgtExifIO::hasGpsExif(QString theFile)
 {
+  EgtDebug("hasGpsExif()");
   try 
   {
     Exiv2::Image::AutoPtr lvImage = Exiv2::ImageFactory::open(qPrintable(theFile));
@@ -49,6 +53,7 @@ bool EgtExifIO::hasGpsExif(const QModelIndex& theIndex)
 
 bool EgtExifIO::isDirectory(QString thePath)
 {
+  EgtDebug("isDirectory()");
   QFileInfo lvFileInfo(thePath);
   return lvFileInfo.isDir();
 }
@@ -60,6 +65,7 @@ bool EgtExifIO::isDirectory(const QModelIndex& theIndex)
 
 bool EgtExifIO::isValidImage(QString theFile)
 {
+  EgtDebug("isValidImage()");
   try 
   {
     Exiv2::Image::AutoPtr lvImage = Exiv2::ImageFactory::open(qPrintable(theFile));

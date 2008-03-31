@@ -1,5 +1,8 @@
-#include "egtexifio.h"
+
 #include "egtmainwindow.h"
+
+#include "egtlogger.h"
+#include "egtexifio.h"
 #include "egtitemdelegate.h"
 
 #include <image.hpp>
@@ -11,6 +14,7 @@
 
 EgtMainWindow::EgtMainWindow()
 {
+  EgtDebug("EgtMainWindow()");
   setupUi(this);
   connect(tvFileBrowser, SIGNAL(clicked(const QModelIndex&)), this, SLOT(clicked(const QModelIndex&)));  
   connect(tvFileBrowser, SIGNAL(expanded(const QModelIndex&)), this, SLOT(expanded(const QModelIndex&)));
@@ -33,6 +37,7 @@ EgtMainWindow::EgtMainWindow()
 
 QString EgtMainWindow::buildPath(const QModelIndex& theIndex)
 {
+  EgtDebug("buildPath()");
   if(!theIndex.isValid()) { return ""; }
   
   if(!theIndex.parent().isValid())
@@ -55,6 +60,7 @@ QString EgtMainWindow::buildPath(const QModelIndex& theIndex)
 
 void EgtMainWindow::clicked(const QModelIndex& theIndex)
 {
+  EgtDebug("clicked()");
   QString lvCurrentFile = buildPath(theIndex);
   cvFileInfo.setFile(lvCurrentFile);
   if(cvFileInfo.isDir())
@@ -99,6 +105,7 @@ void EgtMainWindow::clicked(const QModelIndex& theIndex)
 
 void EgtMainWindow::expanded(const QModelIndex& theIndex)
 {
+  EgtDebug("expanded()");
   int lvChildCount = 0;
   while(theIndex.child(lvChildCount, 0).isValid())
   {
