@@ -10,6 +10,9 @@ class EgtExifIO
 public:
   EgtExifIO() {}
   
+  float getLatitude(QString);
+  float getLongitude(QString);
+  
   bool hasGpsExif(QString);
   bool hasGpsExif(const QModelIndex&);
   

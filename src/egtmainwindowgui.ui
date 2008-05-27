@@ -6,15 +6,15 @@
     <x>0</x>
     <y>0</y>
     <width>943</width>
-    <height>662</height>
+    <height>661</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>EasyGeoTagger - Alpha Works - Do Not Distribute</string>
+   <string>EasyGeoTagger - Alpha Version revision 5 - Do Not Distribute - Biodiversity Informatics Facility - AMNH</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
-   <layout class="QVBoxLayout" >
-    <item>
+   <layout class="QGridLayout" >
+    <item row="0" column="0" colspan="2" >
      <widget class="QSplitter" name="splitter" >
       <property name="orientation" >
        <enum>Qt::Horizontal</enum>
@@ -125,6 +125,26 @@ p, li { white-space: pre-wrap; }
       </widget>
      </widget>
     </item>
+    <item row="1" column="0" >
+     <widget class="QPushButton" name="pbtnCreateLayerFromDir" >
+      <property name="text" >
+       <string>Create layer from Dir</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" >
+     <spacer>
+      <property name="orientation" >
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" >
+       <size>
+        <width>791</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar" >
@@ -133,7 +153,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>943</width>
-     <height>29</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>
