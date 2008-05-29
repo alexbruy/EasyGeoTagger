@@ -7,10 +7,18 @@
 
 class EgtItemDelegate : public QItemDelegate
 {
+  Q_OBJECT
 
 public:
   EgtItemDelegate();
   void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
+
+public slots:
+  void displayGpsExifAvailability(int);
+
+private:
+  bool cvDisplayGpsExifAvailability;
+
 
 };
 #endif

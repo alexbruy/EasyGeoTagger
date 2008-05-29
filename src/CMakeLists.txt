@@ -26,6 +26,7 @@ SET(EasyGT_SRCS
 
 SET(EasyGT_MOC_HDRS
     egtmainwindow.h
+    egtitemdelegate.h
    )
    
 SET(EasyGT_UIS

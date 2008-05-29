@@ -31,7 +31,9 @@ EgtMainWindow::EgtMainWindow()
   tvFileBrowser->setCurrentIndex(lvModel->index(QDir::currentPath()));
   tvFileBrowser->scrollTo(lvModel->index(QDir::currentPath()));
   
-  tvFileBrowser->setItemDelegate(new EgtItemDelegate());
+  EgtItemDelegate* lvItemDelegate =  new EgtItemDelegate();
+  connect(chkbColorCodeFilenames, SIGNAL(stateChanged(int)), lvItemDelegate, SLOT(displayGpsExifAvailability(int)));
+  tvFileBrowser->setItemDelegate(lvItemDelegate);
   tvFileBrowser->setStyleSheet("QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }");
     
   twExif->setColumnCount(2);
