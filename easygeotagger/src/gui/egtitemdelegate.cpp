@@ -23,7 +23,9 @@ void EgtItemDelegate::displayGpsExifAvailability(int theState)
 
 void EgtItemDelegate::paint(QPainter* thePainter, const QStyleOptionViewItem& theOption, const QModelIndex& theIndex ) const
 {
+
   QStyleOptionViewItem lvViewOption(theOption);
+/*
   if(cvDisplayGpsExifAvailability)
   {
     EgtExifIO lvExifIO;
@@ -51,7 +53,7 @@ void EgtItemDelegate::paint(QPainter* thePainter, const QStyleOptionViewItem& th
       lvViewOption.palette.setColor(QPalette::Text, Qt::gray);
     }
   }
-    
+*/  
   QItemDelegate::paint(thePainter, lvViewOption, theIndex);
 }
 
