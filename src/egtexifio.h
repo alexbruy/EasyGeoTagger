@@ -8,7 +8,7 @@ class EgtExifIO
 {
 
 public:
-  EgtExifIO() {}
+  EgtExifIO( QString theImageFile );
   
   float getLatitude(QString);
   float getLongitude(QString);
@@ -20,10 +20,15 @@ public:
   bool isDirectory(const QModelIndex&);
   bool isValidImage(QString);
   bool isValidImage(const QModelIndex&);
+
+  QString read(QString);
   
   
 private:
   QString buildPath(const QModelIndex&); 
-
+  QString cvImageFile;
+  bool cvIsValidImage;
+  bool cvHasGpsExif;
+  
 };
 #endif
