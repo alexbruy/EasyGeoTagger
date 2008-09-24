@@ -145,6 +145,7 @@ void EgtMainWindow::on_pbtnCreateLayerFromDir_clicked()
       
       int lvExportedImages = 0;
       int lvChildCount = 0;
+/*
       EgtExifIO lvEEIO;
       QModelIndex lvCurrentIndex = tvFileBrowser->currentIndex();
       while(lvCurrentIndex.child(lvChildCount, 0).isValid())
@@ -161,6 +162,7 @@ void EgtMainWindow::on_pbtnCreateLayerFromDir_clicked()
     
       lvOutputFile.close();
       QMessageBox::warning(this, tr("Export Complete"), tr("%n images exported.", "", lvExportedImages) );
+*/
     }
     else
     {

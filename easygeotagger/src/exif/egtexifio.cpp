@@ -17,8 +17,8 @@
 EgtExifIO::EgtExifIO( QString theImageFile )
 {
   cvImageFile = theImageFile;
-  cvHasGpsExif = hasGpsExif(theFile);
-  cvIsValidImage = isValidImage(theFile);
+  cvHasGpsExif = hasGpsExif(theImageFile);
+  cvIsValidImage = isValidImage(theImageFile);
 }
 
 QString EgtExifIO::buildPath(const QModelIndex& theIndex)
@@ -201,7 +201,7 @@ bool EgtExifIO::isValidImage(const QModelIndex& theIndex)
 QString EgtExifIO::read(QString theKey)
 {
   EgtDebug("read()");
-  if(cvHasGpsExif))
+  if(cvHasGpsExif)
   {
     try 
     {

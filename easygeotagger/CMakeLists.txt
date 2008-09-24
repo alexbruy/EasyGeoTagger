@@ -15,7 +15,7 @@ INCLUDE_DIRECTORIES(
   ${EasyGT_SOURCE_DIR}/src/core
   ${EasyGT_SOURCE_DIR}/src/exif
   ${EasyGT_SOURCE_DIR}/src/gui
-  ${CMAKE_BINARY_DIR}/ui
+  ${CMAKE_BINARY_DIR}/src/ui
   ${CMAKE_BINARY_DIR}
   .
 )
