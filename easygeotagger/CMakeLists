@@ -1,0 +1,52 @@
+PROJECT(EasyGT)
+
+FIND_PACKAGE(Qt4 REQUIRED)
+
+IF (CMAKE_BUILD_TYPE MATCHES Debug)
+  ADD_DEFINITIONS(-DEGTDEBUG=1)
+ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
+
+FIND_PATH(EXIV2_INCLUDE_DIR exif.hpp /usr/local/include/exiv2 /usr/include/exiv2)
+FIND_LIBRARY(EXIV2_LIBRARY NAMES exiv2 PATHS /usr/local/lib /usr/lib)
+
+INCLUDE(${QT_USE_FILE})
+INCLUDE_DIRECTORIES(
+  ${EXIV2_INCLUDE_DIR}
+  ${EasyGT_SOURCE_DIR}/src/core
+  ${EasyGT_SOURCE_DIR}/src/exif
+  ${EasyGT_SOURCE_DIR}/src/gui
+  ${CMAKE_BINARY_DIR}/ui
+  ${CMAKE_BINARY_DIR}
+  .
+)
+
+SUBDIRS(ui core exif gui)
+
+SET(EasyGT_APP_SRCS
+    main.cpp
+   )
+
+QT4_AUTOMOC(${EasyGT_APP_SRCS})
+
+SET(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install)
+
+# use, i.e. don't skip the full RPATH for the build tree
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
+
+# the RPATH to be used when installing
+SET(CMAKE_INSTALL_RPATH ".:lib:./lib")
+
+IF(WIN32)
+  ADD_EXECUTABLE(EasyGT WIN32 ${EasyGT_APP_SRCS} )
+ELSE(WIN32)
+  ADD_EXECUTABLE(EasyGT ${EasyGT_APP_SRCS})
+ENDIF(WIN32)
+
+TARGET_LINK_LIBRARIES(EasyGT egt_core egt_exif egt_gui ${QT_LIBRARIES} ${EXIV2_LIBRARY})
+
+SET(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install)
+INSTALL(TARGETS EasyGT DESTINATION ${CMAKE_INSTALL_PREFIX})
