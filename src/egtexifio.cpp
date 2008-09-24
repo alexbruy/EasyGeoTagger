@@ -13,6 +13,14 @@
 //TODO: This class operates far to statically, make it more of a real class constructor takes QString or QModelIndex,
 //TODO: Add set file class like QFileInfo
 
+
+EgtExifIO::EgtExifIO( QString theImageFile )
+{
+  cvImageFile = theImageFile;
+  cvHasGpsExif = hasGpsExif(theFile);
+  cvIsValidImage = isValidImage(theFile);
+}
+
 QString EgtExifIO::buildPath(const QModelIndex& theIndex)
 {
   //EgtDebug("buildPath()");
@@ -188,6 +196,35 @@ bool EgtExifIO::isValidImage(QString theFile)
 bool EgtExifIO::isValidImage(const QModelIndex& theIndex)
 {
   return isValidImage(buildPath(theIndex));
+}
+
+QString EgtExifIO::read(QString theKey)
+{
+  EgtDebug("read()");
+  if(cvHasGpsExif))
+  {
+    try 
+    {
+      Exiv2::Image::AutoPtr lvImage = Exiv2::ImageFactory::open( cvImageFile.toStdString() );
+      assert(lvImage.get() != 0);
+      lvImage->readMetadata();
+      
+      Exiv2::ExifKey lvKey( theKey.toStdString() );
+      Exiv2::ExifData::iterator it = lvImage->exifData().findKey(lvKey);
+      if(it == lvImage->exifData().end())
+        return "";
+
+      QString lvIteratorValue( it->value().toString().c_str() );
+      return lvIteratorValue;
+    }
+    catch (Exiv2::AnyError& e)
+    {
+      return "";
+    }
+  }
+  
+  return "";
+
 }
 
 
