@@ -10,8 +10,8 @@ class EgtExifIO
 public:
   EgtExifIO( QString theImageFile );
   
-  float getLatitude(QString);
-  float getLongitude(QString);
+  float getLatitude();
+  float getLongitude();
   
   bool hasGpsExif(QString);
   bool hasGpsExif(const QModelIndex&);
@@ -20,6 +20,9 @@ public:
   bool isDirectory(const QModelIndex&);
   bool isValidImage(QString);
   bool isValidImage(const QModelIndex&);
+  
+  bool setLatitude(QString);
+  bool setLongitude(QString);
 
   
   
@@ -29,9 +32,10 @@ private:
   QString read(QString);
   float tokenizeCoordinate(QString);
   QString cvImageFile;
+  
   bool cvIsValidImage;
   bool cvHasGpsExif;
-  bool :write(QString, QVariant);
+  bool write(QString, QString);
   
 };
 #endif
