@@ -21,11 +21,13 @@ public:
   bool isValidImage(QString);
   bool isValidImage(const QModelIndex&);
 
-  QString read(QString);
+  
   
   
 private:
   QString buildPath(const QModelIndex&); 
+  QString read(QString);
+  float tokenizeCoordinate(QString);
   QString cvImageFile;
   bool cvIsValidImage;
   bool cvHasGpsExif;

@@ -17,8 +17,8 @@
 EgtExifIO::EgtExifIO( QString theImageFile )
 {
   cvImageFile = theImageFile;
-  cvHasGpsExif = hasGpsExif(theImageFile);
-  cvIsValidImage = isValidImage(theImageFile);
+  cvHasGpsExif = hasGpsExif(theFile);
+  cvIsValidImage = isValidImage(theFile);
 }
 
 QString EgtExifIO::buildPath(const QModelIndex& theIndex)
@@ -39,105 +39,49 @@ QString EgtExifIO::buildPath(const QModelIndex& theIndex)
 }
 
 //This is a real hack to prove a concept
-float EgtExifIO::getLatitude(QString theFile)
+float EgtExifIO::getLatitude()
 {
   EgtDebug("getLatitude()");
-  if(hasGpsExif(theFile))
-  {
-    try 
-    {
-      Exiv2::Image::AutoPtr lvImage = Exiv2::ImageFactory::open(qPrintable(theFile));
-      assert(lvImage.get() != 0);
-      lvImage->readMetadata();
+    
+  QString lvValue = read("Exif.GPSInfo.GPSLatitudeRef");
       
-      Exiv2::ExifKey lvKey("Exif.GPSInfo.GPSLatitudeRef");
-      Exiv2::ExifData::iterator it = lvImage->exifData().findKey(lvKey);
-      if(it == lvImage->exifData().end())
-        return 0.0;
-      int lvNorthing = 1;
-      QString lvIteratorValue(it->value().toString().c_str());
-      if(lvIteratorValue.compare("S", Qt::CaseSensitive) == 0)
-      {
-        lvNorthing = -1;
-      }
-      
-      lvKey = Exiv2::ExifKey("Exif.GPSInfo.GPSLatitude");
-      it = lvImage->exifData().findKey(lvKey);
-      if(it == lvImage->exifData().end())
-        return 0.0;
-      EgtDebug(it->value().toString().c_str());
-      
-      float lvLatitude = 0.0;
-      for(int runner = it->value().count() - 1; runner >= 0; runner--)
-      {
-        lvLatitude = lvLatitude + it->value().toFloat(runner);
-        if(runner != 0)
-        {
-          lvLatitude = lvLatitude / 60.0;
-        }
-      }
-      
-      return lvLatitude * lvNorthing;
+  if(QString::compare( lvValue, "" ) == 0)
+    return 0.0;
 
-    }
-    catch (Exiv2::AnyError& e)
-    {
-      return 0.0;
-    }
-  }
-  
-  return 0.0;
+  int lvNorthing = 1;
+      
+  if(QString::compare( lvValue, "S" ) == 0)
+    lvNorthing = -1;
+      
+  lvValue = read("Exif.GPSInfo.GPSLatitude");
+      
+  if(QString::compare( lvValue, "" ) == 0)
+    return 0.0;
+      
+  return tokenizeCoordinate(lvValue)*lvNorthing;
 }
 
 //This is a real hack to prove a concept
-float EgtExifIO::getLongitude(QString theFile)
+float EgtExifIO::getLongitude()
 {
   EgtDebug("getLongitude()");
-  if(hasGpsExif(theFile))
-  {
-    try 
-    {
-      Exiv2::Image::AutoPtr lvImage = Exiv2::ImageFactory::open(qPrintable(theFile));
-      assert(lvImage.get() != 0);
-      lvImage->readMetadata();
+    
+      QString lvValue = read("Exif.GPSInfo.GPSLongitudeRef");
       
-      Exiv2::ExifKey lvKey("Exif.GPSInfo.GPSLongitudeRef");
-      Exiv2::ExifData::iterator it = lvImage->exifData().findKey(lvKey);
-      if(it == lvImage->exifData().end())
+      if(QString::compare( lvValue, "" ) == 0)
         return 0.0;
-      int lvEasting = 1;
-      QString lvIteratorValue(it->value().toString().c_str());
-      if(lvIteratorValue.compare("W", Qt::CaseSensitive) == 0)
-      {
-        lvEasting = -1;
-      }
-      
-      lvKey = Exiv2::ExifKey("Exif.GPSInfo.GPSLongitude");
-      it = lvImage->exifData().findKey(lvKey);
-      if(it == lvImage->exifData().end())
-        return 0.0;
-      EgtDebug(it->value().toString().c_str());
-      
-      float lvLongitude = 0.0;
-      for(int runner = it->value().count() - 1; runner >= 0; runner--)
-      {
-        lvLongitude = lvLongitude + it->value().toFloat(runner);
-        if(runner != 0)
-        {
-          lvLongitude = lvLongitude / 60.0;
-        }
-      }
-      
-      return lvLongitude * lvEasting;
 
-    }
-    catch (Exiv2::AnyError& e)
-    {
-      return 0.0;
-    }
-  }
-  
-  return 0.0;
+      int lvNorthing = 1;
+      
+      if(QString::compare( lvValue, "W" ) == 0)
+        lvNorthing = -1;
+      
+      lvValue = read("Exif.GPSInfo.GPSLongitude");
+      
+      if(QString::compare( lvValue, "" ) == 0)
+        return 0.0;
+
+      return tokenizeCoordinate(lvValue)*lvNorthing;
 }
 
 bool EgtExifIO::hasGpsExif(QString theFile)
@@ -201,7 +145,7 @@ bool EgtExifIO::isValidImage(const QModelIndex& theIndex)
 QString EgtExifIO::read(QString theKey)
 {
   EgtDebug("read()");
-  if(cvHasGpsExif)
+  if(cvHasGpsExif))
   {
     try 
     {
@@ -225,6 +169,55 @@ QString EgtExifIO::read(QString theKey)
   
   return "";
 
+}
+
+float EgtExifIO::tokenizeCoordinate(QString theString)
+{
+  int lvValue1 = 0;
+  bool lvValue1Done = false;
+  int lvValue2 = 0;
+  bool lvNumberFound = false;
+  float lvCoordinate = 0.0;
+  bool lvFirstRationalDone = false;
+
+  for(int i=0; i<theString.length(); i++)
+  {
+    if( theString[i].digitValue()!= -1 )
+    {
+      if(!lvValue1Done)
+      {
+        lvNumberFound = true;
+	lvValue1=theString[i].digitValue()+lvValue1*10;
+      }
+      else
+      {
+        lvValue2=theString[i].digitValue()+lvValue2*10;
+      }		
+    }
+		
+    else if( theString[i] =="/" )
+    {
+      lvValue1Done = true;
+    }
+		
+    else if( theString[i] == ' ' && lvNumberFound )
+    {
+      lvCoordinate = lvCoordinate + lvValue1/lvValue2;
+      if(lvFirstRationalDone)
+      {
+        lvCoordinate = lvCoordinate / 60.0;
+      }
+      lvFirstRationalDone = true;
+      lvValue1 = 0;
+      lvValue2 = 0;
+      lvValue1Done = false;
+    }
+  }
+
+  lvCoordinate = lvCoordinate + lvValue1/lvValue2;
+  lvCoordinate = lvCoordinate / 60.0;
+          
+  return lvCoordinate;
 }
 
 
