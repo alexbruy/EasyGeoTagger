@@ -3,24 +3,22 @@
 
 #include <QModelIndex>
 
+#include <image.hpp>
+#include <exif.hpp>
 
 class EgtExifIO
 {
 
 public:
-  EgtExifIO( QString theImageFile );
+  EgtExifIO( QString );
   
   float getLatitude();
   float getLongitude();
   
-  bool hasGpsExif(QString);
-  bool hasGpsExif(const QModelIndex&);
+  bool hasGpsExif();
+  bool isValidImage();
   
-  bool isDirectory(QString);
-  bool isDirectory(const QModelIndex&);
-  bool isValidImage(QString);
-  bool isValidImage(const QModelIndex&);
-  
+  void setFile( QString theImageFilename );
   bool setLatitude(QString);
   bool setLongitude(QString);
 
@@ -28,11 +26,11 @@ public:
   
   
 private:
-  QString buildPath(const QModelIndex&); 
   QString read(QString);
   float tokenizeCoordinate(QString);
-  QString cvImageFile;
   
+  QString cvImageFile;
+  Exiv2::Image::AutoPtr cvImage;
   bool cvIsValidImage;
   bool cvHasGpsExif;
   bool write(QString, QString);
