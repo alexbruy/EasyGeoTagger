@@ -31,6 +31,7 @@ private:
   QString cvImageFile;
   bool cvIsValidImage;
   bool cvHasGpsExif;
+  bool :write(QString, QVariant);
   
 };
 #endif

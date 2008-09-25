@@ -171,6 +171,16 @@ QString EgtExifIO::read(QString theKey)
 
 }
 
+bool EgtExifIO::setLongitude(QString theValue)
+{
+	return write("Exif.GPSInfo.GPSLongitude", theValue);
+}
+
+bool EgtExifIO::setLatitude(QString theValue)
+{
+  return write("Exif.GPSInfo.GPSLatitude", theValue);
+}
+
 float EgtExifIO::tokenizeCoordinate(QString theString)
 {
   int lvValue1 = 0;
@@ -219,5 +229,99 @@ float EgtExifIO::tokenizeCoordinate(QString theString)
           
   return lvCoordinate;
 }
+
+bool EgtExifIO::write(QString theKey, QString theString)
+{
+  EgtDebug("write()");
+  if(cvHasGpsExif))
+  {
+    try 
+    {
+      Exiv2::ExifData exifData;
+      Exiv2::ExifKey key(theKey.toStdString());
+      
+      QString lvTypeName = exifData[theKey.toStdString()]->typeName(); 
+      if(QString::compare( lvVTypeName, "Ascii" ) == 0)
+      {
+      	Exiv2::Value::AutoPtr v = Exiv2::Value::create(Exiv2::asciiString);
+    		rv->read( theString.toStdString() );
+        exifData.add(key, rv.get());
+      }
+      else if(QString::compare( lvVTypeName, "Rational" ) == 0)
+      {
+      	Exiv2::Value::AutoPtr v = Exiv2::Value::create(Exiv2::unsignedRational);
+    		rv->read( theString.toStdString() );
+        exifData.add(key, rv.get());
+      }
+      else if(QString::compare( lvVTypeName, "SRational" ) == 0)
+      {
+      	Exiv2::Value::AutoPtr v = Exiv2::Value::create(Exiv2::signedRational);
+    		rv->read( theString.toStdString() );
+        exifData.add(key, rv.get());
+      }
+      else if(QString::compare( lvVTypeName, "Short" ) == 0)
+      {
+      	Exiv2::Value::AutoPtr v = Exiv2::Value::create(Exiv2::unsignedShort);
+    		rv->read( theString.toStdString() );
+        exifData.add(key, rv.get());
+      }
+      else if(QString::compare( lvVTypeName, "SShort" ) == 0)
+      {
+      	Exiv2::Value::AutoPtr v = Exiv2::Value::create(Exiv2::signedShort  );
+    		rv->read( theString.toStdString() );
+        exifData.add(key, rv.get());
+      }
+      else if(QString::compare( lvVTypeName, "Byte" ) == 0)
+      {
+      	Exiv2::Value::AutoPtr v = Exiv2::Value::create(Exiv2::unsignedByte );
+    		rv->read( theString.toStdString() );
+        exifData.add(key, rv.get());
+      }
+      else if(QString::compare( lvVTypeName, "SByte" ) == 0)
+      {
+      	Exiv2::Value::AutoPtr v = Exiv2::Value::create(Exiv2::signedByte );
+    		rv->read( theString.toStdString() );
+        exifData.add(key, rv.get());
+      }
+      else if(QString::compare( lvVTypeName, "Long" ) == 0)
+      {
+      	Exiv2::Value::AutoPtr v = Exiv2::Value::create(Exiv2::unsignedLong );
+    		rv->read( theString.toStdString() );
+        exifData.add(key, rv.get());
+      }
+      else if(QString::compare( lvVTypeName, "SLong" ) == 0)
+      {
+      	Exiv2::Value::AutoPtr v = Exiv2::Value::create(Exiv2::signedLong  );
+    		rv->read( theString.toStdString() );
+        exifData.add(key, rv.get());
+      }
+      else //Undefined
+      {
+      	Exiv2::Value::AutoPtr v = Exiv2::Value::create(Exiv2::undefined );
+    		rv->read( theString.toStdString() );
+        exifData.add(key, rv.get());
+      }
+      
+      // Writing the exif data to the image file
+      Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(cvImageFile.toStdString());
+      assert(image.get() != 0);
+
+      image->setExifData(exifData);
+      image->writeMetadata();
+      return true;
+      
+      
+    }
+    catch (Exiv2::AnyError& e)
+    {
+      std::cout << "Caught Exiv2 exception '" << e << "'\n";
+      return false;
+    }
+  }
+  
+  return false;
+
+}
+ 
 
 
