@@ -3,29 +3,30 @@
  *   tim@linfiniti.com                                                     *
  *                                                                         *
  *   This is a plugin generated from the QGIS plugin template              *
+ *   and filled in by Peter J. Ersts                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifndef ExifProviderTestGUI_H
-#define ExifProviderTestGUI_H
+#ifndef LoadExifDatasetGUI_H
+#define LoadExifDatasetGUI_H
 
 #include <QDialog>
 #include <QString>
 
-#include <ui_exifprovidertestguibase.h>
+#include <ui_loadexifdatasetguibase.h>
 
 /**
 @author Tim Sutton
 */
-class ExifProviderTestGui : public QDialog, private Ui::ExifProviderTestGuiBase
+class LoadExifDatasetGui : public QDialog, private Ui::LoadExifDatasetGuiBase
 {
     Q_OBJECT
   public:
-    ExifProviderTestGui( QWidget* parent = 0, Qt::WFlags fl = 0 );
-    ~ExifProviderTestGui();
+    LoadExifDatasetGui( QWidget* parent = 0, Qt::WFlags fl = 0 );
+    ~LoadExifDatasetGui();
 
   private:
     static const int context_id = 0;

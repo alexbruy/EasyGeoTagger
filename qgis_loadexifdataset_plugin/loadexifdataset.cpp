@@ -1,10 +1,10 @@
 /***************************************************************************
-  exifprovidertest.cpp
-  Test EXIF Provider
+  loadexifdataset.cpp
+  Load EXIF Dataset
   -------------------
-         begin                : [PluginDate]
-         copyright            : [(C) Your Name and Date]
-         email                : [Your Email]
+         begin                : 2008-09-19
+         copyright            : (C) Peter J. Ersts 2008
+         email                : ersts at amnh.org
 
  ***************************************************************************
  *                                                                         *
@@ -23,8 +23,8 @@
 #include <qgisinterface.h>
 #include <qgisgui.h>
 
-#include "exifprovidertest.h"
-#include "exifprovidertestgui.h"
+#include "loadexifdataset.h"
+#include "loadexifdatasetgui.h"
 
 //
 // Qt4 Related Includes
@@ -35,9 +35,9 @@
 
 
 static const char * const sIdent = "$Id: plugin.cpp 9327 2008-09-14 11:18:44Z jef $";
-static const QString sName = QObject::tr( "ExifProviderTest" );
-static const QString sDescription = QObject::tr( "Test EXIF Provider" );
-static const QString sPluginVersion = QObject::tr( "Version 0.1" );
+static const QString sName = QObject::tr( "LoadEXIFDataset" );
+static const QString sDescription = QObject::tr( "Load EXIF Dataset" );
+static const QString sPluginVersion = QObject::tr( "Version 0.2" );
 static const QgisPlugin::PLUGINTYPE sPluginType = QgisPlugin::UI;
 
 //////////////////////////////////////////////////////////////////////
@@ -51,13 +51,13 @@ static const QgisPlugin::PLUGINTYPE sPluginType = QgisPlugin::UI;
  * an interface object that provides access to exposed functions in QGIS.
  * @param theQGisInterface - Pointer to the QGIS interface object
  */
-ExifProviderTest::ExifProviderTest( QgisInterface * theQgisInterface ):
+LoadExifDataset::LoadExifDataset( QgisInterface * theQgisInterface ):
     QgisPlugin( sName, sDescription, sPluginVersion, sPluginType ),
     mQGisIface( theQgisInterface )
 {
 }
 
-ExifProviderTest::~ExifProviderTest()
+LoadExifDataset::~LoadExifDataset()
 {
 
 }
@@ -66,22 +66,22 @@ ExifProviderTest::~ExifProviderTest()
  * Initialize the GUI interface for the plugin - this is only called once when the plugin is
  * added to the plugin registry in the QGIS application.
  */
-void ExifProviderTest::initGui()
+void LoadExifDataset::initGui()
 {
 
   // Create the action for tool
-  mQActionPointer = new QAction( QIcon( ":/exifprovidertest/exifprovidertest.png" ), tr( "ExifProviderTest" ), this );
+  mQActionPointer = new QAction( QIcon( ":/loadexifdataset/icon.png" ), tr( "Load Exif Dataset" ), this );
   // Set the what's this text
-  mQActionPointer->setWhatsThis( tr( "Replace this with a short description of what the plugin does" ) );
+  mQActionPointer->setWhatsThis( tr( "Create an vector point layer from a directory of geotagged images" ) );
   // Connect the action to the run
   connect( mQActionPointer, SIGNAL( triggered() ), this, SLOT( run() ) );
   // Add the icon to the toolbar
   mQGisIface->addToolBarIcon( mQActionPointer );
-  mQGisIface->addPluginToMenu( tr( "&ExifProviderTest" ), mQActionPointer );
+  mQGisIface->addPluginToMenu( tr( "&LoadExifDataset" ), mQActionPointer );
 
 }
 //method defined in interface
-void ExifProviderTest::help()
+void LoadExifDataset::help()
 {
   //implement me!
 }
@@ -90,27 +90,27 @@ void ExifProviderTest::help()
 // If you created more menu items / toolbar buttons in initiGui, you should
 // create a separate handler for each action - this single run() method will
 // not be enough
-void ExifProviderTest::run()
+void LoadExifDataset::run()
 {
-  ExifProviderTestGui *myPluginGui = new ExifProviderTestGui( mQGisIface->mainWindow(), QgisGui::ModalDialogFlags );
+  LoadExifDatasetGui *myPluginGui = new LoadExifDatasetGui( mQGisIface->mainWindow(), QgisGui::ModalDialogFlags );
   myPluginGui->setAttribute( Qt::WA_DeleteOnClose );
   connect( myPluginGui, SIGNAL( draw( QString, QString ) ), this, SLOT( draw( QString, QString ) ) );
   myPluginGui->show();
 }
 
 // Unload the plugin by cleaning up the GUI
-void ExifProviderTest::unload()
+void LoadExifDataset::unload()
 {
   // remove the GUI
-  mQGisIface->removePluginMenu( "&ExifProviderTest", mQActionPointer );
+  mQGisIface->removePluginMenu( "&LoadExifDataset", mQActionPointer );
   mQGisIface->removeToolBarIcon( mQActionPointer );
   delete mQActionPointer;
 }
 
-
-void ExifProviderTest::draw(QString theDir, QString theLayerName)
+// Slot to pass along the draw layer call
+void LoadExifDataset::draw( QString theDir, QString theLayerName )
 {
-  mQGisIface->addVectorLayer( theDir, theLayerName, "exif");
+  mQGisIface->addVectorLayer( theDir, theLayerName, "exif" );
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -132,7 +132,7 @@ void ExifProviderTest::draw(QString theDir, QString theLayerName)
 // Class factory to return a new instance of the plugin class
 QGISEXTERN QgisPlugin * classFactory( QgisInterface * theQgisInterfacePointer )
 {
-  return new ExifProviderTest( theQgisInterfacePointer );
+  return new LoadExifDataset( theQgisInterfacePointer );
 }
 // Return the name of the plugin - note that we do not user class members as
 // the class may not yet be insantiated when this method is called.

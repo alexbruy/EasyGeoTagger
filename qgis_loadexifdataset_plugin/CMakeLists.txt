@@ -41,21 +41,21 @@ ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
 ########################################################
 # Files
 
-SET (exiftest_SRCS
-     exifprovidertest.cpp
-     exifprovidertestgui.cpp
+SET (loadexifdataset_SRCS
+     loadexifdataset.cpp
+     loadexifdatasetgui.cpp
 )
 
-SET (exiftest_UIS 
-     exifprovidertestguibase.ui
+SET (loadexifdataset_UIS 
+     loadexifdatasetguibase.ui
 )
 
-SET (exiftest_MOC_HDRS
-     exifprovidertest.h
-     exifprovidertestgui.h
+SET (loadexifdataset_MOC_HDRS
+     loadexifdataset.h
+     loadexifdatasetgui.h
 )
 
-SET (exiftest_RCCS exifprovidertest.qrc)
+SET (loadexifdataset_RCCS loadexifdataset.qrc)
 
 SET (QT_USE_QT3SUPPORT FALSE)
 SET (QT_USE_QTGUI TRUE)
@@ -68,13 +68,13 @@ INCLUDE( ${QT_USE_FILE} )
 ########################################################
 # Build
 
-QT4_WRAP_UI (exiftest_UIS_H  ${exiftest_UIS})
+QT4_WRAP_UI (loadexifdataset_UIS_H  ${loadexifdataset_UIS})
 
-QT4_WRAP_CPP (exiftest_MOC_SRCS  ${exiftest_MOC_HDRS})
+QT4_WRAP_CPP (loadexifdataset_MOC_SRCS  ${loadexifdataset_MOC_HDRS})
 
-QT4_ADD_RESOURCES(exiftest_RCC_SRCS ${exiftest_RCCS})
+QT4_ADD_RESOURCES(loadexifdataset_RCC_SRCS ${loadexifdataset_RCCS})
 
-ADD_LIBRARY (exiftest MODULE ${exiftest_SRCS} ${exiftest_MOC_SRCS} ${exiftest_RCC_SRCS} ${exiftest_UIS_H})
+ADD_LIBRARY (loadexifdataset MODULE ${loadexifdataset_SRCS} ${loadexifdataset_MOC_SRCS} ${loadexifdataset_RCC_SRCS} ${loadexifdataset_UIS_H})
 
 INCLUDE_DIRECTORIES(
      ${GDAL_INCLUDE_DIR}
@@ -91,7 +91,7 @@ IF(QT_QTSQL_FOUND)
  SET(QT_LIBRARIES ${QT_LIBRARIES} ${QT_QTSQL_LIBRARY})
 ENDIF(QT_QTSQL_FOUND)
 
-TARGET_LINK_LIBRARIES(exiftest
+TARGET_LINK_LIBRARIES(loadexifdataset
   ${QT_LIBRARIES}
   ${QGIS_CORE_LIBRARY} 
   ${QGIS_GUI_LIBRARY}
@@ -103,6 +103,6 @@ TARGET_LINK_LIBRARIES(exiftest
 ########################################################
 # Install
 
-INSTALL(TARGETS exiftest
+INSTALL(TARGETS loadexifdataset
   RUNTIME DESTINATION ${QGIS_PLUGIN_DIR}
   LIBRARY DESTINATION ${QGIS_PLUGIN_DIR})

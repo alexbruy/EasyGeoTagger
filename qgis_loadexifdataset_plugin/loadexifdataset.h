@@ -1,6 +1,13 @@
 /***************************************************************************
-    exifprovidertest.h
-    -------------------
+  loadexifdataset.cpp
+  Load EXIF Dataset
+  -------------------
+         begin                : 2008-09-19
+         copyright            : (C) Peter J. Ersts 2008
+         email                : ersts at amnh.org
+
+ based on plugin template by 
+
     begin                : Jan 21, 2004
     copyright            : (C) 2004 by Tim Sutton
     email                : tim@linfiniti.com
@@ -16,25 +23,9 @@
  *                                                                         *
  ***************************************************************************/
 /*  $Id: plugin.h 9138 2008-08-23 21:37:31Z jef $ */
-/***************************************************************************
- *   QGIS Programming conventions:
- *
- *   mVariableName - a class level member variable
- *   sVariableName - a static class level member variable
- *   variableName() - accessor for a class member (no 'get' in front of name)
- *   setVariableName() - mutator for a class member (prefix with 'set')
- *
- *   Additional useful conventions:
- *
- *   theVariableName - a method parameter (prefix with 'the')
- *   myVariableName - a locally declared variable within a method ('my' prefix)
- *
- *   DO: Use mixed case variable names - myVariableName
- *   DON'T: separate variable names using underscores: my_variable_name (NO!)
- *
- * **************************************************************************/
-#ifndef ExifProviderTest_H
-#define ExifProviderTest_H
+
+#ifndef LoadExifDataset_H
+#define LoadExifDataset_H
 
 //QT4 includes
 #include <QObject>
@@ -53,7 +44,7 @@ class QgisInterface;
 * \brief [name] plugin for QGIS
 * [description]
 */
-class ExifProviderTest: public QObject, public QgisPlugin
+class LoadExifDataset: public QObject, public QgisPlugin
 {
     Q_OBJECT
   public:
@@ -69,9 +60,9 @@ class ExifProviderTest: public QObject, public QgisPlugin
     * QGIS when it attempts to instantiate the plugin.
     * @param theInterface Pointer to the QgisInterface object.
      */
-    ExifProviderTest( QgisInterface * theInterface );
+    LoadExifDataset( QgisInterface * theInterface );
     //! Destructor
-    virtual ~ExifProviderTest();
+    virtual ~LoadExifDataset();
 
   public slots:
     //! init the gui
@@ -83,6 +74,7 @@ class ExifProviderTest: public QObject, public QgisPlugin
     //! show the help document
     void help();
     
+    //! slot to propogate draw request
     void draw( QString, QString );
 
   private:
@@ -105,4 +97,4 @@ class ExifProviderTest: public QObject, public QgisPlugin
     ////////////////////////////////////////////////////////////////////
 };
 
-#endif //ExifProviderTest_H
+#endif //LoadExifDataset_H

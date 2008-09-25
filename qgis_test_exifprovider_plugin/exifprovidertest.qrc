@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/exifprovidertest/" >
-        <file>exifprovidertest.png</file>
-    </qresource>
-</RCC>

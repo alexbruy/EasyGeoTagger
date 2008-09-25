@@ -1,21 +1,28 @@
 <ui version="4.0" >
- <class>ExifProviderTestGuiBase</class>
- <widget class="QDialog" name="ExifProviderTestGuiBase" >
+ <class>LoadExifDatasetGuiBase</class>
+ <widget class="QDialog" name="LoadExifDatasetGuiBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>997</width>
+    <width>996</width>
     <height>364</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>QGIS Plugin Template</string>
+   <string>Load EXIF Layer</string>
   </property>
   <property name="windowIcon" >
-   <iconset/>
+   <iconset resource="loadexifdataset.qrc" >:/loadexifdataset/icon.png</iconset>
   </property>
   <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>To create a point layer from a directory of EXIF geotagged images, simply select a folder and press OK</string>
+     </property>
+    </widget>
+   </item>
    <item>
     <widget class="QTreeView" name="tvDirectoryBrowser" />
    </item>
@@ -32,6 +39,8 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <resources/>
+ <resources>
+  <include location="loadexifdataset.qrc" />
+ </resources>
  <connections/>
 </ui>

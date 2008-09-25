@@ -3,13 +3,14 @@
  *   tim@linfiniti.com                                                     *
  *                                                                         *
  *   This is a plugin generated from the QGIS plugin template              *
+ *   and filled in by Peter J. Ersts                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include "exifprovidertestgui.h"
+#include "loadexifdatasetgui.h"
 #include "qgscontexthelp.h"
 
 //qt includes
@@ -17,9 +18,7 @@
 #include <QDirModel>
 #include <QFileInfo>
 
-//standard includes
-
-ExifProviderTestGui::ExifProviderTestGui( QWidget* parent, Qt::WFlags fl )
+LoadExifDatasetGui::LoadExifDatasetGui( QWidget* parent, Qt::WFlags fl )
     : QDialog( parent, fl )
 {
   setupUi( this );
@@ -32,11 +31,12 @@ ExifProviderTestGui::ExifProviderTestGui( QWidget* parent, Qt::WFlags fl )
   tvDirectoryBrowser->setStyleSheet( "QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }" );
 }
 
-ExifProviderTestGui::~ExifProviderTestGui()
+LoadExifDatasetGui::~LoadExifDatasetGui()
 {
 }
 
-QString ExifProviderTestGui::buildPath( const QModelIndex& theIndex )
+// Recursively climb the tree to build the full path to the selected file or directory
+QString LoadExifDatasetGui::buildPath( const QModelIndex& theIndex )
 {
   if( !theIndex.isValid() ) { return ""; }
   
@@ -52,13 +52,13 @@ QString ExifProviderTestGui::buildPath( const QModelIndex& theIndex )
   return buildPath( theIndex.parent() ) + QDir::toNativeSeparators ("/") + theIndex.data().toString();
 }
 
-void ExifProviderTestGui::on_buttonBox_accepted()
+void LoadExifDatasetGui::on_buttonBox_accepted()
 {
   //close the dialog
   accept();
 }
 
-void ExifProviderTestGui::on_buttonBox_clicked( QAbstractButton* theButton )
+void LoadExifDatasetGui::on_buttonBox_clicked( QAbstractButton* theButton )
 {
   if( buttonBox->standardButton ( theButton) == QDialogButtonBox::Ok )
   {
@@ -73,12 +73,12 @@ void ExifProviderTestGui::on_buttonBox_clicked( QAbstractButton* theButton )
   }
 }
 
-void ExifProviderTestGui::on_buttonBox_rejected()
+void LoadExifDatasetGui::on_buttonBox_rejected()
 {
   reject();
 }
 
-void ExifProviderTestGui::on_buttonBox_helpRequested()
+void LoadExifDatasetGui::on_buttonBox_helpRequested()
 {
   QgsContextHelp::run( context_id );
 }

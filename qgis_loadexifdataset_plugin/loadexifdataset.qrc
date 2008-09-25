@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/loadexifdataset/" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
