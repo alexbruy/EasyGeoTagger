@@ -94,7 +94,7 @@ void ExifProviderTest::run()
 {
   ExifProviderTestGui *myPluginGui = new ExifProviderTestGui( mQGisIface->mainWindow(), QgisGui::ModalDialogFlags );
   myPluginGui->setAttribute( Qt::WA_DeleteOnClose );
-  connect( myPluginGui, SIGNAL( draw( QString ) ), this, SLOT( draw( QString ) ) );
+  connect( myPluginGui, SIGNAL( draw( QString, QString ) ), this, SLOT( draw( QString, QString ) ) );
   myPluginGui->show();
 }
 
@@ -108,9 +108,9 @@ void ExifProviderTest::unload()
 }
 
 
-void ExifProviderTest::draw(QString theDir)
+void ExifProviderTest::draw(QString theDir, QString theLayerName)
 {
-  mQGisIface->addVectorLayer( theDir, "ExifTest", "exif");
+  mQGisIface->addVectorLayer( theDir, theLayerName, "exif");
 }
 
 //////////////////////////////////////////////////////////////////////////

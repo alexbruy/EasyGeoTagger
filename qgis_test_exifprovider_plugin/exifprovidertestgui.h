@@ -13,6 +13,8 @@
 #define ExifProviderTestGUI_H
 
 #include <QDialog>
+#include <QString>
+
 #include <ui_exifprovidertestguibase.h>
 
 /**
@@ -27,6 +29,7 @@ class ExifProviderTestGui : public QDialog, private Ui::ExifProviderTestGuiBase
 
   private:
     static const int context_id = 0;
+    QString buildPath(const QModelIndex& theIndex);
 
   private slots:
     void on_buttonBox_accepted();
@@ -35,7 +38,7 @@ class ExifProviderTestGui : public QDialog, private Ui::ExifProviderTestGuiBase
     void on_buttonBox_helpRequested();
   
   signals:
-    void draw(QString);
+    void draw(QString, QString);
 
 };
 

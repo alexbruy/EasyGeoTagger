@@ -13,6 +13,9 @@
 #include "qgscontexthelp.h"
 
 //qt includes
+#include <QDir>
+#include <QDirModel>
+#include <QFileInfo>
 
 //standard includes
 
@@ -20,10 +23,33 @@ ExifProviderTestGui::ExifProviderTestGui( QWidget* parent, Qt::WFlags fl )
     : QDialog( parent, fl )
 {
   setupUi( this );
+  QDirModel* lvModel = new QDirModel( QStringList(), QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot, QDir::DirsFirst );
+  
+  tvDirectoryBrowser->setModel( lvModel );
+  tvDirectoryBrowser->setColumnWidth( 0, 400 );
+  tvDirectoryBrowser->setCurrentIndex( lvModel->index( QDir::currentPath() ) );
+  tvDirectoryBrowser->scrollTo( lvModel->index( QDir::currentPath() ) );
+  tvDirectoryBrowser->setStyleSheet( "QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }" );
 }
 
 ExifProviderTestGui::~ExifProviderTestGui()
 {
+}
+
+QString ExifProviderTestGui::buildPath( const QModelIndex& theIndex )
+{
+  if( !theIndex.isValid() ) { return ""; }
+  
+  if( !theIndex.parent().isValid() )
+  {
+  #ifdef WIN32
+  return theIndex.data().toString();
+  #else
+  return "";
+  #endif
+  }
+  
+  return buildPath( theIndex.parent() ) + QDir::toNativeSeparators ("/") + theIndex.data().toString();
 }
 
 void ExifProviderTestGui::on_buttonBox_accepted()
@@ -32,12 +58,18 @@ void ExifProviderTestGui::on_buttonBox_accepted()
   accept();
 }
 
-void ExifProviderTestGui::on_buttonBox_clicked(QAbstractButton* theButton)
+void ExifProviderTestGui::on_buttonBox_clicked( QAbstractButton* theButton )
 {
-  if(buttonBox->standardButton ( theButton) == QDialogButtonBox::Ok)
+  if( buttonBox->standardButton ( theButton) == QDialogButtonBox::Ok )
   {
-    emit draw(leDirectory->text());
-    qDebug("Button pushed");
+    QFileInfo lvFileInfo;
+    QString lvCurrentFile = buildPath( tvDirectoryBrowser->currentIndex() );
+    lvFileInfo.setFile( lvCurrentFile );
+    if( !lvFileInfo.isDir() )
+    {
+      tvDirectoryBrowser->setCurrentIndex( tvDirectoryBrowser->currentIndex().parent() );
+    }
+    emit draw( buildPath( tvDirectoryBrowser->currentIndex() ), tvDirectoryBrowser->currentIndex().data().toString() );
   }
 }
 

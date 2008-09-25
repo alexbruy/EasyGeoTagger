@@ -1,15 +1,28 @@
 SET(CMAKE_COLOR_MAKEFILE ON)
 
-#Need to make this a into a find routine
-FIND_PATH(EXIV2_INCLUDE_DIR exif.hpp /usr/local/include/exiv2 /usr/include/exiv2)
-FIND_LIBRARY(EXIV2_LIBRARY NAMES exiv2 PATHS /usr/local/lib /usr/lib)
-
 # set path to additional CMake modules
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_find_rules ${CMAKE_MODULE_PATH})
+
+FIND_PACKAGE(EXIV2 REQUIRED)
+IF (NOT EXIV2_FOUND)
+  MESSAGE (SEND_ERROR "EXIV2 dependency was not found!")
+ENDIF (NOT EXIV2_FOUND)
+
 FIND_PACKAGE(QGIS REQUIRED)
 IF (NOT QGIS_FOUND)
   MESSAGE (SEND_ERROR "QGIS dependency was not found!")
 ENDIF (NOT QGIS_FOUND)
+
+FIND_PACKAGE(GDAL REQUIRED)
+IF (NOT GDAL_FOUND)
+  MESSAGE (SEND_ERROR "GDAL dependency was not found!")
+ENDIF (NOT GDAL_FOUND)
+
+FIND_PACKAGE(GEOS REQUIRED)
+IF (NOT GEOS_FOUND)
+  MESSAGE (SEND_ERROR "GEOS dependency was not found!")
+ENDIF (NOT GEOS_FOUND)
+
 IF (WIN32)
   # expect that classes are being imported by default
   # Note: MSVC doesn't like when the macros are quotes
@@ -27,16 +40,6 @@ ELSE (WIN32)
   ADD_DEFINITIONS(-DCORE_EXPORT=)
 ENDIF (WIN32)
 
-FIND_PACKAGE(GDAL REQUIRED)
-IF (NOT GDAL_FOUND)
-  MESSAGE (SEND_ERROR "GDAL dependency was not found!")
-ENDIF (NOT GDAL_FOUND)
-
-FIND_PACKAGE(GEOS REQUIRED)
-IF (NOT GEOS_FOUND)
-  MESSAGE (SEND_ERROR "GEOS dependency was not found!")
-ENDIF (NOT GEOS_FOUND)
-
 IF (CMAKE_BUILD_TYPE MATCHES Debug)
   ADD_DEFINITIONS(-DQGISDEBUG=1)
 ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
@@ -52,11 +55,7 @@ SET (exifprovider_MOC_HDRS
 )
 
 SET (QT_USE_QT3SUPPORT FALSE)
-SET (QT_USE_QTGUI TRUE)
-SET (QT_USE_QTSQL TRUE)
-SET (QT_USE_QTSVG TRUE)
 SET (QT_USE_QTXML TRUE)
-SET (QT_USE_QTNETWORK FALSE)
 FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE( ${QT_USE_FILE} )
 ########################################################

@@ -83,7 +83,7 @@ class ExifProviderTest: public QObject, public QgisPlugin
     //! show the help document
     void help();
     
-    void draw(QString);
+    void draw( QString, QString );
 
   private:
 
