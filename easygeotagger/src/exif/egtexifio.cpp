@@ -14,12 +14,16 @@ EgtExifIO::EgtExifIO( QString theImageFilename )
   setFile( theImageFilename );
 }
 
+EgtExifIO::EgtExifIO( const QModelIndex& theIndex )
+{
+  setFile( buildPath( theIndex ) );
+}
+
 /*
  *
  * PUBLIC FUNCTIONS
  *
  */
-
 //This is a real hack to prove a concept
 float EgtExifIO::getLatitude()
 {
@@ -247,6 +251,21 @@ bool EgtExifIO::write( QString theKey, QString theString )
  * PRIVATE FUNCTIONS
  *
  */
+QString EgtExifIO::buildPath(const QModelIndex& theIndex)
+{
+  if(!theIndex.isValid()) { return ""; }
+  
+  if(!theIndex.parent().isValid())
+  {
+    #ifdef WIN32
+    return theIndex.data().toString();
+    #else
+    return "";
+    #endif
+  }
+  
+  return buildPath( theIndex.parent() ) + QDir::toNativeSeparators( "/" ) + theIndex.data().toString();
+}
 
 QString EgtExifIO::read(QString theKey)
 {

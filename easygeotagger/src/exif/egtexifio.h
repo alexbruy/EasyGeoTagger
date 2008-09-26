@@ -10,6 +10,7 @@ class EgtExifIO
 {
 
 public:
+  EgtExifIO( const QModelIndex& );
   EgtExifIO( QString );
   
   float getLatitude();
@@ -26,6 +27,7 @@ public:
   
   
 private:
+  QString buildPath(const QModelIndex& theIndex);
   QString read(QString);
   float tokenizeCoordinate(QString);
   
