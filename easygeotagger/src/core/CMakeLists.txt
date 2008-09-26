@@ -1,0 +1,11 @@
+SET(EGT_CORE_SRCS
+    egtpathbuilder.cpp
+   )
+
+QT4_AUTOMOC(${EGT_CORE_SRCS})
+
+ADD_LIBRARY (egt_core SHARED ${EGT_CORE_SRCS})
+
+TARGET_LINK_LIBRARIES(egt_core ${QT_LIBRARIES} )
+
+INSTALL(TARGETS egt_core DESTINATION lib)

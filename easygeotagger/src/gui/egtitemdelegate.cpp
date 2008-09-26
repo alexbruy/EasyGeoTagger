@@ -83,23 +83,3 @@ void EgtItemDelegate::paint(QPainter* thePainter, const QStyleOptionViewItem& th
   QItemDelegate::paint(thePainter, lvViewOption, theIndex);
 }
 
-/*
- *
- * PRIVATE FUNCTIONS
- *
- */
-QString EgtItemDelegate::buildPath(const QModelIndex& theIndex) const
-{
-  if(!theIndex.isValid()) { return ""; }
-  
-  if(!theIndex.parent().isValid())
-  {
-    #ifdef WIN32
-    return theIndex.data().toString();
-    #else
-    return "";
-    #endif
-  }
-  
-  return buildPath( theIndex.parent() ) + QDir::toNativeSeparators( "/" ) + theIndex.data().toString();
-}

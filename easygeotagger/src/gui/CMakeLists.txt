@@ -14,7 +14,7 @@ QT4_WRAP_CPP(EGT_GUI_MOC_SRCS ${EGT_GUI_MOC_HDRS})
 
 ADD_LIBRARY (egt_gui SHARED ${EGT_GUI_SRCS} ${EGT_GUI_MOC_SRCS} )
 
-ADD_DEPENDENCIES(egt_gui egt_ui egt_exif)
+ADD_DEPENDENCIES(egt_gui egt_ui egt_exif egt_core)
 
 TARGET_LINK_LIBRARIES(egt_gui ${QT_LIBRARIES} )
 

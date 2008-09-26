@@ -27,7 +27,5 @@ private:
 
   bool cvDisplayGpsExifAvailability;
   //QMap< QString, EgtItemDelegate::cacheObject > cvExifCache;
-
-  QString buildPath(const QModelIndex& theIndex) const;
 };
 #endif

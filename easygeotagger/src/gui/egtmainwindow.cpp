@@ -42,23 +42,6 @@ EgtMainWindow::EgtMainWindow()
   twExif->setHorizontalHeaderLabels(QStringList() << "Key" << "Value");
 }
 
-QString EgtMainWindow::buildPath(const QModelIndex& theIndex)
-{
-  //EgtDebug("buildPath()");
-  if(!theIndex.isValid()) { return ""; }
-  
-  if(!theIndex.parent().isValid())
-  {
-  #ifdef WIN32
-  return theIndex.data().toString();
-  #else
-  return "";
-  #endif
-  }
-  
-  return buildPath(theIndex.parent()) + QDir::toNativeSeparators ("/") + theIndex.data().toString();
-}
-
 /*
  *
  * SIGNAL and SLOTS
@@ -68,7 +51,7 @@ QString EgtMainWindow::buildPath(const QModelIndex& theIndex)
 void EgtMainWindow::clicked(const QModelIndex& theIndex)
 {
   EgtDebug("clicked()");
-  QString lvCurrentFile = buildPath(theIndex);
+  QString lvCurrentFile = cvPathBuilder.buildPath(theIndex);
   cvFileInfo.setFile(lvCurrentFile);
   if(cvFileInfo.isDir())
     return;
@@ -124,14 +107,14 @@ void EgtMainWindow::on_pbtnCreateLayerFromDir_clicked()
 {
   EgtDebug("on_pbtnCreateLayerFromDir_clicked()");
   QFileInfo lvFileInfo;
-  QString lvCurrentFile = buildPath(tvFileBrowser->currentIndex());
+  QString lvCurrentFile = cvPathBuilder.buildPath(tvFileBrowser->currentIndex());
   lvFileInfo.setFile(lvCurrentFile);
   if(!lvFileInfo.isDir())
   {
     tvFileBrowser->setCurrentIndex(tvFileBrowser->currentIndex().parent());
   }
   
-  lvCurrentFile = buildPath(tvFileBrowser->currentIndex());
+  lvCurrentFile = cvPathBuilder.buildPath(tvFileBrowser->currentIndex());
   lvFileInfo.setFile(lvCurrentFile);
   if(lvFileInfo.isWritable())
   {

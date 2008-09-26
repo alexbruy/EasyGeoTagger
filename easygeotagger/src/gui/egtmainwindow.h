@@ -3,6 +3,8 @@
 
 #include "ui_egtmainwindowgui.h"
 
+#include "egtpathbuilder.h"
+
 #include <QFileInfo>
 #include <QMainWindow>
 #include <QModelIndex>
@@ -22,6 +24,6 @@ private slots:
   
 private:
   QFileInfo cvFileInfo;
-  QString buildPath(const QModelIndex& theIndex);
+  EgtPathBuilder cvPathBuilder;
 };
 #endif
