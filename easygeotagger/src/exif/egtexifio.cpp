@@ -1,7 +1,7 @@
 #include "egtexifio.h"
 
 #include "egtlogger.h"
-
+#include <math.h>
 
 #include <cassert>
 
@@ -28,46 +28,72 @@ EgtExifIO::EgtExifIO( const QModelIndex& theIndex )
 float EgtExifIO::getLatitude()
 {
   EgtDebug( "entered" );
-    
-  QString lvValue = read( "Exif.GPSInfo.GPSLatitudeRef" );
+  
+  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLatitudeRef" );
+        
       
-  if(QString::compare( lvValue, "" ) == 0)
-    return 0.0;
+  Exiv2::TypeId lvTypeId = lvValue.typeId ();
+  
+  if(lvTypeId == Exiv2::invalidTypeId)
+    return 0.0;  
 
   int lvNorthing = 1;
-      
-  if(QString::compare( lvValue, "S" ) == 0)
+
+  if(QString::compare( QString(lvValue.toString().c_str()), "S" ) == 0)
     lvNorthing = -1;
       
-  lvValue = read( "Exif.GPSInfo.GPSLatitude" );
-      
-  if( QString::compare( lvValue, "" ) == 0 )
-    return 0.0;
-      
-  return tokenizeCoordinate(lvValue)*lvNorthing;
+  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSLatitude" );
+   
+  lvTypeId = lvValue2.typeId ();   
+  if(lvTypeId == Exiv2::invalidTypeId)
+    return 0.0;  
+  
+  float lvLatitude = 0.0;
+  
+  for(int i=lvValue2.count()-1; i>=0; i--)
+  {
+  	lvLatitude+= lvValue2.toFloat(i);
+  	if(i>0)
+  		lvLatitude/= 60;
+  }
+  
+     
+  return lvLatitude;
 }
 
 //This is a real hack to prove a concept
 float EgtExifIO::getLongitude()
-{
+{  
   EgtDebug( "entered" );
-    
-  QString lvValue = read( "Exif.GPSInfo.GPSLongitudeRef" );
   
-  if( QString::compare( lvValue, "" ) == 0 )
-    return 0.0;
+  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLongitudeRef" );   
+  Exiv2::TypeId lvTypeId = lvValue.typeId ();
+  
+  if(lvTypeId == Exiv2::invalidTypeId)
+    return 0.0;  
 
   int lvNorthing = 1;
-  
-  if( QString::compare( lvValue, "W" ) == 0 )
-    lvNorthing = -1;
-  
-  lvValue = read( "Exif.GPSInfo.GPSLongitude" );
-  
-  if( QString::compare( lvValue, "" ) == 0 )
-    return 0.0;
 
-  return tokenizeCoordinate( lvValue ) * lvNorthing;
+  if(QString::compare( QString(lvValue.toString().c_str()), "S" ) == 0)
+    lvNorthing = -1;
+      
+  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSLongitude" );
+   
+  lvTypeId = lvValue2.typeId ();   
+  if(lvTypeId == Exiv2::invalidTypeId)
+    return 0.0;  
+  
+  float lvLatitude = 0.0;
+  
+  for(int i=lvValue2.count()-1; i>=0; i--)
+  {
+  	lvLatitude+= lvValue2.toFloat(i);
+  	if(i>0)
+  		lvLatitude/= 60;
+  }
+  
+     
+  return lvLatitude;
 }
 
 bool EgtExifIO::hasGpsExif()
@@ -95,11 +121,15 @@ void EgtExifIO::setFile( QString theImageFilename )
     {
       cvImage->readMetadata();
       //TODO: Change this statement, no longer works with Exiv2 v0.18
+      
       Exiv2::ExifData::iterator it = cvImage->exifData().findIfdIdIdx( Exiv2::gpsIfdId, 1 );
       if( it != cvImage->exifData().end() )
       {
         cvHasGpsExif = true;
       }
+      
+      
+      
     }
     catch ( Exiv2::AnyError& e )
     {
@@ -267,7 +297,45 @@ QString EgtExifIO::buildPath(const QModelIndex& theIndex)
   return buildPath( theIndex.parent() ) + QDir::toNativeSeparators( "/" ) + theIndex.data().toString();
 }
 
-QString EgtExifIO::read(QString theKey)
+
+const Exiv2::Value& EgtExifIO::read(QString theKey)
+{
+  EgtDebug( "entered" );
+  
+  Exiv2::DataValue lvNotValidValue(Exiv2::invalidTypeId );
+  Exiv2::Value& lvNotValid = lvNotValidValue;
+  
+  if( cvIsValidImage )
+  {
+    try 
+    {
+      EgtDebug( "Valid image, reading..." );
+      cvImage->readMetadata();
+      Exiv2::ExifKey lvKey( theKey.toStdString() );
+      Exiv2::ExifData::iterator it = cvImage->exifData().findKey( lvKey );
+      if( it == cvImage->exifData().end() )
+      {
+        EgtDebug( QString( "key ["+ theKey + "] no found" ).unicode() );
+        return lvNotValid;
+      }
+
+      EgtDebug( QString( "key ["+ theKey + "] found" ).unicode() );
+      return it->value();
+    }
+    catch (Exiv2::AnyError& e)
+    {
+      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ).unicode() );
+      return lvNotValid;
+    }
+  }
+  
+  EgtDebug( "Image is not valid" );
+  return lvNotValid; 
+
+}
+
+
+QString EgtExifIO::readKeyValueAsString(QString theKey)
 {
   EgtDebug( "entered" );
   if( cvIsValidImage )
