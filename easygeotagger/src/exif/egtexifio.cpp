@@ -131,12 +131,12 @@ void EgtExifIO::setFile( QString theImageFilename )
     }
     catch ( Exiv2::AnyError& e )
     {
-      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ).unicode() );
+      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
     }
   }
   catch ( Exiv2::AnyError& e )
   {
-    EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ).unicode() );
+    EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
   }
 }
 
@@ -235,12 +235,14 @@ bool EgtExifIO::write( QString theKey, QString theString )
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
     }
+/*
     else if( QString::compare( lvTypeName, "SByte" ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::signedByte );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
     }
+*/
     else if( QString::compare( lvTypeName, "Long" ) == 0)
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::unsignedLong );
@@ -270,7 +272,7 @@ bool EgtExifIO::write( QString theKey, QString theString )
   }
   catch ( Exiv2::AnyError& e )
   {
-    EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ).unicode() );
+    EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
     return false;
   }
 }
@@ -369,16 +371,16 @@ const Exiv2::Value& EgtExifIO::read(QString theKey)
       Exiv2::ExifData::iterator it = cvImage->exifData().findKey( lvKey );
       if( it == cvImage->exifData().end() )
       {
-        EgtDebug( QString( "key ["+ theKey + "] no found" ).unicode() );
+        EgtDebug( QString( "key ["+ theKey + "] no found" ) );
         return lvNotValid;
       }
 
-      EgtDebug( QString( "key ["+ theKey + "] found" ).unicode() );
+      EgtDebug( QString( "key ["+ theKey + "] found" ) );
       return it->value();
     }
     catch (Exiv2::AnyError& e)
     {
-      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ).unicode() );
+      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
       return lvNotValid;
     }
   }
@@ -402,17 +404,17 @@ QString EgtExifIO::readKeyValueAsString(QString theKey)
       Exiv2::ExifData::iterator it = cvImage->exifData().findKey( lvKey );
       if( it == cvImage->exifData().end() )
       {
-        EgtDebug( QString( "key ["+ theKey + "] no found" ).unicode() );
+        EgtDebug( QString( "key ["+ theKey + "] no found" ) );
         return "";
       }
 
-      EgtDebug( QString( "key ["+ theKey + "] found" ).unicode() );
+      EgtDebug( QString( "key ["+ theKey + "] found" ) );
       QString lvIteratorValue( it->value().toString().c_str() );
       return lvIteratorValue;
     }
     catch (Exiv2::AnyError& e)
     {
-      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ).unicode() );
+      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
       return "";
     }
   }
