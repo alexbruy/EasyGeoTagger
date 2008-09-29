@@ -28,6 +28,7 @@ public:
   
 private:
   QString buildPath(const QModelIndex& theIndex);
+  QString convertToRational(QString);
   const Exiv2::Value& read(QString);
   QString readKeyValueAsString(QString);
   float tokenizeCoordinate(QString);

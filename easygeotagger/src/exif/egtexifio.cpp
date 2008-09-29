@@ -83,17 +83,15 @@ float EgtExifIO::getLongitude()
   if(lvTypeId == Exiv2::invalidTypeId)
     return 0.0;  
   
-  float lvLatitude = 0.0;
+  float lvLongitude = 0.0;
   
   for(int i=lvValue2.count()-1; i>=0; i--)
   {
-  	lvLatitude+= lvValue2.toFloat(i);
+  	lvLongitude+= lvValue2.toFloat(i);
   	if(i>0)
-  		lvLatitude/= 60;
+  		lvLongitude/= 60;
   }
-  
-     
-  return lvLatitude;
+  return lvLongitude;
 }
 
 bool EgtExifIO::hasGpsExif()
@@ -162,9 +160,11 @@ bool EgtExifIO::setLongitude( QString theValue )
 			return false;
 	}
 	
-	//TODO:convert from degrees
-	return write( "Exif.GPSInfo.GPSLongitude", theValue );
+	return write( "Exif.GPSInfo.GPSLongitude", convertToRational(theValue) );
 }
+
+
+
 
 bool EgtExifIO::setLatitude( QString theValue )
 {
@@ -186,8 +186,7 @@ bool EgtExifIO::setLatitude( QString theValue )
 			return false;
 	}
 	
-	//TODO:convert from degrees
-  return write( "Exif.GPSInfo.GPSLatitude", theValue );
+  return write( "Exif.GPSInfo.GPSLatitude", convertToRational(theValue) );
 }
 
 bool EgtExifIO::write( QString theKey, QString theString )
@@ -295,6 +294,61 @@ QString EgtExifIO::buildPath(const QModelIndex& theIndex)
   }
   
   return buildPath( theIndex.parent() ) + QDir::toNativeSeparators( "/" ) + theIndex.data().toString();
+}
+
+QString EgtExifIO::convertToRational(QString theDegrees)
+{
+	const int lvInitialPrecision = 1000000;
+	bool ok;
+	double lvTheDegrees = theDegrees.toDouble(&ok);
+	if(!ok)
+		return QString( "" );
+	
+	double lvDegrees, lvMinutes, lvSeconds, lvAux;
+	/*decomposes num into its integer and fractional parts.*/
+	lvAux = modf(lvTheDegrees, &lvDegrees);
+	
+	lvAux = modf(lvAux * 60, &lvMinutes);
+	
+	lvSeconds = lvAux * 60;
+	
+	int lvDegreesInt = round(lvDegrees * lvInitialPrecision);
+	int lvMinutesInt = round(lvMinutes * lvInitialPrecision);
+	int lvSecondsInt = round(lvSeconds * lvInitialPrecision);
+	
+	int lvDegreesPrecision = lvInitialPrecision;
+	int lvMinutesPrecision = lvInitialPrecision;
+	int lvSecondsPrecision = lvInitialPrecision;
+	
+	while (lvDegreesInt % 10 == 0)
+	{
+		lvDegreesInt/= 10;
+		lvDegreesPrecision/= 10;
+	}
+	
+	while (lvMinutesInt % 10 == 0)
+	{
+		lvMinutesInt/= 10;
+		lvMinutesPrecision/= 10;
+	}
+	
+	while (lvSecondsInt % 10 == 0)
+	{
+		lvSecondsInt/= 10;
+		lvSecondsPrecision/= 10;
+	}
+	
+	QString lvTextDegrees, lvTextDegreesPrecision, lvTextMinutes, lvTextMinutesPrecision;
+	QString lvTextSeconds, lvTextSecondsPrecision;
+	
+	lvTextDegrees = lvTextDegrees.setNum(lvDegreesInt); 
+	lvTextDegreesPrecision = lvTextDegreesPrecision.setNum(lvDegreesPrecision); 
+	lvTextMinutes = lvTextMinutes.setNum(lvMinutesInt); 
+	lvTextMinutesPrecision = lvTextMinutesPrecision.setNum(lvMinutesPrecision);
+	lvTextSeconds = lvTextSeconds.setNum(lvSecondsInt);
+	lvTextSecondsPrecision = lvTextSecondsPrecision.setNum(lvSecondsPrecision);
+	
+	return QString(lvTextDegrees + "/" +lvTextDegreesPrecision+ " " +lvTextMinutes+ "/" +lvTextMinutesPrecision+ " " +lvTextSeconds+ "/" +lvTextSecondsPrecision);
 }
 
 
