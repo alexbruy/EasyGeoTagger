@@ -17,17 +17,20 @@
 #include <QDir>
 #include <QDirModel>
 #include <QFileInfo>
+#include <QSettings>
 
 LoadExifDatasetGui::LoadExifDatasetGui( QWidget* parent, Qt::WFlags fl )
     : QDialog( parent, fl )
 {
   setupUi( this );
+  QSettings myQSettings;
   QDirModel* lvModel = new QDirModel( QStringList(), QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot, QDir::DirsFirst );
+  QString myDirectory = myQSettings.value( "/loadExifDataset/lastDirectory", QDir::currentPath() ).toString();
   
   tvDirectoryBrowser->setModel( lvModel );
   tvDirectoryBrowser->setColumnWidth( 0, 400 );
-  tvDirectoryBrowser->setCurrentIndex( lvModel->index( QDir::currentPath() ) );
-  tvDirectoryBrowser->scrollTo( lvModel->index( QDir::currentPath() ) );
+  tvDirectoryBrowser->setCurrentIndex( lvModel->index( myDirectory ) );
+  tvDirectoryBrowser->scrollTo( lvModel->index( myDirectory ) );
   tvDirectoryBrowser->setStyleSheet( "QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }" );
 }
 
@@ -63,12 +66,14 @@ void LoadExifDatasetGui::on_buttonBox_clicked( QAbstractButton* theButton )
   if( buttonBox->standardButton ( theButton) == QDialogButtonBox::Ok )
   {
     QFileInfo lvFileInfo;
+    QSettings myQSettings;
     QString lvCurrentFile = buildPath( tvDirectoryBrowser->currentIndex() );
     lvFileInfo.setFile( lvCurrentFile );
     if( !lvFileInfo.isDir() )
     {
       tvDirectoryBrowser->setCurrentIndex( tvDirectoryBrowser->currentIndex().parent() );
     }
+    myQSettings.setValue( "/loadExifDataset/lastDirectory", buildPath( tvDirectoryBrowser->currentIndex() ) );
     emit draw( buildPath( tvDirectoryBrowser->currentIndex() ), tvDirectoryBrowser->currentIndex().data().toString() );
   }
 }
