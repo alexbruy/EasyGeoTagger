@@ -35,11 +35,6 @@ EgtMainWindow::EgtMainWindow()
   connect(chkbColorCodeFilenames, SIGNAL(stateChanged(int)), lvItemDelegate, SLOT(displayGpsExifAvailability(int)));
   tvFileBrowser->setItemDelegate(lvItemDelegate);
   tvFileBrowser->setStyleSheet("QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }");
-    
-  twExif->setColumnCount(2);
-  twExif->setColumnWidth(0, 180);
-  twExif->setColumnWidth(1, 180);
-  twExif->setHorizontalHeaderLabels(QStringList() << "Key" << "Value");
 }
 
 /*
@@ -51,46 +46,7 @@ EgtMainWindow::EgtMainWindow()
 void EgtMainWindow::clicked(const QModelIndex& theIndex)
 {
   EgtDebug("clicked()");
-  QString lvCurrentFile = cvPathBuilder.buildPath(theIndex);
-  cvFileInfo.setFile(lvCurrentFile);
-  if(cvFileInfo.isDir())
-    return;
-  
-  try 
-  {
-    Exiv2::Image::AutoPtr lvImage = Exiv2::ImageFactory::open(qPrintable(lvCurrentFile));
-    assert(lvImage.get() != 0);
-    lvImage->readMetadata();
-    Exiv2::ExifData lvData = lvImage->exifData();
-    Exiv2::Exifdatum lvDatum = lvData["Exif.Image.DateTime"];
-    labelTimestamp->setText(QString(lvDatum.value().toString().c_str()));
-    
-    twExif->clear();
-    twExif->setRowCount(0);
-    twExif->setHorizontalHeaderLabels(QStringList() << "Key" << "Value");
-    
-    Exiv2::ExifData::iterator it = lvData.findIfdIdIdx(Exiv2::gpsIfdId, 1);
-    if(it != lvData.end())
-    {
-      int lvRowCount = 0;
-      while(it->ifdId() == Exiv2::gpsIfdId)
-      {
-        twExif->insertRow(lvRowCount);
-        twExif->setItem(lvRowCount, 0, new QTableWidgetItem(QString(it->tagLabel().c_str())));
-        twExif->setItem(lvRowCount, 1, new QTableWidgetItem(QString(it->value().toString().c_str())));
-        it++;
-        lvRowCount++;
-      }
-    }
-    
-  }
-  catch (Exiv2::AnyError& e)
-  { 
-    twExif->clear();
-    twExif->setRowCount(0);
-    twExif->setHorizontalHeaderLabels(QStringList() << "Key" << "Value");
-    labelTimestamp->setText("");
-  }
+
 }
 
 void EgtMainWindow::expanded(const QModelIndex& theIndex)
@@ -103,6 +59,8 @@ void EgtMainWindow::expanded(const QModelIndex& theIndex)
   }
 }
 
+
+/*
 void EgtMainWindow::on_pbtnCreateLayerFromDir_clicked()
 {
   EgtDebug("on_pbtnCreateLayerFromDir_clicked()");
@@ -128,7 +86,7 @@ void EgtMainWindow::on_pbtnCreateLayerFromDir_clicked()
       
       int lvExportedImages = 0;
       int lvChildCount = 0;
-/*
+
       EgtExifIO lvEEIO;
       QModelIndex lvCurrentIndex = tvFileBrowser->currentIndex();
       while(lvCurrentIndex.child(lvChildCount, 0).isValid())
@@ -145,7 +103,7 @@ void EgtMainWindow::on_pbtnCreateLayerFromDir_clicked()
     
       lvOutputFile.close();
       QMessageBox::warning(this, tr("Export Complete"), tr("%n images exported.", "", lvExportedImages) );
-*/
+
     }
     else
     {
@@ -162,10 +120,4 @@ void EgtMainWindow::on_pbtnCreateLayerFromDir_clicked()
     ((QDirModel*)tvFileBrowser->model())->refresh();
   }
 }
-
-
-
-
-
-
-
+*/

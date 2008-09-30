@@ -20,7 +20,6 @@ public:
 private slots:
   void clicked(const QModelIndex&);
   void expanded(const QModelIndex&);
-  void on_pbtnCreateLayerFromDir_clicked();
   
 private:
   QFileInfo cvFileInfo;

@@ -27,7 +27,7 @@ void EgtItemDelegate::paint(QPainter* thePainter, const QStyleOptionViewItem& th
 
   QStyleOptionViewItem lvViewOption(theOption);
 
-  if(cvDisplayGpsExifAvailability)
+  if(cvDisplayGpsExifAvailability && theIndex.column() == 0)
   {
     /*
     QString lvFileName = buildPath( theIndex );

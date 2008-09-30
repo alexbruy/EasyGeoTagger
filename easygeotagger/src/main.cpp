@@ -1,4 +1,4 @@
-#include "egtmainwindow.h"
+#include "egtapplication.h"
 
 #include <QApplication>
 
@@ -6,8 +6,7 @@ int main(int argc, char* argv[])
 {
 
   QApplication app(argc, argv);
-  EgtMainWindow* EasyGT = new EgtMainWindow();
-  EasyGT->show();
-  
+  EgtApplication* EasyGT = new EgtApplication();
+
   return app.exec();
 }

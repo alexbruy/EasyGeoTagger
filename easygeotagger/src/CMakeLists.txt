@@ -1,4 +1,4 @@
-SUBDIRS(exif core ui gui )
+SUBDIRS( app core exif gui ui plugins )
 
 SET(EasyGT_APP_SRCS
     main.cpp
@@ -12,5 +12,5 @@ ELSE(WIN32)
   ADD_EXECUTABLE(EasyGT ${EasyGT_APP_SRCS})
 ENDIF(WIN32)
 
-TARGET_LINK_LIBRARIES(EasyGT egt_core egt_gui egt_exif ${QT_LIBRARIES} ${EXIV2_LIBRARY})
+TARGET_LINK_LIBRARIES(EasyGT egt_app egt_core egt_gui egt_exif ${QT_LIBRARIES} ${EXIV2_LIBRARY})
 INSTALL(TARGETS EasyGT DESTINATION ${CMAKE_INSTALL_PREFIX})

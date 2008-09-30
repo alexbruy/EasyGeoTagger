@@ -1,5 +1,5 @@
 /*
-** File: egtlogger.h
+** File: egtplugininterface.h
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-09-30
 **
@@ -23,11 +23,28 @@
 ** the U.S. and Canada.
 **
 **/
-#include <QDebug>
-#include <QString>
+#ifndef EGTPLUGININTERFACE_H
+#define EGTPLUGININTERFACE_H
 
-#ifdef EGTDEBUG
-#define EgtDebug( theMessage ) qDebug("%s [%d]: %s", __FILE__, __LINE__, qPrintable( QString( theMessage ) ) );
-#else
-# define EgtDebug( theMessage )
+#include <QString>
+#include <QStringList>
+
+class EgtPluginInterface
+{
+
+  public:
+    virtual ~EgtPluginInterface() { }
+
+    virtual QStringList categories() = 0;
+    virtual QString description() = 0;
+    virtual QString name() = 0;
+
+    virtual bool isConfigurable() { return false; }
+
+  public slots:
+    virtual void showConfigurationPanel() { }
+};
+
+ Q_DECLARE_INTERFACE(EgtPluginInterface, "org.amnh.bif.Plugin.EgtPluginInterface/1.0");
+
 #endif
