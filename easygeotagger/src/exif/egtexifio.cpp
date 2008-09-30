@@ -24,7 +24,7 @@ EgtExifIO::EgtExifIO( const QModelIndex& theIndex )
  * PUBLIC FUNCTIONS
  *
  */
-//This is a real hack to prove a concept
+
 float EgtExifIO::getLatitude()
 {
   EgtDebug( "entered" );
@@ -39,7 +39,7 @@ float EgtExifIO::getLatitude()
 
   int lvNorthing = 1;
 
-  if(QString::compare( QString(lvValue.toString().c_str()), "S" ) == 0)
+  if( QString::compare( QString( lvValue.toString().c_str() ), "S" ) == 0 )
     lvNorthing = -1;
       
   const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSLatitude" );
@@ -58,23 +58,25 @@ float EgtExifIO::getLatitude()
   }
   
      
-  return lvLatitude;
+  return lvLatitude*lvNorthing;
 }
 
-//This is a real hack to prove a concept
+
 float EgtExifIO::getLongitude()
 {  
   EgtDebug( "entered" );
   
   const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLongitudeRef" );   
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
-  
+  EgtDebug( "todavia estoy vivo" );
+EgtDebug( QString("").setNum(lvTypeId,16) );
+EgtDebug( QString("").setNum(Exiv2::invalidTypeId,16) );
   if(lvTypeId == Exiv2::invalidTypeId)
     return 0.0;  
 
   int lvNorthing = 1;
-
-  if(QString::compare( QString(lvValue.toString().c_str()), "S" ) == 0)
+EgtDebug( "ahora voy a comparar yposiblemente a petar" );
+  if(QString::compare( QString(lvValue.toString().c_str()), "W" ) == 0)
     lvNorthing = -1;
       
   const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSLongitude" );
@@ -91,7 +93,7 @@ float EgtExifIO::getLongitude()
   	if(i>0)
   		lvLongitude/= 60;
   }
-  return lvLongitude;
+  return lvLongitude*lvNorthing;
 }
 
 bool EgtExifIO::hasGpsExif()
@@ -168,7 +170,7 @@ bool EgtExifIO::setLongitude( QString theValue )
 
 bool EgtExifIO::setLatitude( QString theValue )
 {
-	EgtDebug( "entered" );
+	EgtDebug( "entered setlatitude" );
   bool ok; 
 	float lvLongitude=theValue.toFloat( &ok );
 	if( !ok )
@@ -191,88 +193,104 @@ bool EgtExifIO::setLatitude( QString theValue )
 
 bool EgtExifIO::write( QString theKey, QString theString )
 {
-  EgtDebug( "entered" );
+  EgtDebug( "entered write" );
   
   try 
   {
-    Exiv2::ExifData exifData;
+    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(cvImageFile.toStdString());
+//TODO: Try not to open the image, just create the exifdata. I want to check whether it contains the right typename or not.
+    assert (image.get() != 0);
+    image->readMetadata();
+    Exiv2::ExifData &exifData = image->exifData();
+
     Exiv2::ExifKey key( theKey.toStdString() );
-      
+
     QString lvTypeName = exifData[theKey.toStdString()].typeName(); 
-    if( QString::compare( lvTypeName, "Ascii" ) == 0 )
+
+    EgtDebug( QString( "Data type ["+ lvTypeName +"]" ) );
+    
+    Exiv2::ExifData::iterator pos = exifData.findKey(key);
+    if (pos != exifData.end()) //If the data exist, we first delete it from the Exif data container
+	exifData.erase(pos);
+
+
+    if( QString::compare( lvTypeName, "Ascii" ,Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::asciiString );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
     }
-    else if( QString::compare( lvTypeName, "Rational" ) == 0 )
+    else if( QString::compare( lvTypeName, "Rational",Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::unsignedRational );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
+
     }
-    else if( QString::compare( lvTypeName, "SRational" ) == 0 )
+    else if( QString::compare( lvTypeName, "SRational",Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::signedRational );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
+
     }
-    else if( QString::compare( lvTypeName, "Short" ) == 0 )
+    else if( QString::compare( lvTypeName, "Short" ,Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::unsignedShort );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
+
     }
-    else if( QString::compare( lvTypeName, "SShort" ) == 0 )
+    else if( QString::compare( lvTypeName, "SShort" ,Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::signedShort );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
+
     }
-    else if( QString::compare( lvTypeName, "Byte" ) == 0 )
+    else if( QString::compare( lvTypeName, "Byte" ,Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::unsignedByte );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
+
     }
-/*
-    else if( QString::compare( lvTypeName, "SByte" ) == 0 )
+    else if( QString::compare( lvTypeName, "SByte" ,Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::signedByte );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
+
     }
-*/
-    else if( QString::compare( lvTypeName, "Long" ) == 0)
+    else if( QString::compare( lvTypeName, "Long" ,Qt::CaseInsensitive ) == 0)
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::unsignedLong );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
     }
-    else if( QString::compare( lvTypeName, "SLong" ) == 0)
+    else if( QString::compare( lvTypeName, "SLong" ,Qt::CaseInsensitive ) == 0)
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::signedLong  );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
+
     }
     else //Undefined
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::undefined );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
+
     }
       
     // Writing the exif data to the image file
-    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open( cvImageFile.toStdString() );
-    assert(image.get() != 0);
-
     image->setExifData( exifData );
     image->writeMetadata();
     return true;      
   }
   catch ( Exiv2::AnyError& e )
   {
-    EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
+    EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ));
     return false;
   }
 }
@@ -302,7 +320,8 @@ QString EgtExifIO::convertToRational(QString theDegrees)
 {
 	const int lvInitialPrecision = 1000000;
 	bool ok;
-	double lvTheDegrees = theDegrees.toDouble(&ok);
+
+	double lvTheDegrees =fabs(theDegrees.toDouble(&ok));
 	if(!ok)
 		return QString( "" );
 	
@@ -360,8 +379,17 @@ const Exiv2::Value& EgtExifIO::read(QString theKey)
   
   Exiv2::DataValue lvNotValidValue(Exiv2::invalidTypeId );
   Exiv2::Value& lvNotValid = lvNotValidValue;
-  
-  if( cvIsValidImage )
+ Exiv2::TypeId lvTypeId = lvNotValidValue.typeId ();
+
+///////////////////////////////////////////////
+//EgtDebug( "first try" );
+//EgtDebug( QString("").setNum(lvTypeId,16) );
+
+//Exiv2::TypeId lvTypeId2 = lvNotValid.typeId ();
+//EgtDebug( "second try" );
+//EgtDebug( QString("").setNum(lvTypeId2,16) );
+////////////////////////////////////////////////
+  if( isValidImage() )
   {
     try 
     {
@@ -376,6 +404,8 @@ const Exiv2::Value& EgtExifIO::read(QString theKey)
       }
 
       EgtDebug( QString( "key ["+ theKey + "] found" ) );
+      EgtDebug( QString( "Data Type ["+ QString(it->typeName()) +"]" ) );
+      
       return it->value();
     }
     catch (Exiv2::AnyError& e)
@@ -394,7 +424,7 @@ const Exiv2::Value& EgtExifIO::read(QString theKey)
 QString EgtExifIO::readKeyValueAsString(QString theKey)
 {
   EgtDebug( "entered" );
-  if( cvIsValidImage )
+  if( isValidImage() )
   {
     try 
     {
