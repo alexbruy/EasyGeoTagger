@@ -1,7 +1,7 @@
 /*
-** File: egtexifio.h
-** Author(s): Roberto Garcia-Yunta, Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-09-22
+** File: egtplugininterface.h
+** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Creation Date: 2008-09-30
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -21,46 +21,24 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTEXIFIO_H
-#define EGTEXIFIO_H
+#ifndef EGTTESTPLUGIN_H
+#define EGTTESTPLUGIN_H
 
-#include <QModelIndex>
+#include "egtplugininterface.h"
 
-#include <image.hpp>
-#include <exif.hpp>
+#include <QObject>
 
-class EgtExifIO
+class EgtTestPlugin : public QObject, EgtPluginInterface
 {
+  Q_OBJECT
+  Q_INTERFACES(EgtPluginInterface)
+  
+  public:
+    QStringList categories();
+    QString description();
+    QString name();
 
-public:
-  EgtExifIO( const QModelIndex& );
-  EgtExifIO( QString );
-  
-  float getLatitude();
-  float getLongitude();
-  
-  bool hasGpsExif();
-  bool isValidImage();
-  
-  void setFile( QString theImageFilename );
-  bool setLatitude(QString);
-  bool setLongitude(QString);
-
-  
-  
-  
-private:
-  QString buildPath(const QModelIndex& theIndex);
-  QString convertToRational(QString);
-  const Exiv2::Value& read(QString);
-  QString readKeyValueAsString(QString);
-  float tokenizeCoordinate(QString);
-  
-  QString cvImageFile;
-  Exiv2::Image::AutoPtr cvImage;
-  bool cvIsValidImage;
-  bool cvHasGpsExif;
-  bool write(QString, QString);
-  
+  public slots:
+    virtual void showConfigurationPanel() { }
 };
 #endif

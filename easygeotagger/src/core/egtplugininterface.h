@@ -16,11 +16,9 @@
 ** Library General Public License for more details.
 **
 ** This work was made possible through a grant by the the John D. and 
-** Catherine T. MacArthur Foundation and The Spanish Ministry of 
-** Science and Innovation INTEGRANTS program, a nation-wide grant 
-** program to give Spanish university graduates the opportunity 
-** to carrying out internships in companies and organizations in 
-** the U.S. and Canada.
+** Catherine T. MacArthur Foundation with additional support from the 
+** Center For Biodiversity and Conservation and The Spanish Ministry of 
+** Science and Innovation's INTEGRANTS program.
 **
 **/
 #ifndef EGTPLUGININTERFACE_H
