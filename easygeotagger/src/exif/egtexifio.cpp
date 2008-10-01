@@ -22,6 +22,7 @@
 **
 **/
 #include "egtexifio.h"
+#include "egtexifio.h"
 
 #include "egtlogger.h"
 #include <math.h>
@@ -50,7 +51,7 @@ EgtExifIO::EgtExifIO( const QModelIndex& theIndex )
 
 float EgtExifIO::getLatitude()
 {
-  EgtDebug( "entered" );
+  EgtDebug( "entered getLatitude()" );
   
   const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLatitudeRef" );
         
@@ -79,26 +80,21 @@ float EgtExifIO::getLatitude()
   	if(i>0)
   		lvLatitude/= 60;
   }
-  
-     
   return lvLatitude*lvNorthing;
 }
 
 
 float EgtExifIO::getLongitude()
 {  
-  EgtDebug( "entered" );
+  EgtDebug( "entered getLongitude()" );
   
   const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLongitudeRef" );   
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
-  EgtDebug( "todavia estoy vivo" );
-EgtDebug( QString("").setNum(lvTypeId,16) );
-EgtDebug( QString("").setNum(Exiv2::invalidTypeId,16) );
+
   if(lvTypeId == Exiv2::invalidTypeId)
     return 0.0;  
 
   int lvNorthing = 1;
-EgtDebug( "ahora voy a comparar yposiblemente a petar" );
   if(QString::compare( QString(lvValue.toString().c_str()), "W" ) == 0)
     lvNorthing = -1;
       
@@ -131,7 +127,7 @@ bool EgtExifIO::isValidImage()
 
 void EgtExifIO::setFile( QString theImageFilename )
 {
-  EgtDebug( "entered" );
+  EgtDebug( "entered setFile()" );
   cvImageFile = theImageFilename;
   cvIsValidImage = false;
   cvHasGpsExif = false;
@@ -143,16 +139,26 @@ void EgtExifIO::setFile( QString theImageFilename )
     try 
     {
       cvImage->readMetadata();
-      //TODO: Change this statement, no longer works with Exiv2 v0.18
       
-      Exiv2::ExifData::iterator it = cvImage->exifData().findIfdIdIdx( Exiv2::gpsIfdId, 1 );
-      if( it != cvImage->exifData().end() )
+      //Exiv2::ExifData::iterator it = cvImage->exifData().findIfdIdIdx( Exiv2::gpsIfdId, 1 );
+      //if( it != cvImage->exifData().end() )
+      //{
+      //  cvHasGpsExif = true;
+      //}
+      QString lvKey;
+
+      Exiv2::ExifData::const_iterator end = cvImage->exifData().end();
+      for (Exiv2::ExifData::const_iterator i = cvImage->exifData().begin(); i != end; ++i)
       {
-        cvHasGpsExif = true;
+        lvKey = QString( i->key().c_str() );
+        lvKey = lvKey.left(12);  //Exif.GPSInfo...
+        if( QString::compare( lvKey, "Exif.GPSInfo" ,Qt::CaseInsensitive ) == 0 )
+        {
+	   			cvHasGpsExif = true;
+	  			EgtDebug( "it has gps exif" );
+	   			break;	
+				}
       }
-      
-      
-      
     }
     catch ( Exiv2::AnyError& e )
     {
@@ -167,61 +173,59 @@ void EgtExifIO::setFile( QString theImageFilename )
 
 bool EgtExifIO::setLongitude( QString theValue )
 {
-  EgtDebug( "entered" );
+  EgtDebug( "entered setLongitude()" );
 	bool ok;
 	float lvLongitude=theValue.toFloat( &ok );
 	if( !ok )
 		return false;
 	if( lvLongitude < 0 )
 	{
-		ok = write( "Exif.GPSInfo.GPSLongitudeRef", "W" );
+		ok = write( "Exif.GPSInfo.GPSLongitudeRef", "W", "Ascii" );
 		if( !ok )
 			return false;
 	}
 	else
 	{
-		ok = write( "Exif.GPSInfo.GPSLongitudeRef", "E" );
+		ok = write( "Exif.GPSInfo.GPSLongitudeRef", "E", "Ascii" );
 		if( !ok )
 			return false;
 	}
 	
-	return write( "Exif.GPSInfo.GPSLongitude", convertToRational(theValue) );
+	return write( "Exif.GPSInfo.GPSLongitude", convertToRational(theValue), "Rational" );
 }
-
-
 
 
 bool EgtExifIO::setLatitude( QString theValue )
 {
-	EgtDebug( "entered setlatitude" );
+	EgtDebug( "entered setlatitude()" );
   bool ok; 
 	float lvLongitude=theValue.toFloat( &ok );
 	if( !ok )
 		return false;
+		
 	if( lvLongitude < 0 )
 	{
-		ok = write( "Exif.GPSInfo.GPSLatitudeRef", "S" );
+		ok = write( "Exif.GPSInfo.GPSLatitudeRef", "S", "Ascii" );
 		if( !ok )
 			return false;
 	}
 	else
 	{
-		ok = write( "Exif.GPSInfo.GPSLatitudeRef", "N" );
+		ok = write( "Exif.GPSInfo.GPSLatitudeRef", "N", "Ascii" );
 		if( !ok )
 			return false;
 	}
 	
-  return write( "Exif.GPSInfo.GPSLatitude", convertToRational(theValue) );
+  return write( "Exif.GPSInfo.GPSLatitude", convertToRational(theValue), "Rational" );
 }
 
-bool EgtExifIO::write( QString theKey, QString theString )
+bool EgtExifIO::write( QString theKey, QString theString, QString theDefaultType )
 {
   EgtDebug( "entered write" );
   
   try 
   {
     Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(cvImageFile.toStdString());
-//TODO: Try not to open the image, just create the exifdata. I want to check whether it contains the right typename or not.
     assert (image.get() != 0);
     image->readMetadata();
     Exiv2::ExifData &exifData = image->exifData();
@@ -230,11 +234,14 @@ bool EgtExifIO::write( QString theKey, QString theString )
 
     QString lvTypeName = exifData[theKey.toStdString()].typeName(); 
 
+		if(QString::compare( lvTypeName, "Invalid" ,Qt::CaseInsensitive ) == 0 ) 
+			lvTypeName = theDefaultType;
+
     EgtDebug( QString( "Data type ["+ lvTypeName +"]" ) );
     
     Exiv2::ExifData::iterator pos = exifData.findKey(key);
     if (pos != exifData.end()) //If the data exist, we first delete it from the Exif data container
-	exifData.erase(pos);
+			exifData.erase(pos);
 
 
     if( QString::compare( lvTypeName, "Ascii" ,Qt::CaseInsensitive ) == 0 )
@@ -248,42 +255,36 @@ bool EgtExifIO::write( QString theKey, QString theString )
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::unsignedRational );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
-
     }
     else if( QString::compare( lvTypeName, "SRational",Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::signedRational );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
-
     }
     else if( QString::compare( lvTypeName, "Short" ,Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::unsignedShort );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
-
     }
     else if( QString::compare( lvTypeName, "SShort" ,Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::signedShort );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
-
     }
     else if( QString::compare( lvTypeName, "Byte" ,Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::unsignedByte );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
-
     }
     else if( QString::compare( lvTypeName, "SByte" ,Qt::CaseInsensitive ) == 0 )
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::signedByte );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
-
     }
     else if( QString::compare( lvTypeName, "Long" ,Qt::CaseInsensitive ) == 0)
     {
@@ -296,14 +297,12 @@ bool EgtExifIO::write( QString theKey, QString theString )
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::signedLong  );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
-
     }
     else //Undefined
     {
      Exiv2::Value::AutoPtr rv = Exiv2::Value::create( Exiv2::undefined );
      rv->read( theString.toStdString() );
      exifData.add( key, rv.get() );
-
     }
       
     // Writing the exif data to the image file
@@ -341,6 +340,8 @@ QString EgtExifIO::buildPath(const QModelIndex& theIndex)
 
 QString EgtExifIO::convertToRational(QString theDegrees)
 {
+	EgtDebug( "entered read()" );
+	
 	const int lvInitialPrecision = 1000000;
 	bool ok;
 
@@ -398,20 +399,12 @@ QString EgtExifIO::convertToRational(QString theDegrees)
 
 const Exiv2::Value& EgtExifIO::read(QString theKey)
 {
-  EgtDebug( "entered" );
+  EgtDebug( "entered read()" );
   
   Exiv2::DataValue lvNotValidValue(Exiv2::invalidTypeId );
   Exiv2::Value& lvNotValid = lvNotValidValue;
- Exiv2::TypeId lvTypeId = lvNotValidValue.typeId ();
+  Exiv2::TypeId lvTypeId = lvNotValidValue.typeId ();
 
-///////////////////////////////////////////////
-//EgtDebug( "first try" );
-//EgtDebug( QString("").setNum(lvTypeId,16) );
-
-//Exiv2::TypeId lvTypeId2 = lvNotValid.typeId ();
-//EgtDebug( "second try" );
-//EgtDebug( QString("").setNum(lvTypeId2,16) );
-////////////////////////////////////////////////
   if( isValidImage() )
   {
     try 
@@ -446,7 +439,7 @@ const Exiv2::Value& EgtExifIO::read(QString theKey)
 
 QString EgtExifIO::readKeyValueAsString(QString theKey)
 {
-  EgtDebug( "entered" );
+  EgtDebug( "entered readKeyValueAsString()" );
   if( isValidImage() )
   {
     try 
@@ -478,7 +471,7 @@ QString EgtExifIO::readKeyValueAsString(QString theKey)
 
 float EgtExifIO::tokenizeCoordinate(QString theString)
 {
-  EgtDebug( "entered" );
+  EgtDebug( "entered tokenizeCoordinate()" );
   int lvValue1 = 0;
   bool lvValue1Done = false;
   int lvValue2 = 0;
