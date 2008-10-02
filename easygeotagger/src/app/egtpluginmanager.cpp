@@ -30,8 +30,9 @@
 #include <QPluginLoader>
 #include <QCoreApplication>
 
-EgtPluginManager::EgtPluginManager()
+EgtPluginManager::EgtPluginManager( QMap< QString, EgtPluginInterface* > * thePluginsMap )
 {
+  cvPluginsMap = thePluginsMap;
 }
 
 void EgtPluginManager::loadPlugins()
@@ -51,7 +52,7 @@ void EgtPluginManager::loadPlugins()
       lvInterface = qobject_cast<EgtPluginInterface *>( lvPlugin );
       if( lvInterface )
       {
-        //DO SOMETHING
+        cvPluginsMap->insert( lvInterface->name(), lvInterface );
         EgtDebug( "loading plugin ["+ lvInterface->name() +"]" );
       }
     }

@@ -35,9 +35,9 @@ class EgtApplication
     EgtApplication();
   
   private:
-    EgtMainWindow cvMainWindow;
-    EgtApplicationInterface cvApplicationInterface;
-    EgtPluginManager cvPluginManager;
+    EgtMainWindow * cvMainWindow;
+    EgtApplicationInterface * cvApplicationInterface;
+    EgtPluginManager * cvPluginManager;
     
 };
 #endif

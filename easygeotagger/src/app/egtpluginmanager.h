@@ -24,10 +24,17 @@
 #ifndef EGTPLUGINMANAGER_H
 #define EGTPLUGINMANAGER_H
 
+#include "egtplugininterface.h"
+
+#include <QMap>
+
 class EgtPluginManager
 {
   public:
-    EgtPluginManager();
+    EgtPluginManager( QMap< QString, EgtPluginInterface* > * );
     void loadPlugins();
+    
+  private:
+    QMap< QString, EgtPluginInterface* > * cvPluginsMap;
 };
 #endif

@@ -23,9 +23,17 @@
 **/
 #include "egtapplication.h"
 
+#include "egtlogger.h"
+
 EgtApplication::EgtApplication()
 {
-  cvPluginManager.loadPlugins();
-  cvMainWindow.show();
+  EgtDebug( "entered" );
+  cvApplicationInterface = new EgtApplicationInterface();
+  cvPluginManager = new EgtPluginManager( &cvApplicationInterface->cvPlugins );
+  cvPluginManager->loadPlugins();
+  EgtDebug( QString( "%1 plugins loaded" ) .arg( cvApplicationInterface->cvPlugins.size() ) );
+  
+  cvMainWindow = new EgtMainWindow();
+  cvMainWindow->show();
 }
 

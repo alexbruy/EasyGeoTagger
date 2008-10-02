@@ -25,5 +25,4 @@
 
 EgtApplicationInterface::EgtApplicationInterface()
 {
-
 }

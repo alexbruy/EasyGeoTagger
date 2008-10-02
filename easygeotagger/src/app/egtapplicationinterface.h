@@ -34,7 +34,7 @@ class EgtApplicationInterface
 
   public:
     EgtApplicationInterface();
-
-  QMap<QString, EgtPluginInterface*> cvPlugins;
+    
+    QMap<QString, EgtPluginInterface*> cvPlugins;
 };
 #endif
