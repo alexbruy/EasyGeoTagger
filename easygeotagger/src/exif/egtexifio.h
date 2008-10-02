@@ -60,7 +60,7 @@ private:
   Exiv2::Image::AutoPtr cvImage;
   bool cvIsValidImage;
   bool cvHasGpsExif;
-  bool write(QString, QString);
+  bool write(QString, QString, QString);
   
 };
 #endif
