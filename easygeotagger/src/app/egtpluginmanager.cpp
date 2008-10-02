@@ -30,17 +30,30 @@
 #include <QPluginLoader>
 #include <QCoreApplication>
 
-EgtPluginManager::EgtPluginManager( QMap< QString, EgtPluginInterface* > * thePluginsMap )
+EgtPluginManager::EgtPluginManager( EgtApplicationInterface* theApplicationInterface )
 {
-  cvPluginsMap = thePluginsMap;
+  cvApplicationInterface = theApplicationInterface;
 }
 
 void EgtPluginManager::loadPlugins()
 {
   EgtDebug( "entered" );
+  
+  //Check to make sure we have a valid application interface
+  if( 0 == cvApplicationInterface )
+  {
+    EgtDebug( "Application interface was null...bailing" )
+    return;
+  }
+  
+  //Clear existing plugin map
+  cvApplicationInterface->cvPlugins.clear();
+  
+  //TODO: Consider making this path as a parameter or QStringList so users can have custom plugin directories
   QDir pluginDirectory( QCoreApplication::instance ()->applicationDirPath() + "/plugin/" );
   QStringList lvFilenames = pluginDirectory.entryList( QStringList() << "lib*" );
 
+  //Loop throught the files in the plugin directory and see if we have any valid plugins
   QStringList::const_iterator lvIterator;
   for( lvIterator = lvFilenames.constBegin(); lvIterator != lvFilenames.constEnd(); ++lvIterator )
   {
@@ -52,7 +65,8 @@ void EgtPluginManager::loadPlugins()
       lvInterface = qobject_cast<EgtPluginInterface *>( lvPlugin );
       if( lvInterface )
       {
-        cvPluginsMap->insert( lvInterface->name(), lvInterface );
+        lvInterface->setApplicationInterface( cvApplicationInterface );
+        cvApplicationInterface->cvPlugins.insert( lvInterface->name(), lvInterface );
         EgtDebug( "loading plugin ["+ lvInterface->name() +"]" );
       }
     }

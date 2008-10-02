@@ -29,7 +29,7 @@ EgtApplication::EgtApplication()
 {
   EgtDebug( "entered" );
   cvApplicationInterface = new EgtApplicationInterface();
-  cvPluginManager = new EgtPluginManager( &cvApplicationInterface->cvPlugins );
+  cvPluginManager = new EgtPluginManager( cvApplicationInterface );
   cvPluginManager->loadPlugins();
   EgtDebug( QString( "%1 plugins loaded" ) .arg( cvApplicationInterface->cvPlugins.size() ) );
   

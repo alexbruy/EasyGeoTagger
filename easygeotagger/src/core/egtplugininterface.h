@@ -27,10 +27,13 @@
 #include <QString>
 #include <QStringList>
 
+class EgtApplicationInterface;
+
 class EgtPluginInterface
 {
 
   public:
+    EgtPluginInterface() { cvApplicationInterface = 0; }
     virtual ~EgtPluginInterface() { }
 
     virtual QStringList categories() = 0;
@@ -38,9 +41,14 @@ class EgtPluginInterface
     virtual QString name() = 0;
 
     virtual bool isConfigurable() { return false; }
+    
+    void setApplicationInterface( EgtApplicationInterface* theInterface ) { cvApplicationInterface = theInterface; }
 
   public slots:
     virtual void showConfigurationPanel() { }
+  
+  private:
+    EgtApplicationInterface* cvApplicationInterface;
 };
 
  Q_DECLARE_INTERFACE(EgtPluginInterface, "org.amnh.bif.Plugin.EgtPluginInterface/1.0");
