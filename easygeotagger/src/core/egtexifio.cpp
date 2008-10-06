@@ -51,7 +51,7 @@ EgtExifIO::EgtExifIO( const QModelIndex& theIndex )
 
 float EgtExifIO::getLatitude()
 {
-  EgtDebug( "entered getLatitude()" );
+  EgtDebug( "entered" );
   
   const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLatitudeRef" );
         
@@ -86,7 +86,7 @@ float EgtExifIO::getLatitude()
 
 float EgtExifIO::getLongitude()
 {  
-  EgtDebug( "entered getLongitude()" );
+  EgtDebug( "entered" );
   
   const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLongitudeRef" );   
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
@@ -127,10 +127,14 @@ bool EgtExifIO::isValidImage()
 
 void EgtExifIO::setFile( QString theImageFilename )
 {
-  EgtDebug( "entered setFile()" );
   cvImageFile = theImageFilename;
   cvIsValidImage = false;
   cvHasGpsExif = false;
+  
+  //If the file is a directory just bail no need to try an open it as an image
+  QFileInfo lvFileToTest( theImageFilename );
+  if( lvFileToTest.isDir() ) { return; }
+  
   try 
   {
     cvImage = Exiv2::ImageFactory::open( theImageFilename.toStdString() );
@@ -173,7 +177,7 @@ void EgtExifIO::setFile( QString theImageFilename )
 
 bool EgtExifIO::setLongitude( QString theValue )
 {
-  EgtDebug( "entered setLongitude()" );
+  EgtDebug( "entered" );
 	bool ok;
 	float lvLongitude=theValue.toFloat( &ok );
 	if( !ok )
@@ -197,7 +201,7 @@ bool EgtExifIO::setLongitude( QString theValue )
 
 bool EgtExifIO::setLatitude( QString theValue )
 {
-	EgtDebug( "entered setlatitude()" );
+	EgtDebug( "entered" );
   bool ok; 
 	float lvLongitude=theValue.toFloat( &ok );
 	if( !ok )
@@ -221,7 +225,7 @@ bool EgtExifIO::setLatitude( QString theValue )
 
 bool EgtExifIO::write( QString theKey, QString theString, QString theDefaultType )
 {
-  EgtDebug( "entered write" );
+  EgtDebug( "entered" );
   
   try 
   {
@@ -340,7 +344,7 @@ QString EgtExifIO::buildPath(const QModelIndex& theIndex)
 
 QString EgtExifIO::convertToRational(QString theDegrees)
 {
-	EgtDebug( "entered read()" );
+	EgtDebug( "entered" );
 	
 	const int lvInitialPrecision = 1000000;
 	bool ok;
@@ -399,7 +403,7 @@ QString EgtExifIO::convertToRational(QString theDegrees)
 
 const Exiv2::Value& EgtExifIO::read(QString theKey)
 {
-  EgtDebug( "entered read()" );
+  EgtDebug( "entered" );
   
   Exiv2::DataValue lvNotValidValue(Exiv2::invalidTypeId );
   Exiv2::Value& lvNotValid = lvNotValidValue;
@@ -439,7 +443,7 @@ const Exiv2::Value& EgtExifIO::read(QString theKey)
 
 QString EgtExifIO::readKeyValueAsString(QString theKey)
 {
-  EgtDebug( "entered readKeyValueAsString()" );
+  EgtDebug( "entered" );
   if( isValidImage() )
   {
     try 
@@ -471,7 +475,7 @@ QString EgtExifIO::readKeyValueAsString(QString theKey)
 
 float EgtExifIO::tokenizeCoordinate(QString theString)
 {
-  EgtDebug( "entered tokenizeCoordinate()" );
+  EgtDebug( "entered" );
   int lvValue1 = 0;
   bool lvValue1Done = false;
   int lvValue2 = 0;
