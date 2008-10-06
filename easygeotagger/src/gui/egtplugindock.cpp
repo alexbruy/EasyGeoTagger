@@ -1,7 +1,7 @@
 /*
-** File: egtpluginmanager.h
+** File: egtplugindock.cpp
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-09-30
+** Creation Date: 2008-10-06
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -21,30 +21,24 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTPLUGINMANAGER_H
-#define EGTPLUGINMANAGER_H
+#include "egtplugindock.h"
 
-#include "egtmainwindow.h"
-#include "egtplugininterface.h"
-#include "egtplugindisplaywidget.h"
-#include "egtapplicationinterface.h"
+#include <QLayout>
+#include <QPushButton>
 
-#include <QMap>
-
-class EgtPluginManager
+EgtPluginDock::EgtPluginDock(const QString & theTitle, QWidget* theParent, Qt::WindowFlags theFlags) : QDockWidget(theTitle, theParent, theFlags)
 {
-  public:
-    EgtPluginManager( EgtApplicationInterface*, EgtMainWindow* );
-    bool loadPlugin( QString );
-    void loadPlugins( QString theDirectory = "");
-    void updateGui();
-    
-  private:
-    /** \brief QMap< Category, QMap< pluginName, pluginDisplay > > */
-    QMap< QString, QMap< QString, EgtPluginDisplayWidget* >* > cvPluginDisplayCollection;
-    QString cvDefaultPluginPath;
-    
-    EgtApplicationInterface* cvApplicationInterface;
-    EgtMainWindow* cvMainWindow;
-};
-#endif
+  init();
+}
+
+EgtPluginDock::EgtPluginDock( QWidget* theParent, Qt::WindowFlags theFlags) : QDockWidget( theParent, theFlags)
+{
+  init();
+}
+
+void EgtPluginDock::init()
+{
+  setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable );
+  setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+  setMinimumSize( 150,150 );
+}

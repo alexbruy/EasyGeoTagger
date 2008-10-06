@@ -28,12 +28,16 @@
 EgtApplication::EgtApplication()
 {
   EgtDebug( "entered" );
+  
+  //Create a new application interface and gui
   cvApplicationInterface = new EgtApplicationInterface();
-  cvPluginManager = new EgtPluginManager( cvApplicationInterface );
+  cvMainWindow = new EgtMainWindow();
+  
+  cvPluginManager = new EgtPluginManager( cvApplicationInterface, cvMainWindow );
   cvPluginManager->loadPlugins();
+  cvPluginManager->updateGui();
   EgtDebug( QString( "%1 plugins loaded" ) .arg( cvApplicationInterface->cvPlugins.size() ) );
   
-  cvMainWindow = new EgtMainWindow();
   cvMainWindow->show();
 }
 

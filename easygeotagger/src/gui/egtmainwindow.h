@@ -26,8 +26,10 @@
 
 #include "ui_egtmainwindowgui.h"
 
+#include "egtplugindock.h"
 #include "egtpathbuilder.h"
 
+#include <QToolBox>
 #include <QFileInfo>
 #include <QMainWindow>
 #include <QModelIndex>
@@ -39,6 +41,7 @@ class EgtMainWindow : public QMainWindow, Ui::EgtMainWindowGui
   
 public:
   EgtMainWindow();
+  void setPluginToolBox( QToolBox* );
   
 private slots:
   void clicked(const QModelIndex&);
@@ -47,5 +50,6 @@ private slots:
 private:
   QFileInfo cvFileInfo;
   EgtPathBuilder cvPathBuilder;
+  EgtPluginDock* cvPluginDock;
 };
 #endif

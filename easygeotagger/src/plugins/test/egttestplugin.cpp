@@ -22,17 +22,23 @@
 **
 **/
 #include "egttestplugin.h"
+#include "egtlogger.h"
 
 #include <QtPlugin>
 #include <QObject>
 
-static const QString cvCategories = QObject::tr( "defaultPlugins|common" );
+static const QString cvCategories = QObject::tr( "Default|Common" );
 static const QString cvDescription = QObject::tr( "This plugin really does not do anything" );
 static const QString cvName = QObject::tr( "Test Plugin" );
 
 QStringList EgtTestPlugin::categories()
 {
   return cvCategories.split("|");
+}
+
+void EgtTestPlugin::connectRunButton( QPushButton* theButton )
+{
+  connect( theButton, SIGNAL( clicked() ), this, SLOT( run() ) );
 }
 
 QString EgtTestPlugin::description()
@@ -43,6 +49,11 @@ QString EgtTestPlugin::description()
 QString EgtTestPlugin::name()
 {
   return cvName;
+}
+
+void EgtTestPlugin::run()
+{
+  EgtDebug("Hello world!");
 }
 
  Q_EXPORT_PLUGIN2( testplugin, EgtTestPlugin );

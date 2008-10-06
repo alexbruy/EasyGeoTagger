@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>759</width>
+    <width>698</width>
     <height>628</height>
    </rect>
   </property>
@@ -13,54 +13,12 @@
    <string>EasyGeoTagger - Alpha Version revision 27 - Do Not Distribute - Biodiversity Informatics Facility - AMNH</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
-   <layout class="QVBoxLayout" >
+   <layout class="QHBoxLayout" >
     <item>
      <widget class="QSplitter" name="splitter_2" >
       <property name="orientation" >
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QGroupBox" name="groupBox" >
-       <property name="title" >
-        <string>Plugins</string>
-       </property>
-       <layout class="QVBoxLayout" >
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QToolBox" name="tboxPluginCollection" >
-          <property name="minimumSize" >
-           <size>
-            <width>200</width>
-            <height>16</height>
-           </size>
-          </property>
-          <property name="currentIndex" >
-           <number>0</number>
-          </property>
-          <widget class="QWidget" name="defaultPlugins" >
-           <property name="geometry" >
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>217</width>
-             <height>511</height>
-            </rect>
-           </property>
-           <attribute name="label" >
-            <string>Default</string>
-           </attribute>
-           <attribute name="toolTip" >
-            <string>Default Plugins</string>
-           </attribute>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
       <widget class="QSplitter" name="splitter" >
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
@@ -172,8 +130,8 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>759</width>
-     <height>29</height>
+     <width>698</width>
+     <height>30</height>
     </rect>
    </property>
   </widget>

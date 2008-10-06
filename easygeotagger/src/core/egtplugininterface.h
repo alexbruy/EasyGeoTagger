@@ -26,7 +26,9 @@
 
 #include <QString>
 #include <QStringList>
+#include <QPushButton>
 
+class EgtMainWindow;
 class EgtApplicationInterface;
 
 class EgtPluginInterface
@@ -37,18 +39,22 @@ class EgtPluginInterface
     virtual ~EgtPluginInterface() { }
 
     virtual QStringList categories() = 0;
+    virtual void connectRunButton( QPushButton* ) = 0;
     virtual QString description() = 0;
     virtual QString name() = 0;
 
     virtual bool isConfigurable() { return false; }
     
     void setApplicationInterface( EgtApplicationInterface* theInterface ) { cvApplicationInterface = theInterface; }
+    void setGui( EgtMainWindow* theGui ) { cvGui = theGui; }
 
   public slots:
     virtual void showConfigurationPanel() { }
+    virtual void run() { }
   
   private:
     EgtApplicationInterface* cvApplicationInterface;
+    EgtMainWindow* cvGui;
 };
 
  Q_DECLARE_INTERFACE(EgtPluginInterface, "org.amnh.bif.Plugin.EgtPluginInterface/1.0");

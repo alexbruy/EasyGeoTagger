@@ -35,10 +35,12 @@ class EgtTestPlugin : public QObject, EgtPluginInterface
   
   public:
     QStringList categories();
+    void connectRunButton( QPushButton* );
     QString description();
     QString name();
 
   public slots:
-    virtual void showConfigurationPanel() { }
+    void run();
+    void showConfigurationPanel() { }
 };
 #endif

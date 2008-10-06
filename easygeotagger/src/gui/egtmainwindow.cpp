@@ -57,6 +57,9 @@ EgtMainWindow::EgtMainWindow()
   connect(chkbColorCodeFilenames, SIGNAL(stateChanged(int)), lvItemDelegate, SLOT(displayGpsExifAvailability(int)));
   tvFileBrowser->setItemDelegate(lvItemDelegate);
   tvFileBrowser->setStyleSheet("QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }");
+  
+  cvPluginDock = new EgtPluginDock( "Plugins", this );
+  addDockWidget( Qt::LeftDockWidgetArea, cvPluginDock );
 }
 
 /*
@@ -143,3 +146,7 @@ void EgtMainWindow::on_pbtnCreateLayerFromDir_clicked()
   }
 }
 */
+void EgtMainWindow::setPluginToolBox( QToolBox* theToolBox)
+{
+  cvPluginDock->setWidget( theToolBox );
+}

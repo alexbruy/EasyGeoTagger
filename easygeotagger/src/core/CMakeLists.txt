@@ -1,11 +1,12 @@
 SET(EGT_CORE_SRCS
     egtpathbuilder.cpp
+    egtexifio.cpp
    )
 
 QT4_AUTOMOC(${EGT_CORE_SRCS})
 
 ADD_LIBRARY (egt_core SHARED ${EGT_CORE_SRCS})
 
-TARGET_LINK_LIBRARIES(egt_core ${QT_LIBRARIES} )
+TARGET_LINK_LIBRARIES(egt_core ${QT_LIBRARIES} ${EXIV2_LIBRARY})
 
 INSTALL(TARGETS egt_core DESTINATION lib)

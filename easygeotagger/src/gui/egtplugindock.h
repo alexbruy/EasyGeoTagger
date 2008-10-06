@@ -1,7 +1,7 @@
 /*
-** File: egtpluginmanager.h
+** File: egtplugindock.h
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-09-30
+** Creation Date: 2008-10-06
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -21,30 +21,21 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTPLUGINMANAGER_H
-#define EGTPLUGINMANAGER_H
+#ifndef EGTPLUGINDOCK_H
+#define EGTPLUGINDOCK_H
 
-#include "egtmainwindow.h"
-#include "egtplugininterface.h"
-#include "egtplugindisplaywidget.h"
-#include "egtapplicationinterface.h"
+#include <QDockWidget>
 
-#include <QMap>
-
-class EgtPluginManager
+class EgtPluginDock : public QDockWidget
 {
+  Q_OBJECT
+  
   public:
-    EgtPluginManager( EgtApplicationInterface*, EgtMainWindow* );
-    bool loadPlugin( QString );
-    void loadPlugins( QString theDirectory = "");
-    void updateGui();
+    EgtPluginDock( const QString & theTitle="", QWidget * theParent = 0, Qt::WindowFlags theFlags = 0 );
+    EgtPluginDock( QWidget * theParent = 0, Qt::WindowFlags theFlags = 0 );
     
   private:
-    /** \brief QMap< Category, QMap< pluginName, pluginDisplay > > */
-    QMap< QString, QMap< QString, EgtPluginDisplayWidget* >* > cvPluginDisplayCollection;
-    QString cvDefaultPluginPath;
-    
-    EgtApplicationInterface* cvApplicationInterface;
-    EgtMainWindow* cvMainWindow;
+    void init();
+
 };
 #endif

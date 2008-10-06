@@ -25,7 +25,7 @@
 #include <QString>
 
 #ifdef EGTDEBUG
-#define EgtDebug( theMessage ) qDebug("%s [%d]: %s", __FILE__, __LINE__, qPrintable( QString( theMessage ) ) );
+#define EgtDebug( theMessage ) qDebug("%s [%d] (%s): %s", __FILE__, __LINE__, __FUNCTION__, qPrintable( QString( theMessage ) ) );
 #else
 # define EgtDebug( theMessage )
 #endif

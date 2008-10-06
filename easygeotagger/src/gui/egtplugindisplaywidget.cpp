@@ -1,7 +1,7 @@
 /*
-** File: egtpluginmanager.h
+** File: egtplugindisplaywidget.cpp
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-09-30
+** Creation Date: 2008-10-06
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -21,30 +21,26 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTPLUGINMANAGER_H
-#define EGTPLUGINMANAGER_H
-
-#include "egtmainwindow.h"
-#include "egtplugininterface.h"
 #include "egtplugindisplaywidget.h"
-#include "egtapplicationinterface.h"
 
-#include <QMap>
+#include <QPushButton>
+#include <QVBoxLayout>
 
-class EgtPluginManager
+EgtPluginDisplayWidget::EgtPluginDisplayWidget( EgtPluginInterface* thePlugin, QWidget* theParent, Qt::WindowFlags theFlags) : QFrame( theParent, theFlags )
 {
-  public:
-    EgtPluginManager( EgtApplicationInterface*, EgtMainWindow* );
-    bool loadPlugin( QString );
-    void loadPlugins( QString theDirectory = "");
-    void updateGui();
-    
-  private:
-    /** \brief QMap< Category, QMap< pluginName, pluginDisplay > > */
-    QMap< QString, QMap< QString, EgtPluginDisplayWidget* >* > cvPluginDisplayCollection;
-    QString cvDefaultPluginPath;
-    
-    EgtApplicationInterface* cvApplicationInterface;
-    EgtMainWindow* cvMainWindow;
-};
-#endif
+  update( thePlugin );
+}
+
+void EgtPluginDisplayWidget::update( EgtPluginInterface* thePlugin )
+{
+  if( 0 == thePlugin ) { return; }
+  
+  //create a new layout for this display item
+  setLayout( new QVBoxLayout( this ) );
+  
+  //Create and add the launch button
+  cvRunButton.setText( thePlugin->name() );
+  layout()->addWidget( &cvRunButton );
+  thePlugin->connectRunButton( &cvRunButton );
+}
+
