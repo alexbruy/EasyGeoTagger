@@ -36,31 +36,32 @@ public:
   EgtExifIO( const QModelIndex& );
   EgtExifIO( QString );
   
-  float getLatitude();
-  float getLongitude();
+  float latitude();
+  float longitude();
   
   bool hasGpsExif();
   bool isValidImage();
   
   void setFile( QString theImageFilename );
-  bool setLatitude(QString);
-  bool setLongitude(QString);
+  
+  bool writeLatitude(QString);
+  bool writeLongitude(QString);
 
   
   
   
 private:
-  QString buildPath(const QModelIndex& theIndex);
   QString convertToRational(QString);
   const Exiv2::Value& read(QString);
   QString readKeyValueAsString(QString);
   float tokenizeCoordinate(QString);
+  bool write(QString, QString, QString);
   
-  QString cvImageFile;
   Exiv2::Image::AutoPtr cvImage;
+  QString cvImageFile;
+  
   bool cvIsValidImage;
   bool cvHasGpsExif;
-  bool write(QString, QString, QString);
   
 };
 #endif

@@ -32,6 +32,11 @@ EgtPluginDisplayWidget::EgtPluginDisplayWidget( EgtPluginInterface* thePlugin, Q
   update( thePlugin );
 }
 
+/*
+ *
+ * PUBLIC FUNCTIONS
+ *
+ */
 void EgtPluginDisplayWidget::update( EgtPluginInterface* thePlugin )
 {
   if( 0 == thePlugin ) { return; }

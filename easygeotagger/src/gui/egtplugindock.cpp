@@ -36,6 +36,11 @@ EgtPluginDock::EgtPluginDock( QWidget* theParent, Qt::WindowFlags theFlags) : QD
   init();
 }
 
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
 void EgtPluginDock::init()
 {
   setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable );

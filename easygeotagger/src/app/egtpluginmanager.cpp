@@ -38,6 +38,11 @@ EgtPluginManager::EgtPluginManager( EgtApplicationInterface* theApplicationInter
   cvDefaultPluginPath = QCoreApplication::instance ()->applicationDirPath() + "/plugin/";
 }
 
+/*
+ *
+ * PUBLIC FUNCTIONS
+ *
+ */
 bool EgtPluginManager::loadPlugin( QString theLibrary )
 {
   EgtDebug( "entered" );

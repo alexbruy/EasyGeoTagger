@@ -33,6 +33,11 @@ EgtItemDelegate::EgtItemDelegate()
   cvDisplayGpsExifAvailability = false;
 }
 
+/*
+ *
+ * SIGNAL and SLOTS
+ *
+ */
 void EgtItemDelegate::displayGpsExifAvailability(int theState)
 {
   if(theState == 0)
@@ -45,6 +50,11 @@ void EgtItemDelegate::displayGpsExifAvailability(int theState)
   }
 }
 
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
 void EgtItemDelegate::paint(QPainter* thePainter, const QStyleOptionViewItem& theOption, const QModelIndex& theIndex ) const
 {
 

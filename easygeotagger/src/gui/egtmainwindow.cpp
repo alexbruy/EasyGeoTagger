@@ -41,7 +41,7 @@
 
 EgtMainWindow::EgtMainWindow()
 {
-  EgtDebug("EgtMainWindow()");
+  EgtDebug( "entered" );
   setupUi(this);
   connect(tvFileBrowser, SIGNAL(clicked(const QModelIndex&)), this, SLOT(clicked(const QModelIndex&)));  
   connect(tvFileBrowser, SIGNAL(expanded(const QModelIndex&)), this, SLOT(expanded(const QModelIndex&)));
@@ -70,13 +70,13 @@ EgtMainWindow::EgtMainWindow()
 
 void EgtMainWindow::clicked(const QModelIndex& theIndex)
 {
-  EgtDebug("clicked()");
+  EgtDebug( "entered" );
 
 }
 
 void EgtMainWindow::expanded(const QModelIndex& theIndex)
 {
-  EgtDebug("expanded()");
+  EgtDebug( "entered" );
   int lvChildCount = 0;
   while(theIndex.child(lvChildCount, 0).isValid())
   {
