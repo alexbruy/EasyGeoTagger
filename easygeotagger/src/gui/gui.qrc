@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/GUI/" >
+        <file>./icons/wrench.png</file>
+    </qresource>
+</RCC>

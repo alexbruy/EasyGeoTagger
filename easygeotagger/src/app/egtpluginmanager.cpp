@@ -160,12 +160,13 @@ void EgtPluginManager::updateGui()
     //Get the keys and loop through the display widget map
     QMap< QString, EgtPluginDisplayWidget*>* lvDisplayItems = cvPluginDisplayCollection.value( lvCollectionKeys.at( lvIterator ) );
     QList< QString > lvDisplayItemKeys = lvDisplayItems->keys();
-    qDebug("%d", lvDisplayItemKeys.size());
     for(int lvItemToDisplay = 0; lvItemToDisplay < lvDisplayItemKeys.size(); lvItemToDisplay++)
     {
       EgtDebug( "...Adding plugin "+ lvDisplayItemKeys.at( lvItemToDisplay ) +" to the display panel" );
       lvPluginPanel->layout()->addWidget( lvDisplayItems->value( lvDisplayItemKeys.at( lvItemToDisplay ) ) );
     }
+    //Add a spacing item to get the buttons to float to the top of the tab
+    ( (QVBoxLayout*) lvPluginPanel->layout() )->insertStretch(-1, 1);
     //Add the panel to the tool box
     lvPluginToolBox->addItem(lvPluginPanel, lvCollectionKeys.at( lvIterator ) );
   }

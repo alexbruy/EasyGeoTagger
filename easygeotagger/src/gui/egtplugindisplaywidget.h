@@ -26,6 +26,7 @@
 
 #include "egtplugininterface.h"
 
+#include <QLabel>
 #include <QFrame>
 #include <QPushButton>
 
@@ -40,5 +41,7 @@ class EgtPluginDisplayWidget : public QFrame
     
   private:
     QPushButton cvRunButton;
+    QPushButton cvConfigureButton;
+    QLabel cvDescription;
 };
 #endif

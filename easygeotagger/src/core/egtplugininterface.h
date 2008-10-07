@@ -39,11 +39,12 @@ class EgtPluginInterface
     virtual ~EgtPluginInterface() { }
 
     virtual QStringList categories() = 0;
+    virtual void connectConfigurationButton( QPushButton* ) = 0;
     virtual void connectRunButton( QPushButton* ) = 0;
     virtual QString description() = 0;
     virtual QString name() = 0;
 
-    virtual bool isConfigurable() { return false; }
+    virtual bool isConfigurable() = 0;
     
     void setApplicationInterface( EgtApplicationInterface* theInterface ) { cvApplicationInterface = theInterface; }
     void setGui( EgtMainWindow* theGui ) { cvGui = theGui; }

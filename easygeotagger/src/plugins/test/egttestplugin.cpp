@@ -36,6 +36,11 @@ QStringList EgtTestPlugin::categories()
   return cvCategories.split("|");
 }
 
+void EgtTestPlugin::connectConfigurationButton( QPushButton* theButton )
+{
+  connect( theButton, SIGNAL( clicked() ), this, SLOT( showConfigurationPanel() ) );
+}
+
 void EgtTestPlugin::connectRunButton( QPushButton* theButton )
 {
   connect( theButton, SIGNAL( clicked() ), this, SLOT( run() ) );

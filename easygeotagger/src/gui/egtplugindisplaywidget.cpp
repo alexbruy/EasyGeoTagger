@@ -23,6 +23,7 @@
 **/
 #include "egtplugindisplaywidget.h"
 
+#include <QIcon>
 #include <QPushButton>
 #include <QVBoxLayout>
 
@@ -38,9 +39,28 @@ void EgtPluginDisplayWidget::update( EgtPluginInterface* thePlugin )
   //create a new layout for this display item
   setLayout( new QVBoxLayout( this ) );
   
+  //Set some styles for the frame
+  setStyleSheet( "QFrame { background-color: white; }" );
+  
   //Create and add the launch button
   cvRunButton.setText( thePlugin->name() );
   layout()->addWidget( &cvRunButton );
   thePlugin->connectRunButton( &cvRunButton );
+  //Create and add the description
+  cvDescription.setText( thePlugin->description() );
+  cvDescription.setWordWrap( true );
+  cvDescription.setTextFormat( Qt::RichText );
+  cvDescription.setStyleSheet( "QLabel { background-color: white; font-size: 10px; }" );
+  layout()->addWidget( &cvDescription );
+  
+  //Add configuration button if necessary.
+  if( thePlugin->isConfigurable() )
+  {
+    cvConfigureButton.setMaximumSize( 20, 20 );
+    cvConfigureButton.setToolTip( tr( "Configure plugin" ) );
+    cvConfigureButton.setIcon ( QIcon( ":/GUI/icons/wrench.png" ) );
+    thePlugin->connectConfigurationButton( &cvConfigureButton );
+    layout()->addWidget( &cvConfigureButton );
+  }
 }
 

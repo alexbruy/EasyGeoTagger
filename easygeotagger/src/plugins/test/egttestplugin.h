@@ -35,8 +35,10 @@ class EgtTestPlugin : public QObject, EgtPluginInterface
   
   public:
     QStringList categories();
+    void connectConfigurationButton( QPushButton* );
     void connectRunButton( QPushButton* );
     QString description();
+    bool isConfigurable() { return false; }
     QString name();
 
   public slots:
