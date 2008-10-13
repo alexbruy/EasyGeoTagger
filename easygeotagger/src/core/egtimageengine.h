@@ -36,14 +36,19 @@
 class EgtImageEngine 
 { 
   public:
+    EgtImageEngine( );
     EgtImageEngine( QString );
     ~EgtImageEngine();
+    
+    QImage image();
     QImage image( int, int );
   
     void setFile( QString );
-    bool writeJpegFile( QString );
+    bool saveAsJpeg( QString );
   
   private:
+    void init();
+    
     bool allocateMemory(int, int);
     float* createCoeff( int, int, int );
     bool readJpegFile();
@@ -52,9 +57,18 @@ class EgtImageEngine
     int cvBytesPerPixel;   
     J_COLOR_SPACE cvColorSpace; 
     QString cvImageFile;
+    
+    /** \brief Was the last image opened sucessfully */
+    bool cvIsValidImage;
+    
+    /** \brief Local copy of the current resized image */
+    QImage* cvCurrentImage;
+    
     int cvOriginalHeight;
     int cvOriginalwidth;
     unsigned char *cvRawImage;
+    
+    //This variables need to be renamed to something else, maybe just cvNewHeight
     int cvShrinkedHeight;
     int cvShrinkedWidth;
     unsigned char *cvShrinkedRawImage;

@@ -27,6 +27,7 @@
 #include "ui_egtmainwindowgui.h"
 
 #include "egtplugindock.h"
+#include "egtimageengine.h"
 #include "egtpathbuilder.h"
 
 #include <QToolBox>
@@ -49,6 +50,7 @@ private slots:
   
 private:
   QFileInfo cvFileInfo;
+  EgtImageEngine cvImageEngine;
   EgtPathBuilder cvPathBuilder;
   EgtPluginDock* cvPluginDock;
 };

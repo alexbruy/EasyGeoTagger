@@ -20,6 +20,9 @@
 ** Center For Biodiversity and Conservation and The Spanish Ministry of 
 ** Science and Innovation's INTEGRANTS program.
 **
+** This class uses a modified version of Ivaylo Byalkov's createCoeff( int, int, int ) and 
+** shrinkData() function originally posted to www.codeguru.com on Febuary 20, 2001
+** Last accessed (2008-10-13) http://www.codeguru.com/cpp/g-m/bitmap/specialeffects/article.php/c4897/ 
 **/
 
 #include "egtimageengine.h"
@@ -33,13 +36,14 @@
 #include <QFileInfo>
 #include <QDir>
 
+EgtImageEngine::EgtImageEngine( )
+{
+  init();
+}
 
 EgtImageEngine::EgtImageEngine( QString theFile )
 {
-  cvRawImage = NULL;
-  cvShrinkedRawImage = NULL;
-  cvBytesPerPixel = 3; /* or 1 for GRACYSCALE images */
-  cvColorSpace = JCS_RGB; /* or JCS_GRAYSCALE for grayscale images */
+  init();
   setFile( theFile );
   
 }
@@ -50,89 +54,164 @@ EgtImageEngine::~EgtImageEngine()
  free(cvShrinkedRawImage);
 }
 
+void EgtImageEngine::init()
+{
+  cvCurrentImage = 0;
+  cvIsValidImage = false;
+  cvRawImage = NULL;
+  cvShrinkedRawImage = NULL;
+  cvBytesPerPixel = 3; /* or 1 for GRACYSCALE images */
+  cvColorSpace = JCS_RGB; /* or JCS_GRAYSCALE for grayscale images */
+}
+
+/*
+ *
+ * PUBLIC FUNCTIONS
+ *
+ */
+/** 
+* Return a copy of the most recently resized version of the image.
+* 
+*/
+QImage EgtImageEngine::image()
+{
+  if( 0 == cvCurrentImage )
+  {
+    return QImage();
+  }
+  
+  return *cvCurrentImage;
+} 
+
 QImage EgtImageEngine::image(int theWidth,int theHeight)
 {
-  EgtDebug( QString( "Entered in image()." ) );
+  EgtDebug( "entered" );
+  
+  //Check to see if the last read image was sucessful
+  if( !cvIsValidImage )
+  {
+    EgtDebug( "A valid images has not been loaded yet" );
+    return QImage(theWidth, theHeight, QImage::Format_RGB32);
+  }
+  
   if (theWidth > cvOriginalwidth || theHeight > cvOriginalHeight)
   {
-    EgtDebug( QString( "The generated image has to be smaller than the original." ) );
-    QImage lvNodata;
-    return lvNodata;
+    EgtDebug( "The resized image has to be smaller than the original." );
+    return QImage(theWidth, theHeight, QImage::Format_RGB32);
   }
+  
   if(!(allocateMemory(theWidth,theHeight)))
   {
-    QImage lvNodata;
-    return lvNodata;
+    return QImage(theWidth, theHeight, QImage::Format_RGB32);
   }
   /*creation of the array that contains the thumbnail in raw format*/
   shrinkData();
 
+  //If a resized image already existsed free it before asking for a new image
+  if( 0 == cvCurrentImage )
+  {
+    free( cvCurrentImage );
+    cvCurrentImage = 0;
+  }
+  
+  cvCurrentImage = new QImage(cvShrinkedWidth, cvShrinkedHeight, QImage::Format_RGB32);
+  if( 0 == cvCurrentImage )
+  {
+    EgtDebug( "Error allocating memory for the new image" );
+    return QImage(theWidth, theHeight, QImage::Format_RGB32);
+  }
+  
   int lvPixelCounter = 0;
-
-  QImage lvImage(cvShrinkedWidth, cvShrinkedHeight, QImage::Format_RGB32);
   for(int i = 0; i< cvShrinkedHeight*cvShrinkedWidth ; i++)
   {
-    lvImage.setPixel(i%cvShrinkedWidth,i/cvShrinkedWidth,cvShrinkedRawImage[lvPixelCounter]<<16|cvShrinkedRawImage[lvPixelCounter+1]<<8|cvShrinkedRawImage[lvPixelCounter+2]);
+    cvCurrentImage->setPixel(i%cvShrinkedWidth,i/cvShrinkedWidth,cvShrinkedRawImage[lvPixelCounter]<<16|cvShrinkedRawImage[lvPixelCounter+1]<<8|cvShrinkedRawImage[lvPixelCounter+2]);
     lvPixelCounter+=3;
   }
   
-  return lvImage;
+  return *cvCurrentImage;
+}
+
+
+bool EgtImageEngine::saveAsJpeg( QString theOutputFile )
+{
+  EgtDebug( "entered" );
+  if( 0 == cvCurrentImage )
+  {
+    EgtDebug( "modified image pointer was null" );
+    return 0;
+  }
+  
+  return cvCurrentImage->save( theOutputFile, "JPG", 100 );
+  
+  /*
+   * 
+   * Verify that the two results are the same
+   *
+   */
+  
+//   struct jpeg_compress_struct lvCInfo;
+//   struct jpeg_error_mgr lvJerr;
+  
+  /* this is a pointer to one row of image data */
+//   JSAMPROW lvRowPointer[1];
+//   FILE *lvOutFile = fopen( theOutputFile.toStdString().c_str(), "wb" );
+//   
+//   if ( lvOutFile  == NULL ) 
+//   {
+//     EgtDebug( "Error opening output jpeg file ["+ theOutputFile +"]" );
+//     return false;
+//   }
+//   lvCInfo.err = jpeg_std_error( &lvJerr );
+//   jpeg_create_compress(&lvCInfo);
+//   jpeg_stdio_dest(&lvCInfo, lvOutFile);
+
+  /* Setting the parameters of the output file here */
+//   lvCInfo.image_width = cvShrinkedWidth;  
+//   lvCInfo.image_height = cvShrinkedHeight;
+//   lvCInfo.input_components = cvBytesPerPixel;
+//   lvCInfo.in_color_space = cvColorSpace;
+  /* default compression parameters, we shouldn't be worried about these */
+//   jpeg_set_defaults( &lvCInfo );
+  /* Now do the compression .. */
+//   jpeg_start_compress( &lvCInfo, TRUE );
+  /* like reading a file, this time write one row at a time */
+//   while( lvCInfo.next_scanline < lvCInfo.image_height )
+//   {
+//     lvRowPointer[0] = &cvShrinkedRawImage[ lvCInfo.next_scanline * lvCInfo.image_width *  lvCInfo.input_components];
+//     jpeg_write_scanlines( &lvCInfo, lvRowPointer, 1 );
+//   }
+  /* similar to read file, clean up after we're done compressing */
+//   jpeg_finish_compress( &lvCInfo );
+//   jpeg_destroy_compress( &lvCInfo );
+//   fclose( lvOutFile );
+  /* success code is 1! */
+//   return true;
 }
 
 void EgtImageEngine::setFile( QString theImageFilename )
 {
-  EgtDebug( QString( "Entered in setFile()." ) );
+  EgtDebug( "entered" );
 
   cvImageFile = theImageFilename;
-  readJpegFile();
-}
-
-bool EgtImageEngine::writeJpegFile( QString theOutputFile )
-{
-  EgtDebug( QString( "Entered in writeJpegFile()." ) );
+  //This should probably be set in read function itself
+  cvIsValidImage = readJpegFile();
   
-  struct jpeg_compress_struct lvCInfo;
-  struct jpeg_error_mgr lvJerr;
-	
-  /* this is a pointer to one row of image data */
-  JSAMPROW lvRowPointer[1];
-  FILE *lvOutFile = fopen( theOutputFile.toStdString().c_str(), "wb" );
-	
-  if ( lvOutFile  == NULL ) 
+  //If there was a previous resized image, free it and set the pointer to null
+  if( 0 != cvCurrentImage )
   {
-    EgtDebug( QString( "Error opening output jpeg file ["+ theOutputFile +"]" ) );
-    return false;
+    free( cvCurrentImage );
+    cvCurrentImage = 0;
   }
-  lvCInfo.err = jpeg_std_error( &lvJerr );
-  jpeg_create_compress(&lvCInfo);
-  jpeg_stdio_dest(&lvCInfo, lvOutFile);
-
-  /* Setting the parameters of the output file here */
-  lvCInfo.image_width = cvShrinkedWidth;	
-  lvCInfo.image_height = cvShrinkedHeight;
-  lvCInfo.input_components = cvBytesPerPixel;
-  lvCInfo.in_color_space = cvColorSpace;
-  /* default compression parameters, we shouldn't be worried about these */
-  jpeg_set_defaults( &lvCInfo );
-  /* Now do the compression .. */
-  jpeg_start_compress( &lvCInfo, TRUE );
-  /* like reading a file, this time write one row at a time */
-  while( lvCInfo.next_scanline < lvCInfo.image_height )
-  {
-    lvRowPointer[0] = &cvShrinkedRawImage[ lvCInfo.next_scanline * lvCInfo.image_width *  lvCInfo.input_components];
-    jpeg_write_scanlines( &lvCInfo, lvRowPointer, 1 );
-  }
-  /* similar to read file, clean up after we're done compressing */
-  jpeg_finish_compress( &lvCInfo );
-  jpeg_destroy_compress( &lvCInfo );
-  fclose( lvOutFile );
-  /* success code is 1! */
-  return true;
 }
 
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
 bool EgtImageEngine::allocateMemory(int theWidth, int theHeight)
 {
-  EgtDebug( QString( "Entered in allocateMemory()." ) );
+  EgtDebug( "entered" );
   cvShrinkedHeight = theHeight;
   cvShrinkedWidth = theWidth;
   if(cvShrinkedRawImage!= NULL)
@@ -141,7 +220,7 @@ bool EgtImageEngine::allocateMemory(int theWidth, int theHeight)
     lvTempShrinkedRawImage = (unsigned char*)realloc(cvShrinkedRawImage,cvShrinkedHeight*cvShrinkedWidth*sizeof(char)*3);
     if(lvTempShrinkedRawImage == NULL)
     {
-      EgtDebug( QString( "Error allocating memory" ) );
+      EgtDebug( "Error allocating memory" );
       return false;
     }
     cvShrinkedRawImage = lvTempShrinkedRawImage;
@@ -151,7 +230,7 @@ bool EgtImageEngine::allocateMemory(int theWidth, int theHeight)
     cvShrinkedRawImage = (unsigned char*)malloc(cvShrinkedHeight*cvShrinkedWidth*sizeof(char)*3); 
     if(cvShrinkedRawImage == NULL)
     {
-      EgtDebug( QString( "Error allocating memory" ) );
+      EgtDebug( "Error allocating memory" );
       return false;
     }
   }
@@ -160,13 +239,13 @@ bool EgtImageEngine::allocateMemory(int theWidth, int theHeight)
 
 float* EgtImageEngine::createCoeff(int theLength, int theNewLength, int theboolShrink)
 {
-  EgtDebug( QString( "Entered in createCoeff()." ) );
+  EgtDebug( "entered" );
 
   int lvSum = 0, lvSum2;
   float *lvRes = (float *)malloc(2 * theLength * sizeof(float));
   if(lvRes == NULL)
   {
-    EgtDebug( QString( "Error allocating memory" ) );
+    EgtDebug( "Error allocating memory" );
     return lvRes;
   }
   float *lvCoeff = lvRes;
@@ -201,7 +280,7 @@ float* EgtImageEngine::createCoeff(int theLength, int theNewLength, int theboolS
 
 bool EgtImageEngine::readJpegFile()
 {
-  EgtDebug( QString( "Entered in readJpegFile()." ) );
+  EgtDebug( "entered" );
 
   /* these are standard libjpeg structures for reading(decompression) */
   struct jpeg_decompress_struct lvCInfo;
@@ -215,7 +294,7 @@ bool EgtImageEngine::readJpegFile()
 	
   if ( lvInfile == NULL )
   {
-    EgtDebug( QString( "Error opening jpeg file ["+ cvImageFile +"]" ) );
+    EgtDebug( "Error opening jpeg file ["+ cvImageFile +"]" );
     return false;
   }
   /* here we set up the standard libjpeg error handler */
@@ -245,7 +324,7 @@ bool EgtImageEngine::readJpegFile()
     lvTempRawImage = (unsigned char*)realloc(cvRawImage, lvCInfo.output_width*lvCInfo.output_height*lvCInfo.num_components);
     if(lvTempRawImage == NULL)
     {
-      EgtDebug( QString( "Error allocating memory" ) );
+      EgtDebug( "Error allocating memory" );
       return false;
     }
     cvRawImage = lvTempRawImage;
@@ -255,14 +334,14 @@ bool EgtImageEngine::readJpegFile()
   cvRawImage = (unsigned char*)malloc( lvCInfo.output_width*lvCInfo.output_height*lvCInfo.num_components );
   if(cvRawImage == NULL)
   {
-    EgtDebug( QString( "Error allocating memory" ) );
+    EgtDebug( "Error allocating memory" );
     return false;
   }
   /* now actually read the jpeg into the raw buffer */
   lvRowPointer[0] = (unsigned char *)malloc( lvCInfo.output_width*lvCInfo.num_components );
   if(lvRowPointer[0] == NULL)
   {
-    EgtDebug( QString( "Error allocating memory" ) );
+    EgtDebug( "Error allocating memory" );
     return false;
   }
   /* read one scan line at a time */
@@ -283,7 +362,7 @@ bool EgtImageEngine::readJpegFile()
 
 void EgtImageEngine::shrinkData()
 {
-  EgtDebug( QString( "Entered in shrinkData()." ) );
+  EgtDebug( "entered" );
 
   unsigned char *pLine = cvRawImage, *pPix;
   unsigned char *pOutLine = cvShrinkedRawImage;
@@ -299,7 +378,7 @@ void EgtImageEngine::shrinkData()
   float *fBuff = (float *)malloc(6 * cvShrinkedWidth*sizeof(float));
   if(fBuff == NULL)
   {
-    EgtDebug( QString( "Error allocating memory" ) );
+    EgtDebug( "Error allocating memory" );
     return;
   }
   float *fCurrLn = fBuff,

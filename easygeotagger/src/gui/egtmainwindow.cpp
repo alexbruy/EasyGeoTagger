@@ -71,7 +71,8 @@ EgtMainWindow::EgtMainWindow()
 void EgtMainWindow::clicked(const QModelIndex& theIndex)
 {
   EgtDebug( "entered" );
-
+  cvImageEngine.setFile( cvPathBuilder.buildPath( theIndex ) );
+  labelThumbnail->setPixmap( QPixmap::fromImage( cvImageEngine.image( labelThumbnail->width(), labelThumbnail->height() ) ) );
 }
 
 void EgtMainWindow::expanded(const QModelIndex& theIndex)
