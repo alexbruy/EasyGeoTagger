@@ -1,6 +1,6 @@
 /*
 ** File: egtimageengine.cpp
-** Author(s): Roberto Garcia Yunta
+** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-10-07
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
@@ -25,11 +25,6 @@
 #include "egtimageengine.h"
 #include "egtlogger.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <cassert>
-
 #include <QFileInfo>
 #include <QDir>
 
@@ -42,7 +37,6 @@ EgtImageEngine::EgtImageEngine( QString theFile )
 {
   init();
   setFile( theFile );
-  
 }
 
 EgtImageEngine::~EgtImageEngine()
@@ -100,7 +94,7 @@ bool EgtImageEngine::saveAsJpeg( QString theOutputFile )
 {
   if( !cvIsValidImage || !cvHasBeenResized )
   {
-    EgtDebug( "A valid image has not been loaded yet or the original has not been resized yet" );
+    EgtDebug( "A valid image has not been loaded or the original has not been resized yet" );
     return false;
   }
   
@@ -115,7 +109,7 @@ void EgtImageEngine::setFile( QString theImageFilename )
   cvHasBeenResized = false;
   
   //TODO: Eventually there will have to be a switch here to figure out which read() to call
-  //Maybe try reading the magic number
+  //Maybe try reading the magic number?
   
   if( theImageFilename.endsWith("tif", Qt::CaseInsensitive) || theImageFilename.endsWith( "tiff", Qt::CaseInsensitive ) )
   {

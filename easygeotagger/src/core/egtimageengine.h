@@ -1,6 +1,6 @@
 /*
 ** File: egtimageengine.h
-** Author(s): Roberto Garcia Yunta
+** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-10-07
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
@@ -23,9 +23,6 @@
 **/
 #ifndef EGTIMAGEENGINE_H
 #define EGTIMAGEENGINE_H
-
-#include <stdio.h>
-#include <jpeglib.h>
 
 #include <QImage>
 #include <QModelIndex>
@@ -50,7 +47,7 @@ class EgtImageEngine
     bool readRaw( QString );
     bool readTiff( QString );
     
-    /** \brief Was the original image been resized */
+    /** \brief Has the original image been resized */
     bool cvHasBeenResized;
     
     /** \brief Was the last image opened sucessfully */
