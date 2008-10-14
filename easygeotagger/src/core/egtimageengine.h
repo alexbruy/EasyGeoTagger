@@ -23,15 +23,12 @@
 **/
 #ifndef EGTIMAGEENGINE_H
 #define EGTIMAGEENGINE_H
+
 #include <stdio.h>
 #include <jpeglib.h>
-#include <qimage.h>
 
+#include <QImage>
 #include <QModelIndex>
-
-#define DWORD_24BIT_WIDTHBYTES_ALIGN( width ) ((width*3) + ( width % 4 == 0 ? 0 : width % 2 == 0 ? 2 : (width+1) % 4 == 0 ? 3 : 1 ));
-#define F_DELTA 0.0001f 
-
 
 class EgtImageEngine 
 { 
@@ -49,28 +46,18 @@ class EgtImageEngine
   private:
     void init();
     
-    bool allocateMemory(int, int);
-    float* createCoeff( int, int, int );
-    bool readJpegFile();
-    void shrinkData();
-
-    int cvBytesPerPixel;   
-    J_COLOR_SPACE cvColorSpace; 
-    QString cvImageFile;
+    bool readJpeg( QString );
+    
+    /** \brief Was the original image been resized */
+    bool cvHasBeenResized;
     
     /** \brief Was the last image opened sucessfully */
-    bool cvIsValidImage;
+    bool cvIsValidImage;    
     
     /** \brief Local copy of the current resized image */
-    QImage* cvCurrentImage;
+    QImage cvResizedImage;
     
-    int cvOriginalHeight;
-    int cvOriginalwidth;
-    unsigned char *cvRawImage;
-    
-    //This variables need to be renamed to something else, maybe just cvNewHeight
-    int cvShrinkedHeight;
-    int cvShrinkedWidth;
-    unsigned char *cvShrinkedRawImage;
+    /** \brief QImage containing the original image data */
+    QImage* cvOriginalImage;
 };
 #endif
