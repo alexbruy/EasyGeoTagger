@@ -47,6 +47,8 @@ class EgtImageEngine
     void init();
     
     bool readJpeg( QString );
+    bool readRaw( QString );
+    bool readTiff( QString );
     
     /** \brief Was the original image been resized */
     bool cvHasBeenResized;

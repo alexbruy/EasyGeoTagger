@@ -117,8 +117,19 @@ void EgtImageEngine::setFile( QString theImageFilename )
   //TODO: Eventually there will have to be a switch here to figure out which read() to call
   //Maybe try reading the magic number
   
-  //TODO: verify that this is a valid JPG image
-  cvIsValidImage = readJpeg( theImageFilename );
+  if( theImageFilename.endsWith("tif", Qt::CaseInsensitive) || theImageFilename.endsWith( "tiff", Qt::CaseInsensitive ) )
+  {
+    cvIsValidImage = readTiff( theImageFilename );
+  }
+  else if( theImageFilename.endsWith("jpg", Qt::CaseInsensitive) || theImageFilename.endsWith( "jpeg", Qt::CaseInsensitive ) )
+  {
+    cvIsValidImage = readJpeg( theImageFilename );
+  }
+  else
+  {
+    cvIsValidImage = readRaw( theImageFilename );
+  }
+  
 }
 
 /*
@@ -129,90 +140,20 @@ void EgtImageEngine::setFile( QString theImageFilename )
 
 bool EgtImageEngine::readJpeg( QString theImageFilename )
 {
-  //TODO: function looks like it was taken from jpeg_sample.c written by Janaed Satter, if so credit is needed http://www.cim.mcgill.ca/~junaed/libjpeg.php
   EgtDebug( "entered" );
-
-  /* these are standard libjpeg structures for reading(decompression) */
-  struct jpeg_decompress_struct lvCInfo; //TODO: change this variable to something meaningful
-  struct jpeg_error_mgr lvJerr; //TODO: change this variable to something meaningful
-	
-  FILE *lvInfile = fopen( theImageFilename.toStdString().c_str(), "rb" );
-	
-  if ( 0 == lvInfile )
-  {
-    EgtDebug( "Error opening jpeg file ["+ theImageFilename +"]" );
-    return false;
-  }
-  
-  /* here we set up the standard libjpeg error handler */
-  lvCInfo.err = jpeg_std_error( &lvJerr ); //TODO: Use this or remove it
-  /* setup decompression process and source, then read JPEG header */
-  jpeg_create_decompress( &lvCInfo );
-  /* this makes the library read from lvInfile */
-  jpeg_stdio_src( &lvCInfo, lvInfile );
-  /* reading the image header which contains image information */
-  jpeg_read_header( &lvCInfo, TRUE );
-	
-  EgtDebug( "JPEG File Information:" );
-  EgtDebug( "Image width and height: "+ QString::number( lvCInfo.image_width ) +" by "+ QString::number( lvCInfo.image_height ) );
-  EgtDebug( "Color components per pixel: "+ QString::number( lvCInfo.num_components ) );
-  EgtDebug( "Color space: "+ QString::number( lvCInfo.jpeg_color_space ) );
-  
-  /* Start decompression jpeg here */
-  jpeg_start_decompress( &lvCInfo );
-  
-  //Allocate the scan line buffer that will be release on exit from the function
-  JSAMPARRAY lvScanlineBuffer;
-  lvScanlineBuffer = (*lvCInfo.mem->alloc_sarray)((j_common_ptr) &lvCInfo, JPOOL_IMAGE, lvCInfo.output_width * lvCInfo.output_components, 1);
-  if( 0 == lvScanlineBuffer )
-  {
-    EgtDebug( "Error allocating memory for scan line buffer" );
-    return false;
-  }
-  
-  //Free the current image if one exists
-  if( 0 != cvOriginalImage )
-  {
-    free( cvOriginalImage );
-  }
-  //Request new image
-  cvOriginalImage = new QImage( lvCInfo.image_width, lvCInfo.image_height, QImage::Format_RGB32 );
-  if( 0 == cvOriginalImage )
-  {
-    EgtDebug( "Error allocating memory for original image" );
-    return false;
-  }
-  
-  /* Read one scan line at a time and place into QImage */
-  int lvRow = 0;
-  while( lvCInfo.output_scanline < lvCInfo.image_height )
-  {
-    jpeg_read_scanlines( &lvCInfo, lvScanlineBuffer, 1 );
-    
-    //Load the buffer into the QImage based on the number of components
-    if( 3 == lvCInfo.num_components )
-    {
-      for( int lvIterator=0; lvIterator < lvCInfo.image_width * 3; lvIterator += 3 ) 
-      {
-        cvOriginalImage->setPixel( lvIterator / 3, lvRow, lvScanlineBuffer[0][lvIterator]<<16|lvScanlineBuffer[0][lvIterator+1]<<8|lvScanlineBuffer[0][lvIterator+2] );
-      }
-    }
-    //Possible?
-    else if( 2 == lvCInfo.num_components )
-    {
-    }
-    //Possible?
-    else if( 1 == lvCInfo.num_components )
-    {
-    }
-    
-    lvRow++;
-  }
-
-  /* wrap up decompression, destroy objects, free pointers and close open files */
-  jpeg_finish_decompress( &lvCInfo );
-  jpeg_destroy_decompress( &lvCInfo );
-  fclose( lvInfile );
-
-  return true;
+  cvOriginalImage = new QImage( theImageFilename, "JPG" );
+  return !cvOriginalImage->isNull();
 }
+
+bool EgtImageEngine::readRaw( QString theImageFilename )
+{
+  return false;
+}
+
+bool EgtImageEngine::readTiff( QString theImageFilename )
+{
+  EgtDebug( "entered" );
+  cvOriginalImage = new QImage( theImageFilename, "TIFF" );
+  return !cvOriginalImage->isNull();
+}
+
