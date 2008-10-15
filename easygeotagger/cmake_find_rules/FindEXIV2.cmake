@@ -7,9 +7,9 @@
 #    EXIV2_LIBRARY
 
 
-FIND_PATH(EXIV2_INCLUDE_DIR exif.hpp
-  /usr/local/include/exiv2
-  /usr/include/exiv2
+FIND_PATH(EXIV2_INCLUDE_DIR exiv2/exif.hpp
+  /usr/local/include/
+  /usr/include/
   #MSVC
   "$ENV{LIB_DIR}/include/exiv2"
   #mingw

@@ -27,8 +27,8 @@
 #include "egtexifio.h"
 #include "egtitemdelegate.h"
 
-#include <image.hpp>
-#include <exif.hpp>
+#include <exiv2/image.hpp>
+#include <exiv2/exif.hpp>
 #include <cassert>
 
 #include <QDir>
@@ -43,23 +43,29 @@ EgtMainWindow::EgtMainWindow()
 {
   EgtDebug( "entered" );
   setupUi(this);
-  connect(tvFileBrowser, SIGNAL(clicked(const QModelIndex&)), this, SLOT(clicked(const QModelIndex&)));  
-  connect(tvFileBrowser, SIGNAL(expanded(const QModelIndex&)), this, SLOT(expanded(const QModelIndex&)));
+  connect( tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( clicked(const QModelIndex& ) ) );  
+  connect( tvFileBrowser, SIGNAL( expanded( const QModelIndex& ) ), this, SLOT( expanded(const QModelIndex& ) ) );
   
-  QDirModel* lvModel = new QDirModel(QStringList(), QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot, QDir::DirsFirst);
+  QDirModel* lvModel = new QDirModel( QStringList(), QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot, QDir::DirsFirst );
   
-  tvFileBrowser->setModel(lvModel);
-  tvFileBrowser->setColumnWidth(0, 400);
-  tvFileBrowser->setCurrentIndex(lvModel->index(QDir::currentPath()));
-  tvFileBrowser->scrollTo(lvModel->index(QDir::currentPath()));
+  tvFileBrowser->setModel( lvModel );
+  tvFileBrowser->setColumnWidth( 0, 400) ;
+  tvFileBrowser->setCurrentIndex( lvModel->index( QDir::currentPath() ) );
+  tvFileBrowser->scrollTo( lvModel->index( QDir::currentPath() ) );
   
   EgtItemDelegate* lvItemDelegate =  new EgtItemDelegate();
-  connect(chkbColorCodeFilenames, SIGNAL(stateChanged(int)), lvItemDelegate, SLOT(displayGpsExifAvailability(int)));
-  tvFileBrowser->setItemDelegate(lvItemDelegate);
-  tvFileBrowser->setStyleSheet("QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }");
+  connect( chkbColorCodeFilenames, SIGNAL( stateChanged( int) ), lvItemDelegate, SLOT( displayGpsExifAvailability( int) ) );
+  tvFileBrowser->setItemDelegate( lvItemDelegate );
+  tvFileBrowser->setStyleSheet( "QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }" );
   
   cvPluginDock = new EgtPluginDock( "Plugins", this );
   addDockWidget( Qt::LeftDockWidgetArea, cvPluginDock );
+  
+  pbarProgressBar->setMinimum( 0 );
+  pbarProgressBar->setMaximum( 1 );
+  pbarProgressBar->setValue( 0 );
+  
+  connect(&cvImageEngine, SIGNAL( progress( int, int, int ) ), this, SLOT( updateProgress( int, int, int ) ) );
 }
 
 /*
@@ -72,7 +78,7 @@ void EgtMainWindow::clicked(const QModelIndex& theIndex)
 {
   EgtDebug( "entered" );
   cvImageEngine.setFile( cvPathBuilder.buildPath( theIndex ) );
-  labelThumbnail->setPixmap( QPixmap::fromImage( cvImageEngine.image( labelThumbnail->width(), labelThumbnail->height() ) ) );
+  labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.image( labelPreview->width(), labelPreview->height() ) ) );
 }
 
 void EgtMainWindow::expanded(const QModelIndex& theIndex)
@@ -85,6 +91,13 @@ void EgtMainWindow::expanded(const QModelIndex& theIndex)
   }
 }
 
+void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgress )
+{
+  //TODO: consider if it is better to set these individually
+  pbarProgressBar->setMinimum( theMinimum );
+  pbarProgressBar->setMaximum( theMaximum );
+  pbarProgressBar->setValue( theProgress );
+}
 
 /*
 void EgtMainWindow::on_pbtnCreateLayerFromDir_clicked()

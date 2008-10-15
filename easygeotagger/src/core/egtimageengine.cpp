@@ -135,19 +135,107 @@ void EgtImageEngine::setFile( QString theImageFilename )
 bool EgtImageEngine::readJpeg( QString theImageFilename )
 {
   EgtDebug( "entered" );
+  
+  emit( progress( 0, 1, 0) );
   cvOriginalImage = new QImage( theImageFilename, "JPG" );
+  emit( progress( 0, 1, 1) );
+  
   return !cvOriginalImage->isNull();
 }
 
 bool EgtImageEngine::readRaw( QString theImageFilename )
 {
-  return false;
+/*
+ * This function is largely modeled after examples provided with LibRaw
+ */
+  EgtDebug( "entered" );
+  
+  emit( progress( 0, 0, 0) );
+  int lvErrorCode = cvRawProcessor.open_file( theImageFilename.toLocal8Bit() );
+  if( LIBRAW_SUCCESS != lvErrorCode )
+  {
+      EgtDebug( "["+ theImageFilename +"] failed to open-> "+  libraw_strerror( lvErrorCode ) );
+      cvRawProcessor.recycle(); 
+      return false;
+  }
+  
+  lvErrorCode = cvRawProcessor.unpack();
+  if( LIBRAW_SUCCESS != lvErrorCode)
+  {
+    EgtDebug( "["+ theImageFilename +"] failed to unpack-> "+  libraw_strerror( lvErrorCode ) );
+    cvRawProcessor.recycle(); 
+    return false;
+  }
+  
+  EgtDebug( "Unpacked: "+ theImageFilename );
+  EgtDebug( "Camera: "+ QString( cvRawProcessor.imgdata.idata.make ) );
+  EgtDebug( "Width: "+ QString::number( cvRawProcessor.imgdata.sizes.width ) +"\tHeight: "+ QString::number( cvRawProcessor.imgdata.sizes.height ) );
+
+  lvErrorCode = cvRawProcessor.dcraw_process();       
+  if(LIBRAW_SUCCESS != lvErrorCode)
+  {
+    EgtDebug( "Unable to process image: "+  QString( libraw_strerror( lvErrorCode ) ) );
+    cvRawProcessor.recycle(); 
+    return false; 
+  }
+  
+//   emit( progress( 0, 0, 0) );
+  libraw_processed_image_t* lvImage = cvRawProcessor.dcraw_make_mem_image( &lvErrorCode );
+  if( 0 != lvImage )
+  {
+    if( 0 != cvOriginalImage )
+    {
+      free( cvOriginalImage );
+    }
+    cvOriginalImage = new QImage(lvImage->width, lvImage->height, QImage::Format_RGB32 );
+    if( cvOriginalImage->isNull() )
+    {
+      EgtDebug( "Unable to allocate memory for cvOriginalImage" );
+      return false;
+    }
+    
+    if( LIBRAW_IMAGE_BITMAP == lvImage->type )
+    {
+      int lvOffset = 0;
+      
+      if( lvImage->colors == 3 )
+      {
+        //Will this actually work if bits = 1?
+        for( int lvY = 0; lvY < lvImage->height; lvY++ )
+        {
+          emit( progress( 0, lvImage->height, lvY ) );
+          for( int lvX = 0; lvX < lvImage->width; lvX++ )
+          {
+            lvOffset = (lvY * lvImage->width * 3 ) + ( lvX * 3 );
+            cvOriginalImage->setPixel( lvX, lvY, lvImage->data[ lvOffset ] << 16 | lvImage->data[ lvOffset+1 ] << 8 | lvImage->data[ lvOffset+2 ]  );
+          }
+        }
+        emit( progress( 0, lvImage->height, lvImage->height ) );
+      }
+    }
+    else
+    {
+      //PROCESS AS JPEG - How exactly will that be different?
+      return false;
+    }
+  }
+  else
+  {
+      EgtDebug( "Unable to make mem_image: "+  QString( libraw_strerror( lvErrorCode ) ) );
+  }
+
+  cvRawProcessor.recycle();
+  return true;
 }
 
 bool EgtImageEngine::readTiff( QString theImageFilename )
 {
   EgtDebug( "entered" );
+  
+  emit( progress( 0, 1, 0) );
   cvOriginalImage = new QImage( theImageFilename, "TIFF" );
+  emit( progress( 0, 1, 1) );
+  
   return !cvOriginalImage->isNull();
 }
 

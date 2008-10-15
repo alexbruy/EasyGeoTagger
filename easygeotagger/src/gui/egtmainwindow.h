@@ -47,6 +47,7 @@ public:
 private slots:
   void clicked(const QModelIndex&);
   void expanded(const QModelIndex&);
+  void updateProgress( int, int, int );
   
 private:
   QFileInfo cvFileInfo;

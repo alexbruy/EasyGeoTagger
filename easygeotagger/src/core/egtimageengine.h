@@ -24,11 +24,15 @@
 #ifndef EGTIMAGEENGINE_H
 #define EGTIMAGEENGINE_H
 
+#include "libraw/libraw.h"
+
 #include <QImage>
 #include <QModelIndex>
 
-class EgtImageEngine 
+class EgtImageEngine : public QObject
 { 
+  Q_OBJECT 
+  
   public:
     EgtImageEngine( );
     EgtImageEngine( QString );
@@ -53,10 +57,16 @@ class EgtImageEngine
     /** \brief Was the last image opened sucessfully */
     bool cvIsValidImage;    
     
+    /** \brief Raw image processor */
+    LibRaw cvRawProcessor;
+    
     /** \brief Local copy of the current resized image */
     QImage cvResizedImage;
     
     /** \brief QImage containing the original image data */
     QImage* cvOriginalImage;
+  
+  signals:
+    void progress( int, int, int );
 };
 #endif
