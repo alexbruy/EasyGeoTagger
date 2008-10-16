@@ -1,7 +1,7 @@
 /*
-** File: egtmainwindow.h
+** File: egtexporttocsv.h
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-09-22
+** Creation Date: 2008-10-15
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -21,41 +21,29 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTMAINWINDOW_H
-#define EGTMAINWINDOW_H
+#ifndef EXPORTTOCSV_H
+#define EXPORTTOCSV_H
 
-#include "ui_egtmainwindowgui.h"
+#include "egtplugininterface.h"
 
-#include "egtplugindock.h"
-#include "egtimageengine.h"
-#include "egtpathbuilder.h"
+#include <QObject>
 
-#include <QToolBox>
-#include <QFileInfo>
-#include <QMainWindow>
-#include <QModelIndex>
-
-class EgtMainWindow : public QMainWindow, Ui::EgtMainWindowGui
+class EgtExportToCsv: public QObject, EgtPluginInterface
 {
-
   Q_OBJECT
+  Q_INTERFACES(EgtPluginInterface)
   
-public:
-  EgtMainWindow();
-  void setPluginToolBox( QToolBox* );
-  
-  //TODO: Can't access file browser from the plgin using cvGui->tvFileBrowser-> seems like you should look into it, maybe namespace problem
-  QTreeView* fileBrowser() { return tvFileBrowser; }
-  
-private slots:
-  void clicked(const QModelIndex&);
-  void expanded(const QModelIndex&);
-  void updateProgress( int, int, int );
-  
-private:
-  QFileInfo cvFileInfo;
-  EgtImageEngine cvImageEngine;
-  EgtPathBuilder cvPathBuilder;
-  EgtPluginDock* cvPluginDock;
+  public:
+    QStringList categories();
+    void connectConfigurationButton( QPushButton* );
+    void connectRunButton( QPushButton* );
+    QString description();
+    bool isConfigurable() { return false; }
+    QString name();
+
+  public slots:
+    void run();
+    void showConfigurationPanel() { }
+
 };
 #endif

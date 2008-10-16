@@ -108,6 +108,15 @@ void EgtImageEngine::setFile( QString theImageFilename )
   //Reset resized flag
   cvHasBeenResized = false;
   
+  //If we were given a dir just bail
+  QFileInfo lvFileInfo( theImageFilename );
+  if( lvFileInfo.isDir() )
+  {
+    EgtDebug( "received directory not image...bailing" );
+    return;
+  }
+  
+  
   //TODO: Eventually there will have to be a switch here to figure out which read() to call
   //Maybe try reading the magic number?
   
@@ -150,12 +159,11 @@ bool EgtImageEngine::readRaw( QString theImageFilename )
  */
   EgtDebug( "entered" );
   
-  emit( progress( 0, 0, 0) );
   int lvErrorCode = cvRawProcessor.open_file( theImageFilename.toLocal8Bit() );
   if( LIBRAW_SUCCESS != lvErrorCode )
   {
       EgtDebug( "["+ theImageFilename +"] failed to open-> "+  libraw_strerror( lvErrorCode ) );
-      cvRawProcessor.recycle(); 
+      cvRawProcessor.recycle();
       return false;
   }
   

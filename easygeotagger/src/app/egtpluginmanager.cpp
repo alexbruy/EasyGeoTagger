@@ -151,6 +151,7 @@ void EgtPluginManager::loadPlugins( QString theDirectory )
 void EgtPluginManager::updateGui()
 {
   EgtDebug( "entered" )
+  
   //Update the gui
   QToolBox* lvPluginToolBox = new QToolBox( cvMainWindow );
   QList< QString > lvCollectionKeys = cvPluginDisplayCollection.keys();

@@ -27,7 +27,7 @@
 #include <QtPlugin>
 #include <QObject>
 
-static const QString cvCategories = QObject::tr( "Default|Common" );
+static const QString cvCategories = QObject::tr( "Tests" );
 static const QString cvDescription = QObject::tr( "This plugin really does not do anything" );
 static const QString cvName = QObject::tr( "Test Plugin" );
 

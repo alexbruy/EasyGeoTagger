@@ -74,7 +74,7 @@ EgtMainWindow::EgtMainWindow()
  *
  */
 
-void EgtMainWindow::clicked(const QModelIndex& theIndex)
+void EgtMainWindow::clicked( const QModelIndex& theIndex )
 {
   EgtDebug( "entered" );
   cvImageEngine.setFile( cvPathBuilder.buildPath( theIndex ) );
@@ -99,67 +99,6 @@ void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgre
   pbarProgressBar->setValue( theProgress );
 }
 
-/*
-void EgtMainWindow::on_pbtnCreateLayerFromDir_clicked()
-{
-  EgtDebug("on_pbtnCreateLayerFromDir_clicked()");
-  QFileInfo lvFileInfo;
-  QString lvCurrentFile = cvPathBuilder.buildPath(tvFileBrowser->currentIndex());
-  lvFileInfo.setFile(lvCurrentFile);
-  if(!lvFileInfo.isDir())
-  {
-    tvFileBrowser->setCurrentIndex(tvFileBrowser->currentIndex().parent());
-  }
-  
-  lvCurrentFile = cvPathBuilder.buildPath(tvFileBrowser->currentIndex());
-  lvFileInfo.setFile(lvCurrentFile);
-  if(lvFileInfo.isWritable())
-  {
-    QDateTime lvTimestamp = QDateTime::currentDateTime();
-    QFile lvOutputFile(QDir::toNativeSeparators (lvCurrentFile + "/" + tvFileBrowser->currentIndex().data().toString() + "Export_" + lvTimestamp.toString("yyyyMMdd_hhmmss") + ".csv"));
-    if(lvOutputFile.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-      QTextStream lvOutputWriter(&lvOutputFile);
-      lvOutputWriter.setRealNumberPrecision(10);
-      lvOutputWriter << "Longitude,Latitude,File\n";
-      
-      int lvExportedImages = 0;
-      int lvChildCount = 0;
-
-      EgtExifIO lvEEIO;
-      QModelIndex lvCurrentIndex = tvFileBrowser->currentIndex();
-      while(lvCurrentIndex.child(lvChildCount, 0).isValid())
-      {
-        QString lvImageFile = buildPath(lvCurrentIndex.child(lvChildCount, 0));
-        EgtDebug(qPrintable(lvImageFile));
-        if(lvEEIO.hasGpsExif(lvImageFile))
-        {
-          lvOutputWriter << lvEEIO.getLongitude(lvImageFile) << "," << lvEEIO.getLatitude(lvImageFile) << "," << lvImageFile << "\n";
-          lvExportedImages++;
-        }
-        lvChildCount++;
-      }
-    
-      lvOutputFile.close();
-      QMessageBox::warning(this, tr("Export Complete"), tr("%n images exported.", "", lvExportedImages) );
-
-    }
-    else
-    {
-      QMessageBox::critical(this, tr("Write Error"), tr("Could create a new file for output") );
-    }
-  }
-  else
-  {
-    QMessageBox::critical(this, tr("Write Error"), tr("The current directory is not writeable") );
-  }
-
-  if(tvFileBrowser->model())
-  {
-    ((QDirModel*)tvFileBrowser->model())->refresh();
-  }
-}
-*/
 void EgtMainWindow::setPluginToolBox( QToolBox* theToolBox)
 {
   cvPluginDock->setWidget( theToolBox );

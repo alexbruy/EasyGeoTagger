@@ -33,8 +33,9 @@ class EgtExifIO
 {
 
 public:
-  EgtExifIO( const QModelIndex& );
+  EgtExifIO();
   EgtExifIO( QString );
+  EgtExifIO( const QModelIndex& );
   
   float latitude();
   float longitude();

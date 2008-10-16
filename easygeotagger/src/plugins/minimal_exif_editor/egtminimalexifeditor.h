@@ -1,7 +1,7 @@
 /*
-** File: egtplugininterface.h
+** File: egtminimalexifeditor.h
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-09-30
+** Creation Date: 2008-10-15
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -21,28 +21,47 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTTESTPLUGIN_H
-#define EGTTESTPLUGIN_H
+#ifndef EGTMINIMALEXIFEDITOR_H
+#define EGTMINIMALEXIFEDITOR_H
 
 #include "egtplugininterface.h"
+#include "egtexifio.h"
 
+#include <QTableWidget>
+#include <QModelIndex>
+#include <QDockWidget>
+#include <QString>
 #include <QObject>
 
-class EgtTestPlugin : public QObject, EgtPluginInterface
+class EgtMinimalExifEditor: public QObject, EgtPluginInterface
 {
   Q_OBJECT
   Q_INTERFACES(EgtPluginInterface)
   
   public:
+    EgtMinimalExifEditor();
+    
     QStringList categories();
     void connectConfigurationButton( QPushButton* );
     void connectRunButton( QPushButton* );
     QString description();
-    bool isConfigurable() { return true; }
+    bool isConfigurable() { return false; }
     QString name();
 
   public slots:
     void run();
-    void showConfigurationPanel();
+    void showConfigurationPanel() { }
+  
+  private slots:
+    void clicked( const QModelIndex& );
+  
+  private:
+    QDockWidget* cvDock;
+    QTableWidget* cvExifTable;
+    EgtExifIO cvExifIO;
+    QString cvLastFile;
+
+    void updateTable( QString );
+
 };
 #endif

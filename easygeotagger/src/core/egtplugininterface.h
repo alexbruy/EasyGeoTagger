@@ -53,7 +53,7 @@ class EgtPluginInterface
     virtual void showConfigurationPanel() { }
     virtual void run() { }
   
-  private:
+  protected:
     EgtApplicationInterface* cvApplicationInterface;
     EgtMainWindow* cvGui;
 };

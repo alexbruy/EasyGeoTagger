@@ -34,13 +34,21 @@
 #include <QDir>
 
 
+EgtExifIO::EgtExifIO()
+{
+  cvIsValidImage = false;
+  cvHasGpsExif = false;
+}
+
 EgtExifIO::EgtExifIO( QString theImageFilename )
 {
+  EgtExifIO();
   setFile( theImageFilename );
 }
 
 EgtExifIO::EgtExifIO( const QModelIndex& theIndex )
 {
+  EgtExifIO();
   EgtPathBuilder cvPathBuilder;
   setFile( cvPathBuilder.buildPath( theIndex ) );
 }
@@ -127,6 +135,7 @@ float EgtExifIO::longitude()
 
 void EgtExifIO::setFile( QString theImageFilename )
 {
+
   cvImageFile = theImageFilename;
   cvIsValidImage = false;
   cvHasGpsExif = false;
@@ -137,20 +146,20 @@ void EgtExifIO::setFile( QString theImageFilename )
   
   try 
   {
+    //Try to open the image
     cvImage = Exiv2::ImageFactory::open( theImageFilename.toStdString() );
     assert( cvImage.get() != 0 );
+    
+    //Assert passed so we have an image
     cvIsValidImage = true;
     try 
     {
+      //Read the metadata
       cvImage->readMetadata();
       
-      //Exiv2::ExifData::iterator it = cvImage->exifData().findIfdIdIdx( Exiv2::gpsIfdId, 1 );
-      //if( it != cvImage->exifData().end() )
-      //{
-      //  cvHasGpsExif = true;
-      //}
+      //Search through the exif data looking for gps header
+      //TODO: update this functionality, there has to be a better way to do this, if not make it a function
       QString lvKey;
-
       Exiv2::ExifData::const_iterator end = cvImage->exifData().end();
       for (Exiv2::ExifData::const_iterator i = cvImage->exifData().begin(); i != end; ++i)
       {
