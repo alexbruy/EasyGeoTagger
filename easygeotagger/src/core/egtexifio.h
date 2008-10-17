@@ -45,8 +45,8 @@ public:
   
   void setFile( QString theImageFilename );
   
-  bool writeLatitude(QString);
-  bool writeLongitude(QString);
+  bool writeLatitude( QString );
+  bool writeLongitude( QString );
 
   
   

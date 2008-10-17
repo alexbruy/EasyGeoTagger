@@ -71,24 +71,29 @@ void EgtExportToCsv::run()
 {
   EgtDebug( "entered" );
   
+  if( 0 == cvGui || 0 == cvGui->tvFileBrowser )
+  {
+    EgtDebug( "pointer to gui or the file browser was null" );
+    return;
+  }
+  
   QFileInfo lvFileInfo;
   EgtPathBuilder lvPathBuilder;
-  QTreeView* lvFileBrowser = cvGui->fileBrowser();
-  QString lvCurrentFile = lvPathBuilder.buildPath( lvFileBrowser->currentIndex() );
+  QString lvCurrentFile = lvPathBuilder.buildPath( cvGui->tvFileBrowser->currentIndex() );
   
   lvFileInfo.setFile( lvCurrentFile );
   if( !lvFileInfo.isDir() )
   {
     EgtDebug( "Current index is pointing to a file, taking parent" );
-    lvFileBrowser->setCurrentIndex( lvFileBrowser->currentIndex().parent() );
+    cvGui->tvFileBrowser->setCurrentIndex( cvGui->tvFileBrowser->currentIndex().parent() );
   }
   
-  lvCurrentFile = lvPathBuilder.buildPath( lvFileBrowser->currentIndex() );
+  lvCurrentFile = lvPathBuilder.buildPath( cvGui->tvFileBrowser->currentIndex() );
   lvFileInfo.setFile( lvCurrentFile );
   if( lvFileInfo.isWritable() )
   {
     QDateTime lvTimestamp = QDateTime::currentDateTime();
-    QFile lvOutputFile( QDir::toNativeSeparators( lvCurrentFile + "/" + lvFileBrowser->currentIndex().data().toString() + "_Export_" + lvTimestamp.toString( "yyyyMMdd_hhmmss" ) + ".csv" ) );
+    QFile lvOutputFile( QDir::toNativeSeparators( lvCurrentFile + "/" + cvGui->tvFileBrowser->currentIndex().data().toString() + "_Export_" + lvTimestamp.toString( "yyyyMMdd_hhmmss" ) + ".csv" ) );
     if( lvOutputFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
       QTextStream lvOutputWriter( &lvOutputFile );
@@ -100,7 +105,7 @@ void EgtExportToCsv::run()
 
       EgtExifIO lvEEIO;
       QString lvImageFile;
-      QModelIndex lvCurrentIndex = lvFileBrowser->currentIndex();
+      QModelIndex lvCurrentIndex = cvGui->tvFileBrowser->currentIndex();
       while( lvCurrentIndex.child( lvChildCount, 0 ).isValid() )
       {
         lvImageFile = lvPathBuilder.buildPath( lvCurrentIndex.child( lvChildCount, 0 ) );
@@ -128,9 +133,9 @@ void EgtExportToCsv::run()
     QMessageBox::critical( cvGui, tr( "Write Error" ), tr( "The current directory is not writeable" ) );
   }
 
-  if( lvFileBrowser->model() )
+  if( cvGui->tvFileBrowser->model() )
   {
-    ( (QDirModel*)lvFileBrowser->model() )->refresh();
+    ( (QDirModel*)cvGui->tvFileBrowser->model() )->refresh();
   }
 }
 

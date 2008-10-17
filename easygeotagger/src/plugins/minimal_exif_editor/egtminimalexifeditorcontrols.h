@@ -1,7 +1,7 @@
 /*
-** File: egtmainwindow.h
+** File: egtminimalexifeditorcontrols.h
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-09-22
+** Creation Date: 2008-10-17
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -21,38 +21,32 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTMAINWINDOW_H
-#define EGTMAINWINDOW_H
+#ifndef EGTMINIMALEXIFEDITORCONTROLS_H
+#define EGTMINIMALEXIFEDITORCONTROLS_H
 
-#include "ui_egtmainwindowgui.h"
+#include "ui_egtminimalexifeditorcontrolsgui.h"
+#include "egtexifio.h"
 
-#include "egtplugindock.h"
-#include "egtimageengine.h"
-#include "egtpathbuilder.h"
+#include <QWidget>
+#include <QString>
 
-#include <QToolBox>
-#include <QFileInfo>
-#include <QMainWindow>
-#include <QModelIndex>
-
-class EgtMainWindow : public QMainWindow, public Ui::EgtMainWindowGui
+class EgtMinimalExifEditorControls : public QWidget, public Ui::EgtMinimalExifEditorControlsGui
 {
-
   Q_OBJECT
   
-public:
-  EgtMainWindow();
-  void setPluginToolBox( QToolBox* );
+  public:
+    EgtMinimalExifEditorControls( EgtExifIO* theExifIoEngine = 0, QWidget* theParent = 0, Qt::WindowFlags theFlags = 0 );
   
-private slots:
-  void clicked(const QModelIndex&);
-  void expanded(const QModelIndex&);
-  void updateProgress( int, int, int );
-  
-private:
-  QFileInfo cvFileInfo;
-  EgtImageEngine cvImageEngine;
-  EgtPathBuilder cvPathBuilder;
-  EgtPluginDock* cvPluginDock;
+  private slots:
+    void on_leLatitude_textEdited( QString );
+    void on_leLongitude_textEdited( QString );
+    void on_pbtnLatitudeSave_clicked();
+    void on_pbtnLatitudeCancel_clicked();
+    void on_pbtnLongitudeSave_clicked();
+    void on_pbtnLongitudeCancel_clicked();
+    
+  private:
+    EgtExifIO* cvExifEngine;
+
 };
 #endif

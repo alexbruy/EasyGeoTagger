@@ -26,6 +26,7 @@
 #include "egtmainwindow.h"
 #include "egtlogger.h"
 
+#include <QPushButton>
 #include <QFileInfo>
 #include <QtPlugin>
 #include <QObject>
@@ -37,7 +38,6 @@ static const QString cvName = QObject::tr( "Minimal EXIF Editor" );
 EgtMinimalExifEditor::EgtMinimalExifEditor()
 {
   cvDock = 0;
-  cvExifTable = 0;
   cvLastFile = "";
 }
 
@@ -77,19 +77,6 @@ QString EgtMinimalExifEditor::name()
  * SIGNAL and SLOTS
  *
  */
-void EgtMinimalExifEditor::clicked( const QModelIndex& theIndex )
-{
-  EgtDebug( "entered" );
-  
-  EgtPathBuilder lvPathBuilder;
-  QString lvFilename = lvPathBuilder.buildPath( theIndex );
-  QFileInfo lvFileInfo( lvFilename );
-  if( !lvFileInfo.isDir() )
-  {
-    updateTable( lvFilename ); 
-  }
-} 
- 
 void EgtMinimalExifEditor::run()
 {
   EgtDebug( "entered" );
@@ -114,22 +101,17 @@ void EgtMinimalExifEditor::run()
     EgtDebug( "requesting new dock" );
     cvDock = new QDockWidget( cvName, cvGui );
     if( 0 == cvDock ) { return; }
-    
-    cvExifTable = new QTableWidget( cvGui );
-    if( 0 == cvExifTable ) { return; }
-    
-    cvExifTable->setColumnCount(2);
-    cvExifTable->setColumnWidth(0, 180);
-    cvExifTable->setColumnWidth(1, 180);
-    cvExifTable->setHorizontalHeaderLabels(QStringList() << "Field" << "Value");
+    cvControls = new EgtMinimalExifEditorControls( &cvExifIO, cvDock );
+    if( 0 == cvControls ) { return; }
     
     cvDock->setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
     cvDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    cvDock->setMinimumSize( 360,150 );
-    cvDock->setWidget( cvExifTable );
+    cvDock->setMinimumSize( 300,150 );
+    cvDock->setWidget( cvControls );
+    cvControls->show();
     
     EgtDebug( "Connecting to GUI signals" );
-    connect( cvGui->fileBrowser(), SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( clicked(const QModelIndex& ) ) );
+    connect( cvGui->tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( updateExifDisplay(const QModelIndex& ) ) );
     
     EgtDebug( "Adding dock to GUI" );
     cvGui->addDockWidget( Qt::RightDockWidgetArea, cvDock );
@@ -137,35 +119,51 @@ void EgtMinimalExifEditor::run()
   
   if( "" != cvLastFile )
   {
-    updateTable( cvLastFile );
+    updateExifDisplay( cvLastFile );
+  }
+  else
+  {
+    updateExifDisplay( cvGui->tvFileBrowser->currentIndex() );
   }
   
   
   EgtDebug( "done" );
 }
+
+void EgtMinimalExifEditor::updateExifDisplay( const QModelIndex& theIndex )
+{
+  EgtDebug( "entered" );
+  
+  EgtPathBuilder lvPathBuilder;
+  QString lvFilename = lvPathBuilder.buildPath( theIndex );
+  QFileInfo lvFileInfo( lvFilename );
+  if( !lvFileInfo.isDir() )
+  {
+    updateExifDisplay( lvFilename ); 
+  }
+} 
+
 /*
  *
  * PRIVATE FUNCTIONS
  *
  */
-void EgtMinimalExifEditor::updateTable( QString theFilename )
+void EgtMinimalExifEditor::updateExifDisplay( QString theFilename )
 {
   EgtDebug( "entered" );
-//   cvExifTable->clear(); //Why does this not work?
-  for(int lvIterator = cvExifTable->rowCount() - 1; lvIterator >= 0; lvIterator--)
-  {
-    cvExifTable->removeRow( lvIterator );
-  }
-
   cvExifIO.setFile( theFilename );
+  cvLastFile = theFilename;
+
+  //Get data if it exists
   if( cvExifIO.hasGpsExif() )
   {
-    cvExifTable->insertRow( 0 );
-    cvExifTable->setItem( 0, 0, new QTableWidgetItem( "Longitude" ) );
-    cvExifTable->setItem( 0, 1, new QTableWidgetItem( QString::number( cvExifIO.longitude() ) ) );
-    cvExifTable->insertRow( 1 );
-    cvExifTable->setItem( 1, 0, new QTableWidgetItem( "Latitude" ) );
-    cvExifTable->setItem( 1, 1, new QTableWidgetItem( QString::number( cvExifIO.latitude() ) ) );
+    cvControls->leLongitude->setText( QString::number( cvExifIO.longitude() ) ); 
+    cvControls->leLatitude->setText( QString::number( cvExifIO.latitude() ) );
+  }
+  else
+  {
+    cvControls->leLongitude->setText( "" ); 
+    cvControls->leLatitude->setText( "" );
   }
 }
 

@@ -25,9 +25,10 @@
 #define EGTMINIMALEXIFEDITOR_H
 
 #include "egtplugininterface.h"
+#include "egtminimalexifeditorcontrols.h"
+#include "ui_egtminimalexifeditorcontrolsgui.h"
 #include "egtexifio.h"
 
-#include <QTableWidget>
 #include <QModelIndex>
 #include <QDockWidget>
 #include <QString>
@@ -49,19 +50,18 @@ class EgtMinimalExifEditor: public QObject, EgtPluginInterface
     QString name();
 
   public slots:
+    void updateExifDisplay( const QModelIndex& );
     void run();
     void showConfigurationPanel() { }
   
-  private slots:
-    void clicked( const QModelIndex& );
-  
   private:
     QDockWidget* cvDock;
-    QTableWidget* cvExifTable;
     EgtExifIO cvExifIO;
     QString cvLastFile;
+    
+    EgtMinimalExifEditorControls* cvControls;
 
-    void updateTable( QString );
+    void updateExifDisplay( QString );
 
 };
 #endif
