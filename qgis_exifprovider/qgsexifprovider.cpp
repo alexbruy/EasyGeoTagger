@@ -264,24 +264,31 @@ QString QgsExifProvider::storageType() const
 }
 
 
-bool QgsExifProvider::getNextFeature( QgsFeature& feature )
+bool QgsExifProvider::nextFeature( QgsFeature& feature )
 {
   // before we do anything else, assume that there's something wrong with
   // the feature
   feature.setValid( false );
-  mCurrentFeatureIndex++;
-  if( mValidImageList.size() >= 1 && mCurrentFeatureIndex < mValidImageList.size() )
-  {
+
+  while( mValidImageList.size() >= 1 && mCurrentFeatureIndex < mValidImageList.size() )
+  { 
     double xCoordinate = 0.0;
     double yCoordinate = 0.0;
 
     //This is unlikely to be false, but concurency issues could exists - i.e., edit exif after layer created
-    if( !extractCoordinates( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + mValidImageList[mCurrentFeatureIndex], &xCoordinate, &yCoordinate ) ) 
-      return false;
+    if( !extractCoordinates( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + mValidImageList[mCurrentFeatureIndex], &xCoordinate, &yCoordinate ) )
+    {
+      mCurrentFeatureIndex++;
+      continue;
+    }
       
     // skip the feature if it's out of current bounds
     if ( ! boundsCheck( xCoordinate, yCoordinate ) )
-      return false;
+    {
+      QgsDebugMsg( "Feature out of bound Id=:"+ QString::number( mCurrentFeatureIndex ) );
+      mCurrentFeatureIndex++;
+      continue;
+    }
       
     // at this point, one way or another, the current feature values
     // are valid
@@ -330,6 +337,7 @@ bool QgsExifProvider::getNextFeature( QgsFeature& feature )
       feature.addAttribute( *it, val );
     }
 
+    mCurrentFeatureIndex++;
     return true;
   }
 
@@ -343,18 +351,21 @@ void QgsExifProvider::select( QgsAttributeList fetchAttributes,
                                        bool fetchGeometry,
                                        bool useIntersect )
 {
+  QgsDebugMsg( "entered" );
   mSelectionRectangle = rect;
   mAttributesToFetch = fetchAttributes;
   mFetchGeom = fetchGeometry;
   if ( rect.isEmpty() )
   {
+    QgsDebugMsg( "rect was empty" );
     mSelectionRectangle = mExtent;
   }
   else
   {
     mSelectionRectangle = rect;
   }
-  reset();
+  
+  begin();
 }
 
 
@@ -369,7 +380,7 @@ QgsRect QgsExifProvider::extent()
 /**
  * Return the feature type
  */
-QGis::WKBTYPE QgsExifProvider::geometryType() const
+QGis::WkbType QgsExifProvider::geometryType() const
 {
   return QGis::WKBPoint;
 }
@@ -394,11 +405,6 @@ uint QgsExifProvider::fieldCount() const
 const QgsFieldMap & QgsExifProvider::fields() const
 {
   return mAttributeFields;
-}
-
-void QgsExifProvider::reset()
-{
-  mCurrentFeatureIndex = -1;
 }
 
 bool QgsExifProvider::isValid()

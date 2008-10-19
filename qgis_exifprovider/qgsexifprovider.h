@@ -47,6 +47,11 @@ class QgsExifProvider : public QgsVectorDataProvider
     /* Implementation of functions from QgsVectorDataProvider */
 
     /**
+     * Restart reading features from previous select operation. 
+     */
+    virtual void begin() {   mCurrentFeatureIndex = 0; }
+    
+    /**
      * Returns the permanent storage type for this layer as a friendly name.
      */
     virtual QString storageType() const;
@@ -71,13 +76,13 @@ class QgsExifProvider : public QgsVectorDataProvider
      * mFile should be open with the file pointer at the record of the next
      * feature, or EOF.  The feature found on the current line is parsed.
      */
-    virtual bool getNextFeature( QgsFeature& feature );
+    virtual bool nextFeature( QgsFeature& feature );
 
     /**
      * Get feature type.
      * @return int representing the feature type
      */
-    virtual QGis::WKBTYPE geometryType() const;
+    virtual QGis::WkbType geometryType() const;
 
     /**
      * Number of features in the layer
@@ -95,9 +100,6 @@ class QgsExifProvider : public QgsVectorDataProvider
      * @return map of fields
      */
     virtual const QgsFieldMap & fields() const;
-
-    /** Restart reading features from previous select operation */
-    virtual void reset();
 
     /** Returns a bitmask containing the supported capabilities
         Note, some capabilities may change depending on whether
