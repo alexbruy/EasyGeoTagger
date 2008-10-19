@@ -29,12 +29,19 @@
 
 #include "egtplugininterface.h"
 
+/*! \brief EasyGeoTagger application interface
+ *
+ * The application interface provides a container for resources available to all plugins. Currently
+ * this is only the list of available plugins
+ */
 class EgtApplicationInterface
 {
 
   public:
+    /*! \brief Constructor */
     EgtApplicationInterface();
     
+    /*! \brief a map holding all of the currently loaded plugins */
     QMap<QString, EgtPluginInterface*> cvPlugins;
 };
 #endif

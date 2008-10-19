@@ -30,21 +30,46 @@
 #include "egtapplicationinterface.h"
 
 #include <QMap>
+#include <QObject>
 
-class EgtPluginManager
+#define PLUGINCOLLECTION QMap< QString, QMap< QString, EgtPluginDisplayWidget* >* >
+
+/*! \brief EasyGeoTagger plugin manager
+ * 
+ * The plugin manager is responsible for loading plugins and updating the gui
+ */
+class EgtPluginManager : public QObject
 {
+  Q_OBJECT 
+  
   public:
+    /*! \brief Constructor */
     EgtPluginManager( EgtApplicationInterface*, EgtMainWindow* );
+    
+    /*! \brief Load a single plugin */
     bool loadPlugin( QString );
+    
+    /*! \brief Load all plugins in a directory */
     void loadPlugins( QString theDirectory = "");
+    
+    /*! \brief Update plugin display dock widget in the main window */
     void updateGui();
     
+  signals:
+    /*! \brief Signal to indicate which plugin was just loaded */
+    void pluginLoaded( QString );  
+    
   private:
-    /** \brief QMap< Category, QMap< pluginName, pluginDisplay > > */
-    QMap< QString, QMap< QString, EgtPluginDisplayWidget* >* > cvPluginDisplayCollection;
+    /*! \brief Collection of available plugins. Collection are build based on category    QMap< Category, QMap< pluginName, pluginDisplay > > */
+    PLUGINCOLLECTION cvPluginDisplayCollection;
+    
+    /*! \brief Default plugin path */
     QString cvDefaultPluginPath;
     
+    /*! \brief Pointer to the application interface */
     EgtApplicationInterface* cvApplicationInterface;
-    EgtMainWindow* cvMainWindow;
+    
+    /*! \brief Pointer to the main window */
+    EgtMainWindow* cvGui;
 };
 #endif

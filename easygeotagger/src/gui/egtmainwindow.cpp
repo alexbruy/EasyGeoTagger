@@ -70,6 +70,18 @@ EgtMainWindow::EgtMainWindow()
 
 /*
  *
+ * PUBLIC FUNCTIONS
+ *
+ */
+void EgtMainWindow::setPluginToolBox( QToolBox* theToolBox)
+{
+  //TODO: Need to free all of the panels and the tool box if it exists?
+  
+  cvPluginDock->setWidget( theToolBox );
+}
+
+/*
+ *
  * SIGNAL and SLOTS
  *
  */
@@ -99,7 +111,3 @@ void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgre
   pbarProgressBar->setValue( theProgress );
 }
 
-void EgtMainWindow::setPluginToolBox( QToolBox* theToolBox)
-{
-  cvPluginDock->setWidget( theToolBox );
-}

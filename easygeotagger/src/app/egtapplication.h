@@ -28,15 +28,25 @@
 #include "egtapplicationinterface.h"
 #include "egtmainwindow.h"
 
+/*! \brief Main EasyGeoTagger application
+ *
+ * This class represents the main EasyGeoTagger application
+ */
 class EgtApplication
 {
 
   public:
+    /*! \brief Constructor */
     EgtApplication();
   
   private:
-    EgtMainWindow * cvMainWindow;
+    /*! \brief Pointer to the main GUI component */
+    EgtMainWindow * cvGui;
+    
+    /*! \brief Pointer to the application interface */
     EgtApplicationInterface * cvApplicationInterface;
+    
+    /*! \brief Pointer to the application's plugin manager */
     EgtPluginManager * cvPluginManager;
     
 };
