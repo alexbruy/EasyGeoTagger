@@ -42,13 +42,15 @@ public:
   
   bool hasGpsExif();
   bool isValidImage();
-  
+
+  QString lastError(); 
+
   void setFile( QString theImageFilename );
   
   bool writeLatitude( QString );
   bool writeLongitude( QString );
 
-  
+ 
   
   
 private:
@@ -63,6 +65,7 @@ private:
   
   bool cvIsValidImage;
   bool cvHasGpsExif;
-  
+  QString cvLastError;
+  Exiv2::DataValue cvNotValidValue;
 };
 #endif

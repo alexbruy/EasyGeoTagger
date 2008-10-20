@@ -36,6 +36,8 @@
 
 EgtExifIO::EgtExifIO()
 {
+  Exiv2::DataValue notvalid(Exiv2::invalidTypeId );
+  cvNotValidValue=  notvalid;
   cvIsValidImage = false;
   cvHasGpsExif = false;
 }
@@ -66,6 +68,11 @@ bool EgtExifIO::hasGpsExif()
 bool EgtExifIO::isValidImage()
 {
   return cvIsValidImage;
+}
+
+QString EgtExifIO::lastError() 
+{ 
+  return cvLastError; 
 }
 
 float EgtExifIO::latitude()
@@ -167,10 +174,10 @@ void EgtExifIO::setFile( QString theImageFilename )
         lvKey = lvKey.left(12);  //Exif.GPSInfo...
         if( QString::compare( lvKey, "Exif.GPSInfo" ,Qt::CaseInsensitive ) == 0 )
         {
-	   			cvHasGpsExif = true;
-	  			EgtDebug( "["+ theImageFilename +"] has gps exif" );
-	   			break;	
-				}  
+	   cvHasGpsExif = true;
+	   EgtDebug( "["+ theImageFilename +"] has gps exif" );
+	   break;	
+	}  
       }
     }
     catch ( Exiv2::AnyError& e )
@@ -180,6 +187,7 @@ void EgtExifIO::setFile( QString theImageFilename )
   }
   catch ( Exiv2::AnyError& e )
   {
+    cvLastError = QString( "Unable to open file: "+ theImageFilename);
     EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
   }
 }
@@ -190,19 +198,28 @@ bool EgtExifIO::writeLatitude( QString theValue )
   bool ok; 
   float lvLongitude=theValue.toFloat( &ok );
   if( !ok )
+  {
+    cvLastError = QString( "Latitude is not in the correct format: "+ theValue);
     return false;
+  }
     
   if( lvLongitude < 0 )
   {
     ok = write( "Exif.GPSInfo.GPSLatitudeRef", "S", "Ascii" );
     if( !ok )
+    {
+      cvLastError = QString( "Unable to write file: " + cvImageFile);
       return false;
+    }
   }
   else
   {
     ok = write( "Exif.GPSInfo.GPSLatitudeRef", "N", "Ascii" );
     if( !ok )
+    {
+      cvLastError = QString( "Unable to write file: " + cvImageFile);
       return false;
+    }
   }
   
   return write( "Exif.GPSInfo.GPSLatitude", convertToRational(theValue), "Rational" );
@@ -239,9 +256,6 @@ bool EgtExifIO::writeLongitude( QString theValue )
  */
 QString EgtExifIO::convertToRational(QString theDegrees)
 {
-	EgtDebug( "entered" );
-	
-	const int lvInitialPrecision = 1000000;
 	bool ok;
 
 	double lvTheDegrees =fabs(theDegrees.toDouble(&ok));
@@ -251,57 +265,25 @@ QString EgtExifIO::convertToRational(QString theDegrees)
 	double lvDegrees, lvMinutes, lvSeconds, lvAux;
 	/*decomposes num into its integer and fractional parts.*/
 	lvAux = modf(lvTheDegrees, &lvDegrees);
-	
+	/*lvAux contains the decimal part*/
 	lvAux = modf(lvAux * 60, &lvMinutes);
 	
 	lvSeconds = lvAux * 60;
 	
-	int lvDegreesInt = round(lvDegrees * lvInitialPrecision);
-	int lvMinutesInt = round(lvMinutes * lvInitialPrecision);
-	int lvSecondsInt = round(lvSeconds * lvInitialPrecision);
+	int lvSecondsInt = round(lvSeconds );
 	
-	int lvDegreesPrecision = lvInitialPrecision;
-	int lvMinutesPrecision = lvInitialPrecision;
-	int lvSecondsPrecision = lvInitialPrecision;
+	QString lvTextDegrees, lvTextMinutes, lvTextSeconds;
 	
-	while (lvDegreesInt % 10 == 0)
-	{
-		lvDegreesInt/= 10;
-		lvDegreesPrecision/= 10;
-	}
-	
-	while (lvMinutesInt % 10 == 0)
-	{
-		lvMinutesInt/= 10;
-		lvMinutesPrecision/= 10;
-	}
-	
-	while (lvSecondsInt % 10 == 0)
-	{
-		lvSecondsInt/= 10;
-		lvSecondsPrecision/= 10;
-	}
-	
-	QString lvTextDegrees, lvTextDegreesPrecision, lvTextMinutes, lvTextMinutesPrecision;
-	QString lvTextSeconds, lvTextSecondsPrecision;
-	
-	lvTextDegrees = lvTextDegrees.setNum(lvDegreesInt); 
-	lvTextDegreesPrecision = lvTextDegreesPrecision.setNum(lvDegreesPrecision); 
-	lvTextMinutes = lvTextMinutes.setNum(lvMinutesInt); 
-	lvTextMinutesPrecision = lvTextMinutesPrecision.setNum(lvMinutesPrecision);
+	lvTextDegrees = lvTextDegrees.setNum(lvDegrees);  
+	lvTextMinutes = lvTextMinutes.setNum(lvMinutes); 
 	lvTextSeconds = lvTextSeconds.setNum(lvSecondsInt);
-	lvTextSecondsPrecision = lvTextSecondsPrecision.setNum(lvSecondsPrecision);
 	
-	return QString(lvTextDegrees + "/" +lvTextDegreesPrecision+ " " +lvTextMinutes+ "/" +lvTextMinutesPrecision+ " " +lvTextSeconds+ "/" +lvTextSecondsPrecision);
+	return QString(lvTextDegrees + "/1" + " " +lvTextMinutes+ "/1"+ " " +lvTextSeconds+ "/1");
 }
 
 const Exiv2::Value& EgtExifIO::read(QString theKey)
 {
   EgtDebug( "entered" );
-  
-  Exiv2::DataValue lvNotValidValue(Exiv2::invalidTypeId );
-  Exiv2::Value& lvNotValid = lvNotValidValue;
-  Exiv2::TypeId lvTypeId = lvNotValidValue.typeId ();
 
   if( isValidImage() )
   {
@@ -314,7 +296,7 @@ const Exiv2::Value& EgtExifIO::read(QString theKey)
       if( it == cvImage->exifData().end() )
       {
         EgtDebug( QString( "key ["+ theKey + "] no found" ) );
-        return lvNotValid;
+        return cvNotValidValue;
       }
 
       EgtDebug( QString( "key ["+ theKey + "] found" ) );
@@ -325,12 +307,12 @@ const Exiv2::Value& EgtExifIO::read(QString theKey)
     catch (Exiv2::AnyError& e)
     {
       EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
-      return lvNotValid;
+      return cvNotValidValue;
     }
   }
   
   EgtDebug( "Image is not valid" );
-  return lvNotValid; 
+  return cvNotValidValue; 
 
 }
 
@@ -507,6 +489,7 @@ bool EgtExifIO::write( QString theKey, QString theString, QString theDefaultType
   }
   catch ( Exiv2::AnyError& e )
   {
+    cvLastError = QString( "Unable to write to file: " + cvImageFile);
     EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ));
     return false;
   }
