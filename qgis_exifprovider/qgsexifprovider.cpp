@@ -285,7 +285,6 @@ bool QgsExifProvider::nextFeature( QgsFeature& feature )
     // skip the feature if it's out of current bounds
     if ( ! boundsCheck( xCoordinate, yCoordinate ) )
     {
-      QgsDebugMsg( "Feature out of bound Id=:"+ QString::number( mCurrentFeatureIndex ) );
       mCurrentFeatureIndex++;
       continue;
     }
