@@ -87,9 +87,9 @@ void EgtMinimalExifEditor::acceptCoordinates( double theLongitude, double theLat
 {
   if( cvExifIO.isValidImage() )
   {
-    cvControls->leLongitude->setText( QString::number( theLongitude, 'f', 10) );
+    cvControls->leLongitude->setText( QString::number( theLongitude, 'f', 7) );
     cvControls->longitudeControls->setEnabled( true );
-    cvControls->leLatitude->setText( QString::number( theLatitude, 'f', 10) );
+    cvControls->leLatitude->setText( QString::number( theLatitude, 'f', 7) );
     cvControls->latitudeControls->setEnabled( true );
   }
 }
@@ -183,8 +183,8 @@ void EgtMinimalExifEditor::updateExifDisplay( QString theFilename )
   }
   else
   {
-    cvControls->leLongitude->setText( QString::number( cvExifIO.longitude() ) ); 
-    cvControls->leLatitude->setText( QString::number( cvExifIO.latitude() ) );
+    cvControls->leLongitude->setText( QString::number( cvExifIO.longitude(), 'f', 7 ) ); 
+    cvControls->leLatitude->setText( QString::number( cvExifIO.latitude(), 'f', 7 ) );
   }
   
 }
