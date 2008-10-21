@@ -22,9 +22,9 @@ ADD_library( exporttocsv MODULE ${EXPORT_TO_CSV_SRCS} ${EXPORT_TO_CSV_MOC_SRCS} 
 TARGET_LINK_LIBRARIES( exporttocsv 
   ${QT_LIBRARIES}
   ${EXIV2_LIBRARY}
-  egt_app
-  egt_core
-  egt_gui
+  easygt_app
+  easygt_core
+  easygt_gui
   )
 
-INSTALL( TARGETS exporttocsv DESTINATION ${CMAKE_INSTALL_PREFIX}/plugins )
+INSTALL( TARGETS exporttocsv DESTINATION ${EASYGT_PLUGIN_SUBDIR} )

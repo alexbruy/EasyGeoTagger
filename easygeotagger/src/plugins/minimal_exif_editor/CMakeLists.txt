@@ -42,9 +42,9 @@ ADD_library( minimalexifeditor MODULE
 TARGET_LINK_LIBRARIES( minimalexifeditor
   ${QT_LIBRARIES}
   ${EXIV2_LIBRARY}
-  egt_app
-  egt_core
-  egt_gui
+  easygt_app
+  easygt_core
+  easygt_gui
   )
 
-INSTALL( TARGETS minimalexifeditor DESTINATION ${CMAKE_INSTALL_PREFIX}/plugins )
+INSTALL( TARGETS minimalexifeditor DESTINATION ${EASYGT_PLUGIN_SUBDIR} )

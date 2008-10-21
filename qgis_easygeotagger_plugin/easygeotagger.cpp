@@ -114,7 +114,7 @@ void EasyGeoTagger::run()
   {
     //TODO: Add default options for linux/mac/windows
     //TODO: Figureout if this can this be set from cmake???
-    cvEasyGeoTaggerApplication = new EgtApplication( "/home/pete/devel/easygeotagger/trunk/easygeotagger/build/install/plugins" );
+    cvEasyGeoTaggerApplication = new EgtApplication( "/usr/local/lib/easygt" );
     if( 0 == cvEasyGeoTaggerApplication) { return; }
     
     connect( cvIdTool, SIGNAL( locationSelected( double, double ) ), cvEasyGeoTaggerApplication->applicationInterface(), SLOT( acceptCoordinates( double, double ) ) );

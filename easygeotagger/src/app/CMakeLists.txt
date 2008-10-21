@@ -1,3 +1,10 @@
+SET( EGT_APP_ALL_HDRS
+    egtapplication.h
+    egtapplicationinterface.h
+    egtpluginmanager.h
+    egtplugininterface.h
+   )
+
 SET( EGT_APP_SRCS
     egtapplication.cpp
     egtapplicationinterface.cpp
@@ -7,16 +14,18 @@ SET( EGT_APP_SRCS
 SET( EGT_APP_MOC_HDRS
     egtapplicationinterface.h
     egtpluginmanager.h
+    egtplugininterface.h
    )
 
 QT4_AUTOMOC( ${EGT_APP_SRCS} )
 
 QT4_WRAP_CPP( EGT_APP_MOC_SRCS ${EGT_APP_MOC_HDRS} )
 
-ADD_LIBRARY (egt_app SHARED ${EGT_APP_SRCS} ${EGT_APP_MOC_SRCS} )
+ADD_LIBRARY (easygt_app SHARED ${EGT_APP_SRCS} ${EGT_APP_MOC_SRCS} )
 
-ADD_DEPENDENCIES( egt_app egt_core egt_gui )
+ADD_DEPENDENCIES( easygt_app easygt_core easygt_gui )
 
-TARGET_LINK_LIBRARIES( egt_app egt_core egt_gui ${QT_LIBRARIES} )
+TARGET_LINK_LIBRARIES( easygt_app easygt_core easygt_gui ${QT_LIBRARIES} )
 
-INSTALL( TARGETS egt_app DESTINATION lib )
+INSTALL( TARGETS easygt_app DESTINATION ${EASYGT_LIB_SUBDIR} )
+INSTALL( FILES ${EGT_APP_ALL_HDRS} DESTINATION ${EASYGT_INCLUDE_SUBDIR})

@@ -17,6 +17,11 @@ IF (NOT GEOS_FOUND)
   MESSAGE (SEND_ERROR "GEOS dependency was not found!")
 ENDIF (NOT GEOS_FOUND)
 
+FIND_PACKAGE(EASYGT REQUIRED)
+IF (NOT EASYGT_FOUND)
+  MESSAGE (SEND_ERROR "EASYGT dependency was not found!")
+ENDIF (NOT EASYGT_FOUND)
+
 FIND_PACKAGE(EXIV2 REQUIRED)
 IF (NOT EXIV2_FOUND)
   MESSAGE (SEND_ERROR "EXIV2 dependency was not found!")
@@ -26,12 +31,6 @@ FIND_PACKAGE(LIBRAW REQUIRED)
 IF (NOT LIBRAW_FOUND)
   MESSAGE (SEND_ERROR "LIBRAW dependency was not found!")
 ENDIF (NOT LIBRAW_FOUND)
-
-FIND_PATH( EASYGT_INCLUDE_DIR main.cpp /home/pete/devel/easygeotagger/trunk/easygeotagger/src )
-FIND_PATH( EASYGT_HACK_INCLUDE_DIR ui_egtmainwindowgui.h /home/pete/devel/easygeotagger/trunk/easygeotagger/build/src/ui )
-FIND_LIBRARY( EASYGT_APP_LIBRARY egt_app /home/pete/devel/easygeotagger/trunk/easygeotagger/build/install/lib )
-FIND_LIBRARY( EASYGT_CORE_LIBRARY egt_core /home/pete/devel/easygeotagger/trunk/easygeotagger/build/install/lib )
-FIND_LIBRARY( EASYGT_GUI_LIBRARY egt_gui /home/pete/devel/easygeotagger/trunk/easygeotagger/build/install/lib )
 
 IF (WIN32)
   # expect that classes are being imported by default
@@ -93,16 +92,13 @@ QT4_ADD_RESOURCES(easygeotagger_RCC_SRCS ${easygeotagger_RCCS})
 ADD_LIBRARY (easygeotaggerplugin MODULE ${easygeotagger_SRCS} ${easygeotagger_MOC_SRCS} ${easygeotagger_RCC_SRCS} ${easygeotagger_UIS_H})
 
 INCLUDE_DIRECTORIES(
-     ${CMAKE_CURRENT_BINARY_DIR}
-     ${QT_INCLUDE_DIR}
-     ${GDAL_INCLUDE_DIR}
-     ${GEOS_INCLUDE_DIR}
-     ${QGIS_INCLUDE_DIR}
-     ${EASYGT_INCLUDE_DIR}/app
-     ${EASYGT_INCLUDE_DIR}/core
-     ${EASYGT_INCLUDE_DIR}/gui
-     ${EASYGT_HACK_INCLUDE_DIR}
-     .
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${QT_INCLUDE_DIR}
+  ${GDAL_INCLUDE_DIR}
+  ${GEOS_INCLUDE_DIR}
+  ${QGIS_INCLUDE_DIR}
+  ${EASYGT_INCLUDE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 TARGET_LINK_LIBRARIES(easygeotaggerplugin
