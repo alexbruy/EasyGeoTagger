@@ -88,9 +88,9 @@ void EgtMinimalExifEditor::acceptCoordinates( double theLongitude, double theLat
   if( cvExifIO.isValidImage() )
   {
     cvControls->leLongitude->setText( QString::number( theLongitude, 'f', 10) );
-    cvControls->frameLongitudeControls->setEnabled( true );
+    cvControls->longitudeControls->setEnabled( true );
     cvControls->leLatitude->setText( QString::number( theLatitude, 'f', 10) );
-    cvControls->frameLatitudeControls->setEnabled( true );
+    cvControls->latitudeControls->setEnabled( true );
   }
 }
 

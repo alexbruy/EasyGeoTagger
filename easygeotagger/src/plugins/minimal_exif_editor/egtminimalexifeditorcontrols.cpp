@@ -43,7 +43,7 @@ EgtMinimalExifEditorControls::EgtMinimalExifEditorControls( EgtExifIO* theExifIo
   pbtnLongitudeCancel->setToolTip( tr( "Discard changes" ) );
   pbtnLongitudeCancel->setIcon ( QIcon( ":/MINIMALEDITOR/cancel.png" ) );
   
-  frameLongitudeControls->setEnabled( false );
+  longitudeControls->setEnabled( false );
   
   //setup latitude controls
   pbtnLatitudeSave->setMaximumSize( 20,20 );
@@ -54,7 +54,7 @@ EgtMinimalExifEditorControls::EgtMinimalExifEditorControls( EgtExifIO* theExifIo
   pbtnLatitudeCancel->setToolTip( tr( "Discard changes" ) );
   pbtnLatitudeCancel->setIcon ( QIcon( ":/MINIMALEDITOR/cancel.png" ) );
   
-  frameLatitudeControls->setEnabled( false );
+  latitudeControls->setEnabled( false );
 }
 
 /*
@@ -64,12 +64,12 @@ EgtMinimalExifEditorControls::EgtMinimalExifEditorControls( EgtExifIO* theExifIo
  */
  void EgtMinimalExifEditorControls::on_leLatitude_textEdited( QString theString )
 {
-  frameLatitudeControls->setEnabled( true );
+  latitudeControls->setEnabled( true );
 }
 
 void EgtMinimalExifEditorControls::on_leLongitude_textEdited( QString theString )
 {
-  frameLongitudeControls->setEnabled( true );
+  longitudeControls->setEnabled( true );
 }
 
 void EgtMinimalExifEditorControls::on_pbtnLatitudeCancel_clicked()
@@ -77,7 +77,7 @@ void EgtMinimalExifEditorControls::on_pbtnLatitudeCancel_clicked()
   if( 0 == cvExifEngine ) { return; }
   
   leLatitude->setText( QString::number( cvExifEngine->latitude() ) );
-  frameLatitudeControls->setEnabled( false );
+  latitudeControls->setEnabled( false );
 }
 
 void EgtMinimalExifEditorControls::on_pbtnLatitudeSave_clicked()
@@ -90,7 +90,7 @@ void EgtMinimalExifEditorControls::on_pbtnLatitudeSave_clicked()
   }
   else
   {
-    frameLatitudeControls->setEnabled( false );
+    latitudeControls->setEnabled( false );
   }
 }
 
@@ -99,7 +99,7 @@ void EgtMinimalExifEditorControls::on_pbtnLongitudeCancel_clicked()
   if( 0 == cvExifEngine ) { return; }
   
   leLongitude->setText( QString::number( cvExifEngine->longitude() ) );
-  frameLongitudeControls->setEnabled( false );
+  longitudeControls->setEnabled( false );
 }
 
 void EgtMinimalExifEditorControls::on_pbtnLongitudeSave_clicked()
@@ -112,7 +112,7 @@ void EgtMinimalExifEditorControls::on_pbtnLongitudeSave_clicked()
   }
   else
   {
-    frameLongitudeControls->setEnabled( false );
+    longitudeControls->setEnabled( false );
   }
 }
 
