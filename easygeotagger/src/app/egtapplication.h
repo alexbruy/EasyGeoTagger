@@ -34,20 +34,32 @@
  */
 class EgtApplication
 {
-
+  
   public:
     /*! \brief Constructor */
     EgtApplication();
+    
+    /*! \brief Constructor */
+    EgtApplication( QString );
+    
+    /*! \brief Show the gui, just a wrapper for EgtMainWindow->show() */
+    void show() { cvGui->show(); }
+  
+    /*! \brief Return a pointer to the application interface */
+    EgtApplicationInterface* applicationInterface() { return cvApplicationInterface; }
   
   private:
+    /*! \brief Extended constructor */
+    void init( QString thePluginDirectory = "" );
+  
     /*! \brief Pointer to the main GUI component */
-    EgtMainWindow * cvGui;
+    EgtMainWindow* cvGui;
     
     /*! \brief Pointer to the application interface */
-    EgtApplicationInterface * cvApplicationInterface;
+    EgtApplicationInterface* cvApplicationInterface;
     
     /*! \brief Pointer to the application's plugin manager */
-    EgtPluginManager * cvPluginManager;
+    EgtPluginManager* cvPluginManager;
     
 };
 #endif

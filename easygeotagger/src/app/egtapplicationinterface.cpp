@@ -22,7 +22,19 @@
 **
 **/
 #include "egtapplicationinterface.h"
+#include "egtlogger.h"
 
 EgtApplicationInterface::EgtApplicationInterface()
 {
+}
+
+/*
+ *
+ * PUBLIC SLOTS
+ *
+ */
+void EgtApplicationInterface::acceptCoordinates( double theLongitude, double theLatitude )
+{
+  EgtDebug( "Received Lon: "+ QString::number( theLongitude ) +"\tLat: "+ QString::number( theLatitude ) );
+  emit coordinatesReceived( theLongitude, theLatitude );
 }

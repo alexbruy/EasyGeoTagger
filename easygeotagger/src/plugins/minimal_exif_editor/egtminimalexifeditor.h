@@ -32,9 +32,8 @@
 #include <QModelIndex>
 #include <QDockWidget>
 #include <QString>
-#include <QObject>
 
-class EgtMinimalExifEditor: public QObject, EgtPluginInterface
+class EgtMinimalExifEditor: public EgtPluginInterface
 {
   Q_OBJECT
   Q_INTERFACES(EgtPluginInterface)
@@ -47,9 +46,11 @@ class EgtMinimalExifEditor: public QObject, EgtPluginInterface
     void connectRunButton( QPushButton* );
     QString description();
     bool isConfigurable() { return false; }
+    void initPlugin();
     QString name();
 
   public slots:
+    void acceptCoordinates( double, double );
     void updateExifDisplay( const QModelIndex& );
     void run();
     void showConfigurationPanel() { }

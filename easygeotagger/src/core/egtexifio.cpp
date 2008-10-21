@@ -284,7 +284,7 @@ QString EgtExifIO::convertToRational(QString theDegrees)
 const Exiv2::Value& EgtExifIO::read(QString theKey)
 {
   EgtDebug( "entered" );
-
+  
   if( isValidImage() )
   {
     try 

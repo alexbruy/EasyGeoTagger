@@ -39,6 +39,12 @@ ADD_library( minimalexifeditor MODULE
              ${MINIMAL_EXIF_EDITOR_UIS_H} 
            )
 
-TARGET_LINK_LIBRARIES( minimalexifeditor ${QT_LIBRARIES} )
+TARGET_LINK_LIBRARIES( minimalexifeditor
+  ${QT_LIBRARIES}
+  ${EXIV2_LIBRARY}
+  egt_app
+  egt_core
+  egt_gui
+  )
 
-INSTALL( TARGETS minimalexifeditor DESTINATION ${CMAKE_INSTALL_PREFIX}/plugin )
+INSTALL( TARGETS minimalexifeditor DESTINATION ${CMAKE_INSTALL_PREFIX}/plugins )

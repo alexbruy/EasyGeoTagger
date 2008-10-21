@@ -26,6 +26,7 @@
 
 #include <QMap>
 #include <QString>
+#include <QObject>
 
 #include "egtplugininterface.h"
 
@@ -34,8 +35,9 @@
  * The application interface provides a container for resources available to all plugins. Currently
  * this is only the list of available plugins
  */
-class EgtApplicationInterface
+class EgtApplicationInterface : public QObject
 {
+  Q_OBJECT
 
   public:
     /*! \brief Constructor */
@@ -43,5 +45,13 @@ class EgtApplicationInterface
     
     /*! \brief a map holding all of the currently loaded plugins */
     QMap<QString, EgtPluginInterface*> cvPlugins;
+    
+  public slots:
+    /*! \brief Slot accept coordinates from other plugins or external applications */
+    void acceptCoordinates( double, double );
+    
+  signals:
+    /*! \brief Relays coordinates received by acceptCoordinates( double, double ) */
+    void coordinatesReceived( double, double );
 };
 #endif

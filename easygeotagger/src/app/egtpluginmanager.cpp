@@ -36,7 +36,7 @@ EgtPluginManager::EgtPluginManager( EgtApplicationInterface* theApplicationInter
 {
   cvApplicationInterface = theApplicationInterface;
   cvGui = theMainWindow;
-  cvDefaultPluginPath = QCoreApplication::instance ()->applicationDirPath() + "/plugin/";
+  cvDefaultPluginPath = QCoreApplication::instance ()->applicationDirPath() + "/plugins/";
 }
 
 /*
@@ -72,6 +72,7 @@ bool EgtPluginManager::loadPlugin( QString theLibrary )
       //Set the plugin's pointer to the application interface and gui
       lvInterface->setApplicationInterface( cvApplicationInterface );
       lvInterface->setGui( cvGui );
+      lvInterface->initPlugin();
       
       //Loop through all of the categories and build the display components
       QString lvKey;

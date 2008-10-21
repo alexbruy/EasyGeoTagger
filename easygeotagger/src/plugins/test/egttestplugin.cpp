@@ -25,7 +25,6 @@
 #include "egtlogger.h"
 
 #include <QtPlugin>
-#include <QObject>
 
 static const QString cvCategories = QObject::tr( "Tests" );
 static const QString cvDescription = QObject::tr( "This plugin really does not do anything" );

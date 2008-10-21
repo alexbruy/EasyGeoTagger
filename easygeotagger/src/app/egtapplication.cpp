@@ -27,6 +27,24 @@
 
 EgtApplication::EgtApplication()
 {
+  init();
+}
+
+EgtApplication::EgtApplication( QString thePluginDirectory )
+{
+  init( thePluginDirectory );
+}
+
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
+/*!
+ * \param thePluginDirectory a fully qualified path to the directory with EasyGeoTagger plugins
+ */
+void EgtApplication::init( QString thePluginDirectory )
+{
   EgtDebug( "entered" );
   
   //TODO: Add slash screen showing progress, i.e. showing plugin
@@ -39,11 +57,10 @@ EgtApplication::EgtApplication()
   
   //Create a new plugin manager and load plugins from the main plugin archive
   cvPluginManager = new EgtPluginManager( cvApplicationInterface, cvGui );
-  cvPluginManager->loadPlugins();
+  cvPluginManager->loadPlugins( thePluginDirectory );
   cvPluginManager->updateGui();
   EgtDebug( QString( "%1 plugins loaded" ) .arg( cvApplicationInterface->cvPlugins.size() ) );
   
   //Display the main window
   cvGui->show();
 }
-

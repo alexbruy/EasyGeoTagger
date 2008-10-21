@@ -6,6 +6,7 @@ SET(EGT_CORE_SRCS
 
 SET(EGT_CORE_MOC_HDRS
     egtimageengine.h
+    egtplugininterface.h
    )
 
 QT4_AUTOMOC(${EGT_CORE_SRCS})

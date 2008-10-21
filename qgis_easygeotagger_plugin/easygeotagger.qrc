@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/easygeotagger/" >
+        <file>easygeotagger.jpg</file>
+    </qresource>
+</RCC>

@@ -1,7 +1,7 @@
 /*
-** File: egtplugininterface.h
+** File: easygeotaggeridtool.h
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-09-30
+** Creation Date: 2008-10-20
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -21,26 +21,36 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTTESTPLUGIN_H
-#define EGTTESTPLUGIN_H
+#ifndef EASYGEOTAGGER_H
+#define EASYGEOTAGGER_H
 
-#include "egtplugininterface.h"
+#include <QMouseEvent>
+#include <QWidget>
 
-class EgtTestPlugin : public EgtPluginInterface
+#include "qgsmaplayer.h"
+#include "qgsmaptool.h"
+#include "qgsmapcanvas.h"
+#include "qgspoint.h"
+
+/*!
+* \class EasyGeoTaggerIdTool
+* \brief Map tool for collecting mouse clicks
+*
+* The EasyGeoTaggerIdTool is an id style map tool that is used to select point and send them back to the EasyGeoTagger
+* application
+*/
+class EasyGeoTaggerIdTool : public QgsMapTool
 {
   Q_OBJECT
-  Q_INTERFACES(EgtPluginInterface)
   
   public:
-    QStringList categories();
-    void connectConfigurationButton( QPushButton* );
-    void connectRunButton( QPushButton* );
-    QString description();
-    bool isConfigurable() { return false; }
-    QString name();
+    /*! \brief Constructor */
+    EasyGeoTaggerIdTool(QgsMapCanvas*);
+    
+    /*! \brief Method to handle mouse release, i.e., select, event */
+    void canvasReleaseEvent(QMouseEvent*);
 
-  public slots:
-    void run();
-    void showConfigurationPanel() { }
+  signals:
+    void locationSelected( double, double );
 };
 #endif

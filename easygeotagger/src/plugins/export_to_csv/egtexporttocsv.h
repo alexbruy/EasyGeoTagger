@@ -26,9 +26,7 @@
 
 #include "egtplugininterface.h"
 
-#include <QObject>
-
-class EgtExportToCsv: public QObject, EgtPluginInterface
+class EgtExportToCsv: public EgtPluginInterface
 {
   Q_OBJECT
   Q_INTERFACES(EgtPluginInterface)

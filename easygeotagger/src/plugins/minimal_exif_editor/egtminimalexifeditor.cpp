@@ -21,6 +21,7 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
+#include "egtapplicationinterface.h"
 #include "egtminimalexifeditor.h"
 #include "egtpathbuilder.h"
 #include "egtmainwindow.h"
@@ -29,7 +30,6 @@
 #include <QPushButton>
 #include <QFileInfo>
 #include <QtPlugin>
-#include <QObject>
 
 static const QString cvCategories = QObject::tr( "EXIF Editors" );
 static const QString cvDescription = QObject::tr( "Edit/add latitude longitude entries" );
@@ -46,6 +46,7 @@ EgtMinimalExifEditor::EgtMinimalExifEditor()
  * PUBLIC FUNCTIONS
  *
  */
+
 QStringList EgtMinimalExifEditor::categories()
 {
   return cvCategories.split("|");
@@ -66,6 +67,11 @@ QString EgtMinimalExifEditor::description()
   return cvDescription;
 }
 
+void EgtMinimalExifEditor::initPlugin()
+{
+  connect( cvApplicationInterface, SIGNAL( coordinatesReceived( double, double ) ), this, SLOT( acceptCoordinates( double, double ) ) );
+}
+
 QString EgtMinimalExifEditor::name()
 {
   return cvName;
@@ -77,6 +83,17 @@ QString EgtMinimalExifEditor::name()
  * SIGNAL and SLOTS
  *
  */
+void EgtMinimalExifEditor::acceptCoordinates( double theLongitude, double theLatitude )
+{
+  if( cvExifIO.isValidImage() )
+  {
+    cvControls->leLongitude->setText( QString::number( theLongitude, 'f', 10) );
+    cvControls->frameLongitudeControls->setEnabled( true );
+    cvControls->leLatitude->setText( QString::number( theLatitude, 'f', 10) );
+    cvControls->frameLatitudeControls->setEnabled( true );
+  }
+}
+
 void EgtMinimalExifEditor::run()
 {
   EgtDebug( "entered" );
@@ -141,6 +158,10 @@ void EgtMinimalExifEditor::updateExifDisplay( const QModelIndex& theIndex )
   {
     updateExifDisplay( lvFilename ); 
   }
+  else
+  {
+    updateExifDisplay( "" ); 
+  }
 } 
 
 /*
@@ -155,16 +176,17 @@ void EgtMinimalExifEditor::updateExifDisplay( QString theFilename )
   cvLastFile = theFilename;
 
   //Get data if it exists
-  if( cvExifIO.hasGpsExif() )
-  {
-    cvControls->leLongitude->setText( QString::number( cvExifIO.longitude() ) ); 
-    cvControls->leLatitude->setText( QString::number( cvExifIO.latitude() ) );
-  }
-  else
+  if( theFilename == "" || !cvExifIO.hasGpsExif() )
   {
     cvControls->leLongitude->setText( "" ); 
     cvControls->leLatitude->setText( "" );
   }
+  else
+  {
+    cvControls->leLongitude->setText( QString::number( cvExifIO.longitude() ) ); 
+    cvControls->leLatitude->setText( QString::number( cvExifIO.latitude() ) );
+  }
+  
 }
 
  Q_EXPORT_PLUGIN2( minimalexifeditor, EgtMinimalExifEditor );

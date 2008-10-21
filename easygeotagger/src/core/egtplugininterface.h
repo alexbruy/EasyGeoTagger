@@ -25,17 +25,19 @@
 #define EGTPLUGININTERFACE_H
 
 #include <QString>
+#include <QObject>
 #include <QStringList>
 #include <QPushButton>
 
 class EgtMainWindow;
 class EgtApplicationInterface;
 
-class EgtPluginInterface
+class EgtPluginInterface : public QObject
 {
-
+  Q_OBJECT 
+  
   public:
-    EgtPluginInterface() { cvApplicationInterface = 0; }
+    EgtPluginInterface() { cvGui = 0; cvApplicationInterface = 0; }
     virtual ~EgtPluginInterface() { }
 
     virtual QStringList categories() = 0;
@@ -43,8 +45,9 @@ class EgtPluginInterface
     virtual void connectRunButton( QPushButton* ) = 0;
     virtual QString description() = 0;
     virtual QString name() = 0;
-
     virtual bool isConfigurable() = 0;
+    
+    virtual void initPlugin() {}
     
     void setApplicationInterface( EgtApplicationInterface* theInterface ) { cvApplicationInterface = theInterface; }
     void setGui( EgtMainWindow* theGui ) { cvGui = theGui; }
