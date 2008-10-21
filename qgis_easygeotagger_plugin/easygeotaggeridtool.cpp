@@ -24,7 +24,9 @@
 #include "qgscursors.h"
 #include "qgsmaptopixel.h"
 #include "qgsvectorlayer.h"
+#include "qgsmaprenderer.h"
 #include "qgsvectordataprovider.h"
+#include "qgscoordinatetransform.h"
 
 #include "easygeotaggeridtool.h"
 
@@ -35,32 +37,49 @@
 * to the map canvas.
 * @param canvas - Pointer to the QGIS map canvas
 */
-EasyGeoTaggerIdTool::EasyGeoTaggerIdTool(QgsMapCanvas* theCanvas)
-: QgsMapTool(theCanvas)
+EasyGeoTaggerIdTool::EasyGeoTaggerIdTool( QgsMapCanvas* theCanvas )
+: QgsMapTool( theCanvas )
 {
   //set cursor
-  QPixmap myIdentifyQPixmap = QPixmap((const char **) identify_cursor);
-  mCursor = QCursor(myIdentifyQPixmap, 1, 1);
+  QPixmap myIdentifyQPixmap = QPixmap( ( const char ** ) identify_cursor );
+  mCursor = QCursor( myIdentifyQPixmap, 1, 1 );
+  
   //set the current tool to this object
-  mCanvas->setMapTool(this);
+  mCanvas->setMapTool( this );
+  
+  //set the default CRS
+  cvDestinationCRS = new QgsCoordinateReferenceSystem( );
+  cvDestinationCRS->createFromProj4( "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" );
 }
 
 /*!
 * Mouse release, i.e., select, event
 * @param mouseEvent - Pointer to a QMouseEvent
 */
-void EasyGeoTaggerIdTool::canvasReleaseEvent(QMouseEvent* mouseEvent)
+void EasyGeoTaggerIdTool::canvasReleaseEvent( QMouseEvent* mouseEvent )
 {
   //Check to see if there is a layer selected
-  if(mCanvas->currentLayer())
+  if( mCanvas->currentLayer() && cvDestinationCRS )
   {
-    QgsPoint lvThePoint = mCanvas->getCoordinateTransform()->toMapCoordinates( mouseEvent->x(), mouseEvent->y() );
+    QgsCoordinateTransform lvTransformer;
+    lvTransformer.setDestCRS( *cvDestinationCRS );
+    
+    if( mCanvas->hasCrsTransformEnabled() )
+    {
+      lvTransformer.setSourceCrs( mCanvas->mapRenderer()->destinationSrs() );
+    }
+    else
+    {
+      lvTransformer.setSourceCrs( mCanvas->currentLayer()->srs() );
+    }
+    
+    QgsPoint lvTransformedLocation = lvTransformer.transform( mCanvas->getCoordinateTransform()->toMapCoordinates( mouseEvent->x(), mouseEvent->y() ) );
     
     //TODO: If not WGS84 reproject point
-    emit locationSelected( lvThePoint.x(), lvThePoint.y() );
+    emit locationSelected( lvTransformedLocation.x(), lvTransformedLocation.y() );
   }
   else
   {
-    QMessageBox::warning(mCanvas, tr("Warning"), tr("No active layers found"));
+    QMessageBox::warning( mCanvas, tr("Warning"), tr("No active layers found") );
   }
 }

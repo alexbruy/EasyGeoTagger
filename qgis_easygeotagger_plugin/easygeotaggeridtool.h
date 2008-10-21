@@ -27,10 +27,11 @@
 #include <QMouseEvent>
 #include <QWidget>
 
-#include "qgsmaplayer.h"
+#include "qgspoint.h"
 #include "qgsmaptool.h"
 #include "qgsmapcanvas.h"
-#include "qgspoint.h"
+#include "qgsmaplayer.h"
+#include "qgscoordinatereferencesystem.h"
 
 /*!
 * \class EasyGeoTaggerIdTool
@@ -52,5 +53,9 @@ class EasyGeoTaggerIdTool : public QgsMapTool
 
   signals:
     void locationSelected( double, double );
+    
+  private:
+    /*! \brief The destination CRS for transforming points */
+    QgsCoordinateReferenceSystem* cvDestinationCRS;
 };
 #endif
