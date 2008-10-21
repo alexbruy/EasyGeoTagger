@@ -75,7 +75,7 @@ QString EgtExifIO::lastError()
   return cvLastError; 
 }
 
-float EgtExifIO::latitude()
+double EgtExifIO::latitude()
 {
   EgtDebug( "entered" );
   
@@ -98,18 +98,18 @@ float EgtExifIO::latitude()
   if(lvTypeId == Exiv2::invalidTypeId)
     return 0.0;  
   
-  float lvLatitude = 0.0;
+  double lvLatitude = 0.0;
   
   for(int i=lvValue2.count()-1; i>=0; i--)
   {
-    lvLatitude+= lvValue2.toFloat(i);
+    lvLatitude+= (double)lvValue2.toFloat(i);
     if(i>0)
       lvLatitude/= 60;
   }
   return lvLatitude*lvNorthing;
 }
 
-float EgtExifIO::longitude()
+double EgtExifIO::longitude()
 {  
   EgtDebug( "entered" );
   
@@ -129,11 +129,11 @@ float EgtExifIO::longitude()
   if(lvTypeId == Exiv2::invalidTypeId)
     return 0.0;  
   
-  float lvLongitude = 0.0;
+  double lvLongitude = 0.0;
   
   for(int i=lvValue2.count()-1; i>=0; i--)
   {
-    lvLongitude+= lvValue2.toFloat(i);
+    lvLongitude+= (double)lvValue2.toFloat(i);
     if(i>0)
       lvLongitude/= 60;
   }
@@ -270,15 +270,16 @@ QString EgtExifIO::convertToRational(QString theDegrees)
 	
 	lvSeconds = lvAux * 60;
 	
-	int lvSecondsInt = round(lvSeconds );
+	double lvSecondsInt;
+        lvAux = modf(lvSeconds*99999, &lvSecondsInt);
 	
 	QString lvTextDegrees, lvTextMinutes, lvTextSeconds;
 	
-	lvTextDegrees = lvTextDegrees.setNum(lvDegrees);  
+	lvTextDegrees = lvTextDegrees.setNum(lvDegrees); 
 	lvTextMinutes = lvTextMinutes.setNum(lvMinutes); 
-	lvTextSeconds = lvTextSeconds.setNum(lvSecondsInt);
+	lvTextSeconds = lvTextSeconds.setNum((int)lvSecondsInt);
 	
-	return QString(lvTextDegrees + "/1" + " " +lvTextMinutes+ "/1"+ " " +lvTextSeconds+ "/1");
+	return QString(lvTextDegrees + "/1" + " " +lvTextMinutes+ "/1"+ " " +lvTextSeconds+ "/99999");
 }
 
 const Exiv2::Value& EgtExifIO::read(QString theKey)

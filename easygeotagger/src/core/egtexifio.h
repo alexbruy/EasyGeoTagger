@@ -37,8 +37,8 @@ public:
   EgtExifIO( QString );
   EgtExifIO( const QModelIndex& );
   
-  float latitude();
-  float longitude();
+  double latitude();
+  double longitude();
   
   bool hasGpsExif();
   bool isValidImage();
