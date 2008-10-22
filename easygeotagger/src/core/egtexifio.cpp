@@ -197,12 +197,6 @@ bool EgtExifIO::writeLatitude(double theValue)
 {
   EgtDebug( "entered writeLatitude(double)" );
   bool ok; 
-
-  if( !ok )
-  {
-    cvLastError = QString( "Latitude is not in the correct format: "+ QString::number(theValue));
-    return false;
-  }
     
   if( theValue < 0 )
   {
@@ -223,7 +217,7 @@ bool EgtExifIO::writeLatitude(double theValue)
     }
   }
   
-  return write( "Exif.GPSInfo.GPSLatitude", convertToRational( QString::number( theValue ) ), "Rational" );
+  return write( "Exif.GPSInfo.GPSLatitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
 }
 
 
@@ -243,12 +237,6 @@ bool EgtExifIO::writeLongitude( double theValue )
   EgtDebug( "entered writeLatitude(double)" );
   bool ok; 
 
-  if( !ok )
-  {
-    cvLastError = QString( "Longitude is not in the correct format: "+ QString::number( theValue ) );
-    return false;
-  }
-    
   if( theValue < 0 )
   {
     ok = write( "Exif.GPSInfo.GPSLatitudeRef", "S", "Ascii" );
@@ -268,7 +256,7 @@ bool EgtExifIO::writeLongitude( double theValue )
     }
   }
   
-  return write( "Exif.GPSInfo.GPSLongitude", convertToRational( QString::number( theValue ) ), "Rational" );
+  return write( "Exif.GPSInfo.GPSLongitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
 }
 
 bool EgtExifIO::writeLongitude( QString theValue )

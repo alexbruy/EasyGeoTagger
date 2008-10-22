@@ -76,7 +76,7 @@ void EgtMinimalExifEditorControls::on_pbtnLatitudeCancel_clicked()
 {
   if( 0 == cvExifEngine ) { return; }
   
-  leLatitude->setText( QString::number( cvExifEngine->latitude() ) );
+  leLatitude->setText( QString::number( cvExifEngine->latitude(), 'f', 7  ) );
   latitudeControls->setEnabled( false );
 }
 
@@ -90,7 +90,7 @@ void EgtMinimalExifEditorControls::on_pbtnLatitudeSave_clicked()
   }
   else
   {
-    leLatitude->setText( QString::number( cvExifEngine->latitude() ) );
+    leLatitude->setText( QString::number( cvExifEngine->latitude(), 'f', 7  ) );
     latitudeControls->setEnabled( false );
   }
 }
@@ -99,7 +99,7 @@ void EgtMinimalExifEditorControls::on_pbtnLongitudeCancel_clicked()
 {
   if( 0 == cvExifEngine ) { return; }
   
-  leLongitude->setText( QString::number( cvExifEngine->longitude() ) );
+  leLongitude->setText( QString::number( cvExifEngine->longitude(), 'f', 7  ) );
   longitudeControls->setEnabled( false );
 }
 
@@ -113,7 +113,7 @@ void EgtMinimalExifEditorControls::on_pbtnLongitudeSave_clicked()
   }
   else
   {
-    leLongitude->setText( QString::number( cvExifEngine->longitude() ) );
+    leLongitude->setText( QString::number( cvExifEngine->longitude(), 'f', 7  ) );
     longitudeControls->setEnabled( false );
   }
 }
