@@ -1,4 +1,4 @@
-SUBDIRS( app core gui ui plugins )
+SUBDIRS( ui app core gui plugins )
 
 SET(EasyGT_APP_SRCS
     main.cpp

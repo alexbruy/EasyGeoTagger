@@ -90,6 +90,7 @@ void EgtMinimalExifEditorControls::on_pbtnLatitudeSave_clicked()
   }
   else
   {
+    leLatitude->setText( QString::number( cvExifEngine->latitude() ) );
     latitudeControls->setEnabled( false );
   }
 }
@@ -112,6 +113,7 @@ void EgtMinimalExifEditorControls::on_pbtnLongitudeSave_clicked()
   }
   else
   {
+    leLongitude->setText( QString::number( cvExifEngine->longitude() ) );
     longitudeControls->setEnabled( false );
   }
 }

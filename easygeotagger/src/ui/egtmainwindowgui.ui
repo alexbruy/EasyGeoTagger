@@ -5,22 +5,40 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>698</width>
-    <height>628</height>
+    <width>555</width>
+    <height>648</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>EasyGeoTagger - Alpha Version revision 27 - Do Not Distribute - Biodiversity Informatics Facility - AMNH</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
-   <layout class="QVBoxLayout" >
-    <item>
+   <layout class="QGridLayout" >
+    <item row="0" column="0" >
      <widget class="QSplitter" name="splitter" >
       <property name="orientation" >
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWidget" name="layoutWidget" >
+      <widget class="QFrame" name="frame" >
+       <property name="frameShape" >
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow" >
+        <enum>QFrame::Plain</enum>
+       </property>
        <layout class="QVBoxLayout" >
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
+        </property>
         <item>
          <widget class="QTreeView" name="tvFileBrowser" >
           <property name="sizePolicy" >
@@ -46,37 +64,64 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget" >
+      <widget class="QFrame" name="frame_2" >
+       <property name="frameShape" >
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow" >
+        <enum>QFrame::Raised</enum>
+       </property>
        <layout class="QGridLayout" >
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
+        </property>
         <item row="0" column="0" colspan="2" >
-         <widget class="QLabel" name="labelPreview" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <widget class="QGroupBox" name="groupBox_2" >
+          <property name="title" >
+           <string>ImagePreview</string>
           </property>
-          <property name="minimumSize" >
-           <size>
-            <width>512</width>
-            <height>250</height>
-           </size>
-          </property>
-          <property name="layoutDirection" >
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="text" >
-           <string>Preview</string>
-          </property>
-          <property name="textFormat" >
-           <enum>Qt::LogText</enum>
-          </property>
-          <property name="scaledContents" >
-           <bool>false</bool>
-          </property>
-          <property name="alignment" >
-           <set>Qt::AlignCenter</set>
-          </property>
+          <layout class="QVBoxLayout" >
+           <item>
+            <widget class="QLabel" name="labelPreview" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize" >
+              <size>
+               <width>512</width>
+               <height>250</height>
+              </size>
+             </property>
+             <property name="layoutDirection" >
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text" >
+              <string>Preview</string>
+             </property>
+             <property name="textFormat" >
+              <enum>Qt::LogText</enum>
+             </property>
+             <property name="scaledContents" >
+              <bool>false</bool>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item row="1" column="0" >
@@ -110,21 +155,10 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>698</width>
+     <width>555</width>
      <height>30</height>
     </rect>
    </property>
-  </widget>
-  <widget class="QToolBar" name="toolBar" >
-   <property name="windowTitle" >
-    <string>toolBar</string>
-   </property>
-   <attribute name="toolBarArea" >
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak" >
-    <bool>false</bool>
-   </attribute>
   </widget>
  </widget>
  <resources/>
