@@ -47,10 +47,11 @@ public:
 
   void setFile( QString theImageFilename );
   
+  bool writeLatitude(double);
   bool writeLatitude( QString );
+  
+  bool writeLongitude(double );
   bool writeLongitude( QString );
-
- 
   
   
 private:

@@ -192,18 +192,19 @@ void EgtExifIO::setFile( QString theImageFilename )
   }
 }
 
-bool EgtExifIO::writeLatitude( QString theValue )
+
+bool EgtExifIO::writeLatitude(double theValue)
 {
-  EgtDebug( "entered" );
+  EgtDebug( "entered writeLatitude(double)" );
   bool ok; 
-  float lvLongitude=theValue.toFloat( &ok );
+
   if( !ok )
   {
-    cvLastError = QString( "Latitude is not in the correct format: "+ theValue);
+    cvLastError = QString( "Latitude is not in the correct format: "+ QString::number(theValue));
     return false;
   }
     
-  if( lvLongitude < 0 )
+  if( theValue < 0 )
   {
     ok = write( "Exif.GPSInfo.GPSLatitudeRef", "S", "Ascii" );
     if( !ok )
@@ -217,36 +218,71 @@ bool EgtExifIO::writeLatitude( QString theValue )
     ok = write( "Exif.GPSInfo.GPSLatitudeRef", "N", "Ascii" );
     if( !ok )
     {
-      cvLastError = QString( "Unable to write file: " + cvImageFile);
+      cvLastError = QString( "Unable to write file: " + cvImageFile );
       return false;
     }
   }
   
-  return write( "Exif.GPSInfo.GPSLatitude", convertToRational(theValue), "Rational" );
+  return write( "Exif.GPSInfo.GPSLatitude", convertToRational( QString::number( theValue ) ), "Rational" );
+}
+
+
+bool EgtExifIO::writeLatitude( QString theValue )
+{
+  EgtDebug( "entered writeLatitude(QString)" );
+  bool ok; 
+  double lvLatitude=theValue.toDouble( &ok );
+  if( ok )
+    return writeLatitude( lvLatitude );
+  else 
+    return false;
+}
+
+bool EgtExifIO::writeLongitude( double theValue )
+{
+  EgtDebug( "entered writeLatitude(double)" );
+  bool ok; 
+
+  if( !ok )
+  {
+    cvLastError = QString( "Longitude is not in the correct format: "+ QString::number( theValue ) );
+    return false;
+  }
+    
+  if( theValue < 0 )
+  {
+    ok = write( "Exif.GPSInfo.GPSLatitudeRef", "S", "Ascii" );
+    if( !ok )
+    {
+      cvLastError = QString( "Unable to write file: " + cvImageFile );
+      return false;
+    }
+  }
+  else
+  {
+    ok = write( "Exif.GPSInfo.GPSLatitudeRef", "N", "Ascii" );
+    if( !ok )
+    {
+      cvLastError = QString( "Unable to write file: " + cvImageFile );
+      return false;
+    }
+  }
+  
+  return write( "Exif.GPSInfo.GPSLongitude", convertToRational( QString::number( theValue ) ), "Rational" );
 }
 
 bool EgtExifIO::writeLongitude( QString theValue )
 {
-  EgtDebug( "entered" );
-  bool ok;
-  float lvLongitude=theValue.toFloat( &ok );
-  if( !ok )
+  EgtDebug( "entered writeLongitude(QString)" );
+  bool ok; 
+  double lvLongitude=theValue.toDouble( &ok );
+  if( ok )
+    return writeLongitude( lvLongitude );
+  else 
     return false;
-  if( lvLongitude < 0 )
-  {
-    ok = write( "Exif.GPSInfo.GPSLongitudeRef", "W", "Ascii" );
-    if( !ok )
-      return false;
-  }
-  else
-  {
-    ok = write( "Exif.GPSInfo.GPSLongitudeRef", "E", "Ascii" );
-    if( !ok )
-      return false;
-  }
-  
-  return write( "Exif.GPSInfo.GPSLongitude", convertToRational(theValue), "Rational" );
 }
+
+
 
 
 /*
