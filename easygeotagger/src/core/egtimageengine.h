@@ -34,36 +34,53 @@ class EgtImageEngine : public QObject
   Q_OBJECT 
   
   public:
+    /*! \brief Constructor */
     EgtImageEngine( );
+    
+    /*! \brief Constructor */
     EgtImageEngine( QString );
+    
+    /*! \brief Destructor */
     ~EgtImageEngine();
     
+    /*! \brief Returns the a copy of the current resize image */
     QImage image();
+    
+    /*! \brief Returns a copy of the image resized to the specified dimensions */
     QImage image( int, int );
   
+    /*! \brief Set the image filename */
     void setFile( QString );
+    
+    /*! \brief Save the current resized image as a jpeg */
     bool saveAsJpeg( QString );
   
   private:
+    /*! \brief Initialization steps */
     void init();
     
+    /*! \brief Read/open the base image as a jpeg */
     bool readJpeg( QString );
+    
+    /*! \brief Read/open the base image as a raw image format */
     bool readRaw( QString );
+    
+    /*! \brief Read/open the base image as a tiff */
     bool readTiff( QString );
     
-    /** \brief Has the original image been resized */
+    /*! \brief Has the base image been resized */
     bool cvHasBeenResized;
     
-    /** \brief Was the last image opened sucessfully */
+    /*! \brief Was the last image opened sucessfully */
     bool cvIsValidImage;    
     
-    /** \brief Raw image processor */
+    /*! \brief Raw image processor */
     LibRaw cvRawProcessor;
     
-    /** \brief Local copy of the current resized image */
+    /*! \brief Local copy of the current resized image */
     QImage cvResizedImage;
     
-    /** \brief QImage containing the original image data */
+    /*! \brief QImage containing the original/base image data */
     QImage* cvOriginalImage;
   
   signals:

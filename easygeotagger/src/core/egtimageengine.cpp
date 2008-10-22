@@ -60,6 +60,9 @@ void EgtImageEngine::init()
 * 
 */
 //TODO: rename this function
+/*!
+ * \returns A copy of the resized image or an invalid image if the original image has not been resize yet
+ */
 QImage EgtImageEngine::image()
 {
   EgtDebug( "entered" );
@@ -73,6 +76,11 @@ QImage EgtImageEngine::image()
 } 
 
 //TODO: rename this function
+/*!
+ * \param theWidth the width of the new image
+ * \param theHeight the height of the new image
+ * \returns A new image resized to the specific dimensions or a blank image if a valid image as not been opened
+ */
 QImage EgtImageEngine::image(int theWidth,int theHeight)
 {
   EgtDebug( "entered" );
@@ -90,6 +98,10 @@ QImage EgtImageEngine::image(int theWidth,int theHeight)
   return cvResizedImage;
 }
 
+/*!
+ * \param theOutputFile absolute path and filename in which to save the resized image
+ * \returns true on success, false on failure
+ */
 bool EgtImageEngine::saveAsJpeg( QString theOutputFile )
 {
   if( !cvIsValidImage || !cvHasBeenResized )
@@ -101,6 +113,9 @@ bool EgtImageEngine::saveAsJpeg( QString theOutputFile )
   return cvResizedImage.save( theOutputFile, "JPG", 100 );
 }
 
+/*!
+ * \param theImageFilename absolute path and filename of the image to open
+ */
 void EgtImageEngine::setFile( QString theImageFilename )
 {
   EgtDebug( "entered" );
@@ -140,7 +155,9 @@ void EgtImageEngine::setFile( QString theImageFilename )
  * PRIVATE FUNCTIONS
  *
  */
-
+/*!
+ * \param theImageFilename absolute path and filename of the image to open
+ */
 bool EgtImageEngine::readJpeg( QString theImageFilename )
 {
   EgtDebug( "entered" );
@@ -152,6 +169,9 @@ bool EgtImageEngine::readJpeg( QString theImageFilename )
   return !cvOriginalImage->isNull();
 }
 
+/*!
+ * \param theImageFilename absolute path and filename of the image to open
+ */
 bool EgtImageEngine::readRaw( QString theImageFilename )
 {
 /*
@@ -159,6 +179,7 @@ bool EgtImageEngine::readRaw( QString theImageFilename )
  */
   EgtDebug( "entered" );
   
+  //Try to open the file
   int lvErrorCode = cvRawProcessor.open_file( theImageFilename.toLocal8Bit() );
   if( LIBRAW_SUCCESS != lvErrorCode )
   {
@@ -167,6 +188,7 @@ bool EgtImageEngine::readRaw( QString theImageFilename )
       return false;
   }
   
+  //Unpack the image data
   lvErrorCode = cvRawProcessor.unpack();
   if( LIBRAW_SUCCESS != lvErrorCode)
   {
@@ -179,6 +201,7 @@ bool EgtImageEngine::readRaw( QString theImageFilename )
   EgtDebug( "Camera: "+ QString( cvRawProcessor.imgdata.idata.make ) );
   EgtDebug( "Width: "+ QString::number( cvRawProcessor.imgdata.sizes.width ) +"\tHeight: "+ QString::number( cvRawProcessor.imgdata.sizes.height ) );
 
+  //Process data -- not totally sure this is necessary here
   lvErrorCode = cvRawProcessor.dcraw_process();       
   if(LIBRAW_SUCCESS != lvErrorCode)
   {
@@ -187,7 +210,8 @@ bool EgtImageEngine::readRaw( QString theImageFilename )
     return false; 
   }
   
-//   emit( progress( 0, 0, 0) );
+  //Read the image data then place it into a QImage
+  emit( progress( 0, 0, 0) );
   libraw_processed_image_t* lvImage = cvRawProcessor.dcraw_make_mem_image( &lvErrorCode );
   if( 0 != lvImage )
   {
@@ -236,6 +260,9 @@ bool EgtImageEngine::readRaw( QString theImageFilename )
   return true;
 }
 
+/*!
+ * \param theImageFilename absolute path and filename of the image to open
+ */
 bool EgtImageEngine::readTiff( QString theImageFilename )
 {
   EgtDebug( "entered" );

@@ -30,6 +30,10 @@
  * PUBLIC FUNCTIONS
  *
  */
+/*!
+ * \param theIndex the QModelIndex representing the object for which to build an abolute path
+ * \returns a the absolute path to the object represented by the QModeIndex
+ */
 QString EgtPathBuilder::buildPath(const QModelIndex& theIndex)
 {
   if(!theIndex.isValid()) { return ""; }

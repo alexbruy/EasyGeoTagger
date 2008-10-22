@@ -26,10 +26,14 @@
 
 #include <QModelIndex>
 
+/*! \brief Builds absolute paths from a QModelIndex
+ *
+ */
 class EgtPathBuilder
 {
 
   public:
+    /*! \brief Build an absolute path for the selected item */
     QString buildPath(const QModelIndex& theIndex);
 
 };
