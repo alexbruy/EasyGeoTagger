@@ -80,9 +80,6 @@ void EasyGeoTaggerGui::on_pbtnAutoArrange_clicked()
   cvQgisInterface->mainWindow()->resize( newQgisWidth - ( cvQgisInterface->mainWindow()->width() - newQgisWidth ), newQgisHeight - ( cvQgisInterface->mainWindow()->height() - newQgisHeight ) );
   cvQgisInterface->mainWindow()->move( int( lvScreenWidth * 0.63 ), int( lvScreenHeight * 0.25 ) );
   cvQgisInterface->mainWindow()->setEnabled( true );
-  
-  
-qDebug("%d\t%d", lvScreenWidth, lvScreenHeight );
 }
 
 void EasyGeoTaggerGui::on_pbtnActivate_clicked()
