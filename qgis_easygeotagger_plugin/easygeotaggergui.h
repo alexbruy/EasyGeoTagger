@@ -15,6 +15,10 @@
 #include <QDialog>
 #include <ui_easygeotaggerguibase.h>
 
+#include "egtapplication.h"
+
+#include "qgisinterface.h"
+
 /**
 @author Tim Sutton
 */
@@ -22,16 +26,23 @@ class EasyGeoTaggerGui : public QDialog, private Ui::EasyGeoTaggerGuiBase
 {
     Q_OBJECT
   public:
-    EasyGeoTaggerGui( QWidget* parent = 0, Qt::WFlags fl = 0 );
+    EasyGeoTaggerGui( QgisInterface*, EgtApplication*, QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~EasyGeoTaggerGui();
 
+  signals:
+    void setMapTool();
+    
   private:
     static const int context_id = 0;
+    EgtApplication* cvEasyGT;
+    QgisInterface* cvQgisInterface;
 
   private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
     void on_buttonBox_helpRequested();
+    void on_pbtnAutoArrange_clicked();
+    void on_pbtnActivate_clicked();
 
 };
 

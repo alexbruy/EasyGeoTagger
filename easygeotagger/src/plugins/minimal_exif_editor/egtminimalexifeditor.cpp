@@ -123,7 +123,7 @@ void EgtMinimalExifEditor::run()
     
     cvDock->setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
     cvDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    cvDock->setMinimumSize( 300,150 );
+    cvDock->setMinimumSize( 250,150 );
     cvDock->setWidget( cvControls );
     cvControls->show();
     

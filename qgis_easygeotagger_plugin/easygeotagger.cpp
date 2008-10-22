@@ -96,13 +96,6 @@ void EasyGeoTagger::help()
 // not be enough
 void EasyGeoTagger::run()
 {
-    //NOTE: DO we need a gui?
-//   if( 0 == cvPluginGui )
-//   {
-//     cvPluginGui = new EasyGeoTaggerGui( mQGisIface->mainWindow(), QgisGui::ModalDialogFlags );
-//     if( 0 == cvPluginGui ) { return; }
-//   }
-//   cvPluginGui->show();
   
   if( 0 == cvIdTool )
   {
@@ -123,6 +116,21 @@ void EasyGeoTagger::run()
   {
     cvEasyGeoTaggerApplication->show();
   }
+  
+  if( 0 == cvPluginGui )
+  {
+    cvPluginGui = new EasyGeoTaggerGui( mQGisIface, cvEasyGeoTaggerApplication, mQGisIface->mainWindow(), QgisGui::ModalDialogFlags );
+    if( 0 == cvPluginGui ) { return; }
+    connect( cvPluginGui, SIGNAL( setMapTool() ), this, SLOT( setMapTool() ) );
+  }
+  
+  cvPluginGui->show();
+  setMapTool();
+}
+
+void EasyGeoTagger::setMapTool()
+{
+  if( 0 == cvIdTool ) { return; }
   
   mQGisIface->mapCanvas()->setMapTool( cvIdTool );
 }

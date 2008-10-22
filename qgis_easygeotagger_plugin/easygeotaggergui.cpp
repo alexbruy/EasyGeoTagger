@@ -12,14 +12,19 @@
 #include "easygeotaggergui.h"
 #include "qgscontexthelp.h"
 
-//qt includes
+#include <QDesktopWidget>
+#include <QRect>
+
+class QgisApp;
 
 //standard includes
 
-EasyGeoTaggerGui::EasyGeoTaggerGui( QWidget* parent, Qt::WFlags fl )
+EasyGeoTaggerGui::EasyGeoTaggerGui( QgisInterface* theQgisApplication, EgtApplication* theEasyGTApplication, QWidget* parent, Qt::WFlags fl )
     : QDialog( parent, fl )
 {
   setupUi( this );
+  cvEasyGT = theEasyGTApplication;
+  cvQgisInterface = theQgisApplication;
 }
 
 EasyGeoTaggerGui::~EasyGeoTaggerGui()
@@ -42,3 +47,45 @@ void EasyGeoTaggerGui::on_buttonBox_helpRequested()
   QgsContextHelp::run( context_id );
 }
 
+void EasyGeoTaggerGui::on_pbtnAutoArrange_clicked()
+{
+  if( 0 == cvQgisInterface ) { return; }
+  if( 0 == cvEasyGT ) { return; }
+
+  //read the desktop geometry
+  QRect screenGeometry = QApplication::desktop()->availableGeometry();
+  int lvScreenWidth = screenGeometry.width();
+  int lvScreenHeight = screenGeometry.height();
+  
+  int newEasyGTHeight = qMax( int( lvScreenHeight * 0.80 ), cvEasyGT->gui()->minimumHeight() );
+  int newEasyGTWidth = qMax( int( lvScreenWidth * 0.60 ), cvEasyGT->gui()->minimumHeight() );
+  int newPluginDialogHeight = qMax( int( lvScreenHeight * 0.1 ), minimumHeight() );
+  int newPluginDialogWidth = qMax( int( lvScreenWidth * 0.35 ), minimumWidth() );
+  int newQgisHeight = qMax( int( lvScreenHeight * 0.55 ), cvQgisInterface->mainWindow()->minimumHeight() );
+  int newQgisWidth = qMax( int( lvScreenWidth * 0.35 ), cvQgisInterface->mainWindow()->minimumWidth() );
+  
+  //place EasyGT
+  cvEasyGT->gui()->resize( newEasyGTWidth, newEasyGTHeight );
+  cvEasyGT->gui()->resize( newEasyGTWidth - ( cvEasyGT->gui()->width() - newEasyGTWidth ), newEasyGTHeight - ( cvEasyGT->gui()->height() - newEasyGTHeight ) );
+  cvEasyGT->gui()->move( int( lvScreenHeight * 0.02 ), int( lvScreenHeight * 0.1 ) );
+  
+  //place this dialog
+  resize( newPluginDialogWidth, newPluginDialogHeight );
+  resize( newPluginDialogWidth - ( width() - newPluginDialogWidth ), newPluginDialogHeight - ( height() - newPluginDialogHeight ) );
+  move( int( lvScreenWidth * 0.63 ), int( lvScreenHeight * 0.1 ) );
+  
+  //place QGIS
+  cvQgisInterface->mainWindow()->setEnabled( false );
+  cvQgisInterface->mainWindow()->resize( newQgisWidth, newQgisHeight - height() );
+  cvQgisInterface->mainWindow()->resize( newQgisWidth - ( cvQgisInterface->mainWindow()->width() - newQgisWidth ), newQgisHeight - ( cvQgisInterface->mainWindow()->height() - newQgisHeight ) );
+  cvQgisInterface->mainWindow()->move( int( lvScreenWidth * 0.63 ), int( lvScreenHeight * 0.25 ) );
+  cvQgisInterface->mainWindow()->setEnabled( true );
+  
+  
+qDebug("%d\t%d", lvScreenWidth, lvScreenHeight );
+}
+
+void EasyGeoTaggerGui::on_pbtnActivate_clicked()
+{
+  emit setMapTool();
+}

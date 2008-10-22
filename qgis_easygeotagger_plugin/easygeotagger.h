@@ -72,6 +72,8 @@ class EasyGeoTagger: public QObject, public QgisPlugin
     virtual void initGui();
     //! Show the dialog box
     void run();
+    /*! \brief Set the map tool */
+    void setMapTool();
     //! unload the plugin
     void unload();
     //! show the help document

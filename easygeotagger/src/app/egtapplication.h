@@ -22,7 +22,7 @@
 **
 **/
 #ifndef EGTAPPLICATION_H
-#define EGTAPPAPPLICATION_H
+#define EGTAPPLICATION_H
 
 #include "egtpluginmanager.h"
 #include "egtapplicationinterface.h"
@@ -42,11 +42,16 @@ class EgtApplication
     /*! \brief Constructor */
     EgtApplication( QString );
     
+    /*! \brief Return a pointer to the application interface */
+    EgtApplicationInterface* applicationInterface() { return cvApplicationInterface; }
+    
+    /*! \brief Return a pointer to the application's gui */
+    EgtMainWindow* gui() { return cvGui; }
+    
     /*! \brief Show the gui, just a wrapper for EgtMainWindow->show() */
     void show() { cvGui->show(); }
   
-    /*! \brief Return a pointer to the application interface */
-    EgtApplicationInterface* applicationInterface() { return cvApplicationInterface; }
+    
   
   private:
     /*! \brief Extended constructor */
