@@ -71,16 +71,19 @@ void EgtExportToCsv::run()
 {
   EgtDebug( "entered" );
   
+  //Bail if either the pointer to the gui for the file browser is null
   if( 0 == cvGui || 0 == cvGui->tvFileBrowser )
   {
     EgtDebug( "pointer to gui or the file browser was null" );
     return;
   }
   
+  //Check to see if the currently selected item is a file or a directory
   QFileInfo lvFileInfo;
   EgtPathBuilder lvPathBuilder;
   QString lvCurrentFile = lvPathBuilder.buildPath( cvGui->tvFileBrowser->currentIndex() );
   
+  //If it is a file, takes is parent which will be the directory whe image is in
   lvFileInfo.setFile( lvCurrentFile );
   if( !lvFileInfo.isDir() )
   {
@@ -88,6 +91,7 @@ void EgtExportToCsv::run()
     cvGui->tvFileBrowser->setCurrentIndex( cvGui->tvFileBrowser->currentIndex().parent() );
   }
   
+  //If the directory is writeable, open a file ane export the EXIF data
   lvCurrentFile = lvPathBuilder.buildPath( cvGui->tvFileBrowser->currentIndex() );
   lvFileInfo.setFile( lvCurrentFile );
   if( lvFileInfo.isWritable() )
@@ -106,10 +110,12 @@ void EgtExportToCsv::run()
       EgtExifIO lvEEIO;
       QString lvImageFile;
       QModelIndex lvCurrentIndex = cvGui->tvFileBrowser->currentIndex();
+      //Loop through the directory and examine each file
       while( lvCurrentIndex.child( lvChildCount, 0 ).isValid() )
       {
         lvImageFile = lvPathBuilder.buildPath( lvCurrentIndex.child( lvChildCount, 0 ) );
         
+        //If the file has exif data,then export it, otherwise skip it
         lvEEIO.setFile( lvImageFile );
         if( lvEEIO.hasGpsExif() )
         {
@@ -133,6 +139,7 @@ void EgtExportToCsv::run()
     QMessageBox::critical( cvGui, tr( "Write Error" ), tr( "The current directory is not writeable" ) );
   }
 
+  //Refresh the file browser once the process is complete
   if( cvGui->tvFileBrowser->model() )
   {
     ( (QDirModel*)cvGui->tvFileBrowser->model() )->refresh();

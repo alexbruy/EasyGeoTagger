@@ -26,21 +26,39 @@
 
 #include "egtplugininterface.h"
 
+/*! \brief Export EXIF to CSV plugin
+ *
+ * This EasyGT plugin will walk through a directory of images and extract the latitude, longitude from
+ * exif header and save it in the csv file along with the image name
+ */
 class EgtExportToCsv: public EgtPluginInterface
 {
   Q_OBJECT
   Q_INTERFACES(EgtPluginInterface)
   
   public:
+    /*! \brief Return the list of categories that plugin will show up in */
     QStringList categories();
+    
+    /*! \brief Connects the provided button to the showConfigurationPanel function */
     void connectConfigurationButton( QPushButton* );
+    
+    /*! \brief Connects the provided button to the run function */
     void connectRunButton( QPushButton* );
+    
+    /*! \brief Returns the description for this plugin */
     QString description();
+    
+    /*! \brief Returns the ability of this plugin to be configured */
     bool isConfigurable() { return false; }
+    
+    /*! \brief Returns the name of this plugin */
     QString name();
 
   public slots:
+    /*! \brief The main function to launch the plugin */
     void run();
+    /*! \brief Shows the configuration panel for this plugin */
     void showConfigurationPanel() { }
 
 };
