@@ -30,18 +30,30 @@
 #include <QFrame>
 #include <QPushButton>
 
+/*! \brief Plugin display widget for the plugin list
+ *
+ * The graphical container that holds buttons to launch and configure plugins as well as display
+ * the plugin's description.
+ */
 class EgtPluginDisplayWidget : public QFrame
 {
   Q_OBJECT
 
   public:
+    /*! \brief Constructor */
     EgtPluginDisplayWidget(  EgtPluginInterface* thePlugin, QWidget* theParent = 0, Qt::WindowFlags theFlags = 0);
     
+    /*! \brief Update the widget's components */
     void update( EgtPluginInterface* thePlugin );
     
   private:
+    /*! \brief Button that shows up in the plugin collection display and activates or launches the plugin */
     QPushButton cvRunButton;
+    
+    /*! \brief Button that shows up in the plugin collection display and activates or launches the configuration panel */
     QPushButton cvConfigureButton;
+    
+    /*! \brief Description that is shown in the plugin collection display */
     QLabel cvDescription;
 };
 #endif

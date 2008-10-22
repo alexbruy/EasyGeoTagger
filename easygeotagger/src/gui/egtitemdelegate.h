@@ -30,25 +30,29 @@
 #include <QString>
 #include <QItemDelegate>
 
+/*! \brief An item deletegate to shade the entries in the file browser.
+ *
+ * When active, this item delegate will color the back ground red for entries that are valid
+ * images but have no gps exif data. A green background will be shown for entries that are
+ * valid images and have gps exif data.
+ */
 class EgtItemDelegate : public QItemDelegate
 {
   Q_OBJECT
 
 public:
+  /*! \brief Constructor */
   EgtItemDelegate();
+  
+  /*! \brief Painter */
   void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 
 public slots:
+  /*! \brief Slot to set flag indicating the desire to display availability */
   void displayGpsExifAvailability(int);
 
 private:
 
-//   struct cacheObject {
-//     bool isImage;
-//     bool hasGpsExif;
-//   };
-
   bool cvDisplayGpsExifAvailability;
-  //QMap< QString, EgtItemDelegate::cacheObject > cvExifCache;
 };
 #endif

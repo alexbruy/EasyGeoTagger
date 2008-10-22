@@ -2,14 +2,12 @@ SET(EGT_GUI_SRCS
     egtitemdelegate.cpp
     egtmainwindow.cpp
     egtplugindisplaywidget.cpp
-    egtplugindock.cpp
    )
    
 SET(EGT_GUI_MOC_HDRS
     egtitemdelegate.h
     egtmainwindow.h
     egtplugindisplaywidget.h
-    egtplugindock.h
    )
 
 SET (EGT_GUI_RCCS gui.qrc)

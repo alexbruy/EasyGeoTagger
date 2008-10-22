@@ -52,11 +52,17 @@ QStringList EgtMinimalExifEditor::categories()
   return cvCategories.split("|");
 }
 
+/*!
+ * \param theButton pointer to a QPushButton that is to be connect to the  showConfigureationPanel slot
+ */
 void EgtMinimalExifEditor::connectConfigurationButton( QPushButton* theButton )
 {
   connect( theButton, SIGNAL( clicked() ), this, SLOT( showConfigurationPanel() ) );
 }
 
+/*!
+ * \param theButton pointer to a QPushButton that is to be connect to the  run slot
+ */
 void EgtMinimalExifEditor::connectRunButton( QPushButton* theButton )
 {
   connect( theButton, SIGNAL( clicked() ), this, SLOT( run() ) );
@@ -69,7 +75,11 @@ QString EgtMinimalExifEditor::description()
 
 void EgtMinimalExifEditor::initPlugin()
 {
-  connect( cvApplicationInterface, SIGNAL( coordinatesReceived( double, double ) ), this, SLOT( acceptCoordinates( double, double ) ) );
+  //Hook into the application interface and listen for coordinates from outside sources
+  if( 0 != cvApplicationInterface )
+  {
+    connect( cvApplicationInterface, SIGNAL( coordinatesReceived( double, double ) ), this, SLOT( acceptCoordinates( double, double ) ) );
+  }
 }
 
 QString EgtMinimalExifEditor::name()
@@ -97,17 +107,17 @@ void EgtMinimalExifEditor::acceptCoordinates( double theLongitude, double theLat
 void EgtMinimalExifEditor::run()
 {
   EgtDebug( "entered" );
+  
   //if the gui pointer is null, bail
   if( 0 == cvGui ) { return; }
-  
 
+  //Build or reshow the plugins GUI component
   if( 0 != cvDock &&  cvDock->isVisible() )
   {
     EgtDebug( "dock is already open and visible" );
     return;
   }
-  
-  if( 0 != cvDock &&  !cvDock->isMinimized() )
+  else if( 0 != cvDock &&  !cvDock->isMinimized() )
   {
     EgtDebug( "dock is already open but not visible" );
     cvDock->showMaximized();
@@ -118,6 +128,7 @@ void EgtMinimalExifEditor::run()
     EgtDebug( "requesting new dock" );
     cvDock = new QDockWidget( cvName, cvGui );
     if( 0 == cvDock ) { return; }
+    
     cvControls = new EgtMinimalExifEditorControls( &cvExifIO, cvDock );
     if( 0 == cvControls ) { return; }
     
@@ -127,6 +138,7 @@ void EgtMinimalExifEditor::run()
     cvDock->setWidget( cvControls );
     cvControls->show();
     
+    //Get clicks from the file browser
     EgtDebug( "Connecting to GUI signals" );
     connect( cvGui->tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( updateExifDisplay(const QModelIndex& ) ) );
     
@@ -134,6 +146,7 @@ void EgtMinimalExifEditor::run()
     cvGui->addDockWidget( Qt::RightDockWidgetArea, cvDock );
   }
   
+  //On redisplay of the widget, update the exif data incase the index has changed
   if( "" != cvLastFile )
   {
     updateExifDisplay( cvLastFile );
@@ -143,10 +156,12 @@ void EgtMinimalExifEditor::run()
     updateExifDisplay( cvGui->tvFileBrowser->currentIndex() );
   }
   
-  
   EgtDebug( "done" );
 }
 
+/*!
+ * \param theIndex the QModelIndex representing the file from which to extract exif data
+ */
 void EgtMinimalExifEditor::updateExifDisplay( const QModelIndex& theIndex )
 {
   EgtDebug( "entered" );
@@ -154,6 +169,8 @@ void EgtMinimalExifEditor::updateExifDisplay( const QModelIndex& theIndex )
   EgtPathBuilder lvPathBuilder;
   QString lvFilename = lvPathBuilder.buildPath( theIndex );
   QFileInfo lvFileInfo( lvFilename );
+  
+  //If the index points a file, try to extract the exif data
   if( !lvFileInfo.isDir() )
   {
     updateExifDisplay( lvFilename ); 
@@ -168,6 +185,9 @@ void EgtMinimalExifEditor::updateExifDisplay( const QModelIndex& theIndex )
  *
  * PRIVATE FUNCTIONS
  *
+ */
+/*!
+ * \param theFilename the name of the file from which to extract exif data
  */
 void EgtMinimalExifEditor::updateExifDisplay( QString theFilename )
 {

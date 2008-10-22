@@ -39,29 +39,57 @@ class EgtMinimalExifEditor: public EgtPluginInterface
   Q_INTERFACES(EgtPluginInterface)
   
   public:
+    /*! \brief Constuctor */
     EgtMinimalExifEditor();
     
+    /*! \brief Return the list of categories that the plugin will show up in */
     QStringList categories();
+    
+    /*! \brief Connect the provided button to the showConfigurationPanel function */
     void connectConfigurationButton( QPushButton* );
+    
+    /*! \brief Connect the provided button to the run function */
     void connectRunButton( QPushButton* );
+    
+    /*! \brief Return the description for this plugin */
     QString description();
+    
+    /*! \brief Return the ability of this plugin to be configured */
     bool isConfigurable() { return false; }
+    
+    /*! \brief Initialization plugin*/
     void initPlugin();
+    
+    /*! \brief Return the name of this plugin */
     QString name();
 
   public slots:
+    /*! \brief Slot that allows external components to pass coordinates to the plugin */
     void acceptCoordinates( double, double );
+    
+    /*! \brief Slot that will update the fields with data from the currently selected object in the file browser */
     void updateExifDisplay( const QModelIndex& );
+    
+    /*! \brief Slot called to activate or launch the plugin */
     void run();
+    
+    /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel() { }
   
   private:
+    /*! \brief The main dock window that forms the base for the visual component of this plugin */
     QDockWidget* cvDock;
+    
+    /*! \brief An instance of the EXIF reader writer */
     EgtExifIO cvExifIO;
+    
+    /*! \brief Last file that sucessfully had GPS exif data extraced */
     QString cvLastFile;
     
+    /*! \brief The GUI components that visual portion of the plugin */
     EgtMinimalExifEditorControls* cvControls;
 
+    /*! \brief Slot that will update the fields with data a image file */
     void updateExifDisplay( QString );
 
 };

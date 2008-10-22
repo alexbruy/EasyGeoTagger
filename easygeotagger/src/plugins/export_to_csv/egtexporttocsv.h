@@ -37,7 +37,7 @@ class EgtExportToCsv: public EgtPluginInterface
   Q_INTERFACES(EgtPluginInterface)
   
   public:
-    /*! \brief Return the list of categories that plugin will show up in */
+    /*! \brief Return the list of categories that the plugin will show up in */
     QStringList categories();
     
     /*! \brief Connects the provided button to the showConfigurationPanel function */
@@ -56,10 +56,10 @@ class EgtExportToCsv: public EgtPluginInterface
     QString name();
 
   public slots:
-    /*! \brief The main function to launch the plugin */
+    /*! \brief Slot called to activate or launch the plugin */
     void run();
-    /*! \brief Shows the configuration panel for this plugin */
+    
+    /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel() { }
-
 };
 #endif

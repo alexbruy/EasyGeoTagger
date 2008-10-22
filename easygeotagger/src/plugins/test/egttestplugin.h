@@ -26,21 +26,39 @@
 
 #include "egtplugininterface.h"
 
+/*! \brief Test plugin
+ *
+ * This EasyGT plugin does not do anything. It is basically just a plugin template
+ */
 class EgtTestPlugin : public EgtPluginInterface
 {
   Q_OBJECT
   Q_INTERFACES(EgtPluginInterface)
   
   public:
+    /*! \brief Return the list of categories that the plugin will show up in */
     QStringList categories();
+    
+    /*! \brief Connects the provided button to the showConfigurationPanel function */
     void connectConfigurationButton( QPushButton* );
+    
+    /*! \brief Connects the provided button to the run function */
     void connectRunButton( QPushButton* );
+    
+    /*! \brief Returns the description for this plugin */
     QString description();
+    
+    /*! \brief Returns the ability of this plugin to be configured */
     bool isConfigurable() { return false; }
+    
+    /*! \brief Returns the name of this plugin */
     QString name();
 
   public slots:
+    /*! \brief Slot called to activate or launch the plugin */
     void run();
+    
+    /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel() { }
 };
 #endif

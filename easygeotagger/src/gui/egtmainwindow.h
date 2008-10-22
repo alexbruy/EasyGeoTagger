@@ -26,7 +26,6 @@
 
 #include "ui_egtmainwindowgui.h"
 
-#include "egtplugindock.h"
 #include "egtimageengine.h"
 #include "egtpathbuilder.h"
 
@@ -34,25 +33,34 @@
 #include <QFileInfo>
 #include <QMainWindow>
 #include <QModelIndex>
+#include <QDockWidget>
 
+/*! \brief Main EasyGeoTagger window
+ *
+ */
 class EgtMainWindow : public QMainWindow, public Ui::EgtMainWindowGui
 {
 
   Q_OBJECT
   
 public:
+  /*! \brief Constructor */
   EgtMainWindow();
+  
+  /*! \brief Set the plugin dock's tool box */
   void setPluginToolBox( QToolBox* );
   
 private slots:
+  /*! \brief Slot to listen for mouse in the file browser */
   void clicked(const QModelIndex&);
-  void expanded(const QModelIndex&);
+  
+  /*! \brief Slot to interact with the progress bar */
   void updateProgress( int, int, int );
   
 private:
   QFileInfo cvFileInfo;
   EgtImageEngine cvImageEngine;
   EgtPathBuilder cvPathBuilder;
-  EgtPluginDock* cvPluginDock;
+  QDockWidget* cvPluginDock;
 };
 #endif

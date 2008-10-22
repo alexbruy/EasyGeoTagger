@@ -59,58 +59,25 @@ void EgtItemDelegate::paint(QPainter* thePainter, const QStyleOptionViewItem& th
 {
 
   QStyleOptionViewItem lvViewOption(theOption);
-
+  //TODO: See if it is posisble to cache this data, tried but found the const to be problematic
   if(cvDisplayGpsExifAvailability && theIndex.column() == 0)
   {
-    /*
-    QString lvFileName = buildPath( theIndex );
-    EgtItemDelegate::cacheObject lvCacheObject;
-    lvCacheObject.isImage = false;
-    lvCacheObject.hasGpsExif = false;
-        
-    if( cvExifCache.contains( lvFileName ) )
+    EgtExifIO lvExifIO( theIndex );
+    if( lvExifIO.isValidImage() )
     {
-      qDebug("Using Cached value");
-      lvCacheObject = cvExifCache.value( lvFileName );
-      if( lvCacheObject.isImage )
+      if( lvExifIO.hasGpsExif() )
       {
-        if( lvCacheObject.hasGpsExif )
-        {
-          QPixmap lvPixmap( lvViewOption.rect.x(),lvViewOption.rect.y() );
-          lvPixmap.fill( QColor( 0,255,0,75 ) );
-          thePainter->drawPixmap( lvViewOption.rect, lvPixmap );
-        }
-        else
-        {
-          QPixmap lvPixmap( lvViewOption.rect.x(),lvViewOption.rect.y() );
-          lvPixmap.fill( QColor( 255,0,0,75 ) );
-          thePainter->drawPixmap( lvViewOption.rect, lvPixmap );
-        }
+        QPixmap lvPixmap( lvViewOption.rect.x(),lvViewOption.rect.y() );
+        lvPixmap.fill( QColor( 0,255,0,75 ) );
+        thePainter->drawPixmap( lvViewOption.rect, lvPixmap );
+      }
+      else
+      {
+        QPixmap lvPixmap( lvViewOption.rect.x(),lvViewOption.rect.y() );
+        lvPixmap.fill( QColor( 255,0,0,75 ) );
+        thePainter->drawPixmap( lvViewOption.rect, lvPixmap );
       }
     }
-    else
-    {
-    */
-      EgtExifIO lvExifIO( theIndex );
-      if( lvExifIO.isValidImage() )
-      {
-//         lvCacheObject.isImage = true;
-        if( lvExifIO.hasGpsExif() )
-        {
-//           lvCacheObject.hasGpsExif = true;
-          QPixmap lvPixmap( lvViewOption.rect.x(),lvViewOption.rect.y() );
-          lvPixmap.fill( QColor( 0,255,0,75 ) );
-          thePainter->drawPixmap( lvViewOption.rect, lvPixmap );
-        }
-        else
-        {
-          QPixmap lvPixmap( lvViewOption.rect.x(),lvViewOption.rect.y() );
-          lvPixmap.fill( QColor( 255,0,0,75 ) );
-          thePainter->drawPixmap( lvViewOption.rect, lvPixmap );
-        }
-      }
-//     }
-//     cvExifCache.insert( lvFileName, lvCacheObject );
   }
 
   QItemDelegate::paint(thePainter, lvViewOption, theIndex);

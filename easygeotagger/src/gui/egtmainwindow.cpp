@@ -42,25 +42,32 @@
 EgtMainWindow::EgtMainWindow()
 {
   EgtDebug( "entered" );
+  
   setupUi(this);
   connect( tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( clicked(const QModelIndex& ) ) );  
-  connect( tvFileBrowser, SIGNAL( expanded( const QModelIndex& ) ), this, SLOT( expanded(const QModelIndex& ) ) );
   
+  //Set up the file browser window
   QDirModel* lvModel = new QDirModel( QStringList(), QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot, QDir::DirsFirst );
-  
   tvFileBrowser->setModel( lvModel );
   tvFileBrowser->setColumnWidth( 0, 400) ;
   tvFileBrowser->setCurrentIndex( lvModel->index( QDir::currentPath() ) );
   tvFileBrowser->scrollTo( lvModel->index( QDir::currentPath() ) );
   
+  //Add an item delegate to colorize the entries in the file browser
+  //TODO: See if this is possible Qt4.4.0 to accomplish with styles
   EgtItemDelegate* lvItemDelegate =  new EgtItemDelegate();
   connect( chkbColorCodeFilenames, SIGNAL( stateChanged( int) ), lvItemDelegate, SLOT( displayGpsExifAvailability( int) ) );
   tvFileBrowser->setItemDelegate( lvItemDelegate );
   tvFileBrowser->setStyleSheet( "QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }" );
   
-  cvPluginDock = new EgtPluginDock( "Plugins", this );
+  //Create a new plugin dock
+  cvPluginDock = new QDockWidget( "Plugins", this );
+  cvPluginDock->setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable );
+  cvPluginDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+  cvPluginDock->setMinimumSize( 150,150 );
   addDockWidget( Qt::LeftDockWidgetArea, cvPluginDock );
   
+  //Set up the progress bar
   pbarProgressBar->setMinimum( 0 );
   pbarProgressBar->setMaximum( 1 );
   pbarProgressBar->setValue( 0 );
@@ -85,7 +92,8 @@ void EgtMainWindow::setPluginToolBox( QToolBox* theToolBox)
  * SIGNAL and SLOTS
  *
  */
-
+/*!
+ * \param theIndex the current selection in the file browser */
 void EgtMainWindow::clicked( const QModelIndex& theIndex )
 {
   EgtDebug( "entered" );
@@ -93,16 +101,11 @@ void EgtMainWindow::clicked( const QModelIndex& theIndex )
   labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.image( labelPreview->width(), labelPreview->height() ) ) );
 }
 
-void EgtMainWindow::expanded(const QModelIndex& theIndex)
-{
-  EgtDebug( "entered" );
-  int lvChildCount = 0;
-  while(theIndex.child(lvChildCount, 0).isValid())
-  {
-    lvChildCount++;
-  }
-}
-
+/*!
+ * \param theMinimum the minumum value for the progress bar
+ * \param theMaxumum the maximum value for the progress bar
+ * \param theProgress the current progress
+ */
 void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgress )
 {
   //TODO: consider if it is better to set these individually

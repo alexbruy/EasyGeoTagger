@@ -32,29 +32,55 @@
 class EgtMainWindow;
 class EgtApplicationInterface;
 
+/*! \brief EasyGeoTagger plugin interface
+ *
+ * This interface provide the mechanism by which EasyGT can dynamically load plugins
+ */
 class EgtPluginInterface : public QObject
 {
   Q_OBJECT 
   
   public:
+    /*! \brief Constuctor */
     EgtPluginInterface() { cvGui = 0; cvApplicationInterface = 0; }
+    
+    /*! \brief Virtual Destuctor */
     virtual ~EgtPluginInterface() { }
-
+    
+    /*! \brief Pure virtual function to return the list of categories that the plugin will show up in */
     virtual QStringList categories() = 0;
+    
+    /*! \brief Pure virtual function to connect the provided button to the showConfigurationPanel function */
     virtual void connectConfigurationButton( QPushButton* ) = 0;
+    
+    /*! \brief Pure virtual function to connect the provided button to the run function */
     virtual void connectRunButton( QPushButton* ) = 0;
+    
+    /*! \brief Pure virtual function to return the description for this plugin */
     virtual QString description() = 0;
-    virtual QString name() = 0;
+    
+    /*! \brief Pure virtual function to return the ability of this plugin to be configured */
     virtual bool isConfigurable() = 0;
     
+    /*! \brief Pure virtual function to return the name of this plugin */
+    virtual QString name() = 0;
+    
+    /*! \brief Virtual function to run initialization steps if needed */
     virtual void initPlugin() {}
     
+    
+    /*! \brief Set the pointer to the EasyGeoTagger application interface */
     void setApplicationInterface( EgtApplicationInterface* theInterface ) { cvApplicationInterface = theInterface; }
+    
+    /*! \brief Set the pointer to the EasyGeoTagger main GUI component */
     void setGui( EgtMainWindow* theGui ) { cvGui = theGui; }
 
   public slots:
-    virtual void showConfigurationPanel() { }
+    /*! \brief Slot called to activate or launch the plugin */
     virtual void run() { }
+    
+    /*! \brief Slot to display the condifuration panel */
+    virtual void showConfigurationPanel() { }
   
   protected:
     EgtApplicationInterface* cvApplicationInterface;
