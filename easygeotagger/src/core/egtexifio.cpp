@@ -60,21 +60,33 @@ EgtExifIO::EgtExifIO( const QModelIndex& theIndex )
  * PUBLIC FUNCTIONS
  *
  */
+/*!
+ * \returns whether the image contains exif metadata or not
+ */
 bool EgtExifIO::hasGpsExif()
 {
   return cvHasGpsExif;
 }
 
+/*!
+ * \returns whether the image is valid or not
+ */
 bool EgtExifIO::isValidImage()
 {
   return cvIsValidImage;
 }
 
+/*!
+ * \returns A message with the last error occured
+ */
 QString EgtExifIO::lastError() 
 { 
   return cvLastError; 
 }
 
+/*!
+ * \returns the latitude of the current image
+ */
 double EgtExifIO::latitude()
 {
   EgtDebug( "entered" );
@@ -109,6 +121,9 @@ double EgtExifIO::latitude()
   return lvLatitude*lvNorthing;
 }
 
+/*!
+ * \returns the longitude of the current image
+ */
 double EgtExifIO::longitude()
 {  
   EgtDebug( "entered" );
@@ -140,10 +155,13 @@ double EgtExifIO::longitude()
   return lvLongitude*lvNorthing;
 }
 
+/*!
+ * \param theImageFilename Image file that is going to be readen/written
+ */
 void EgtExifIO::setFile( QString theImageFilename )
 {
 
-  cvImageFile = theImageFilename;
+  cvImageFileName = theImageFilename;
   cvIsValidImage = false;
   cvHasGpsExif = false;
   
@@ -192,7 +210,10 @@ void EgtExifIO::setFile( QString theImageFilename )
   }
 }
 
-
+/*!
+ * \param theValue Latitude represented as a double value, to be written in the exif metadata
+ * \returns Whether the operation was successful or not
+ */
 bool EgtExifIO::writeLatitude(double theValue)
 {
   EgtDebug( "entered writeLatitude(double)" );
@@ -203,7 +224,7 @@ bool EgtExifIO::writeLatitude(double theValue)
     ok = write( "Exif.GPSInfo.GPSLatitudeRef", "S", "Ascii" );
     if( !ok )
     {
-      cvLastError = QString( "Unable to write file: " + cvImageFile);
+      cvLastError = QString( "Unable to write file: " + cvImageFileName);
       return false;
     }
   }
@@ -212,7 +233,7 @@ bool EgtExifIO::writeLatitude(double theValue)
     ok = write( "Exif.GPSInfo.GPSLatitudeRef", "N", "Ascii" );
     if( !ok )
     {
-      cvLastError = QString( "Unable to write file: " + cvImageFile );
+      cvLastError = QString( "Unable to write file: " + cvImageFileName );
       return false;
     }
   }
@@ -220,7 +241,10 @@ bool EgtExifIO::writeLatitude(double theValue)
   return write( "Exif.GPSInfo.GPSLatitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
 }
 
-
+/*!
+ * \param theValue QString representing the Latitude to be written in the exif metadata
+ * \returns Whether the operation was successful or not
+ */
 bool EgtExifIO::writeLatitude( QString theValue )
 {
   EgtDebug( "entered writeLatitude(QString)" );
@@ -232,6 +256,11 @@ bool EgtExifIO::writeLatitude( QString theValue )
     return false;
 }
 
+
+/*!
+ * \param theValue Longitude represented as a double value, to be written in the exif metadata
+ * \returns Whether the operation was successful or not
+ */
 bool EgtExifIO::writeLongitude( double theValue )
 {
   EgtDebug( "entered writeLatitude(double)" );
@@ -242,7 +271,7 @@ bool EgtExifIO::writeLongitude( double theValue )
     ok = write( "Exif.GPSInfo.GPSLatitudeRef", "S", "Ascii" );
     if( !ok )
     {
-      cvLastError = QString( "Unable to write file: " + cvImageFile );
+      cvLastError = QString( "Unable to write file: " + cvImageFileName );
       return false;
     }
   }
@@ -251,7 +280,7 @@ bool EgtExifIO::writeLongitude( double theValue )
     ok = write( "Exif.GPSInfo.GPSLatitudeRef", "N", "Ascii" );
     if( !ok )
     {
-      cvLastError = QString( "Unable to write file: " + cvImageFile );
+      cvLastError = QString( "Unable to write file: " + cvImageFileName );
       return false;
     }
   }
@@ -259,6 +288,11 @@ bool EgtExifIO::writeLongitude( double theValue )
   return write( "Exif.GPSInfo.GPSLongitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
 }
 
+
+/*!
+ * \param theValue QString representing the Longitude to be written in the exif metadata
+ * \returns Whether the operation was successful or not
+ */
 bool EgtExifIO::writeLongitude( QString theValue )
 {
   EgtDebug( "entered writeLongitude(QString)" );
@@ -271,12 +305,15 @@ bool EgtExifIO::writeLongitude( QString theValue )
 }
 
 
-
-
 /*
  *
  * PRIVATE FUNCTIONS
  *
+ */
+
+/*!
+ * \param theDegrees A QString that represents the decimal degrees to be converted to rational format
+ * \returns A QString containing the rational value obtained
  */
 QString EgtExifIO::convertToRational(QString theDegrees)
 {
@@ -306,6 +343,11 @@ QString EgtExifIO::convertToRational(QString theDegrees)
 	return QString(lvTextDegrees + "/1" + " " +lvTextMinutes+ "/1"+ " " +lvTextSeconds+ "/99999");
 }
 
+
+/*!
+ * \param theKey the key to be searched within the exif data
+ * \returns the Value that has been readen from the exif data 
+ */
 const Exiv2::Value& EgtExifIO::read(QString theKey)
 {
   EgtDebug( "entered" );
@@ -340,7 +382,10 @@ const Exiv2::Value& EgtExifIO::read(QString theKey)
   return cvNotValidValue; 
 
 }
-
+/*!
+ * \param theKey the key to be searched within the exif data
+ * \returns A QString that represents the readen value 
+ */
 QString EgtExifIO::readKeyValueAsString(QString theKey)
 {
   EgtDebug( "entered" );
@@ -373,56 +418,12 @@ QString EgtExifIO::readKeyValueAsString(QString theKey)
   return "";
 }
 
-float EgtExifIO::tokenizeCoordinate(QString theString)
-{
-  EgtDebug( "entered" );
-  int lvValue1 = 0;
-  bool lvValue1Done = false;
-  int lvValue2 = 0;
-  bool lvNumberFound = false;
-  float lvCoordinate = 0.0;
-  bool lvFirstRationalDone = false;
-
-  for(int i=0; i<theString.length(); i++)
-  {
-    if( theString[i].digitValue()!= -1 )
-    {
-      if(!lvValue1Done)
-      {
-        lvNumberFound = true;
-        lvValue1=theString[i].digitValue()+lvValue1*10;
-      }
-      else
-      {
-        lvValue2=theString[i].digitValue()+lvValue2*10;
-      }   
-    }
-    
-    else if( theString[i] =='/' )
-    {
-      lvValue1Done = true;
-    }
-    
-    else if( theString[i] == ' ' && lvNumberFound )
-    {
-      lvCoordinate = lvCoordinate + lvValue1/lvValue2;
-      if(lvFirstRationalDone)
-      {
-        lvCoordinate = lvCoordinate / 60.0;
-      }
-      lvFirstRationalDone = true;
-      lvValue1 = 0;
-      lvValue2 = 0;
-      lvValue1Done = false;
-    }
-  }
-
-  lvCoordinate = lvCoordinate + lvValue1/lvValue2;
-  lvCoordinate = lvCoordinate / 60.0;
-          
-  return lvCoordinate;
-}
-
+/*!
+ * \param theKey the key to be searched within the exif data
+ * \param theString String containing the data to be written
+ * \param theDefaultType The data type of what it is going to be written
+ * \returns Whether the operation was succesful or not 
+ */
 bool EgtExifIO::write( QString theKey, QString theString, QString theDefaultType )
 {
   EgtDebug( "entered" );
@@ -514,7 +515,7 @@ bool EgtExifIO::write( QString theKey, QString theString, QString theDefaultType
   }
   catch ( Exiv2::AnyError& e )
   {
-    cvLastError = QString( "Unable to write to file: " + cvImageFile);
+    cvLastError = QString( "Unable to write to file: " + cvImageFileName);
     EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ));
     return false;
   }
