@@ -52,10 +52,10 @@ public:
   QString lastError(); 
 
   /*! \brief Returns the latitude */
-  double latitude();
+  double latitude( bool * isValid = 0 );
   
   /*! \brief Returns the longitude */
-  double longitude();
+  double longitude( bool * isValid = 0 );
 
   /*! \brief Sets the image to be managed with this class */
   void setFile( QString theImageFilename );

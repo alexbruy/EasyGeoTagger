@@ -86,17 +86,22 @@ QString EgtExifIoEngine::lastError()
 /*!
  * \returns the latitude of the current image
  */
-double EgtExifIoEngine::latitude()
+double EgtExifIoEngine::latitude( bool * isValid )
 {
   EgtDebug( "entered" );
   
   const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLatitudeRef" );
-        
+      
       
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
   
   if(lvTypeId == Exiv2::invalidTypeId)
+  {
+    cvLastError = QString( "Unable to read exif data from file: " + cvImageFileName );
+    if(isValid)
+      *isValid =false;
     return 0.0;  
+  } 
 
   int lvNorthing = 1;
 
@@ -107,7 +112,12 @@ double EgtExifIoEngine::latitude()
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
+  {
+    cvLastError = QString( "Unable to read exif data from file: " + cvImageFileName );
+    if(isValid)
+      *isValid =false;
     return 0.0;  
+  }  
   
   double lvLatitude = 0.0;
   
@@ -117,21 +127,30 @@ double EgtExifIoEngine::latitude()
     if(i>0)
       lvLatitude/= 60;
   }
+
+  if(isValid)
+      *isValid =true;
+  
   return lvLatitude*lvNorthing;
 }
 
 /*!
  * \returns the longitude of the current image
  */
-double EgtExifIoEngine::longitude()
+double EgtExifIoEngine::longitude( bool * isValid )
 {  
   EgtDebug( "entered" );
-  
+ 
   const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLongitudeRef" );   
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
 
   if(lvTypeId == Exiv2::invalidTypeId)
+  {
+    cvLastError = QString( "Unable to read exif data from file: " + cvImageFileName );
+    if(isValid)
+      *isValid =false;
     return 0.0;  
+  }
 
   int lvNorthing = 1;
   if(QString::compare( QString(lvValue.toString().c_str()), "W" ) == 0)
@@ -141,7 +160,12 @@ double EgtExifIoEngine::longitude()
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
+  {
+    cvLastError = QString( "Unable to read exif data from file: " + cvImageFileName );
+    if(isValid)
+      *isValid =false;
     return 0.0;  
+  }
   
   double lvLongitude = 0.0;
   
@@ -151,6 +175,10 @@ double EgtExifIoEngine::longitude()
     if(i>0)
       lvLongitude/= 60;
   }
+
+  if(isValid)
+    *isValid = true;
+ 
   return lvLongitude*lvNorthing;
 }
 
@@ -199,6 +227,7 @@ void EgtExifIoEngine::setFile( QString theImageFilename )
     }
     catch ( Exiv2::AnyError& e )
     {
+      cvLastError = QString( "Error caught ["+ QString( e.what() ) +"]" );
       EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
     }
   }
@@ -361,6 +390,7 @@ const Exiv2::Value& EgtExifIoEngine::read(QString theKey)
       Exiv2::ExifData::iterator it = cvImage->exifData().findKey( lvKey );
       if( it == cvImage->exifData().end() )
       {
+        cvLastError = QString( "key ["+ theKey + "] no found" );
         EgtDebug( QString( "key ["+ theKey + "] no found" ) );
         return cvNotValidValue;
       }
@@ -372,6 +402,7 @@ const Exiv2::Value& EgtExifIoEngine::read(QString theKey)
     }
     catch (Exiv2::AnyError& e)
     {
+      cvLastError = QString( "Error caught ["+ QString( e.what() ) +"]" ) ;
       EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
       return cvNotValidValue;
     }
@@ -398,6 +429,7 @@ QString EgtExifIoEngine::readKeyValueAsString(QString theKey)
       Exiv2::ExifData::iterator it = cvImage->exifData().findKey( lvKey );
       if( it == cvImage->exifData().end() )
       {
+        cvLastError = QString( "key ["+ theKey + "] no found" );
         EgtDebug( QString( "key ["+ theKey + "] no found" ) );
         return "";
       }
@@ -408,6 +440,7 @@ QString EgtExifIoEngine::readKeyValueAsString(QString theKey)
     }
     catch (Exiv2::AnyError& e)
     {
+      cvLastError = QString( "Error caught ["+ QString( e.what() ) +"]" );
       EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
       return "";
     }
