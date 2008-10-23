@@ -28,11 +28,11 @@
 #include <QPushButton>
 #include <QMessageBox>
 
-EgtMinimalExifEditorControls::EgtMinimalExifEditorControls( EgtExifIO* theExifIoEngine, QWidget* theParent, Qt::WindowFlags theFlags ) : QWidget( theParent, theFlags )
+EgtMinimalExifEditorControls::EgtMinimalExifEditorControls( EgtExifIoEngine* theExifIoEngine, QWidget* theParent, Qt::WindowFlags theFlags ) : QWidget( theParent, theFlags )
 {
   setupUi( this );
   
-  cvExifEngine = theExifIoEngine;
+  cvExifIoEngine = theExifIoEngine;
   
   //setup longitude controls
   pbtnLongitudeSave->setMaximumSize( 20,20 );
@@ -74,46 +74,46 @@ void EgtMinimalExifEditorControls::on_leLongitude_textEdited( QString theString 
 
 void EgtMinimalExifEditorControls::on_pbtnLatitudeCancel_clicked()
 {
-  if( 0 == cvExifEngine ) { return; }
+  if( 0 == cvExifIoEngine ) { return; }
   
-  leLatitude->setText( QString::number( cvExifEngine->latitude(), 'f', 7  ) );
+  leLatitude->setText( QString::number( cvExifIoEngine->latitude(), 'f', 7  ) );
   latitudeControls->setEnabled( false );
 }
 
 void EgtMinimalExifEditorControls::on_pbtnLatitudeSave_clicked()
 {
-  if( 0 == cvExifEngine ) { return; }
+  if( 0 == cvExifIoEngine ) { return; }
   
-  if( !cvExifEngine->writeLatitude( leLatitude->text() ) )
+  if( !cvExifIoEngine->writeLatitude( leLatitude->text() ) )
   {
     QMessageBox::critical( this, tr( "Write Error" ), tr( "Unable to write value into exif header" ) ); 
   }
   else
   {
-    leLatitude->setText( QString::number( cvExifEngine->latitude(), 'f', 7  ) );
+    leLatitude->setText( QString::number( cvExifIoEngine->latitude(), 'f', 7  ) );
     latitudeControls->setEnabled( false );
   }
 }
 
 void EgtMinimalExifEditorControls::on_pbtnLongitudeCancel_clicked()
 {
-  if( 0 == cvExifEngine ) { return; }
+  if( 0 == cvExifIoEngine ) { return; }
   
-  leLongitude->setText( QString::number( cvExifEngine->longitude(), 'f', 7  ) );
+  leLongitude->setText( QString::number( cvExifIoEngine->longitude(), 'f', 7  ) );
   longitudeControls->setEnabled( false );
 }
 
 void EgtMinimalExifEditorControls::on_pbtnLongitudeSave_clicked()
 {
-  if( 0 == cvExifEngine ) { return; }
+  if( 0 == cvExifIoEngine ) { return; }
   
-  if( !cvExifEngine->writeLongitude( leLongitude->text() ) )
+  if( !cvExifIoEngine->writeLongitude( leLongitude->text() ) )
   {
     QMessageBox::critical( this, tr( "Write Error" ), tr( "Unable to write value into exif header" ) ); 
   }
   else
   {
-    leLongitude->setText( QString::number( cvExifEngine->longitude(), 'f', 7  ) );
+    leLongitude->setText( QString::number( cvExifIoEngine->longitude(), 'f', 7  ) );
     longitudeControls->setEnabled( false );
   }
 }

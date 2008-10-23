@@ -21,10 +21,10 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
+#include "egtexifioengine.h"
 #include "egtexporttocsv.h"
 #include "egtpathbuilder.h"
 #include "egtmainwindow.h"
-#include "egtexifio.h"
 #include "egtlogger.h"
 
 #include <QModelIndex>
@@ -107,7 +107,7 @@ void EgtExportToCsv::run()
       int lvExportedImages = 0;
       int lvChildCount = 0;
 
-      EgtExifIO lvEEIO;
+      EgtExifIoEngine lvExifIoEngine;
       QString lvImageFile;
       QModelIndex lvCurrentIndex = cvGui->tvFileBrowser->currentIndex();
       //Loop through the directory and examine each file
@@ -116,10 +116,10 @@ void EgtExportToCsv::run()
         lvImageFile = lvPathBuilder.buildPath( lvCurrentIndex.child( lvChildCount, 0 ) );
         
         //If the file has exif data,then export it, otherwise skip it
-        lvEEIO.setFile( lvImageFile );
-        if( lvEEIO.hasGpsExif() )
+        lvExifIoEngine.setFile( lvImageFile );
+        if( lvExifIoEngine.hasGpsExif() )
         {
-          lvOutputWriter << lvEEIO.longitude() << "," << lvEEIO.latitude() << "," << lvImageFile << "\n";
+          lvOutputWriter << lvExifIoEngine.longitude() << "," << lvExifIoEngine.latitude() << "," << lvImageFile << "\n";
           lvExportedImages++;
         }
         lvChildCount++;

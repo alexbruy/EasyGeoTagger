@@ -1,12 +1,12 @@
 SET( EGT_CORE_ALL_HDRS
-     egtexifio.h
+     egtexifioengine.h
      egtimageengine.h
      egtlogger.h
      egtpathbuilder.h
    )
 
 SET( EGT_CORE_SRCS
-     egtexifio.cpp
+     egtexifioengine.cpp
      egtimageengine.cpp
      egtpathbuilder.cpp
    )

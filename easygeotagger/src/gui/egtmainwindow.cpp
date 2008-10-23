@@ -24,7 +24,6 @@
 #include "egtmainwindow.h"
 
 #include "egtlogger.h"
-#include "egtexifio.h"
 #include "egtitemdelegate.h"
 
 #include <exiv2/image.hpp>
@@ -98,7 +97,7 @@ void EgtMainWindow::clicked( const QModelIndex& theIndex )
 {
   EgtDebug( "entered" );
   cvImageEngine.setFile( cvPathBuilder.buildPath( theIndex ) );
-  labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.image( labelPreview->width(), labelPreview->height() ) ) );
+  labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( labelPreview->width(), labelPreview->height() ) ) );
 }
 
 /*!

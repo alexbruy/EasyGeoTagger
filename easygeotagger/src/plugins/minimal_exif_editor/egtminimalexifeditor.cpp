@@ -95,7 +95,7 @@ QString EgtMinimalExifEditor::name()
  */
 void EgtMinimalExifEditor::acceptCoordinates( double theLongitude, double theLatitude )
 {
-  if( cvExifIO.isValidImage() )
+  if( cvExifIoEngine.isValidImage() )
   {
     cvControls->leLongitude->setText( QString::number( theLongitude, 'f', 7) );
     cvControls->longitudeControls->setEnabled( true );
@@ -129,7 +129,7 @@ void EgtMinimalExifEditor::run()
     cvDock = new QDockWidget( cvName, cvGui );
     if( 0 == cvDock ) { return; }
     
-    cvControls = new EgtMinimalExifEditorControls( &cvExifIO, cvDock );
+    cvControls = new EgtMinimalExifEditorControls( &cvExifIoEngine, cvDock );
     if( 0 == cvControls ) { return; }
     
     cvDock->setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
@@ -192,19 +192,19 @@ void EgtMinimalExifEditor::updateExifDisplay( const QModelIndex& theIndex )
 void EgtMinimalExifEditor::updateExifDisplay( QString theFilename )
 {
   EgtDebug( "entered" );
-  cvExifIO.setFile( theFilename );
+  cvExifIoEngine.setFile( theFilename );
   cvLastFile = theFilename;
 
   //Get data if it exists
-  if( theFilename == "" || !cvExifIO.hasGpsExif() )
+  if( theFilename == "" || !cvExifIoEngine.hasGpsExif() )
   {
     cvControls->leLongitude->setText( "" ); 
     cvControls->leLatitude->setText( "" );
   }
   else
   {
-    cvControls->leLongitude->setText( QString::number( cvExifIO.longitude(), 'f', 7 ) ); 
-    cvControls->leLatitude->setText( QString::number( cvExifIO.latitude(), 'f', 7 ) );
+    cvControls->leLongitude->setText( QString::number( cvExifIoEngine.longitude(), 'f', 7 ) ); 
+    cvControls->leLatitude->setText( QString::number( cvExifIoEngine.latitude(), 'f', 7 ) );
   }
   
 }

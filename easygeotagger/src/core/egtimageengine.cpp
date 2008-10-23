@@ -59,29 +59,32 @@ void EgtImageEngine::init()
 * Return a copy of the most recently resized version of the image.
 * 
 */
-//TODO: rename this function
+
 /*!
+ * \param isValid optional parameter to return if the scaled image is valid
  * \returns A copy of the resized image or an invalid image if the original image has not been resize yet
  */
-QImage EgtImageEngine::image()
+QImage EgtImageEngine::scaledImage( bool* isValid )
 {
   EgtDebug( "entered" );
   if( !cvIsValidImage || !cvHasBeenResized )
   {
     EgtDebug( "A valid image has not been loaded yet or the original has not been resized yet" );
+    if( 0 != isValid ) { *isValid = false; }
     return QImage();
   }
   
+  if( 0 != isValid ) { *isValid = true; }
   return cvResizedImage;
 } 
 
-//TODO: rename this function
 /*!
  * \param theWidth the width of the new image
  * \param theHeight the height of the new image
+ * \param isValid optional parameter to return if the scaled image is valid
  * \returns A new image resized to the specific dimensions or a blank image if a valid image as not been opened
  */
-QImage EgtImageEngine::image(int theWidth,int theHeight)
+QImage EgtImageEngine::scaleImage(int theWidth,int theHeight, bool* isValid )
 {
   EgtDebug( "entered" );
   
@@ -90,11 +93,14 @@ QImage EgtImageEngine::image(int theWidth,int theHeight)
   if( !cvIsValidImage )
   {
     EgtDebug( "A valid image has not been loaded yet" );
-    return QImage(theWidth, theHeight, QImage::Format_RGB32);
+    if( 0 != isValid ) { *isValid = false; }
+    return QImage();
   }
   
   cvResizedImage = cvOriginalImage->scaled(theWidth, theHeight, Qt::KeepAspectRatio );
   cvHasBeenResized = !cvResizedImage.isNull();
+  
+  if( 0 != isValid ) { *isValid = cvHasBeenResized; }
   return cvResizedImage;
 }
 

@@ -24,8 +24,6 @@
 #ifndef EGTITEMDELEGATE_H
 #define EGTITEMDELEGATE_H
 
-#include "egtexifio.h"
-
 #include <QMap>
 #include <QString>
 #include <QItemDelegate>

@@ -44,10 +44,10 @@ class EgtImageEngine : public QObject
     ~EgtImageEngine();
     
     /*! \brief Returns the a copy of the current resize image */
-    QImage image();
+    QImage scaledImage( bool* isValid=0 );
     
     /*! \brief Returns a copy of the image resized to the specified dimensions */
-    QImage image( int, int );
+    QImage scaleImage( int, int, bool* isValid=0 );
   
     /*! \brief Set the image filename */
     void setFile( QString );

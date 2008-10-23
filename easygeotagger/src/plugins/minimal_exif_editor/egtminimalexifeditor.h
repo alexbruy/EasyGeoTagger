@@ -24,10 +24,10 @@
 #ifndef EGTMINIMALEXIFEDITOR_H
 #define EGTMINIMALEXIFEDITOR_H
 
+#include "egtexifioengine.h"
 #include "egtplugininterface.h"
 #include "egtminimalexifeditorcontrols.h"
 #include "ui_egtminimalexifeditorcontrolsgui.h"
-#include "egtexifio.h"
 
 #include <QModelIndex>
 #include <QDockWidget>
@@ -81,7 +81,7 @@ class EgtMinimalExifEditor: public EgtPluginInterface
     QDockWidget* cvDock;
     
     /*! \brief An instance of the EXIF reader writer */
-    EgtExifIO cvExifIO;
+    EgtExifIoEngine cvExifIoEngine;
     
     /*! \brief Last file that sucessfully had GPS exif data extraced */
     QString cvLastFile;

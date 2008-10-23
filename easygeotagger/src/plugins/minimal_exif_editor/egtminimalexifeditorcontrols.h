@@ -25,7 +25,7 @@
 #define EGTMINIMALEXIFEDITORCONTROLS_H
 
 #include "ui_egtminimalexifeditorcontrolsgui.h"
-#include "egtexifio.h"
+#include "egtexifioengine.h"
 
 #include <QWidget>
 #include <QString>
@@ -35,7 +35,7 @@ class EgtMinimalExifEditorControls : public QWidget, public Ui::EgtMinimalExifEd
   Q_OBJECT
   
   public:
-    EgtMinimalExifEditorControls( EgtExifIO* theExifIoEngine = 0, QWidget* theParent = 0, Qt::WindowFlags theFlags = 0 );
+    EgtMinimalExifEditorControls( EgtExifIoEngine* theExifIoEngine = 0, QWidget* theParent = 0, Qt::WindowFlags theFlags = 0 );
   
   private slots:
     void on_leLatitude_textEdited( QString );
@@ -46,7 +46,7 @@ class EgtMinimalExifEditorControls : public QWidget, public Ui::EgtMinimalExifEd
     void on_pbtnLongitudeCancel_clicked();
     
   private:
-    EgtExifIO* cvExifEngine;
+    EgtExifIoEngine* cvExifIoEngine;
 
 };
 #endif

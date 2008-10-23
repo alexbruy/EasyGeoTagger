@@ -1,5 +1,5 @@
 /*
-** File: egtexifio.h
+** File: egtexifioengine.h
 ** Author(s): Roberto Garcia-Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-09-22
 **
@@ -21,50 +21,54 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTEXIFIO_H
-#define EGTEXIFIO_H
+#ifndef EGTEXIFIOENGINE_H
+#define EGTEXIFIOENGINE_H
 
 #include <QModelIndex>
 
 #include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
 
-class EgtExifIO
+class EgtExifIoEngine
 {
 
 public:
   /*! \brief Constructor */
-  EgtExifIO();
+  EgtExifIoEngine();
+  
   /*! \brief Constructor */
-  EgtExifIO( QString );
+  EgtExifIoEngine( QString );
+  
   /*! \brief Constructor */
-  EgtExifIO( const QModelIndex& );
+  EgtExifIoEngine( const QModelIndex& );
   
   /*! \brief has the image gps exif metadata? */
   bool hasGpsExif();
+  
   /*! \brief is the image valid? */
   bool isValidImage();
   
   /*! \brief Returns the last error occured */
   QString lastError(); 
-  
 
   /*! \brief Returns the latitude */
   double latitude();
+  
   /*! \brief Returns the longitude */
   double longitude();
-
 
   /*! \brief Sets the image to be managed with this class */
   void setFile( QString theImageFilename );
   
   /*! \brief writes the latitude from a double number */
   bool writeLatitude(double);
+  
   /*! \brief writes the latitude from a QString */
   bool writeLatitude( QString );
   
    /*! \brief writes the longitude from a double */
   bool writeLongitude(double );
+  
   /*! \brief writes the longitude from a QString */
   bool writeLongitude( QString );
   
@@ -72,10 +76,13 @@ public:
 private:
   /*! \brief Converts from decimal degrees to Rational notation */
   QString convertToRational(QString);
+  
   /*! \brief reads the value specified as parameter */
   const Exiv2::Value& read(QString);
+  
   /*! \brief reads the value specified as parameter and returns it as a QString */
   QString readKeyValueAsString(QString);
+  
   /*! \brief writes exif metadata */
   bool write(QString, QString, QString);
   
@@ -84,6 +91,7 @@ private:
 
   /*! \brief Exiv2 data to handle the image */
   Exiv2::Image::AutoPtr cvImage;
+  
   /*! \brief Name of the file picture */
   QString  cvImageFileName;
   
@@ -92,6 +100,7 @@ private:
   
   /*! \brief Last error occured */
   QString cvLastError;
+  
   /*! \brief Exiv2 data used in case we have to work with invalid data */
   Exiv2::DataValue cvNotValidValue;
 };

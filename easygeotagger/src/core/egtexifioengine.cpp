@@ -1,5 +1,5 @@
 /*
-** File: egtexifio.cpp
+** File: egtexifioengine.cpp
 ** Author(s): Roberto Garcia-Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-09-22
 **
@@ -21,8 +21,7 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#include "egtexifio.h"
-#include "egtexifio.h"
+#include "egtexifioengine.h"
 
 #include "egtpathbuilder.h"
 #include "egtlogger.h"
@@ -34,7 +33,7 @@
 #include <QDir>
 
 
-EgtExifIO::EgtExifIO()
+EgtExifIoEngine::EgtExifIoEngine()
 {
   Exiv2::DataValue notvalid(Exiv2::invalidTypeId );
   cvNotValidValue=  notvalid;
@@ -42,15 +41,15 @@ EgtExifIO::EgtExifIO()
   cvHasGpsExif = false;
 }
 
-EgtExifIO::EgtExifIO( QString theImageFilename )
+EgtExifIoEngine::EgtExifIoEngine( QString theImageFilename )
 {
-  EgtExifIO();
+  EgtExifIoEngine();
   setFile( theImageFilename );
 }
 
-EgtExifIO::EgtExifIO( const QModelIndex& theIndex )
+EgtExifIoEngine::EgtExifIoEngine( const QModelIndex& theIndex )
 {
-  EgtExifIO();
+  EgtExifIoEngine();
   EgtPathBuilder cvPathBuilder;
   setFile( cvPathBuilder.buildPath( theIndex ) );
 }
@@ -61,9 +60,9 @@ EgtExifIO::EgtExifIO( const QModelIndex& theIndex )
  *
  */
 /*!
- * \returns whether the image contains exif metadata or not
+ * \returns whether the image contains gps exif metadata or not
  */
-bool EgtExifIO::hasGpsExif()
+bool EgtExifIoEngine::hasGpsExif()
 {
   return cvHasGpsExif;
 }
@@ -71,7 +70,7 @@ bool EgtExifIO::hasGpsExif()
 /*!
  * \returns whether the image is valid or not
  */
-bool EgtExifIO::isValidImage()
+bool EgtExifIoEngine::isValidImage()
 {
   return cvIsValidImage;
 }
@@ -79,7 +78,7 @@ bool EgtExifIO::isValidImage()
 /*!
  * \returns A message with the last error occured
  */
-QString EgtExifIO::lastError() 
+QString EgtExifIoEngine::lastError() 
 { 
   return cvLastError; 
 }
@@ -87,7 +86,7 @@ QString EgtExifIO::lastError()
 /*!
  * \returns the latitude of the current image
  */
-double EgtExifIO::latitude()
+double EgtExifIoEngine::latitude()
 {
   EgtDebug( "entered" );
   
@@ -124,7 +123,7 @@ double EgtExifIO::latitude()
 /*!
  * \returns the longitude of the current image
  */
-double EgtExifIO::longitude()
+double EgtExifIoEngine::longitude()
 {  
   EgtDebug( "entered" );
   
@@ -156,9 +155,9 @@ double EgtExifIO::longitude()
 }
 
 /*!
- * \param theImageFilename Image file that is going to be readen/written
+ * \param theImageFilename Absolute path to the image file that is going to be read/written
  */
-void EgtExifIO::setFile( QString theImageFilename )
+void EgtExifIoEngine::setFile( QString theImageFilename )
 {
 
   cvImageFileName = theImageFilename;
@@ -214,7 +213,7 @@ void EgtExifIO::setFile( QString theImageFilename )
  * \param theValue Latitude represented as a double value, to be written in the exif metadata
  * \returns Whether the operation was successful or not
  */
-bool EgtExifIO::writeLatitude(double theValue)
+bool EgtExifIoEngine::writeLatitude(double theValue)
 {
   EgtDebug( "entered writeLatitude(double)" );
   bool ok; 
@@ -245,7 +244,7 @@ bool EgtExifIO::writeLatitude(double theValue)
  * \param theValue QString representing the Latitude to be written in the exif metadata
  * \returns Whether the operation was successful or not
  */
-bool EgtExifIO::writeLatitude( QString theValue )
+bool EgtExifIoEngine::writeLatitude( QString theValue )
 {
   EgtDebug( "entered writeLatitude(QString)" );
   bool ok; 
@@ -261,7 +260,7 @@ bool EgtExifIO::writeLatitude( QString theValue )
  * \param theValue Longitude represented as a double value, to be written in the exif metadata
  * \returns Whether the operation was successful or not
  */
-bool EgtExifIO::writeLongitude( double theValue )
+bool EgtExifIoEngine::writeLongitude( double theValue )
 {
   EgtDebug( "entered writeLatitude(double)" );
   bool ok; 
@@ -293,7 +292,7 @@ bool EgtExifIO::writeLongitude( double theValue )
  * \param theValue QString representing the Longitude to be written in the exif metadata
  * \returns Whether the operation was successful or not
  */
-bool EgtExifIO::writeLongitude( QString theValue )
+bool EgtExifIoEngine::writeLongitude( QString theValue )
 {
   EgtDebug( "entered writeLongitude(QString)" );
   bool ok; 
@@ -315,7 +314,7 @@ bool EgtExifIO::writeLongitude( QString theValue )
  * \param theDegrees A QString that represents the decimal degrees to be converted to rational format
  * \returns A QString containing the rational value obtained
  */
-QString EgtExifIO::convertToRational(QString theDegrees)
+QString EgtExifIoEngine::convertToRational(QString theDegrees)
 {
 	bool ok;
 
@@ -348,7 +347,7 @@ QString EgtExifIO::convertToRational(QString theDegrees)
  * \param theKey the key to be searched within the exif data
  * \returns the Value that has been readen from the exif data 
  */
-const Exiv2::Value& EgtExifIO::read(QString theKey)
+const Exiv2::Value& EgtExifIoEngine::read(QString theKey)
 {
   EgtDebug( "entered" );
   
@@ -386,7 +385,7 @@ const Exiv2::Value& EgtExifIO::read(QString theKey)
  * \param theKey the key to be searched within the exif data
  * \returns A QString that represents the readen value 
  */
-QString EgtExifIO::readKeyValueAsString(QString theKey)
+QString EgtExifIoEngine::readKeyValueAsString(QString theKey)
 {
   EgtDebug( "entered" );
   if( isValidImage() )
@@ -424,7 +423,7 @@ QString EgtExifIO::readKeyValueAsString(QString theKey)
  * \param theDefaultType The data type of what it is going to be written
  * \returns Whether the operation was succesful or not 
  */
-bool EgtExifIO::write( QString theKey, QString theString, QString theDefaultType )
+bool EgtExifIoEngine::write( QString theKey, QString theString, QString theDefaultType )
 {
   EgtDebug( "entered" );
   
