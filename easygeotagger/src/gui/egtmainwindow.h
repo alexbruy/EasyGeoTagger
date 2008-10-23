@@ -38,7 +38,7 @@
 /*! \brief Main EasyGeoTagger window
  *
  */
-class EgtMainWindow : public QMainWindow, public Ui::EgtMainWindowGui
+class MS_DLL_SPEC EgtMainWindow : public QMainWindow, public Ui::EgtMainWindowGui
 {
 
   Q_OBJECT

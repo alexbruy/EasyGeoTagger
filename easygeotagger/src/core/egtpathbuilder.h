@@ -29,7 +29,7 @@
 /*! \brief Builds absolute paths from a QModelIndex
  *
  */
-class EgtPathBuilder
+class MS_DLL_SPEC EgtPathBuilder
 {
 
   public:

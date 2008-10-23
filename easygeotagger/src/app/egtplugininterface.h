@@ -36,7 +36,7 @@ class EgtApplicationInterface;
  *
  * This interface provide the mechanism by which EasyGT can dynamically load plugins
  */
-class EgtPluginInterface : public QObject
+class MS_DLL_SPEC EgtPluginInterface : public QObject
 {
   Q_OBJECT 
   

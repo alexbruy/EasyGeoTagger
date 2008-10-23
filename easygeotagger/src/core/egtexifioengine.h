@@ -29,7 +29,7 @@
 #include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
 
-class EgtExifIoEngine
+class MS_DLL_SPEC EgtExifIoEngine
 {
 
 public:

@@ -35,7 +35,7 @@
  * The graphical container that holds buttons to launch and configure plugins as well as display
  * the plugin's description.
  */
-class EgtPluginDisplayWidget : public QFrame
+class MS_DLL_SPEC EgtPluginDisplayWidget : public QFrame
 {
   Q_OBJECT
 

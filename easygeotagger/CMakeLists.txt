@@ -1,4 +1,18 @@
 PROJECT(EasyGT)
+
+IF (WIN32)
+  # expect that classes are being imported
+  # Note: MSVC doesn't like when the macros are quotes
+  # and MSYS doesn't like them unqouted (bacause of braces)
+  IF (MSVC)
+    ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllimport)")
+  ELSE (MSVC)
+    ADD_DEFINITIONS("\"-DMS_DLL_SPEC=__declspec(dllimport)\"")
+  ENDIF (MSVC)
+ELSE (WIN32)
+  ADD_DEFINITIONS(-DMS_DLL_SPEC=)
+ENDIF (WIN32)
+
 # set path to additional CMake modules
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_find_rules ${CMAKE_MODULE_PATH})
 
@@ -24,14 +38,14 @@ ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
 IF ( WIN32 )
   #Add later
 ELSE ( WIN32 )
+  SET( CMAKE_INSTALL_PREFIX "/usr/local" )
   SET ( EASYGT_BIN_SUBDIR     bin )
   SET ( EASYGT_LIB_SUBDIR     lib )
   SET ( EASYGT_PLUGIN_SUBDIR  lib/easygt )
   SET ( EASYGT_INCLUDE_SUBDIR include/easygt )
+  
+  ADD_DEFINITIONS( -DPLUGINPATH=\\\"${CMAKE_INSTALL_PREFIX}/${EASYGT_PLUGIN_SUBDIR}\\\" )
 ENDIF ( WIN32 )
-
-SET( CMAKE_INSTALL_PREFIX "/usr/local" )
-
 
 INCLUDE(${QT_USE_FILE})
 

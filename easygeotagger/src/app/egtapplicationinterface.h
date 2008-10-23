@@ -35,7 +35,7 @@
  * The application interface provides a container for resources available to all plugins. Currently
  * this is only the list of available plugins
  */
-class EgtApplicationInterface : public QObject
+class MS_DLL_SPEC EgtApplicationInterface : public QObject
 {
   Q_OBJECT
 

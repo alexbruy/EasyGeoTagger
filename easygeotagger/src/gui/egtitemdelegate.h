@@ -34,7 +34,7 @@
  * images but have no gps exif data. A green background will be shown for entries that are
  * valid images and have gps exif data.
  */
-class EgtItemDelegate : public QItemDelegate
+class MS_DLL_SPEC EgtItemDelegate : public QItemDelegate
 {
   Q_OBJECT
 

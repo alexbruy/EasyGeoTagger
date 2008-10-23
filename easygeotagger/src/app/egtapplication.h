@@ -32,7 +32,7 @@
  *
  * This class represents the main EasyGeoTagger application
  */
-class EgtApplication
+class MS_DLL_SPEC EgtApplication
 {
   
   public:

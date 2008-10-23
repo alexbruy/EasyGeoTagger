@@ -38,7 +38,7 @@
  * 
  * The plugin manager is responsible for loading plugins and updating the gui
  */
-class EgtPluginManager : public QObject
+class MS_DLL_SPEC EgtPluginManager : public QObject
 {
   Q_OBJECT 
   

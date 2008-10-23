@@ -29,7 +29,7 @@
 #include <QImage>
 #include <QModelIndex>
 
-class EgtImageEngine : public QObject
+class MS_DLL_SPEC EgtImageEngine : public QObject
 { 
   Q_OBJECT 
   

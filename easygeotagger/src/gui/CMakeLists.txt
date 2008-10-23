@@ -1,3 +1,12 @@
+IF (WIN32)
+# expect that classes are being exported
+  IF (MSVC)
+    ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllexport)")
+  ELSE (MSVC)
+    ADD_DEFINITIONS("\"-DMS_DLL_SPEC=__declspec(dllexport)\"")
+  ENDIF (MSVC)
+ENDIF (WIN32)
+
 SET(EGT_GUI_SRCS
     egtitemdelegate.cpp
     egtmainwindow.cpp
