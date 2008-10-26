@@ -3,7 +3,7 @@ IF (WIN32)
   IF (MSVC)
     ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllexport)")
   ELSE (MSVC)
-    ADD_DEFINITIONS("\"-DMS_DLL_SPEC=__declspec(dllexport)\"")
+    ADD_DEFINITIONS("-UMS_DLL_SPEC \"-DMS_DLL_SPEC=__declspec(dllexport)\"")
   ENDIF (MSVC)
 ENDIF (WIN32)
 
@@ -31,7 +31,10 @@ ADD_LIBRARY (easygt_gui SHARED ${EGT_GUI_SRCS} ${EGT_GUI_MOC_SRCS} ${EGT_GUI_RCC
 
 ADD_DEPENDENCIES(easygt_gui easygt_ui easygt_core)
 
-TARGET_LINK_LIBRARIES(easygt_gui ${QT_LIBRARIES} )
+TARGET_LINK_LIBRARIES(easygt_gui 
+	easygt_core
+	${QT_LIBRARIES}
+	)
 
 INSTALL(TARGETS easygt_gui DESTINATION ${EASYGT_LIB_SUBDIR} )
 INSTALL( FILES ${EGT_GUI_MOC_HDRS} DESTINATION ${EASYGT_INCLUDE_SUBDIR})

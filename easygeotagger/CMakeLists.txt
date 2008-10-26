@@ -7,7 +7,7 @@ IF (WIN32)
   IF (MSVC)
     ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllimport)")
   ELSE (MSVC)
-    ADD_DEFINITIONS("\"-DMS_DLL_SPEC=__declspec(dllimport)\"")
+    ADD_DEFINITIONS("-UMS_DLL_SPEC \"-DMS_DLL_SPEC=__declspec(dllimport)\"")
   ENDIF (MSVC)
 ELSE (WIN32)
   ADD_DEFINITIONS(-DMS_DLL_SPEC=)
@@ -30,15 +30,28 @@ IF (NOT LIBRAW_FOUND)
   MESSAGE (SEND_ERROR "LIBRAW dependency was not found!")
 ENDIF (NOT LIBRAW_FOUND)
 
+#MinGW seems to build the exe in Release mode but plugins in Debug mode as default
+ADD_DEFINITIONS(-DQT_NO_DEBUG)
+
 IF (CMAKE_BUILD_TYPE MATCHES Debug)
   ADD_DEFINITIONS(-DEGTDEBUG=1)
 ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
 
 # set up the install locations
 IF ( WIN32 )
-  #Add later
+  #Make this a find routine -- just for the lib
+  FIND_LIBRARY( EXPAT_LIBRARY NAMES expat PATHS C:/devel/bin/msys/1.0/home/pete/local/bin/ )
+  FIND_LIBRARY( ZLIB_LIBRARY NAMES z PATHS C:/devel/bin/msys/1.0/home/pete/local/lib/ )
+
+  SET( CMAKE_INSTALL_PREFIX   ./install )
+  SET ( EASYGT_BIN_SUBDIR     . )
+  SET ( EASYGT_LIB_SUBDIR     . )
+  SET ( EASYGT_PLUGIN_SUBDIR  ./easygt )
+  SET ( EASYGT_INCLUDE_SUBDIR ./include/easygt )
+  
+  ADD_DEFINITIONS( -DPLUGINPATH=\\\"${EASYGT_PLUGIN_SUBDIR}\\\" )
 ELSE ( WIN32 )
-  SET( CMAKE_INSTALL_PREFIX "/usr/local" )
+  SET( CMAKE_INSTALL_PREFIX   /usr/local )
   SET ( EASYGT_BIN_SUBDIR     bin )
   SET ( EASYGT_LIB_SUBDIR     lib )
   SET ( EASYGT_PLUGIN_SUBDIR  lib/easygt )
