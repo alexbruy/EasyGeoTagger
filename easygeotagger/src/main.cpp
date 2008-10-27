@@ -24,12 +24,15 @@
 
 #include "egtapplication.h"
 
+#include <QDir>
 #include <QApplication>
 
 int main(int argc, char* argv[])
 {
 
   QApplication app(argc, argv);
+  
+  QCoreApplication::addLibraryPath( QApplication::applicationDirPath() + QDir::toNativeSeparators("/") + "plugins" );
   
   //PLUGINPATH is set from cmake
   EgtApplication* EasyGT = new EgtApplication( PLUGINPATH );
