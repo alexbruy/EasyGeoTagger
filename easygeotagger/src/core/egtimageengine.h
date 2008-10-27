@@ -59,6 +59,9 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     /*! \brief Initialization steps */
     void init();
     
+    /*! \brief Open the raw image file do everything but read the image data */
+    bool preprocessRaw( QString );
+    
     /*! \brief Read/open the base image as a jpeg */
     bool readJpeg( QString );
     
@@ -68,8 +71,12 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     /*! \brief Read/open the base image as a tiff */
     bool readTiff( QString );
     
+    
     /*! \brief Has the base image been resized */
     bool cvHasBeenResized;
+    
+    /*! \brief Has a valid thumbnail image */
+    bool cvHasThumbnail;
     
     /*! \brief Was the last image opened sucessfully */
     bool cvIsValidImage;    
@@ -82,6 +89,9 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     
     /*! \brief QImage containing the original/base image data */
     QImage* cvOriginalImage;
+    
+    /*! \brief QImage containing embeded thumbnail for raw images */
+    QImage cvThumbnailImage;
   
   signals:
     void progress( int, int, int );

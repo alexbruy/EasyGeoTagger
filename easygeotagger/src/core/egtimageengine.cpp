@@ -47,6 +47,7 @@ void EgtImageEngine::init()
 {
   cvOriginalImage = 0;
   cvHasBeenResized = false;
+  cvHasThumbnail = false;
   cvIsValidImage = false;
 }
 
@@ -164,21 +165,7 @@ void EgtImageEngine::setFile( QString theImageFilename )
 /*!
  * \param theImageFilename absolute path and filename of the image to open
  */
-bool EgtImageEngine::readJpeg( QString theImageFilename )
-{
-  EgtDebug( "entered" );
-  
-  emit( progress( 0, 1, 0) );
-  cvOriginalImage = new QImage( theImageFilename, "JPG" );
-  emit( progress( 0, 1, 1) );
-  
-  return !cvOriginalImage->isNull();
-}
-
-/*!
- * \param theImageFilename absolute path and filename of the image to open
- */
-bool EgtImageEngine::readRaw( QString theImageFilename )
+bool EgtImageEngine::preprocessRaw( QString theImageFilename )
 {
 /*
  * This function is largely modeled after examples provided with LibRaw
@@ -207,6 +194,39 @@ bool EgtImageEngine::readRaw( QString theImageFilename )
   EgtDebug( "Camera: "+ QString( cvRawProcessor.imgdata.idata.make ) );
   EgtDebug( "Width: "+ QString::number( cvRawProcessor.imgdata.sizes.width ) +"\tHeight: "+ QString::number( cvRawProcessor.imgdata.sizes.height ) );
 
+
+//This does not actually work -- first the "thumbnail" is the full size image
+/*
+  //Unpack the thumbnail
+  lvErrorCode = cvRawProcessor.unpack_thumb();
+  if( LIBRAW_SUCCESS != lvErrorCode )
+  {
+    cvHasThumbnail = false;
+    cvThumbnailImage = QImage();
+    EgtDebug( "Unable to unpack thumbnail: "+  QString( libraw_strerror( lvErrorCode ) ) );
+    if( LIBRAW_FATAL_ERROR( lvErrorCode ) ) { return false; }
+  }
+  else 
+  {
+    cvHasThumbnail = true;
+    cvThumbnailImage = QImage( ( int )cvRawProcessor.imgdata.thumbnail.twidth, ( int )cvRawProcessor.imgdata.thumbnail.theight, QImage::Format_RGB32 );
+    
+    int lvOffset = 0;
+    int lvHeight = ( int )cvRawProcessor.imgdata.thumbnail.theight;
+    int lvWidth = ( int )cvRawProcessor.imgdata.thumbnail.twidth;
+    char* lvImage = cvRawProcessor.imgdata.thumbnail.thumb;
+    for( int lvY = 0; lvY < lvHeight; lvY++ )
+    {
+      for( int lvX = 0; lvX < lvWidth; lvX++ )
+      {
+        lvOffset = (lvY * lvWidth * 3 ) + ( lvX * 3 );
+        cvThumbnailImage.setPixel( lvX, lvY, lvImage[ lvOffset ] << 16 | lvImage[ lvOffset+1 ] << 8 | lvImage[ lvOffset+2 ]  );
+      }
+    }
+    cvThumbnailImage.save("/home/pete/test.jpg");
+  }
+*/
+
   //Process data -- not totally sure this is necessary here
   lvErrorCode = cvRawProcessor.dcraw_process();       
   if(LIBRAW_SUCCESS != lvErrorCode)
@@ -216,8 +236,35 @@ bool EgtImageEngine::readRaw( QString theImageFilename )
     return false; 
   }
   
+  return true;
+}
+ 
+/*!
+ * \param theImageFilename absolute path and filename of the image to open
+ */
+bool EgtImageEngine::readJpeg( QString theImageFilename )
+{
+  EgtDebug( "entered" );
+  
+  emit( progress( 0, 1, 0) );
+  cvOriginalImage = new QImage( theImageFilename, "JPG" );
+  emit( progress( 0, 1, 1) );
+  
+  return !cvOriginalImage->isNull();
+}
+
+/*!
+ * \param theImageFilename absolute path and filename of the image to open
+ */
+bool EgtImageEngine::readRaw( QString theImageFilename )
+{
+  EgtDebug( "entered" );
+
+  if( !preprocessRaw( theImageFilename ) ) { return false; }
+
   //Read the image data then place it into a QImage
   emit( progress( 0, 0, 0) );
+  int lvErrorCode;
   libraw_processed_image_t* lvImage = cvRawProcessor.dcraw_make_mem_image( &lvErrorCode );
   if( 0 != lvImage )
   {
@@ -262,6 +309,7 @@ bool EgtImageEngine::readRaw( QString theImageFilename )
       EgtDebug( "Unable to make mem_image: "+  QString( libraw_strerror( lvErrorCode ) ) );
   }
 
+  free( lvImage );
   cvRawProcessor.recycle();
   return true;
 }
