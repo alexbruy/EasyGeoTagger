@@ -12,12 +12,14 @@ SET( EGT_CORE_ALL_HDRS
      egtimageengine.h
      egtlogger.h
      egtpathbuilder.h
+     egtrawthread.h
    )
 
 SET( EGT_CORE_SRCS
      egtexifioengine.cpp
      egtimageengine.cpp
      egtpathbuilder.cpp
+     egtrawthread.cpp
    )
 
 SET( EGT_CORE_MOC_HDRS
