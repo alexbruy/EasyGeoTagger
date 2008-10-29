@@ -24,7 +24,7 @@
 
 #include "egtimageengine.h"
 #include "egtlogger.h"
-#include "egtrawthread.h"
+
 
 #include <QFileInfo>
 #include <QDir>
@@ -46,6 +46,7 @@ EgtImageEngine::~EgtImageEngine()
 
 void EgtImageEngine::init()
 {
+  cvRawThread = 0;
   cvOriginalImage = 0;
   cvHasBeenResized = false;
   cvHasThumbnail = false;
@@ -269,22 +270,15 @@ void EgtImageEngine::readRaw( QString theImageFilename )
   cvIsValidImage = false;
   cvIsProcessing = true;
 
-  if( !preprocessRaw( theImageFilename ) ) { emit( imageLoaded( cvIsValidImage ) ); }
-//slot thread complete
-//connect thread complete to finish signal from thread
-//emit image loaded
-  //Read the image data then place it into a QImage
   emit( progress( 0, 0, 0) );
   cvOriginalImage = new QImage();
-  EgtRawThread lvRawThread( &cvRawProcessor,cvOriginalImage );
+  //EgtRawThread lvRawThread( &cvRawProcessor,cvOriginalImage );
+  cvRawThread = new EgtRawThread( &cvRawProcessor,cvOriginalImage, theImageFilename );
 
+  connect( cvRawThread, SIGNAL( progressThread( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
+  connect( cvRawThread, SIGNAL( rawReady( bool ) ),this , SLOT( threadComplete( bool ) ) );
 
-  connect( &lvRawThread, SIGNAL( progressThread( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
-  connect( &lvRawThread, SIGNAL( rawReady( bool ) ),this , SLOT( threadComplete( bool ) ) );
-
-  lvRawThread.start();
-  lvRawThread.wait(); //This statement should not exist
-
+  cvRawThread->start();
 }
 
 /*!

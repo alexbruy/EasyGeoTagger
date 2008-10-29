@@ -25,7 +25,7 @@
 #define EGTIMAGEENGINE_H
 
 #include "libraw/libraw.h"
-
+#include "egtrawthread.h"
 #include <QImage>
 #include <QModelIndex>
 
@@ -93,6 +93,7 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     /*! \brief QImage containing embeded thumbnail for raw images */
     QImage cvThumbnailImage;
 
+    EgtRawThread* cvRawThread;
 
 bool cvIsProcessing;
 

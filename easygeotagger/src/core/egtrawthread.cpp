@@ -25,11 +25,12 @@
 #include "egtrawthread.h"
 #include "egtlogger.h"
 
- EgtRawThread::EgtRawThread( LibRaw* theRawProcessor, QImage* theImage )
+ EgtRawThread::EgtRawThread( LibRaw* theRawProcessor, QImage* theImage, QString theFileName )
  {
    cvImage = theImage;
    cvRawProcessor = theRawProcessor;
    cvIsValid = true;
+   cvFileName = theFileName;
  }
 
  EgtRawThread::~EgtRawThread()
@@ -38,6 +39,12 @@
 
  void EgtRawThread::run()
  {
+   if( !preprocessRaw( cvFileName ) ) 
+   { 
+     cvIsValid = false;
+     emit( rawReady( cvIsValid ) ); 
+   }
+
    int lvError;
    libraw_processed_image_t* lvImage = cvRawProcessor->dcraw_make_mem_image( &lvError );
    if( 0 != lvImage )
@@ -52,8 +59,8 @@
      {
        EgtDebug( "Unable to allocate memory for cvOriginalImage" );
        cvIsValid = false;
-emit( rawReady( cvIsValid ) );
-return;
+       emit( rawReady( cvIsValid ) );
+       return;
      }
  
     if( LIBRAW_IMAGE_BITMAP == lvImage->type )
@@ -90,7 +97,7 @@ return;
 
   free( lvImage );
   cvRawProcessor->recycle();
-emit( rawReady( cvIsValid ) );
+  emit( rawReady( cvIsValid ) );
 }
 
 /*!
@@ -100,3 +107,48 @@ emit( rawReady( cvIsValid ) );
  {
    return cvIsValid;
  }
+
+/*!
+ * \param theImageFilename absolute path and filename of the image to open
+ */
+bool EgtRawThread::preprocessRaw( QString theImageFilename )
+{
+/*
+ * This function is largely modeled after examples provided with LibRaw
+ */
+  EgtDebug( "entered" );
+  
+  //Try to open the file
+  int lvErrorCode = cvRawProcessor->open_file( theImageFilename.toLocal8Bit() );
+  if( LIBRAW_SUCCESS != lvErrorCode )
+  {
+      EgtDebug( "["+ theImageFilename +"] failed to open-> "+  libraw_strerror( lvErrorCode ) );
+      cvRawProcessor->recycle();
+      return false;
+  }
+  
+  //Unpack the image data
+  lvErrorCode = cvRawProcessor->unpack();
+  if( LIBRAW_SUCCESS != lvErrorCode)
+  {
+    EgtDebug( "["+ theImageFilename +"] failed to unpack-> "+  libraw_strerror( lvErrorCode ) );
+    cvRawProcessor->recycle(); 
+    return false;
+  }
+  
+  EgtDebug( "Unpacked: "+ theImageFilename );
+  EgtDebug( "Camera: "+ QString( cvRawProcessor.imgdata.idata.make ) );
+  EgtDebug( "Width: "+ QString::number( cvRawProcessor.imgdata.sizes.width ) +"\tHeight: "+ QString::number( cvRawProcessor->imgdata.sizes.height ) );
+
+
+  //Process data -- not totally sure this is necessary here
+  lvErrorCode = cvRawProcessor->dcraw_process();       
+  if(LIBRAW_SUCCESS != lvErrorCode)
+  {
+    EgtDebug( "Unable to process image: "+  QString( libraw_strerror( lvErrorCode ) ) );
+    cvRawProcessor->recycle(); 
+    return false; 
+  }
+  
+  return true;
+}
