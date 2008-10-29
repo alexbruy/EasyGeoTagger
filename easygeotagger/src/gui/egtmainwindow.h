@@ -56,6 +56,8 @@ private slots:
   
   /*! \brief Slot to interact with the progress bar */
   void updateProgress( int, int, int );
+
+void listenImageLoaded( bool );
   
 private:
   QFileInfo cvFileInfo;

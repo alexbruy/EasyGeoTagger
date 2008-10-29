@@ -44,6 +44,7 @@ EgtMainWindow::EgtMainWindow()
   
   setupUi(this);
   connect( tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( clicked(const QModelIndex& ) ) );  
+
   
   //Set up the file browser window
   QDirModel* lvModel = new QDirModel( QStringList(), QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot, QDir::DirsFirst );
@@ -72,6 +73,7 @@ EgtMainWindow::EgtMainWindow()
   pbarProgressBar->setValue( 0 );
   
   connect(&cvImageEngine, SIGNAL( progress( int, int, int ) ), this, SLOT( updateProgress( int, int, int ) ) );
+  connect(&cvImageEngine, SIGNAL( imageLoaded( bool ) ), this, SLOT( listenImageLoaded( bool ) ) );
 }
 
 /*
@@ -97,7 +99,7 @@ void EgtMainWindow::clicked( const QModelIndex& theIndex )
 {
   EgtDebug( "entered" );
   cvImageEngine.setFile( cvPathBuilder.buildPath( theIndex ) );
-  labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( labelPreview->width(), labelPreview->height() ) ) );
+  //labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( labelPreview->width(), labelPreview->height() ) ) );
 }
 
 /*!
@@ -111,5 +113,11 @@ void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgre
   pbarProgressBar->setMinimum( theMinimum );
   pbarProgressBar->setMaximum( theMaximum );
   pbarProgressBar->setValue( theProgress );
+}
+
+void EgtMainWindow::listenImageLoaded( bool theCorrectness )
+{
+  if( theCorrectness )
+    labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( labelPreview->width(), labelPreview->height() ) ) );
 }
 
