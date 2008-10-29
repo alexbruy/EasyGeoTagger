@@ -145,15 +145,15 @@ void EgtImageEngine::setFile( QString theImageFilename )
   
   if( theImageFilename.endsWith("tif", Qt::CaseInsensitive) || theImageFilename.endsWith( "tiff", Qt::CaseInsensitive ) )
   {
-    cvIsValidImage = readTiff( theImageFilename );
+    readTiff( theImageFilename );
   }
   else if( theImageFilename.endsWith("jpg", Qt::CaseInsensitive) || theImageFilename.endsWith( "jpeg", Qt::CaseInsensitive ) )
   {
-    cvIsValidImage = readJpeg( theImageFilename );
+    readJpeg( theImageFilename );
   }
   else
   {
-    cvIsValidImage = readRaw( theImageFilename );
+    readRaw( theImageFilename );
   }
   
 }
@@ -243,47 +243,82 @@ bool EgtImageEngine::preprocessRaw( QString theImageFilename )
 /*!
  * \param theImageFilename absolute path and filename of the image to open
  */
-bool EgtImageEngine::readJpeg( QString theImageFilename )
+void EgtImageEngine::readJpeg( QString theImageFilename )
 {
   EgtDebug( "entered" );
-  
+  cvIsValidImage = false;
+  cvIsProcessing = true;
+
+ 
   emit( progress( 0, 1, 0) );
   cvOriginalImage = new QImage( theImageFilename, "JPG" );
   emit( progress( 0, 1, 1) );
-  
-  return !cvOriginalImage->isNull();
+
+  cvIsProcessing = false;
+  cvIsValidImage = !cvOriginalImage->isNull();
+ 
+  emit( imageLoaded( cvIsValidImage ) );
 }
 
 /*!
  * \param theImageFilename absolute path and filename of the image to open
  */
-bool EgtImageEngine::readRaw( QString theImageFilename )
+void EgtImageEngine::readRaw( QString theImageFilename )
 {
   EgtDebug( "entered" );
+  cvIsValidImage = false;
+  cvIsProcessing = true;
 
-  if( !preprocessRaw( theImageFilename ) ) { return false; }
-
+  if( !preprocessRaw( theImageFilename ) ) { emit( imageLoaded( cvIsValidImage ) ); }
+//slot thread complete
+//connect thread complete to finish signal from thread
+//emit image loaded
   //Read the image data then place it into a QImage
   emit( progress( 0, 0, 0) );
   cvOriginalImage = new QImage();
   EgtRawThread lvRawThread( &cvRawProcessor,cvOriginalImage );
-  lvRawThread.start();
-  lvRawThread.wait();
 
-  return true;
+
+  connect( &lvRawThread, SIGNAL( progressThread( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
+  connect( &lvRawThread, SIGNAL( rawReady( bool ) ),this , SLOT( threadComplete( bool ) ) );
+
+  lvRawThread.start();
+  lvRawThread.wait(); //This statement should not exist
+
 }
 
 /*!
  * \param theImageFilename absolute path and filename of the image to open
  */
-bool EgtImageEngine::readTiff( QString theImageFilename )
+void EgtImageEngine::readTiff( QString theImageFilename )
 {
   EgtDebug( "entered" );
-  
+  cvIsValidImage = false;
+  cvIsProcessing = true;  
   emit( progress( 0, 1, 0) );
   cvOriginalImage = new QImage( theImageFilename, "TIFF" );
   emit( progress( 0, 1, 1) );
-  
-  return !cvOriginalImage->isNull();
+ 
+
+  cvIsProcessing = false;
+  cvIsValidImage = !cvOriginalImage->isNull();
+ 
+  emit( imageLoaded( cvIsValidImage ) );
 }
 
+/*!
+ * \param theMinimum the minumum value for the progress bar
+ * \param theMaxumum the maximum value for the progress bar
+ * \param theProgress the current progress
+ */
+void EgtImageEngine::reEmitProgress(int theMinimum, int theMaximum, int theProgress )
+{
+  emit( progress( theMinimum, theMaximum, theProgress) );
+}
+
+void EgtImageEngine::threadComplete( bool theError )
+{
+  cvIsProcessing = false;
+  cvIsValidImage = theError;
+  emit( imageLoaded( theError ) );
+}

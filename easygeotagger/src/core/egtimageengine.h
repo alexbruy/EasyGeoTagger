@@ -63,13 +63,13 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     bool preprocessRaw( QString );
     
     /*! \brief Read/open the base image as a jpeg */
-    bool readJpeg( QString );
+    void readJpeg( QString );
     
     /*! \brief Read/open the base image as a raw image format */
-    bool readRaw( QString );
+    void readRaw( QString );
     
     /*! \brief Read/open the base image as a tiff */
-    bool readTiff( QString );
+    void readTiff( QString );
     
     
     /*! \brief Has the base image been resized */
@@ -92,8 +92,20 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     
     /*! \brief QImage containing embeded thumbnail for raw images */
     QImage cvThumbnailImage;
+
+
+bool cvIsProcessing;
+
+
   
   signals:
     void progress( int, int, int );
+    void imageLoaded(bool);
+
+  private slots:
+  /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
+  void reEmitProgress( int, int, int );
+  void threadComplete( bool );
+
 };
 #endif

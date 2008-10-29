@@ -29,7 +29,7 @@
  {
    cvImage = theImage;
    cvRawProcessor = theRawProcessor;
-   cvErrorCode = 0;
+   cvIsValid = true;
  }
 
  EgtRawThread::~EgtRawThread()
@@ -38,7 +38,8 @@
 
  void EgtRawThread::run()
  {
-   libraw_processed_image_t* lvImage = cvRawProcessor->dcraw_make_mem_image( &cvErrorCode );
+   int lvError;
+   libraw_processed_image_t* lvImage = cvRawProcessor->dcraw_make_mem_image( &lvError );
    if( 0 != lvImage )
    {
      if( 0 != cvImage )
@@ -50,8 +51,9 @@
      if( cvImage->isNull() )
      {
        EgtDebug( "Unable to allocate memory for cvOriginalImage" );
-       cvErrorCode = 1;
-       return;
+       cvIsValid = false;
+emit( rawReady( cvIsValid ) );
+return;
      }
  
     if( LIBRAW_IMAGE_BITMAP == lvImage->type )
@@ -63,7 +65,7 @@
         //Will this actually work if bits = 1?
         for( int lvY = 0; lvY < lvImage->height; lvY++ )
         {
-          emit( progress( 0, lvImage->height, lvY ) );
+          emit( progressThread( 0, lvImage->height, lvY ) );
           for( int lvX = 0; lvX < lvImage->width; lvX++ )
           {
             lvOffset = (lvY * lvImage->width * 3 ) + ( lvX * 3 );
@@ -71,7 +73,7 @@
 
           }
         }
-        //emit( progress( 0, lvImage->height, lvImage->height ) );
+        emit( progressThread( 0, lvImage->height, lvImage->height ) );
       }
     }
     else
@@ -82,18 +84,19 @@
   }
   else
   {
-    cvErrorCode = 1;
+    cvIsValid = false;
     EgtDebug( "Unable to make mem_image: "+  QString( libraw_strerror( cvErrorCode ) ) );
   }
 
   free( lvImage );
   cvRawProcessor->recycle();
+emit( rawReady( cvIsValid ) );
 }
 
 /*!
  * \returns 0 in case of success. An integer different to 0 in case of error.
  */
- int EgtRawThread::getErrorCode()
+ bool EgtRawThread::isValid()
  {
-   return cvErrorCode;
+   return cvIsValid;
  }
