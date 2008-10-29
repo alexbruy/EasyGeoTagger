@@ -38,7 +38,7 @@ class EgtRawThread : public QThread
 
   public:
     /*! \brief Constructor */
-    EgtRawThread( LibRaw*, QImage*, QString );
+    EgtRawThread( QImage*, QString );
     /*! \brief Destructor */
     ~EgtRawThread();
     /*! \brief Returns an error code */
@@ -47,17 +47,19 @@ class EgtRawThread : public QThread
     void run();
 
   private:
-    
+    /*! \brief Performs previous operation on the raw file before reading it */
     bool preprocessRaw( QString );
-    /*! \brief Integer containing an error code */
-    bool cvIsValid;
+
+    QString cvFileName;
     /*! \brief Transformed QImage from the Raw picture */
     QImage* cvImage;
+    /*! \brief Integer containing an error code */
+    bool cvIsValid;
     /*! \brief LibRaw object to handle the raw data */
-    LibRaw* cvRawProcessor;
-    QString cvFileName;
+    LibRaw cvRawProcessor;
+    
   signals:
-    void progressThread( int, int, int );
+    void progress( int, int, int );
     void rawReady(bool);
 
 };

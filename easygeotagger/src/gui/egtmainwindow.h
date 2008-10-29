@@ -53,11 +53,14 @@ public:
 private slots:
   /*! \brief Slot to listen for mouse in the file browser */
   void clicked(const QModelIndex&);
-  
+
+  /*! \brief Slot to show the preview */
+  void loadPreview( bool );  
+
   /*! \brief Slot to interact with the progress bar */
   void updateProgress( int, int, int );
 
-void listenImageLoaded( bool );
+
   
 private:
   QFileInfo cvFileInfo;

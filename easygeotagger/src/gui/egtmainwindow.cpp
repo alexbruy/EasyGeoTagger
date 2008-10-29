@@ -73,7 +73,7 @@ EgtMainWindow::EgtMainWindow()
   pbarProgressBar->setValue( 0 );
   
   connect(&cvImageEngine, SIGNAL( progress( int, int, int ) ), this, SLOT( updateProgress( int, int, int ) ) );
-  connect(&cvImageEngine, SIGNAL( imageLoaded( bool ) ), this, SLOT( listenImageLoaded( bool ) ) );
+  connect(&cvImageEngine, SIGNAL( imageLoaded( bool ) ), this, SLOT( loadPreview( bool ) ) );
 }
 
 /*
@@ -99,7 +99,6 @@ void EgtMainWindow::clicked( const QModelIndex& theIndex )
 {
   EgtDebug( "entered" );
   cvImageEngine.setFile( cvPathBuilder.buildPath( theIndex ) );
-  //labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( labelPreview->width(), labelPreview->height() ) ) );
 }
 
 /*!
@@ -115,7 +114,10 @@ void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgre
   pbarProgressBar->setValue( theProgress );
 }
 
-void EgtMainWindow::listenImageLoaded( bool theCorrectness )
+/*!
+ * \param theCorrectness if the image loaded is correct
+ */
+void EgtMainWindow::loadPreview( bool theCorrectness )
 {
   if( theCorrectness )
     labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( labelPreview->width(), labelPreview->height() ) ) );

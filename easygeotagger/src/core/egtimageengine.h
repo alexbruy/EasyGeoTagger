@@ -78,12 +78,15 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     /*! \brief Has a valid thumbnail image */
     bool cvHasThumbnail;
     
+    /*! \brief Is the image processing */
+    bool cvIsProcessing;
+
     /*! \brief Was the last image opened sucessfully */
     bool cvIsValidImage;    
-    
-    /*! \brief Raw image processor */
-    LibRaw cvRawProcessor;
-    
+
+    /*! \brief Thread to load the raw image */
+    EgtRawThread* cvRawThread;    
+
     /*! \brief Local copy of the current resized image */
     QImage cvResizedImage;
     
@@ -93,12 +96,7 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     /*! \brief QImage containing embeded thumbnail for raw images */
     QImage cvThumbnailImage;
 
-    EgtRawThread* cvRawThread;
-
-bool cvIsProcessing;
-
-
-  
+    
   signals:
     void progress( int, int, int );
     void imageLoaded(bool);
@@ -106,6 +104,7 @@ bool cvIsProcessing;
   private slots:
   /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
   void reEmitProgress( int, int, int );
+  /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
   void threadComplete( bool );
 
 };

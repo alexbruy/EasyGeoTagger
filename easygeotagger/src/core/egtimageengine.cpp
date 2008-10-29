@@ -25,7 +25,6 @@
 #include "egtimageengine.h"
 #include "egtlogger.h"
 
-
 #include <QFileInfo>
 #include <QDir>
 
@@ -58,10 +57,6 @@ void EgtImageEngine::init()
  * PUBLIC FUNCTIONS
  *
  */
-/** 
-* Return a copy of the most recently resized version of the image.
-* 
-*/
 
 /*!
  * \param isValid optional parameter to return if the scaled image is valid
@@ -164,83 +159,7 @@ void EgtImageEngine::setFile( QString theImageFilename )
  * PRIVATE FUNCTIONS
  *
  */
-/*!
- * \param theImageFilename absolute path and filename of the image to open
- */
-bool EgtImageEngine::preprocessRaw( QString theImageFilename )
-{
-/*
- * This function is largely modeled after examples provided with LibRaw
- */
-  EgtDebug( "entered" );
-  
-  //Try to open the file
-  int lvErrorCode = cvRawProcessor.open_file( theImageFilename.toLocal8Bit() );
-  if( LIBRAW_SUCCESS != lvErrorCode )
-  {
-      EgtDebug( "["+ theImageFilename +"] failed to open-> "+  libraw_strerror( lvErrorCode ) );
-      cvRawProcessor.recycle();
-      return false;
-  }
-  
-  //Unpack the image data
-  lvErrorCode = cvRawProcessor.unpack();
-  if( LIBRAW_SUCCESS != lvErrorCode)
-  {
-    EgtDebug( "["+ theImageFilename +"] failed to unpack-> "+  libraw_strerror( lvErrorCode ) );
-    cvRawProcessor.recycle(); 
-    return false;
-  }
-  
-  EgtDebug( "Unpacked: "+ theImageFilename );
-  EgtDebug( "Camera: "+ QString( cvRawProcessor.imgdata.idata.make ) );
-  EgtDebug( "Width: "+ QString::number( cvRawProcessor.imgdata.sizes.width ) +"\tHeight: "+ QString::number( cvRawProcessor.imgdata.sizes.height ) );
 
-
-//This does not actually work -- first the "thumbnail" is the full size image
-/*
-  //Unpack the thumbnail
-  lvErrorCode = cvRawProcessor.unpack_thumb();
-  if( LIBRAW_SUCCESS != lvErrorCode )
-  {
-    cvHasThumbnail = false;
-    cvThumbnailImage = QImage();
-    EgtDebug( "Unable to unpack thumbnail: "+  QString( libraw_strerror( lvErrorCode ) ) );
-    if( LIBRAW_FATAL_ERROR( lvErrorCode ) ) { return false; }
-  }
-  else 
-  {
-    cvHasThumbnail = true;
-    cvThumbnailImage = QImage( ( int )cvRawProcessor.imgdata.thumbnail.twidth, ( int )cvRawProcessor.imgdata.thumbnail.theight, QImage::Format_RGB32 );
-    
-    int lvOffset = 0;
-    int lvHeight = ( int )cvRawProcessor.imgdata.thumbnail.theight;
-    int lvWidth = ( int )cvRawProcessor.imgdata.thumbnail.twidth;
-    char* lvImage = cvRawProcessor.imgdata.thumbnail.thumb;
-    for( int lvY = 0; lvY < lvHeight; lvY++ )
-    {
-      for( int lvX = 0; lvX < lvWidth; lvX++ )
-      {
-        lvOffset = (lvY * lvWidth * 3 ) + ( lvX * 3 );
-        cvThumbnailImage.setPixel( lvX, lvY, lvImage[ lvOffset ] << 16 | lvImage[ lvOffset+1 ] << 8 | lvImage[ lvOffset+2 ]  );
-      }
-    }
-    cvThumbnailImage.save("/home/pete/test.jpg");
-  }
-*/
-
-  //Process data -- not totally sure this is necessary here
-  lvErrorCode = cvRawProcessor.dcraw_process();       
-  if(LIBRAW_SUCCESS != lvErrorCode)
-  {
-    EgtDebug( "Unable to process image: "+  QString( libraw_strerror( lvErrorCode ) ) );
-    cvRawProcessor.recycle(); 
-    return false; 
-  }
-  
-  return true;
-}
- 
 /*!
  * \param theImageFilename absolute path and filename of the image to open
  */
@@ -272,10 +191,10 @@ void EgtImageEngine::readRaw( QString theImageFilename )
 
   emit( progress( 0, 0, 0) );
   cvOriginalImage = new QImage();
-  //EgtRawThread lvRawThread( &cvRawProcessor,cvOriginalImage );
-  cvRawThread = new EgtRawThread( &cvRawProcessor,cvOriginalImage, theImageFilename );
+  
+  cvRawThread = new EgtRawThread( cvOriginalImage, theImageFilename );
 
-  connect( cvRawThread, SIGNAL( progressThread( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
+  connect( cvRawThread, SIGNAL( progress( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
   connect( cvRawThread, SIGNAL( rawReady( bool ) ),this , SLOT( threadComplete( bool ) ) );
 
   cvRawThread->start();
@@ -310,6 +229,9 @@ void EgtImageEngine::reEmitProgress(int theMinimum, int theMaximum, int theProgr
   emit( progress( theMinimum, theMaximum, theProgress) );
 }
 
+/*!
+ * \param theError Has the thread finished correctly
+ */
 void EgtImageEngine::threadComplete( bool theError )
 {
   cvIsProcessing = false;
