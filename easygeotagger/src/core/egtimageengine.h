@@ -86,7 +86,7 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
 
 
     /*! \brief Thread to load the raw image */
-    EgtRawImageReader* cvRawImageReader;    
+    EgtRawImageReader cvRawImageReader;    
 
     /*! \brief Local copy of the current resized image */
     QImage cvResizedImage;

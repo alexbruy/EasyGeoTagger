@@ -115,11 +115,15 @@ void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgre
 }
 
 /*!
- * \param theCorrectness if the image loaded is correct
+ * \param isValid Did the requested image load correctly
  */
-void EgtMainWindow::loadPreview( bool theCorrectness )
+void EgtMainWindow::loadPreview( bool isValid )
 {
-  if( theCorrectness )
+  EgtDebug( "entered" );
+  
+  if( isValid )
+  {
     labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( labelPreview->width(), labelPreview->height() ) ) );
+  }
 }
 

@@ -45,11 +45,13 @@ EgtImageEngine::~EgtImageEngine()
 
 void EgtImageEngine::init()
 {
-  cvRawImageReader = 0;
-  cvOriginalImage = 0;
+  cvOriginalImage = new QImage();
   cvHasBeenResized = false;
   cvHasThumbnail = false;
   cvIsValidImage = false;
+  
+  connect( &cvRawImageReader, SIGNAL( progress( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
+  connect( &cvRawImageReader, SIGNAL( rawImageProcessed( bool ) ),this , SLOT( rawImageLoaded( bool ) ) );
 }
 
 /*
@@ -136,9 +138,19 @@ void EgtImageEngine::setFile( QString theImageFilename )
   }
   
   
+  if( cvRawImageReader.isRunning() )
+  {
+    EgtDebug( "RawImageReader is currently running, wating for thread to abort" );
+    cvRawImageReader.abort();
+    while( cvRawImageReader.isRunning() )
+    {
+      cvRawImageReader.wait( 500 );
+    }
+    EgtDebug( "thread aborted" );
+  }
+  
   //TODO: Eventually there will have to be a switch here to figure out which read() to call
   //Maybe try reading the magic number?
-  
   if( theImageFilename.endsWith("tif", Qt::CaseInsensitive) || theImageFilename.endsWith( "tiff", Qt::CaseInsensitive ) )
   {
     readTiff( theImageFilename );
@@ -191,13 +203,9 @@ void EgtImageEngine::readRaw( QString theImageFilename )
 
   emit( progress( 0, 0, 0) );
   cvOriginalImage = new QImage();
-  
-  cvRawImageReader = new EgtRawImageReader( cvOriginalImage, theImageFilename );
 
-  connect( cvRawImageReader, SIGNAL( progress( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
-  connect( cvRawImageReader, SIGNAL( rawImageProcessed( bool ) ),this , SLOT( rawImageLoaded( bool ) ) );
-
-  cvRawImageReader->start();
+  cvRawImageReader.init( cvOriginalImage, theImageFilename ); 
+  cvRawImageReader.start();
 }
 
 /*!
@@ -230,11 +238,11 @@ void EgtImageEngine::reEmitProgress(int theMinimum, int theMaximum, int theProgr
 }
 
 /*!
- * \param theError Has the thread finished correctly
+ * \param isValid Has the thread finished correctly
  */
-void EgtImageEngine::rawImageLoaded( bool theError )
+void EgtImageEngine::rawImageLoaded( bool isValid )
 {
   cvIsProcessing = false;
-  cvIsValidImage = theError;
-  emit( imageLoaded( theError ) );
+  cvIsValidImage = isValid;
+  emit( imageLoaded( isValid ) );
 }
