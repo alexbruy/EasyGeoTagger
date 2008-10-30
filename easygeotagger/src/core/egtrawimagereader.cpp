@@ -28,7 +28,6 @@
  EgtRawImageReader::EgtRawImageReader(  QImage* theImage, QString theFileName )
  {
    cvImage = theImage;
-   cvIsValid = true;
    cvFileName = theFileName;
  }
 
@@ -39,41 +38,36 @@
 /*!
  * \returns whether the image is valid or not.
  */
-bool EgtRawImageReader::isValid()
+void EgtRawImageReader::run()
 {
-  return cvIsValid;
-}
+  EgtDebug( "entered" );
+  
+  if( !preprocessRaw( cvFileName ) ) 
+  { 
+    emit( rawImageProcessed( false ) ); 
+  }
 
- void EgtRawImageReader::run()
- {
-   if( !preprocessRaw( cvFileName ) ) 
-   { 
-     cvIsValid = false;
-     emit( rawReady( cvIsValid ) ); 
-   }
+  int lvError;
+  libraw_processed_image_t* lvImage = cvRawProcessor.dcraw_make_mem_image( &lvError );
+  if( 0 != lvImage )
+  {
+    if( 0 != cvImage )
+    {
+      free( cvImage );
+    }
 
-   int lvError;
-   libraw_processed_image_t* lvImage = cvRawProcessor.dcraw_make_mem_image( &lvError );
-   if( 0 != lvImage )
-   {
-     if( 0 != cvImage )
-     {
-       free( cvImage );
-     }
+    cvImage = new QImage( lvImage->width, lvImage->height, QImage::Format_RGB32 );
+    if( cvImage->isNull() )
+    {
+      EgtDebug( "Unable to allocate memory for cvOriginalImage" );
+      emit( rawImageProcessed( false ) );
+      return;
+    }
 
-     cvImage = new QImage( lvImage->width, lvImage->height, QImage::Format_RGB32 );
-     if( cvImage->isNull() )
-     {
-       EgtDebug( "Unable to allocate memory for cvOriginalImage" );
-       cvIsValid = false;
-       emit( rawReady( cvIsValid ) );
-       return;
-     }
- 
     if( LIBRAW_IMAGE_BITMAP == lvImage->type )
     {
       int lvOffset = 0;
-
+  
       if( lvImage->colors == 3 )
       {
         //Will this actually work if bits = 1?
@@ -84,7 +78,7 @@ bool EgtRawImageReader::isValid()
           {
             lvOffset = (lvY * lvImage->width * 3 ) + ( lvX * 3 );
             cvImage->setPixel( lvX, lvY, lvImage->data[ lvOffset ] << 16 | lvImage->data[ lvOffset+1 ]<<8|lvImage->data[ lvOffset+2 ]  );
-
+  
           }
         }
         emit( progress( 0, lvImage->height, lvImage->height ) );
@@ -93,20 +87,28 @@ bool EgtRawImageReader::isValid()
     else
     {
       //PROCESS AS JPEG - How exactly will that be different?
+      emit( rawImageProcessed( false ) );
       return;
     }
   }
   else
   {
-    cvIsValid = false;
     EgtDebug( "Unable to make mem_image: "+  QString( libraw_strerror( lvError ) ) );
+    emit( rawImageProcessed( false ) );
+    return;
   }
-
+  
   free( lvImage );
   cvRawProcessor.recycle();
-  emit( rawReady( cvIsValid ) );
+  emit( rawImageProcessed( cvImage->isNull() ) );
 }
 
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
+ 
 /*!
  * \param theImageFilename absolute path and filename of the image to open
  */

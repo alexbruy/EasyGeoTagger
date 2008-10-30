@@ -39,28 +39,31 @@ class EgtRawImageReader : public QThread
   public:
     /*! \brief Constructor */
     EgtRawImageReader( QImage*, QString );
+    
     /*! \brief Destructor */
     ~EgtRawImageReader();
-    /*! \brief Returns an error code */
-    bool isValid();
-    /*! \brief runs the thread */
+    
+    /*! \brief Required thread function */
     void run();
 
   private:
     /*! \brief Performs previous operation on the raw file before reading it */
     bool preprocessRaw( QString );
 
+
+
+    /*! \brief Absolute path and filename of the image to open */
     QString cvFileName;
-    /*! \brief Transformed QImage from the Raw picture */
+    
+    /*! \brief Pointer to the EgtImageEngine's QImage that will be loaded with data from the raw image*/
     QImage* cvImage;
-    /*! \brief Integer containing an error code */
-    bool cvIsValid;
+    
     /*! \brief LibRaw object to handle the raw data */
     LibRaw cvRawProcessor;
     
   signals:
     void progress( int, int, int );
-    void rawReady(bool);
+    void rawImageProcessed(bool);
 
 };
 

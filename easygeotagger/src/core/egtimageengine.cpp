@@ -195,7 +195,7 @@ void EgtImageEngine::readRaw( QString theImageFilename )
   cvRawImageReader = new EgtRawImageReader( cvOriginalImage, theImageFilename );
 
   connect( cvRawImageReader, SIGNAL( progress( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
-  connect( cvRawImageReader, SIGNAL( rawReady( bool ) ),this , SLOT( threadComplete( bool ) ) );
+  connect( cvRawImageReader, SIGNAL( rawImageProcessed( bool ) ),this , SLOT( rawImageLoaded( bool ) ) );
 
   cvRawImageReader->start();
 }
@@ -232,7 +232,7 @@ void EgtImageEngine::reEmitProgress(int theMinimum, int theMaximum, int theProgr
 /*!
  * \param theError Has the thread finished correctly
  */
-void EgtImageEngine::threadComplete( bool theError )
+void EgtImageEngine::rawImageLoaded( bool theError )
 {
   cvIsProcessing = false;
   cvIsValidImage = theError;

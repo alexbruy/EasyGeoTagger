@@ -82,6 +82,9 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     /*! \brief Was the last image opened sucessfully */
     bool cvIsValidImage;    
 
+
+
+
     /*! \brief Thread to load the raw image */
     EgtRawImageReader* cvRawImageReader;    
 
@@ -100,11 +103,11 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     void imageLoaded(bool);
 
   private slots:
-  /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
-  void reEmitProgress( int, int, int );
+    /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
+    void reEmitProgress( int, int, int );
   
-  /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
-  void threadComplete( bool );
+    /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
+    void rawImageLoaded( bool );
 
 };
 #endif
