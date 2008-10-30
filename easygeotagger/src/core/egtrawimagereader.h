@@ -1,5 +1,5 @@
 /*
-** File: egtrawthread.h
+** File: egtrawimagereader.h
 ** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-10-28
 **
@@ -22,8 +22,8 @@
 **
 **/
 
-#ifndef EGTRAWTHREAD_H
-#define EGTRAWTHREAD_H
+#ifndef EGTRAWIMAGEREADER_H
+#define EGTRAWIMAGEREADER_H
 
 #include "libraw/libraw.h"
 
@@ -32,15 +32,15 @@
 #include <QModelIndex>
 
 
-class EgtRawThread : public QThread
+class EgtRawImageReader : public QThread
 { 
   Q_OBJECT
 
   public:
     /*! \brief Constructor */
-    EgtRawThread( QImage*, QString );
+    EgtRawImageReader( QImage*, QString );
     /*! \brief Destructor */
-    ~EgtRawThread();
+    ~EgtRawImageReader();
     /*! \brief Returns an error code */
     bool isValid();
     /*! \brief runs the thread */

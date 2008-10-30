@@ -45,7 +45,7 @@ EgtImageEngine::~EgtImageEngine()
 
 void EgtImageEngine::init()
 {
-  cvRawThread = 0;
+  cvRawImageReader = 0;
   cvOriginalImage = 0;
   cvHasBeenResized = false;
   cvHasThumbnail = false;
@@ -192,12 +192,12 @@ void EgtImageEngine::readRaw( QString theImageFilename )
   emit( progress( 0, 0, 0) );
   cvOriginalImage = new QImage();
   
-  cvRawThread = new EgtRawThread( cvOriginalImage, theImageFilename );
+  cvRawImageReader = new EgtRawImageReader( cvOriginalImage, theImageFilename );
 
-  connect( cvRawThread, SIGNAL( progress( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
-  connect( cvRawThread, SIGNAL( rawReady( bool ) ),this , SLOT( threadComplete( bool ) ) );
+  connect( cvRawImageReader, SIGNAL( progress( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
+  connect( cvRawImageReader, SIGNAL( rawReady( bool ) ),this , SLOT( threadComplete( bool ) ) );
 
-  cvRawThread->start();
+  cvRawImageReader->start();
 }
 
 /*!

@@ -12,19 +12,19 @@ SET( EGT_CORE_ALL_HDRS
      egtimageengine.h
      egtlogger.h
      egtpathbuilder.h
-     egtrawthread.h
+     egtrawimagereader.h
    )
 
 SET( EGT_CORE_SRCS
      egtexifioengine.cpp
      egtimageengine.cpp
      egtpathbuilder.cpp
-     egtrawthread.cpp
+     egtrawimagereader.cpp
    )
 
 SET( EGT_CORE_MOC_HDRS
      egtimageengine.h
-     egtrawthread.h
+     egtrawimagereader.h
    )
 
 QT4_AUTOMOC( ${EGT_CORE_SRCS} )

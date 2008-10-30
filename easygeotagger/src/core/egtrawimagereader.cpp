@@ -1,5 +1,5 @@
 /*
-** File: egtrawthread.cpp
+** File: egtrawimagereader.cpp
 ** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-10-28
 **
@@ -22,29 +22,29 @@
 **
 **/
 
-#include "egtrawthread.h"
+#include "egtrawimagereader.h"
 #include "egtlogger.h"
 
- EgtRawThread::EgtRawThread(  QImage* theImage, QString theFileName )
+ EgtRawImageReader::EgtRawImageReader(  QImage* theImage, QString theFileName )
  {
    cvImage = theImage;
    cvIsValid = true;
    cvFileName = theFileName;
  }
 
- EgtRawThread::~EgtRawThread()
+ EgtRawImageReader::~EgtRawImageReader()
  {
  }
 
 /*!
  * \returns whether the image is valid or not.
  */
-bool EgtRawThread::isValid()
+bool EgtRawImageReader::isValid()
 {
   return cvIsValid;
 }
 
- void EgtRawThread::run()
+ void EgtRawImageReader::run()
  {
    if( !preprocessRaw( cvFileName ) ) 
    { 
@@ -99,7 +99,7 @@ bool EgtRawThread::isValid()
   else
   {
     cvIsValid = false;
-    EgtDebug( "Unable to make mem_image: "+  QString( libraw_strerror( cvErrorCode ) ) );
+    EgtDebug( "Unable to make mem_image: "+  QString( libraw_strerror( lvError ) ) );
   }
 
   free( lvImage );
@@ -110,7 +110,7 @@ bool EgtRawThread::isValid()
 /*!
  * \param theImageFilename absolute path and filename of the image to open
  */
-bool EgtRawThread::preprocessRaw( QString theImageFilename )
+bool EgtRawImageReader::preprocessRaw( QString theImageFilename )
 {
 /*
  * This function is largely modeled after examples provided with LibRaw

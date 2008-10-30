@@ -24,8 +24,10 @@
 #ifndef EGTIMAGEENGINE_H
 #define EGTIMAGEENGINE_H
 
+#include "egtrawimagereader.h"
+
 #include "libraw/libraw.h"
-#include "egtrawthread.h"
+
 #include <QImage>
 #include <QModelIndex>
 
@@ -59,9 +61,6 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     /*! \brief Initialization steps */
     void init();
     
-    /*! \brief Open the raw image file do everything but read the image data */
-    bool preprocessRaw( QString );
-    
     /*! \brief Read/open the base image as a jpeg */
     void readJpeg( QString );
     
@@ -70,7 +69,6 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     
     /*! \brief Read/open the base image as a tiff */
     void readTiff( QString );
-    
     
     /*! \brief Has the base image been resized */
     bool cvHasBeenResized;
@@ -85,7 +83,7 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     bool cvIsValidImage;    
 
     /*! \brief Thread to load the raw image */
-    EgtRawThread* cvRawThread;    
+    EgtRawImageReader* cvRawImageReader;    
 
     /*! \brief Local copy of the current resized image */
     QImage cvResizedImage;
@@ -104,6 +102,7 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
   private slots:
   /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
   void reEmitProgress( int, int, int );
+  
   /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
   void threadComplete( bool );
 
