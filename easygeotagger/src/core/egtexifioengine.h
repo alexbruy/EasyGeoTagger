@@ -29,6 +29,10 @@
 #include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
 
+/*! \brief Read and write EXIF data
+ *
+ * This class is largely a wrapper for Exiv2 to provide simple access to EXIF header data
+ */
 class MS_DLL_SPEC EgtExifIoEngine
 {
 

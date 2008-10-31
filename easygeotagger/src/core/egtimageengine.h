@@ -31,6 +31,9 @@
 #include <QImage>
 #include <QModelIndex>
 
+/*! \brief Image reader
+ *
+ */
 class MS_DLL_SPEC EgtImageEngine : public QObject
 { 
   Q_OBJECT 

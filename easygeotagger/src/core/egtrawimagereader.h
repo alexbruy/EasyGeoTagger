@@ -31,7 +31,9 @@
 #include <QImage>
 #include <QModelIndex>
 
-
+/*! \brief Threaded class to load raw images
+ *
+ */
 class EgtRawImageReader : public QThread
 { 
   Q_OBJECT
