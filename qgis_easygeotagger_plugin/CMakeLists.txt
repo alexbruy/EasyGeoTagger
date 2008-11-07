@@ -33,18 +33,20 @@ IF (NOT LIBRAW_FOUND)
 ENDIF (NOT LIBRAW_FOUND)
 
 IF (WIN32)
-  # expect that classes are being imported by default
+  # expect that classes are being imported
   # Note: MSVC doesn't like when the macros are quotes
   # and MSYS doesn't like them unqouted (bacause of braces)
-  # import qgis classes
   IF (MSVC)
+    ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllimport)")
     ADD_DEFINITIONS("-DGUI_EXPORT=__declspec(dllimport)")
     ADD_DEFINITIONS("-DCORE_EXPORT=__declspec(dllimport)")
   ELSE (MSVC)
+    ADD_DEFINITIONS("-UMS_DLL_SPEC \"-DMS_DLL_SPEC=__declspec(dllimport)\"")
     ADD_DEFINITIONS("\"-DGUI_EXPORT=__declspec(dllimport)\"")
     ADD_DEFINITIONS("\"-DCORE_EXPORT=__declspec(dllimport)\"")
   ENDIF (MSVC)
 ELSE (WIN32)
+  ADD_DEFINITIONS(-DMS_DLL_SPEC=)
   ADD_DEFINITIONS(-DGUI_EXPORT=)
   ADD_DEFINITIONS(-DCORE_EXPORT=)
 ENDIF (WIN32)
