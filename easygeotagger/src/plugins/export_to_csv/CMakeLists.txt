@@ -20,9 +20,7 @@ ADD_library( exporttocsv MODULE ${EXPORT_TO_CSV_SRCS} ${EXPORT_TO_CSV_MOC_SRCS} 
 TARGET_LINK_LIBRARIES( exporttocsv 
   ${QT_LIBRARIES}
   ${EXIV2_LIBRARY}
-  easygt_app
-  easygt_core
-  easygt_gui
+  easygt
   )
 
 INSTALL( TARGETS exporttocsv DESTINATION ${EASYGT_PLUGIN_SUBDIR} )

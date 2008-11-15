@@ -42,9 +42,7 @@ ADD_library( minimalexifeditor MODULE
 TARGET_LINK_LIBRARIES( minimalexifeditor
   ${QT_LIBRARIES}
   ${EXIV2_LIBRARY}
-  easygt_app
-  easygt_core
-  easygt_gui
+  easygt
   )
 
 INSTALL( TARGETS minimalexifeditor DESTINATION ${EASYGT_PLUGIN_SUBDIR} )

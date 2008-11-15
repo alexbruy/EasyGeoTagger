@@ -58,10 +58,7 @@ EasyGeoTagger::EasyGeoTagger( QgisInterface * theQgisInterface ):
 
 EasyGeoTagger::~EasyGeoTagger()
 {
-  if(0 != cvIdTool)
-  {
-    delete cvIdTool;
-  }
+
 }
 
 /*

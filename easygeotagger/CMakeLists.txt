@@ -1,5 +1,11 @@
 PROJECT(EasyGT)
 
+cmake_minimum_required(VERSION 2.4)
+if(COMMAND cmake_policy)
+  cmake_policy(SET CMP0003 OLD)
+  cmake_policy(SET CMP0005 OLD)
+endif(COMMAND cmake_policy)
+
 IF (WIN32)
   # expect that classes are being imported
   # Note: MSVC doesn't like when the macros are quotes
@@ -72,7 +78,6 @@ INCLUDE_DIRECTORIES(
   ${EasyGT_SOURCE_DIR}/src/app
   ${EasyGT_SOURCE_DIR}/src/core
   ${EasyGT_SOURCE_DIR}/src/exif
-  ${EasyGT_SOURCE_DIR}/src/gui
   ${CMAKE_BINARY_DIR}/src/ui
   ${CMAKE_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
