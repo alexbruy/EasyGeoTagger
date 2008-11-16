@@ -9,6 +9,7 @@ IF (WIN32)
 ENDIF (WIN32)
 
 SET( EGT_INSTALL_HDRS
+     app/egtapplication.h
      app/egtapplicationinterface.h
      app/egtplugininterface.h
 

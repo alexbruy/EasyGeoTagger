@@ -24,6 +24,8 @@
 #include "egtapplication.h"
 
 #include "egtlogger.h"
+#include "egtmainwindow.h"
+#include "egtpluginmanager.h"
 
 EgtApplication::EgtApplication()
 {
@@ -61,5 +63,10 @@ void EgtApplication::init( QString thePluginDirectory )
   cvPluginManager->updateGui();
   
   //Display the main window
+  cvGui->show();
+}
+
+void EgtApplication::show()
+{
   cvGui->show();
 }

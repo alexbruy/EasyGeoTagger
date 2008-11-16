@@ -57,17 +57,17 @@ void EasyGeoTaggerGui::on_pbtnAutoArrange_clicked()
   int lvScreenWidth = screenGeometry.width();
   int lvScreenHeight = screenGeometry.height();
   
-  int newEasyGTHeight = qMax( int( lvScreenHeight * 0.80 ), cvEasyGT->gui()->minimumHeight() );
-  int newEasyGTWidth = qMax( int( lvScreenWidth * 0.60 ), cvEasyGT->gui()->minimumHeight() );
+  int newEasyGTHeight = qMax( int( lvScreenHeight * 0.80 ), cvEasyGT->applicationInterface()->gui()->minimumHeight() );
+  int newEasyGTWidth = qMax( int( lvScreenWidth * 0.60 ), cvEasyGT->applicationInterface()->gui()->minimumHeight() );
   int newPluginDialogHeight = qMax( int( lvScreenHeight * 0.1 ), minimumHeight() );
   int newPluginDialogWidth = qMax( int( lvScreenWidth * 0.35 ), minimumWidth() );
   int newQgisHeight = qMax( int( lvScreenHeight * 0.55 ), cvQgisInterface->mainWindow()->minimumHeight() );
   int newQgisWidth = qMax( int( lvScreenWidth * 0.35 ), cvQgisInterface->mainWindow()->minimumWidth() );
   
   //place EasyGT
-  cvEasyGT->gui()->resize( newEasyGTWidth, newEasyGTHeight );
-  cvEasyGT->gui()->resize( newEasyGTWidth - ( cvEasyGT->gui()->width() - newEasyGTWidth ), newEasyGTHeight - ( cvEasyGT->gui()->height() - newEasyGTHeight ) );
-  cvEasyGT->gui()->move( int( lvScreenHeight * 0.02 ), int( lvScreenHeight * 0.1 ) );
+  cvEasyGT->applicationInterface()->gui()->resize( newEasyGTWidth, newEasyGTHeight );
+  cvEasyGT->applicationInterface()->gui()->resize( newEasyGTWidth - ( cvEasyGT->applicationInterface()->gui()->width() - newEasyGTWidth ), newEasyGTHeight - ( cvEasyGT->applicationInterface()->gui()->height() - newEasyGTHeight ) );
+  cvEasyGT->applicationInterface()->gui()->move( int( lvScreenHeight * 0.02 ), int( lvScreenHeight * 0.1 ) );
   
   //place this dialog
   resize( newPluginDialogWidth, newPluginDialogHeight );

@@ -24,9 +24,11 @@
 #ifndef EGTAPPLICATION_H
 #define EGTAPPLICATION_H
 
-#include "egtpluginmanager.h"
+class EgtMainWindow;
+class EgtPluginManager;
+
 #include "egtapplicationinterface.h"
-#include "egtmainwindow.h"
+
 
 #include <QObject>
 
@@ -49,7 +51,7 @@ class MS_DLL_SPEC EgtApplication : public QObject
     EgtApplicationInterface* applicationInterface() { return cvApplicationInterface; }
     
     /*! \brief Show the gui, just a wrapper for EgtMainWindow->show() */
-    void show() { cvGui->show(); }
+    void show();
   
     
   
