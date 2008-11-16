@@ -29,7 +29,6 @@
 #include <QStringList>
 #include <QPushButton>
 
-class EgtMainWindow;
 class EgtApplicationInterface;
 
 /*! \brief EasyGeoTagger plugin interface
@@ -42,7 +41,7 @@ class MS_DLL_SPEC EgtPluginInterface : public QObject
   
   public:
     /*! \brief Constuctor */
-    EgtPluginInterface() { cvGui = 0; cvApplicationInterface = 0; }
+    EgtPluginInterface() { cvApplicationInterface = 0; }
     
     /*! \brief Virtual Destuctor */
     virtual ~EgtPluginInterface() { }
@@ -71,9 +70,6 @@ class MS_DLL_SPEC EgtPluginInterface : public QObject
     
     /*! \brief Set the pointer to the EasyGeoTagger application interface */
     void setApplicationInterface( EgtApplicationInterface* theInterface ) { cvApplicationInterface = theInterface; }
-    
-    /*! \brief Set the pointer to the EasyGeoTagger main GUI component */
-    void setGui( EgtMainWindow* theGui ) { cvGui = theGui; }
 
   public slots:
     /*! \brief Slot called to activate or launch the plugin */
@@ -84,7 +80,6 @@ class MS_DLL_SPEC EgtPluginInterface : public QObject
   
   protected:
     EgtApplicationInterface* cvApplicationInterface;
-    EgtMainWindow* cvGui;
 };
 
  Q_DECLARE_INTERFACE(EgtPluginInterface, "org.amnh.bif.Plugin.EgtPluginInterface/1.0");

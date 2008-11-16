@@ -42,6 +42,7 @@ SET( EGT_APP_SRCS
    )
 
 SET( EGT_APP_MOC_HDRS
+    app/egtapplication.h
     app/egtapplicationinterface.h
     app/egtitemdelegate.h
     app/egtmainwindow.h

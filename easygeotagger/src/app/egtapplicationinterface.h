@@ -27,8 +27,11 @@
 #include <QMap>
 #include <QString>
 #include <QObject>
+#include <QModelIndex>
+#include <QMainWindow>
 
 #include "egtplugininterface.h"
+
 
 /*! \brief EasyGeoTagger application interface
  *
@@ -41,17 +44,32 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
 
   public:
     /*! \brief Constructor */
-    EgtApplicationInterface();
-    
-    /*! \brief a map holding all of the currently loaded plugins */
-    QMap<QString, EgtPluginInterface*> cvPlugins;
-    
+    EgtApplicationInterface( QMainWindow* );
+
+    QMainWindow* gui() { return cvGui; }
+
   public slots:
     /*! \brief Slot accept coordinates from other plugins or external applications */
     void acceptCoordinates( double, double );
-    
+
+    /*! \brief Slot to accept item selections */
+    void acceptModelIndexSelections( const QModelIndex& theIndex);
+
+    /*! \brief Slot to accept requests to fresh the file browser */
+    void refreshFileBrowser();
+
   signals:
     /*! \brief Relays coordinates received by acceptCoordinates( double, double ) */
     void coordinatesReceived( double, double );
+
+    /* \brief Signal to broad cast a mouse click event in the file browser */
+    void indexSelected( const QModelIndex& );
+
+    /* \brief Signal to relay requests to refresh the file browser */
+    void fileBrowserRefreshRequest();
+
+   private:
+     QMainWindow* cvGui;
+
 };
 #endif

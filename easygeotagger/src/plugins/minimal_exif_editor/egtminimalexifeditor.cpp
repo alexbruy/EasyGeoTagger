@@ -75,10 +75,11 @@ QString EgtMinimalExifEditor::description()
 
 void EgtMinimalExifEditor::initPlugin()
 {
-  //Hook into the application interface and listen for coordinates from outside sources
+  //Hook listeners into the application interface
   if( 0 != cvApplicationInterface )
   {
     connect( cvApplicationInterface, SIGNAL( coordinatesReceived( double, double ) ), this, SLOT( acceptCoordinates( double, double ) ) );
+    connect( cvApplicationInterface, SIGNAL( indexSelected( const QModelIndex& ) ), this, SLOT( updateExifDisplay( const QModelIndex& ) ) );
   }
 }
 
@@ -108,9 +109,6 @@ void EgtMinimalExifEditor::run()
 {
   EgtDebug( "entered" );
   
-  //if the gui pointer is null, bail
-  if( 0 == cvGui ) { return; }
-
   //Build or reshow the plugins GUI component
   if( 0 != cvDock &&  cvDock->isVisible() )
   {
@@ -126,7 +124,7 @@ void EgtMinimalExifEditor::run()
   else
   {
     EgtDebug( "requesting new dock" );
-    cvDock = new QDockWidget( cvName, cvGui );
+    cvDock = new QDockWidget( cvName, cvApplicationInterface->gui() );
     if( 0 == cvDock ) { return; }
     
     cvControls = new EgtMinimalExifEditorControls( &cvExifIoEngine, cvDock );
@@ -138,22 +136,14 @@ void EgtMinimalExifEditor::run()
     cvDock->setWidget( cvControls );
     cvControls->show();
     
-    //Get clicks from the file browser
-    EgtDebug( "Connecting to GUI signals" );
-    connect( cvGui->tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( updateExifDisplay(const QModelIndex& ) ) );
-    
     EgtDebug( "Adding dock to GUI" );
-    cvGui->addDockWidget( Qt::RightDockWidgetArea, cvDock );
+    cvApplicationInterface->gui()->addDockWidget( Qt::RightDockWidgetArea, cvDock );
   }
   
   //On redisplay of the widget, update the exif data incase the index has changed
   if( "" != cvLastFile )
   {
     updateExifDisplay( cvLastFile );
-  }
-  else
-  {
-    updateExifDisplay( cvGui->tvFileBrowser->currentIndex() );
   }
   
   EgtDebug( "done" );

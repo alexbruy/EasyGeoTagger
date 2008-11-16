@@ -28,12 +28,15 @@
 #include "egtapplicationinterface.h"
 #include "egtmainwindow.h"
 
+#include <QObject>
+
 /*! \brief Main EasyGeoTagger application
  *
  * This class represents the main EasyGeoTagger application
  */
-class MS_DLL_SPEC EgtApplication
+class MS_DLL_SPEC EgtApplication : public QObject
 {
+  Q_OBJECT
   
   public:
     /*! \brief Constructor */
@@ -45,9 +48,6 @@ class MS_DLL_SPEC EgtApplication
     /*! \brief Return a pointer to the application interface */
     EgtApplicationInterface* applicationInterface() { return cvApplicationInterface; }
     
-    /*! \brief Return a pointer to the application's gui */
-    EgtMainWindow* gui() { return cvGui; }
-    
     /*! \brief Show the gui, just a wrapper for EgtMainWindow->show() */
     void show() { cvGui->show(); }
   
@@ -57,11 +57,11 @@ class MS_DLL_SPEC EgtApplication
     /*! \brief Extended constructor */
     void init( QString thePluginDirectory = "" );
   
-    /*! \brief Pointer to the main GUI component */
-    EgtMainWindow* cvGui;
-    
     /*! \brief Pointer to the application interface */
     EgtApplicationInterface* cvApplicationInterface;
+
+    /*! \brief Pointer to the main GUI component */
+    EgtMainWindow* cvGui;
     
     /*! \brief Pointer to the application's plugin manager */
     EgtPluginManager* cvPluginManager;

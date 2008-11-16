@@ -48,18 +48,17 @@ void EgtApplication::init( QString thePluginDirectory )
   EgtDebug( "entered" );
   
   //TODO: Add slash screen showing progress, i.e. showing plugin
-  
-  //Create a new application interface and gui
-  cvApplicationInterface = new EgtApplicationInterface();
-  
+
   //Create a new main window
   cvGui = new EgtMainWindow();
+  
+  //Create a new application interface and gui
+  cvApplicationInterface = new EgtApplicationInterface( cvGui );
   
   //Create a new plugin manager and load plugins from the main plugin archive
   cvPluginManager = new EgtPluginManager( cvApplicationInterface, cvGui );
   cvPluginManager->loadPlugins( thePluginDirectory );
   cvPluginManager->updateGui();
-  EgtDebug( QString( "%1 plugins loaded" ) .arg( cvApplicationInterface->cvPlugins.size() ) );
   
   //Display the main window
   cvGui->show();

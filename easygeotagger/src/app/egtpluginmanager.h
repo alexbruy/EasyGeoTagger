@@ -45,16 +45,17 @@ class MS_DLL_SPEC EgtPluginManager : public QObject
   public:
     /*! \brief Constructor */
     EgtPluginManager( EgtApplicationInterface*, EgtMainWindow* );
-    
-    /*! \brief Load a single plugin */
-    bool loadPlugin( QString );
-    
-    /*! \brief Load all plugins in a directory */
-    void loadPlugins( QString theDirectory = "");
-    
+
     /*! \brief Update plugin display dock widget in the main window */
     void updateGui();
-    
+
+  public slots:
+    /*! \brief Load a single plugin */
+    bool loadPlugin( QString );
+
+    /*! \brief Load all plugins in a directory */
+    void loadPlugins( QString theDirectory = "");
+
   signals:
     /*! \brief Signal to indicate which plugin was just loaded */
     void pluginLoaded( QString );  

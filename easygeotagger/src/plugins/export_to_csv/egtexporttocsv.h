@@ -24,6 +24,8 @@
 #ifndef EXPORTTOCSV_H
 #define EXPORTTOCSV_H
 
+#include <QModelIndex>
+
 #include "egtplugininterface.h"
 
 /*! \brief Export EXIF to CSV plugin
@@ -51,15 +53,24 @@ class EgtExportToCsv: public EgtPluginInterface
     
     /*! \brief Returns the ability of this plugin to be configured */
     bool isConfigurable() { return false; }
+
+    /*! \brief Initialization plugin*/
+    void initPlugin();
     
     /*! \brief Returns the name of this plugin */
     QString name();
 
   public slots:
+    /* \brief Receives mouse clicks from the file browser */
+    void indexSelected( const QModelIndex& );
+
     /*! \brief Slot called to activate or launch the plugin */
     void run();
     
     /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel() { }
+
+  private:
+    QModelIndex cvCurrentIndex;
 };
 #endif

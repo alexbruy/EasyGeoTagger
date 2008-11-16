@@ -71,7 +71,6 @@ bool EgtPluginManager::loadPlugin( QString theLibrary )
     {
       //Set the plugin's pointer to the application interface and gui
       lvInterface->setApplicationInterface( cvApplicationInterface );
-      lvInterface->setGui( cvGui );
       lvInterface->initPlugin();
       
       //Loop through all of the categories and build the display components
@@ -102,9 +101,7 @@ bool EgtPluginManager::loadPlugin( QString theLibrary )
           cvPluginDisplayCollection[ lvKey ]->value( lvInterface->name() )->update( lvInterface );
         }
       }
-      
-      //Insert plugin into the application interfaces master plugin list
-      cvApplicationInterface->cvPlugins.insert( lvInterface->name(), lvInterface );
+
       emit pluginLoaded( lvInterface->name() );
       EgtDebug( "loaded plugin ["+ lvInterface->name() +"]" );
     }
@@ -119,7 +116,7 @@ bool EgtPluginManager::loadPlugin( QString theLibrary )
     EgtDebug( lvPluginLoader.errorString() );
     return false;
   }
-  
+
   return true;
 }
 
@@ -168,7 +165,7 @@ void EgtPluginManager::loadPlugins( QString theDirectory )
 void EgtPluginManager::updateGui()
 {
   EgtDebug( "entered" )
-  
+
   //TODO: See if there is a way to just update the existing display widgets rather than totally rebuilding
   //Create a new tool box to hold the plugins
   QToolBox* lvPluginToolBox = new QToolBox( cvGui );
@@ -176,11 +173,11 @@ void EgtPluginManager::updateGui()
   for(int lvIterator = 0; lvIterator < lvCollectionKeys.size(); lvIterator++)
   {
     EgtDebug( "Building display panel for key: "+ lvCollectionKeys.at( lvIterator ) );
-    
+
     //Create a new planel for the plugin collection
     QWidget* lvPluginPanel = new QWidget( lvPluginToolBox );
     lvPluginPanel->setLayout( new QVBoxLayout );
-    
+
     //Get the keys and loop through the display widget map
     QMap< QString, EgtPluginDisplayWidget*>* lvDisplayItems = cvPluginDisplayCollection.value( lvCollectionKeys.at( lvIterator ) );
     QList< QString > lvDisplayItemKeys = lvDisplayItems->keys();
@@ -194,7 +191,7 @@ void EgtPluginManager::updateGui()
     //Add the panel to the tool box
     lvPluginToolBox->addItem(lvPluginPanel, lvCollectionKeys.at( lvIterator ) );
   }
-  
+
   //Set the display dock's main widget top the new toolbox
   cvGui->setPluginToolBox( lvPluginToolBox );
 }

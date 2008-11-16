@@ -53,12 +53,13 @@ class EgtMinimalExifEditor: public EgtPluginInterface
     
     /*! \brief Return the description for this plugin */
     QString description();
+
+    /*! \brief Initialization plugin*/
+    void initPlugin();
     
     /*! \brief Return the ability of this plugin to be configured */
     bool isConfigurable() { return false; }
-    
-    /*! \brief Initialization plugin*/
-    void initPlugin();
+
     
     /*! \brief Return the name of this plugin */
     QString name();

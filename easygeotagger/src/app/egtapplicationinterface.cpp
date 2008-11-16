@@ -24,8 +24,14 @@
 #include "egtapplicationinterface.h"
 #include "egtlogger.h"
 
-EgtApplicationInterface::EgtApplicationInterface()
+EgtApplicationInterface::EgtApplicationInterface( QMainWindow* theMainWindow )
 {
+    cvGui = theMainWindow;
+    if( 0 != cvGui )
+    {
+      connect( cvGui, SIGNAL( fileBrowserItemSelected( const QModelIndex& ) ), this, SLOT( acceptModelIndexSelections( const QModelIndex& ) ) );
+      connect( this, SIGNAL( fileBrowserRefreshRequest( ) ), cvGui, SLOT( refreshFileBrowser( ) ) );
+    }
 }
 
 /*
@@ -37,4 +43,16 @@ void EgtApplicationInterface::acceptCoordinates( double theLongitude, double the
 {
   EgtDebug( "Received Lon: "+ QString::number( theLongitude ) +"\tLat: "+ QString::number( theLatitude ) );
   emit coordinatesReceived( theLongitude, theLatitude );
+}
+
+void EgtApplicationInterface::acceptModelIndexSelections( const QModelIndex& theIndex)
+{
+  EgtDebug( "Received model index selection signal" );
+  emit( indexSelected( theIndex ) );
+}
+
+void EgtApplicationInterface::refreshFileBrowser()
+{
+  EgtDebug( "Received file browser refresh request" );
+  emit( fileBrowserRefreshRequest() );
 }

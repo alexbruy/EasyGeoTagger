@@ -21,10 +21,10 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
+#include "egtapplicationinterface.h"
 #include "egtexifioengine.h"
 #include "egtexporttocsv.h"
 #include "egtpathbuilder.h"
-#include "egtmainwindow.h"
 #include "egtlogger.h"
 
 #include <QModelIndex>
@@ -62,6 +62,20 @@ QString EgtExportToCsv::description()
   return cvDescription;
 }
 
+void EgtExportToCsv::indexSelected( const QModelIndex& theIndex )
+{
+    cvCurrentIndex = theIndex;
+}
+
+void EgtExportToCsv::initPlugin()
+{
+  //Hook into the application interface and listen for mouse clicks in the file browser
+  if( 0 != cvApplicationInterface )
+  {
+    connect( cvApplicationInterface, SIGNAL( indexSelected( const QModelIndex& ) ), this, SLOT( indexSelected( const QModelIndex& ) ) );
+  }
+}
+
 QString EgtExportToCsv::name()
 {
   return cvName;
@@ -71,33 +85,26 @@ void EgtExportToCsv::run()
 {
   EgtDebug( "entered" );
   
-  //Bail if either the pointer to the gui for the file browser is null
-  if( 0 == cvGui || 0 == cvGui->tvFileBrowser )
-  {
-    EgtDebug( "pointer to gui or the file browser was null" );
-    return;
-  }
-  
   //Check to see if the currently selected item is a file or a directory
   QFileInfo lvFileInfo;
   EgtPathBuilder lvPathBuilder;
-  QString lvCurrentFile = lvPathBuilder.buildPath( cvGui->tvFileBrowser->currentIndex() );
+  QString lvCurrentFile = lvPathBuilder.buildPath( cvCurrentIndex );
   
   //If it is a file, takes is parent which will be the directory whe image is in
   lvFileInfo.setFile( lvCurrentFile );
   if( !lvFileInfo.isDir() )
   {
     EgtDebug( "Current index is pointing to a file, taking parent" );
-    cvGui->tvFileBrowser->setCurrentIndex( cvGui->tvFileBrowser->currentIndex().parent() );
+    cvCurrentIndex = cvCurrentIndex.parent();
   }
   
   //If the directory is writeable, open a file ane export the EXIF data
-  lvCurrentFile = lvPathBuilder.buildPath( cvGui->tvFileBrowser->currentIndex() );
+  lvCurrentFile = lvPathBuilder.buildPath( cvCurrentIndex );
   lvFileInfo.setFile( lvCurrentFile );
   if( lvFileInfo.isWritable() )
   {
     QDateTime lvTimestamp = QDateTime::currentDateTime();
-    QFile lvOutputFile( QDir::toNativeSeparators( lvCurrentFile + "/" + cvGui->tvFileBrowser->currentIndex().data().toString() + "_Export_" + lvTimestamp.toString( "yyyyMMdd_hhmmss" ) + ".csv" ) );
+    QFile lvOutputFile( QDir::toNativeSeparators( lvCurrentFile + "/" + cvCurrentIndex.data().toString() + "_Export_" + lvTimestamp.toString( "yyyyMMdd_hhmmss" ) + ".csv" ) );
     if( lvOutputFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
       QTextStream lvOutputWriter( &lvOutputFile );
@@ -109,11 +116,10 @@ void EgtExportToCsv::run()
 
       EgtExifIoEngine lvExifIoEngine;
       QString lvImageFile;
-      QModelIndex lvCurrentIndex = cvGui->tvFileBrowser->currentIndex();
       //Loop through the directory and examine each file
-      while( lvCurrentIndex.child( lvChildCount, 0 ).isValid() )
+      while( cvCurrentIndex.child( lvChildCount, 0 ).isValid() )
       {
-        lvImageFile = lvPathBuilder.buildPath( lvCurrentIndex.child( lvChildCount, 0 ) );
+        lvImageFile = lvPathBuilder.buildPath( cvCurrentIndex.child( lvChildCount, 0 ) );
         
         //If the file has exif data,then export it, otherwise skip it
         lvExifIoEngine.setFile( lvImageFile );
@@ -126,24 +132,21 @@ void EgtExportToCsv::run()
       }
     
       lvOutputFile.close();
-      QMessageBox::warning( cvGui, tr( "Export Complete" ), tr( "%n images exported.", "", lvExportedImages ) );
+      QMessageBox::warning( cvApplicationInterface->gui(), tr( "Export Complete" ), tr( "%n images exported.", "", lvExportedImages ) );
 
     }
     else
     {
-      QMessageBox::critical( cvGui, tr( "Write Error" ), tr( "Could create a new file for output" ) );
+      QMessageBox::critical( cvApplicationInterface->gui(), tr( "Write Error" ), tr( "Could create a new file for output" ) );
     }
   }
   else
   {
-    QMessageBox::critical( cvGui, tr( "Write Error" ), tr( "The current directory is not writeable" ) );
+    QMessageBox::critical( cvApplicationInterface->gui(), tr( "Write Error" ), tr( "The current directory is not writeable" ) );
   }
 
   //Refresh the file browser once the process is complete
-  if( cvGui->tvFileBrowser->model() )
-  {
-    ( (QDirModel*)cvGui->tvFileBrowser->model() )->refresh();
-  }
+  cvApplicationInterface->refreshFileBrowser();
 }
 
  Q_EXPORT_PLUGIN2( exporttocsv, EgtExportToCsv );

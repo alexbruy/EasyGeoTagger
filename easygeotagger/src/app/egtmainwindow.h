@@ -38,7 +38,7 @@
 /*! \brief Main EasyGeoTagger window
  *
  */
-class MS_DLL_SPEC EgtMainWindow : public QMainWindow, public Ui::EgtMainWindowGui
+class MS_DLL_SPEC EgtMainWindow : public QMainWindow, protected Ui::EgtMainWindowGui
 {
 
   Q_OBJECT
@@ -49,7 +49,10 @@ public:
   
   /*! \brief Set the plugin dock's tool box */
   void setPluginToolBox( QToolBox* );
-  
+
+public slots:
+  void refreshFileBrowser();
+
 private slots:
   /*! \brief Slot to listen for mouse in the file browser */
   void clicked(const QModelIndex&);
@@ -59,6 +62,10 @@ private slots:
 
   /*! \brief Slot to interact with the progress bar */
   void updateProgress( int, int, int );
+
+  signals:
+    /* \brief Signal to broad cast a mouse click event in the file browser */
+    void fileBrowserItemSelected( const QModelIndex& );
 
 
   

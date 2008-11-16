@@ -99,6 +99,7 @@ void EgtMainWindow::clicked( const QModelIndex& theIndex )
 {
   EgtDebug( "entered" );
   cvImageEngine.setFile( cvPathBuilder.buildPath( theIndex ) );
+  emit( fileBrowserItemSelected( theIndex ) );
 }
 
 /*!
@@ -125,5 +126,10 @@ void EgtMainWindow::loadPreview( bool isValid )
   {
     labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( labelPreview->width(), labelPreview->height() ) ) );
   }
+}
+
+void EgtMainWindow::refreshFileBrowser()
+{
+  ( (QDirModel*)tvFileBrowser->model() )->refresh();
 }
 
