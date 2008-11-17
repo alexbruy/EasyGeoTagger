@@ -49,7 +49,7 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     ~EgtImageEngine();
     
     /*! \brief Returns the a copy of the current resize image */
-    QImage scaledImage( bool* isValid=0 );
+    QImage scaledImage( bool* isValid=0 ) const;
     
     /*! \brief Returns a copy of the image resized to the specified dimensions */
     QImage scaleImage( int, int, bool* isValid=0 );
@@ -95,7 +95,7 @@ class MS_DLL_SPEC EgtImageEngine : public QObject
     QImage cvResizedImage;
     
     /*! \brief QImage containing the original/base image data */
-    QImage* cvOriginalImage;
+    QImage cvOriginalImage;
     
     /*! \brief QImage containing embeded thumbnail for raw images */
     QImage cvThumbnailImage;

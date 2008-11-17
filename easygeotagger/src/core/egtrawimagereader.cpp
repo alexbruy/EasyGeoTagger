@@ -28,8 +28,8 @@
 EgtRawImageReader::EgtRawImageReader( )
 {
   cvAbort = false;
-  cvImage = 0;
   cvFileName = "";
+  cvImageLoaded = false;
   cvIsInitialized = false;
 }
 
@@ -49,51 +49,46 @@ void EgtRawImageReader::abort()
   cvAbort = true; 
 }
 
-/*!
- * \param theImage pointer back to the EgtImageEngine's QImage to be filled with data
- * \param theFileName absolute path and filename of the image to open
- */
-void EgtRawImageReader::init( QImage* theImage, QString theFileName )
+QImage EgtRawImageReader::image() const
 {
-  EgtDebug( "entered" );
-  
-  //Make sure we are not actually running
-  if( isRunning() )
-  {
-    cvAbort = true;
-  }
-  
-  cvImage = theImage;
-  cvFileName = theFileName;
-  if( 0 != cvImage && cvFileName != "" )
-  {
-    cvIsInitialized = true;
-    cvAbort = false; //Should we test again to see if the thread is still running?
-  }
+  if( !cvImageLoaded ) { return QImage(); }
+
+  return cvImage;
+}
+
+bool EgtRawImageReader::recycle()
+{
+  if( isRunning() ) { return false; }
+
+  cvImage = QImage();
+  return true;
 }
 
 void EgtRawImageReader::run()
 {
   EgtDebug( "entered" );
+
+  cvImageLoaded = false;
   if( !cvIsInitialized )
   {
     EgtDebug( "thread has not been initialized" );
-    emit( progress( 0, 1, 1 ) );
-    emit( rawImageProcessed( false ) ); 
+    emit( progress( 0, 1, 0 ) );
+    emit( finished( false ) );
   }
   else
   {
-    if( 0 != cvImage && processRaw( cvFileName ) ) 
+    if( processRaw( cvFileName ) )
     {
       EgtDebug( "processing complete" );
-      emit( progress( 0, 1, 1 ) );
-      emit( rawImageProcessed( true ) );
+      cvImageLoaded = true;
+      emit( progress( 0, 1, 0 ) );
+      emit( finished( true ) );
     }
     else
     { 
       EgtDebug( "an error has occurred or the process was aborted" );
-      emit( progress( 0, 1, 1 ) );
-      emit( rawImageProcessed( false ) ); 
+      emit( progress( 0, 1, 0 ) );
+      emit( finished( false ) );
     }
   }
   
@@ -101,6 +96,28 @@ void EgtRawImageReader::run()
   //Reset the parameters at the end of the thread's run
   cvIsInitialized = false;
   cvRawProcessor.recycle();
+}
+
+/*!
+ * \param theImage pointer back to the EgtImageEngine's QImage to be filled with data
+ * \param theFileName absolute path and filename of the image to open
+ */
+void EgtRawImageReader::setFile( QString theFileName )
+{
+  EgtDebug( "entered" );
+
+  //Make sure we are not actually running
+  if( isRunning() )
+  {
+    cvAbort = true;
+  }
+
+  cvFileName = theFileName;
+  if( cvFileName != "" )
+  {
+    cvIsInitialized = true;
+    cvAbort = false; //Should we test again to see if the thread is still running?
+  }
 }
 
 /*
@@ -163,13 +180,9 @@ bool EgtRawImageReader::processRaw( QString theImageFilename )
   libraw_processed_image_t* lvImage = cvRawProcessor.dcraw_make_mem_image( &lvErrorCode );
   if( 0 != lvImage )
   {
-    if( 0 != cvImage )
-    {
-      free( cvImage );
-    }
 
-    cvImage = new QImage( lvImage->width, lvImage->height, QImage::Format_RGB32 );
-    if( cvImage->isNull() )
+    cvImage = QImage( lvImage->width, lvImage->height, QImage::Format_RGB32 );
+    if( cvImage.isNull() )
     {
       EgtDebug( "Unable to allocate memory for cvOriginalImage" );
       free( lvImage );
@@ -203,7 +216,7 @@ bool EgtRawImageReader::processRaw( QString theImageFilename )
           for( int lvX = 0; lvX < lvImage->width; lvX++ )
           {
             lvOffset = (lvY * lvImage->width * 3 ) + ( lvX * 3 );
-            cvImage->setPixel( lvX, lvY, lvImage->data[ lvOffset ] << 16 | lvImage->data[ lvOffset+1 ]<<8|lvImage->data[ lvOffset+2 ]  );
+            cvImage.setPixel( lvX, lvY, lvImage->data[ lvOffset ] << 16 | lvImage->data[ lvOffset+1 ]<<8|lvImage->data[ lvOffset+2 ]  );
   
           }
         }

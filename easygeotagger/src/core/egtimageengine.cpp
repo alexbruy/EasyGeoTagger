@@ -45,13 +45,13 @@ EgtImageEngine::~EgtImageEngine()
 
 void EgtImageEngine::init()
 {
-  cvOriginalImage = new QImage();
+  cvOriginalImage = QImage();
   cvHasBeenResized = false;
   cvHasThumbnail = false;
   cvIsValidImage = false;
   
   connect( &cvRawImageReader, SIGNAL( progress( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
-  connect( &cvRawImageReader, SIGNAL( rawImageProcessed( bool ) ),this , SLOT( rawImageLoaded( bool ) ) );
+  connect( &cvRawImageReader, SIGNAL( finished( bool ) ),this , SLOT( rawImageLoaded( bool ) ) );
 }
 
 /*
@@ -64,7 +64,7 @@ void EgtImageEngine::init()
  * \param isValid optional parameter to return if the scaled image is valid
  * \returns A copy of the resized image or an invalid image if the original image has not been resize yet
  */
-QImage EgtImageEngine::scaledImage( bool* isValid )
+QImage EgtImageEngine::scaledImage( bool* isValid ) const
 {
   EgtDebug( "entered" );
   if( !cvIsValidImage || !cvHasBeenResized )
@@ -97,7 +97,7 @@ QImage EgtImageEngine::scaleImage(int theWidth,int theHeight, bool* isValid )
     return QImage();
   }
   
-  cvResizedImage = cvOriginalImage->scaled(theWidth, theHeight, Qt::KeepAspectRatio );
+  cvResizedImage = cvOriginalImage.scaled(theWidth, theHeight, Qt::KeepAspectRatio );
   cvHasBeenResized = !cvResizedImage.isNull();
   
   if( 0 != isValid ) { *isValid = cvHasBeenResized; }
@@ -183,11 +183,11 @@ void EgtImageEngine::readJpeg( QString theImageFilename )
 
  
   emit( progress( 0, 1, 0) );
-  cvOriginalImage = new QImage( theImageFilename, "JPG" );
+  cvOriginalImage = QImage( theImageFilename, "JPG" );
   emit( progress( 0, 1, 1) );
 
   cvIsProcessing = false;
-  cvIsValidImage = !cvOriginalImage->isNull();
+  cvIsValidImage = !cvOriginalImage.isNull();
  
   emit( imageLoaded( cvIsValidImage ) );
 }
@@ -202,9 +202,9 @@ void EgtImageEngine::readRaw( QString theImageFilename )
   cvIsProcessing = true;
 
   emit( progress( 0, 0, 0) );
-  cvOriginalImage = new QImage();
+  cvOriginalImage = QImage();
 
-  cvRawImageReader.init( cvOriginalImage, theImageFilename ); 
+  cvRawImageReader.setFile( theImageFilename );
   cvRawImageReader.start();
 }
 
@@ -217,12 +217,12 @@ void EgtImageEngine::readTiff( QString theImageFilename )
   cvIsValidImage = false;
   cvIsProcessing = true;  
   emit( progress( 0, 1, 0) );
-  cvOriginalImage = new QImage( theImageFilename, "TIFF" );
+  cvOriginalImage = QImage( theImageFilename, "TIFF" );
   emit( progress( 0, 1, 1) );
  
 
   cvIsProcessing = false;
-  cvIsValidImage = !cvOriginalImage->isNull();
+  cvIsValidImage = !cvOriginalImage.isNull();
  
   emit( imageLoaded( cvIsValidImage ) );
 }
@@ -244,5 +244,7 @@ void EgtImageEngine::rawImageLoaded( bool isValid )
 {
   cvIsProcessing = false;
   cvIsValidImage = isValid;
+  cvOriginalImage = cvRawImageReader.image();
+  cvRawImageReader.recycle();
   emit( imageLoaded( isValid ) );
 }

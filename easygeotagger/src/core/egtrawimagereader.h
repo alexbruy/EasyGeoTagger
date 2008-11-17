@@ -47,12 +47,18 @@ class EgtRawImageReader : public QThread
     
     /*! \brief Set the abort flag to true and terminate the thread */
     void abort();
-    
-    /*! \brief Set the pointer to EgtImageEngine's QImage and the absolute path and filename of the raw image to open */
-    void init( QImage*, QString );
-    
+
+    /*! \brief Return the raw image */
+    QImage image() const;
+
+     /*! \brief Releases the memory used for the raw image */
+    bool recycle();
+
     /*! \brief Required thread function */
     void run();
+
+    /*! \brief Set the absolute path and filename of the raw image to open */
+    void setFile( QString );
 
   private:
     /*! \brief Performs previous operation on the raw file before reading it */
@@ -69,17 +75,24 @@ class EgtRawImageReader : public QThread
     QString cvFileName;
     
     /*! \brief Pointer to the EgtImageEngine's QImage that will be loaded with data from the raw image*/
-    QImage* cvImage;
-    
-    /*! \brief LibRaw object to handle the raw data */
-    LibRaw cvRawProcessor;
-    
+    QImage cvImage;
+
+    /*! \brief Flag to indicate if the thread has loaded an image */
+    bool cvImageLoaded;
+
     /*! \brief Flag that indicates if the thread has been initialized with valid parameters */
     bool cvIsInitialized;
     
+    /*! \brief LibRaw object to handle the raw data */
+    LibRaw cvRawProcessor;
+
+
+
+
+    
   signals:
     void progress( int, int, int );
-    void rawImageProcessed(bool);
+    void finished( bool );
 
 };
 

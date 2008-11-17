@@ -185,6 +185,9 @@ void EgtMinimalExifEditor::updateExifDisplay( QString theFilename )
   cvExifIoEngine.setFile( theFilename );
   cvLastFile = theFilename;
 
+  //check to make sure the dock has been created
+  if( 0 == cvDock ) { return; }
+
   //Get data if it exists
   if( theFilename == "" || !cvExifIoEngine.hasGpsExif() )
   {
