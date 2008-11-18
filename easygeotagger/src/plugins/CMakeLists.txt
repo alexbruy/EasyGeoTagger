@@ -1,1 +1,1 @@
-SUBDIRS( export_to_csv minimal_exif_editor )
+SUBDIRS( export_to_csv minimal_exif_editor python_console )
