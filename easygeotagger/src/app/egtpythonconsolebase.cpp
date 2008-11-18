@@ -32,16 +32,17 @@ EgtPythonConsoleBase::EgtPythonConsoleBase()
   cvDictionary = PyModule_GetDict( cvMainModule );
 
   qDebug( "%d" , runCommand( "import sys" ));
-  qDebug( "%d" , runCommand( "from PyQt4.QtCorea import *" ));
-  runCommand( "from PyQt4.QtGui import *" );
-  runCommand( "from sip import wrapinstance" );
-  runCommand( "class redirect:\n"
+  qDebug( "%d" , runCommand( "from sip import wrapinstance" ));
+  qDebug( "%d" , runCommand( "from PyQt4.QtCore import *" ));
+  qDebug( "%d" , runCommand( "from PyQt4.QtGui import *" ));
+
+  qDebug( "%d" , runCommand( "class redirect:\n"
               "  def __init__( self, textbrowser ):\n"
               "    self.console = textbrowser\n"
               "  def write( self, message ):\n"
               "    self.console.append( message )\n"
               "\n"
-            );
+            ));
   runCommand( "outputConsole = wrapinstance(" + QString::number(( unsigned long ) tbOutput ) + ", QTextBrowser)" );
   runCommand( "logger = redirect( outputConsole ) " );
   runCommand( "sys.stdout = logger" );

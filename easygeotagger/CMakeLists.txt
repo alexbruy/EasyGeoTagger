@@ -40,6 +40,11 @@ IF (NOT LIBRAW_FOUND)
   MESSAGE (SEND_ERROR "LIBRAW dependency was not found!")
 ENDIF (NOT LIBRAW_FOUND)
 
+FIND_PACKAGE(PYTHON REQUIRED)
+IF (NOT PYTHON_FOUND)
+  MESSAGE (SEND_ERROR "PYTHON dependency was not found!")
+ENDIF (NOT PYTHON_FOUND)
+
 #MinGW seems to build the exe in Release mode but plugins in Debug mode as default
 ADD_DEFINITIONS(-DQT_NO_DEBUG)
 
@@ -75,6 +80,7 @@ INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(
   ${EXIV2_INCLUDE_DIR}
   ${LIBRAW_INCLUDE_DIR}
+  ${PYTHON_INCLUDE_DIR}
   ${EasyGT_SOURCE_DIR}/src/app
   ${EasyGT_SOURCE_DIR}/src/core
   ${EasyGT_SOURCE_DIR}/src/exif

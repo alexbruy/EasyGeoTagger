@@ -12,6 +12,7 @@ SET( EGT_INSTALL_HDRS
      app/egtapplication.h
      app/egtapplicationinterface.h
      app/egtplugininterface.h
+     app/egtpythonconsolebase.h
 
      core/egtexifioengine.h
      core/egtimageengine.h
@@ -40,6 +41,7 @@ SET( EGT_APP_SRCS
     app/egtmainwindow.cpp
     app/egtpluginmanager.cpp
     app/egtplugindisplaywidget.cpp
+    app/egtpythonconsolebase.cpp
    )
 
 SET( EGT_APP_MOC_HDRS
@@ -50,6 +52,7 @@ SET( EGT_APP_MOC_HDRS
     app/egtplugininterface.h
     app/egtpluginmanager.h
     app/egtplugindisplaywidget.h
+     app/egtpythonconsolebase.h
    )
 
 SET (EGT_APP_RCCS app/app.qrc)
@@ -69,6 +72,7 @@ TARGET_LINK_LIBRARIES( easygt
   ${ZLIB_LIBRARY}
   ${EXPAT_LIBRARY}
   ${LIBRAW_LIBRARY}
+  ${PYTHON_LIBRARY}
   )
 
 SET( EasyGT_APP_SRCS

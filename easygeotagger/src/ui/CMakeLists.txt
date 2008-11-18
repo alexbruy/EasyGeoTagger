@@ -1,5 +1,6 @@
 SET(EGT_UIS
     egtmainwindowgui.ui
+    egtpythonconsoledialog.ui
    )
    
 QT4_WRAP_UI(EGT_UIS_H ${EGT_UIS})

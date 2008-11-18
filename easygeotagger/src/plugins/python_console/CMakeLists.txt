@@ -1,33 +1,16 @@
-# set path to additional CMake modules
-SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_find_rules ${CMAKE_MODULE_PATH})
-
-FIND_PACKAGE(PYTHON REQUIRED)
-IF (NOT PYTHON_FOUND)
-  MESSAGE (SEND_ERROR "PYTHON dependency was not found!")
-ENDIF (NOT PYTHON_FOUND)
-
 INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${PYTHON_INCLUDE_DIR}
 )
 
 SET( PYTHON_CONSOLE_SRCS
     egtpythonconsole.cpp
-    egtpythonconsolebase.cpp
    )
 
 SET( PYTHON_CONSOLE_MOC_HDRS
     egtpythonconsole.h
-    egtpythonconsolebase.h
    )
-
-SET( PYTHON_CONSOLE_UIS
-    egtpythonconsoledialog.ui
-   )
-
-QT4_WRAP_UI( PYTHON_CONSOLE_UIS_H ${PYTHON_CONSOLE_UIS} )
 
 QT4_AUTOMOC( ${PYTHON_CONSOLE_SRCS} )
 
@@ -38,7 +21,6 @@ ADD_DEFINITIONS( -DQT_PLUGIN )
 ADD_LIBRARY( pythonconsole MODULE
              ${PYTHON_CONSOLE_SRCS}
              ${PYTHON_CONSOLE_MOC_SRCS}
-             ${PYTHON_CONSOLE_UIS_H}
            )
 
 TARGET_LINK_LIBRARIES( pythonconsole
