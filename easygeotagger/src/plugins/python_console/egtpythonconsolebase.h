@@ -36,7 +36,7 @@ class EgtPythonConsoleBase : public QWidget, Ui::EgtPythonConsoleDialog
 
 public:
     EgtPythonConsoleBase();
-    void runCommand( QString theCommand );
+    bool runCommand( QString theCommand );
     QString getVariableFromMain( QString name );
 
 

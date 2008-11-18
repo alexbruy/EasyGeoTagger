@@ -1,5 +1,5 @@
 /*
-** File: "egtpythonconsole.h
+** File: egtpythonconsole.h
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-11-18
 **

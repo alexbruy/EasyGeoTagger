@@ -1,5 +1,5 @@
 /*
-** File: "egtpythonconsolebase.cpp
+** File: egtpythonconsolebase.cpp
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-11-18
 **
@@ -31,8 +31,8 @@ EgtPythonConsoleBase::EgtPythonConsoleBase()
   cvMainModule = PyImport_AddModule( "__main__" );
   cvDictionary = PyModule_GetDict( cvMainModule );
 
-  runCommand( "import sys" );
-  runCommand( "from PyQt4.QtCore import *" );
+  qDebug( "%d" , runCommand( "import sys" ));
+  qDebug( "%d" , runCommand( "from PyQt4.QtCorea import *" ));
   runCommand( "from PyQt4.QtGui import *" );
   runCommand( "from sip import wrapinstance" );
   runCommand( "class redirect:\n"
@@ -48,9 +48,10 @@ EgtPythonConsoleBase::EgtPythonConsoleBase()
 
 }
 
-void EgtPythonConsoleBase::runCommand( QString theCommand )
+bool  EgtPythonConsoleBase::runCommand( QString theCommand )
 {
   PyRun_String( qPrintable( theCommand ), Py_file_input, cvDictionary, cvDictionary );
+  return ( PyErr_Occurred() == 0 );
 }
 
 void EgtPythonConsoleBase::on_pbtnRun_clicked()
