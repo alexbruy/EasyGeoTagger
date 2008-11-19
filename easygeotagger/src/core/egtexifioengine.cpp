@@ -59,6 +59,77 @@ EgtExifIoEngine::EgtExifIoEngine( const QModelIndex& theIndex )
  * PUBLIC FUNCTIONS
  *
  */
+
+double EgtExifIoEngine::altitude( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0.0;  
+}
+
+QString EgtExifIoEngine::areaInformation( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return "";  
+}
+
+QString EgtExifIoEngine::dateStamp( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return "";  
+}
+
+float EgtExifIoEngine::destBearing( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0.0;
+}
+
+int EgtExifIoEngine::differential( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0;  
+}
+
+float EgtExifIoEngine::direction( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0.0;  
+}
+
+double EgtExifIoEngine::destDistance( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0.0;  
+}
+
+double EgtExifIoEngine::destLatitude( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0.0;  
+}
+
+double EgtExifIoEngine::destLongitude( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0.0;  
+}
+
+long EgtExifIoEngine::gpsDOP( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0.0;  
+}
+
 /*!
  * \returns whether the image contains gps exif metadata or not
  */
@@ -182,6 +253,34 @@ double EgtExifIoEngine::longitude( bool * isValid )
   return lvLongitude*lvNorthing;
 }
 
+QString EgtExifIoEngine::mapDatum( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return "";  
+}
+
+QString EgtExifIoEngine::measureMode( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return "";  
+}
+
+QString EgtExifIoEngine::processingMethod( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return "";  
+}
+
+QString EgtExifIoEngine::satellites( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return "";  
+}
+
 /*!
  * \param theImageFilename Absolute path to the image file that is going to be read/written
  */
@@ -236,6 +335,41 @@ void EgtExifIoEngine::setFile( QString theImageFilename )
     cvLastError = QString( "Unable to open file: "+ theImageFilename);
     EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
   }
+}
+
+double EgtExifIoEngine::speed( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0.0;  
+}
+
+QString EgtExifIoEngine::status( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return "";  
+}
+
+long EgtExifIoEngine::timeStamp( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0;  
+}
+
+float EgtExifIoEngine::track( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0.0;  
+}
+
+int EgtExifIoEngine::versionID( bool * isValid )
+{
+  if(isValid)
+      *isValid =false;
+  return 0;  
 }
 
 /*!
@@ -372,6 +506,7 @@ QString EgtExifIoEngine::convertToRational(QString theDegrees)
 }
 
 
+
 /*!
  * \param theKey the key to be searched within the exif data
  * \returns the Value that has been readen from the exif data 
@@ -449,6 +584,8 @@ QString EgtExifIoEngine::readKeyValueAsString(QString theKey)
   EgtDebug( "Image is not valid" );
   return "";
 }
+
+
 
 /*!
  * \param theKey the key to be searched within the exif data

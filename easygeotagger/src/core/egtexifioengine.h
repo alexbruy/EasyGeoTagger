@@ -45,7 +45,28 @@ public:
   
   /*! \brief Constructor */
   EgtExifIoEngine( const QModelIndex& );
-  
+
+  double altitude( bool * isValid = 0 );
+
+  QString areaInformation( bool * isValid = 0 );
+
+  QString dateStamp( bool * isValid = 0 );
+
+  float destBearing( bool * isValid = 0 );
+
+  int differential( bool * isValid = 0 );
+
+  float direction( bool * isValid = 0 );
+
+  double destDistance( bool * isValid = 0 );
+
+  double destLatitude( bool * isValid = 0 );
+
+  double destLongitude( bool * isValid = 0 );
+
+  long gpsDOP( bool * isValid = 0 );
+
+
   /*! \brief has the image gps exif metadata? */
   bool hasGpsExif();
   
@@ -61,9 +82,27 @@ public:
   /*! \brief Returns the longitude */
   double longitude( bool * isValid = 0 );
 
+  QString mapDatum( bool * isValid = 0 );  
+
+  QString measureMode( bool * isValid = 0 );
+
+  QString processingMethod( bool * isValid=0 );
+
+  QString satellites( bool * isValid = 0 );
+
   /*! \brief Sets the image to be managed with this class */
   void setFile( QString theImageFilename );
   
+  double speed( bool * isValid = 0 );
+
+  QString status( bool * isValid = 0 );
+
+  long timeStamp( bool * isValid = 0 );
+
+  float track( bool * isValid = 0 );
+ 
+  int versionID( bool * isValid = 0 );
+
   /*! \brief writes the latitude from a double number */
   bool writeLatitude(double);
   
