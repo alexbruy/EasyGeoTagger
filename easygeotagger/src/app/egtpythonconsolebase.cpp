@@ -23,7 +23,7 @@
 **/
 #include "egtpythonconsolebase.h"
 
-EgtPythonConsoleBase::EgtPythonConsoleBase()
+EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterface )
 {
   setupUi(this);
 
@@ -31,21 +31,22 @@ EgtPythonConsoleBase::EgtPythonConsoleBase()
   cvMainModule = PyImport_AddModule( "__main__" );
   cvDictionary = PyModule_GetDict( cvMainModule );
 
-  qDebug( "%d" , runCommand( "import sys" ));
-  qDebug( "%d" , runCommand( "from sip import wrapinstance" ));
-  qDebug( "%d" , runCommand( "from PyQt4.QtCore import *" ));
-  qDebug( "%d" , runCommand( "from PyQt4.QtGui import *" ));
-
-  qDebug( "%d" , runCommand( "class redirect:\n"
+  runCommand( "import sys" );
+  //runCommand( "from PyEasyGT" );
+  runCommand( "from sip import wrapinstance" );
+  runCommand( "from PyQt4.QtCore import *" );
+  runCommand( "from PyQt4.QtGui import *" );
+  runCommand( "class redirect:\n"
               "  def __init__( self, textbrowser ):\n"
               "    self.console = textbrowser\n"
               "  def write( self, message ):\n"
               "    self.console.append( message )\n"
               "\n"
-            ));
+            );
   runCommand( "outputConsole = wrapinstance(" + QString::number(( unsigned long ) tbOutput ) + ", QTextBrowser)" );
   runCommand( "logger = redirect( outputConsole ) " );
   runCommand( "sys.stdout = logger" );
+  //runCommand( "EgtInterface = wrapinstance(" + QString::number(( unsigned long ) theInterface ) + ", EgtApplicationInterface)" );
 
 }
 

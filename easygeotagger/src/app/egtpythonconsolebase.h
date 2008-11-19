@@ -30,12 +30,14 @@
 
 #include "ui_egtpythonconsoledialog.h"
 
-class EgtPythonConsoleBase : public QWidget, Ui::EgtPythonConsoleDialog
+#include "egtapplicationinterface.h"
+
+class MS_DLL_SPEC EgtPythonConsoleBase : public QWidget, Ui::EgtPythonConsoleDialog
 {
     Q_OBJECT
 
 public:
-    EgtPythonConsoleBase();
+    EgtPythonConsoleBase( EgtApplicationInterface* );
     bool runCommand( QString theCommand );
     QString getVariableFromMain( QString name );
 

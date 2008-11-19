@@ -41,7 +41,7 @@ SET( EGT_APP_SRCS
     app/egtmainwindow.cpp
     app/egtpluginmanager.cpp
     app/egtplugindisplaywidget.cpp
-    app/egtpythonconsolebase.cpp
+
    )
 
 SET( EGT_APP_MOC_HDRS
@@ -52,17 +52,22 @@ SET( EGT_APP_MOC_HDRS
     app/egtplugininterface.h
     app/egtpluginmanager.h
     app/egtplugindisplaywidget.h
-     app/egtpythonconsolebase.h
    )
+
+IF ( PYTHON_BINDINGS )
+  SET( EGT_PYTHON_SRCS app/egtpythonconsolebase.cpp )
+  SET( EGT_PYTHON_MOC_HDRS app/egtpythonconsolebase.h )
+ENDIF ( PYTHON_BINDINGS )
 
 SET (EGT_APP_RCCS app/app.qrc)
 
-QT4_AUTOMOC( ${EGT_CORE_SRCS} ${EGT_APP_SRCS} )
+QT4_AUTOMOC( ${EGT_CORE_SRCS} ${EGT_APP_SRCS} ${EGT_PYTHON_SRCS} )
 
 QT4_WRAP_CPP( EGT_APP_MOC_SRCS ${EGT_APP_MOC_HDRS} )
 QT4_WRAP_CPP( EGT_CORE_MOC_SRCS ${EGT_CORE_MOC_HDRS} )
+QT4_WRAP_CPP( EGT_PYTHON_MOC_SRCS ${EGT_PYTHON_MOC_HDRS} )
 
-ADD_LIBRARY ( easygt SHARED ${EGT_CORE_SRCS} ${EGT_CORE_MOC_SRCS} ${EGT_APP_SRCS} ${EGT_APP_MOC_SRCS} ${EGT_APP_RCCS} )
+ADD_LIBRARY ( easygt SHARED ${EGT_CORE_SRCS} ${EGT_CORE_MOC_SRCS} ${EGT_APP_SRCS} ${EGT_APP_MOC_SRCS} ${EGT_APP_RCCS} ${EGT_PYTHON_SRCS} ${EGT_PYTHON_MOC_SRCS})
 
 ADD_DEPENDENCIES( easygt  easygt_ui )
 

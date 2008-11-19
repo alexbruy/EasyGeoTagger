@@ -22,6 +22,8 @@ ENDIF (WIN32)
 # set path to additional CMake modules
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_find_rules ${CMAKE_MODULE_PATH})
 
+SET (PYTHON_BINDINGS FALSE CACHE BOOL "Flag to indicate if pyghon bindings should be built")
+
 SET (QT_USE_QT3SUPPORT FALSE)
 SET (QT_USE_QTGUI TRUE)
 SET (QT_USE_QTNETWORK TRUE)
@@ -40,10 +42,12 @@ IF (NOT LIBRAW_FOUND)
   MESSAGE (SEND_ERROR "LIBRAW dependency was not found!")
 ENDIF (NOT LIBRAW_FOUND)
 
-FIND_PACKAGE(PYTHON REQUIRED)
-IF (NOT PYTHON_FOUND)
-  MESSAGE (SEND_ERROR "PYTHON dependency was not found!")
-ENDIF (NOT PYTHON_FOUND)
+IF (PYTHON_BINDINGS)
+  FIND_PACKAGE( PYTHON REQUIRED )
+  IF (NOT PYTHON_FOUND)
+    MESSAGE (SEND_ERROR "PYTHON dependency was not found!")
+  ENDIF (NOT PYTHON_FOUND)
+ENDIF (PYTHON_BINDINGS)
 
 #MinGW seems to build the exe in Release mode but plugins in Debug mode as default
 ADD_DEFINITIONS(-DQT_NO_DEBUG)
@@ -58,7 +62,7 @@ IF ( WIN32 )
   FIND_LIBRARY( EXPAT_LIBRARY NAMES expat PATHS C:/devel/bin/msys/1.0/home/pete/local/bin/ )
   FIND_LIBRARY( ZLIB_LIBRARY NAMES z PATHS C:/devel/bin/msys/1.0/home/pete/local/lib/ )
 
-  SET( CMAKE_INSTALL_PREFIX   ./install )
+  SET ( CMAKE_INSTALL_PREFIX   ./install )
   SET ( EASYGT_BIN_SUBDIR     . )
   SET ( EASYGT_LIB_SUBDIR     . )
   SET ( EASYGT_PLUGIN_SUBDIR  ./easygt )
