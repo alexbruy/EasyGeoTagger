@@ -22,9 +22,12 @@
 **
 **/
 #include "egtpythonconsolebase.h"
+#include "egtlogger.h"
 
 EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterface )
 {
+  EgtDebug( "entered" );
+
   setupUi(this);
 
   Py_Initialize();
@@ -32,7 +35,7 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
   cvDictionary = PyModule_GetDict( cvMainModule );
 
   runCommand( "import sys" );
-  //runCommand( "from PyEasyGT" );
+  runCommand( "from PyEasyGT import *" );
   runCommand( "from sip import wrapinstance" );
   runCommand( "from PyQt4.QtCore import *" );
   runCommand( "from PyQt4.QtGui import *" );
@@ -46,7 +49,7 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
   runCommand( "outputConsole = wrapinstance(" + QString::number(( unsigned long ) tbOutput ) + ", QTextBrowser)" );
   runCommand( "logger = redirect( outputConsole ) " );
   runCommand( "sys.stdout = logger" );
-  //runCommand( "EgtInterface = wrapinstance(" + QString::number(( unsigned long ) theInterface ) + ", EgtApplicationInterface)" );
+  runCommand( "EgtInterface = wrapinstance(" + QString::number(( unsigned long ) theInterface ) + ", EgtApplicationInterface)" );
 
 }
 
@@ -58,5 +61,6 @@ bool  EgtPythonConsoleBase::runCommand( QString theCommand )
 
 void EgtPythonConsoleBase::on_pbtnRun_clicked()
 {
+    EgtDebug( QString("run python command\n%1") .arg( teInput->toPlainText() ) );
     runCommand( teInput->toPlainText() );
 }

@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>EasyGeoTagger - Alpha Version revision 27 - Do Not Distribute - Biodiversity Informatics Facility - AMNH</string>
+   <string>EasyGeoTagger - Alpha Version - Do Not Distribute - Biodiversity Informatics Facility - AMNH</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QGridLayout" >
@@ -27,16 +27,7 @@
         <enum>QFrame::Plain</enum>
        </property>
        <layout class="QVBoxLayout" >
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item>
@@ -72,16 +63,7 @@
         <enum>QFrame::Raised</enum>
        </property>
        <layout class="QGridLayout" >
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin" >
          <number>0</number>
         </property>
         <item row="0" column="0" colspan="2" >
@@ -156,7 +138,7 @@
      <x>0</x>
      <y>0</y>
      <width>555</width>
-     <height>30</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

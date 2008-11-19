@@ -64,7 +64,7 @@ void EgtPythonConsole::run()
 {
   if( 0 == cvConsole )
   {
-    cvConsole = new EgtPythonConsoleBase();
+    cvConsole = new EgtPythonConsoleBase( cvApplicationInterface );
   }
 
   cvConsole->show();
