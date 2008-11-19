@@ -43,7 +43,7 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
               "  def __init__( self, textbrowser ):\n"
               "    self.console = textbrowser\n"
               "  def write( self, message ):\n"
-              "    self.console.append( message )\n"
+              "    self.console.append( '>>>' + message )\n"
               "\n"
             );
   runCommand( "outputConsole = wrapinstance(" + QString::number(( unsigned long ) tbOutput ) + ", QTextBrowser)" );
