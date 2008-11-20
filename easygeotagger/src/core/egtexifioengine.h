@@ -110,12 +110,36 @@ public:
   bool writeLatitude( QString );
   
    /*! \brief writes the longitude from a double */
-  bool writeLongitude(double );
+  bool writeLongitude( double );
   
   /*! \brief writes the longitude from a QString */
   bool writeLongitude( QString );
   
   
+  /////////////////////////////////////
+bool writeAltitude( double );
+bool writeAreaInformation( QString );
+bool writeDateStamp( QString);
+bool writeDestBearing( float, char theRefference = 'T' );
+bool writeDifferential( int );
+bool writeDirection( float, char theRefference = 'T' );
+bool writeDestDistance( double, char theUnit = 'K' );
+bool writeDestLatitude( double, char theRefference = 'N' );
+bool writeDestLongitude( double, char theRefference = 'N' );
+bool writeGpsDOP( double );
+bool writeMapDatum( QString );
+bool writeMeasureMode( QString );
+bool writeProcessingMethod( QString );
+bool writeSatellites( QString );
+bool writeSpeed( double, char theUnit = 'K' );
+bool writeStatus( QString );
+bool writeTimeStamp( long );
+bool writeTrack( float, char theRefference = 'T' );
+bool writeVersionID( int );
+  ////////////////////////////////////
+
+
+
 private:
   /*! \brief Converts from decimal degrees to Rational notation */
   QString convertToRational(QString);
