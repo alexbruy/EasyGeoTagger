@@ -3,6 +3,7 @@ import os
 #import pyqtconfig
 import PyQt4.pyqtconfig
 
+easygt_lib = '@EASYGT_LIB@'
 src_path = '@CMAKE_SOURCE_DIR@'
 python_path = src_path + '/python'
 build_path = '@CMAKE_BINARY_DIR@'
@@ -47,7 +48,7 @@ makefile = PyQt4.pyqtconfig.QtGuiModuleMakefile(
 # specific prefixes or extensions (e.g. the "lib" prefix on UNIX, or the
 # ".dll" extension on Windows).
 makefile.extra_libs = ["easygt"]
-makefile.extra_lib_dirs = [build_path+"/easygt"]
+makefile.extra_lib_dirs = [build_path+"/src"]
 makefile.extra_include_dirs = [src_path + "/src/app", src_path + "/src/core"]
 makefile.extra_cxxflags = ["-DMS_DLL_SPEC="]
 makefile.LFLAGS.append("-Wl,-rpath,.")
