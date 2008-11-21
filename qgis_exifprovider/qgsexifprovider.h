@@ -49,7 +49,7 @@ class QgsExifProvider : public QgsVectorDataProvider
     /**
      * Restart reading features from previous select operation. 
      */
-    virtual void begin() {   mCurrentFeatureIndex = 0; }
+    virtual void rewind() {   mCurrentFeatureIndex = 0; }
     
     /**
      * Returns the permanent storage type for this layer as a friendly name.
@@ -64,7 +64,7 @@ class QgsExifProvider : public QgsVectorDataProvider
      *                     false if a test based on bounding box is sufficient
      */
     virtual void select( QgsAttributeList fetchAttributes = QgsAttributeList(),
-                         QgsRect rect = QgsRect(),
+                         QgsRectangle rect = QgsRectangle(),
                          bool fetchGeometry = true,
                          bool useIntersect = false );
 
@@ -141,14 +141,14 @@ class QgsExifProvider : public QgsVectorDataProvider
     /**
      * Return the extent for this data layer
      */
-    virtual QgsRect extent();
+    virtual QgsRectangle extent();
 
     /**
      * Returns true if this is a valid delimited file
      */
     bool isValid();
 
-    virtual QgsCoordinateReferenceSystem getCRS();
+    virtual QgsCoordinateReferenceSystem crs();
 
     /* new functions */
 
@@ -180,11 +180,11 @@ class QgsExifProvider : public QgsVectorDataProvider
     int mCurrentFeatureIndex;
 
     //! Layer extent
-    QgsRect mExtent;
+    QgsRectangle mExtent;
 
     //! Current selection rectangle
 
-    QgsRect mSelectionRectangle;
+    QgsRectangle mSelectionRectangle;
 
     bool mValid;
 

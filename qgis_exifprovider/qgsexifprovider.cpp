@@ -27,7 +27,7 @@
 #include <QDir>
 #include <QSettings>
 
-#include "qgsrect.h"
+#include "qgsrectangle.h"
 #include "qgslogger.h"
 #include "qgsapplication.h"
 #include "qgsdataprovider.h"
@@ -46,7 +46,7 @@ QgsExifProvider::QgsExifProvider( QString theDir )
   mSourceDirectory.setPath( theDir );
   
   // Set the selection rectangle to null
-  mSelectionRectangle = QgsRect();
+  mSelectionRectangle = QgsRectangle();
   
   // assume the layer is invalid until proven otherwise
   mValid = false;
@@ -60,7 +60,7 @@ QgsExifProvider::QgsExifProvider( QString theDir )
   QgsDebugMsg( "Valid and readable directory" );
   
   // set the initial extent
-  mExtent = QgsRect();
+  mExtent = QgsRectangle();
   
   //Get only the files in the directory
   QStringList myFileList = mSourceDirectory.entryList(QDir::Files);
@@ -346,7 +346,7 @@ bool QgsExifProvider::nextFeature( QgsFeature& feature )
 
 
 void QgsExifProvider::select( QgsAttributeList fetchAttributes,
-                                       QgsRect rect,
+                                       QgsRectangle rect,
                                        bool fetchGeometry,
                                        bool useIntersect )
 {
@@ -364,14 +364,14 @@ void QgsExifProvider::select( QgsAttributeList fetchAttributes,
     mSelectionRectangle = rect;
   }
   
-  begin();
+  rewind();
 }
 
 
 
 
 // Return the extent of the layer
-QgsRect QgsExifProvider::extent()
+QgsRectangle QgsExifProvider::extent()
 {
   return mExtent;
 }
@@ -420,8 +420,8 @@ bool QgsExifProvider::boundsCheck( double x, double y )
   if ( mSelectionRectangle.isEmpty() )
     return true;
 
-  return ( x <= mSelectionRectangle.xMax() ) && ( x >= mSelectionRectangle.xMin() ) &&
-         ( y <= mSelectionRectangle.yMax() ) && ( y >= mSelectionRectangle.yMin() );
+  return ( x <= mSelectionRectangle.xMaximum() ) && ( x >= mSelectionRectangle.xMinimum() ) &&
+         ( y <= mSelectionRectangle.yMaximum() ) && ( y >= mSelectionRectangle.yMinimum() );
 }
 
 int QgsExifProvider::capabilities() const
@@ -430,7 +430,7 @@ int QgsExifProvider::capabilities() const
 }
 
 
-QgsCoordinateReferenceSystem QgsExifProvider::getCRS()
+QgsCoordinateReferenceSystem QgsExifProvider::crs()
 {
   // TODO: make provider projection-aware
   return QgsCoordinateReferenceSystem(); // return default CRS
