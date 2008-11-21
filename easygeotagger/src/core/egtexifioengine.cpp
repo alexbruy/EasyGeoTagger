@@ -184,7 +184,7 @@ long EgtExifIoEngine::gpsDOP( bool * isValid )
 {
   if(isValid)
       *isValid =false;
-  return 0.0;  
+  return 0;  
 }
 
 /*!

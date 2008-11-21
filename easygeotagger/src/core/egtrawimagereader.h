@@ -34,7 +34,7 @@
 /*! \brief Threaded class to load raw images
  *
  */
-class EgtRawImageReader : public QThread
+class MS_DLL_SPEC EgtRawImageReader : public QThread
 { 
   Q_OBJECT
 

@@ -1,3 +1,12 @@
+IF (WIN32)
+  IF (MSVC)
+    ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllimport)")
+  ELSE (MSVC)
+    ADD_DEFINITIONS("-UMS_DLL_SPEC \"-DMS_DLL_SPEC=__declspec(dllimport)\"")
+  ENDIF (MSVC)
+ENDIF (WIN32)
+
+
 INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE_DIRECTORIES(
