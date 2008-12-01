@@ -40,14 +40,19 @@ public:
     EgtPythonConsoleBase( EgtApplicationInterface* );
     bool runCommand( QString theCommand );
     QString getVariableFromMain( QString name );
-
-
+//const char* getPyObjStringRepr( PyObject* );
+bool getError( QString&, QString&);
+QString getTypeAsString( PyObject* );
 public slots:
     void on_pbtnRun_clicked();
 
 private:
     PyObject* cvMainModule;
     PyObject* cvDictionary;
+/*PyObject* mainModObj;
+PyObject* returnObj;
+PyObject* resultObj;*/
+
 };
 
 #endif // EGTPYTHONCONSOLEBASE_H
