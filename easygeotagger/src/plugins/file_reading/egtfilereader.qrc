@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/FILEREADER/" >
+        <file>save.png</file>
+        <file>cancel.png</file>
+    </qresource>
+</RCC>
