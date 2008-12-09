@@ -20,16 +20,14 @@ SET( FILE_READER_SRCS
 
 SET( FILE_READER_MOC_HDRS
     egtfilereader.h
-    egtfilereadercontrols.cpp
+    egtfilereadercontrols.h
    )
 
 SET( FILE_READER_UIS
     egtfilereadercontrolsgui.ui
    )
 
-SET ( FILE_READER_RCCS 
-     egtfilereader.qrc
-    )
+
 
 QT4_WRAP_UI( FILE_READER_UIS_H ${FILE_READER_UIS} )
 

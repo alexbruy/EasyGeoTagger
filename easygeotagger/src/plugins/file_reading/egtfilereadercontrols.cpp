@@ -42,17 +42,26 @@ EgtFileReaderControls::EgtFileReaderControls( EgtExifIoEngine* theExifIoEngine, 
   cvExifIoEngine = theExifIoEngine;
 
   //Set up the file browser window
-  QStandardItemModel* lvModel = new QStandardItemModel( 4,2 );
+  QStandardItemModel* lvModel = new QStandardItemModel( );
   tvFileContent->setModel( lvModel );
-  
+  QModelIndex lvIndex ;
   for (int lvRow = 0; lvRow < 4; ++lvRow) 
   {
     for (int lvColumn = 0; lvColumn < 2; ++lvColumn) 
     {
-      QModelIndex lvIndex = lvModel->index(lvRow, lvColumn, QModelIndex());
-      lvModel->setData(lvIndex, QVariant((lvRow+1) * (lvColumn+1)));
+      
+      lvModel->insertRows(lvModel->rowCount(),1);
+      //lvModel->insertColumns(lvColumn,1,lvIndex); 
+      //lvModel->setData(lvIndex, QVariant((2) * (2)));
     }
   }
+
+lvModel->insertColumns(lvModel->columnCount(),1);
+lvModel->insertColumns(lvModel->columnCount(),1);  
+lvModel->insertColumns(lvModel->columnCount(),1); 
+
+lvIndex = lvModel->index(lvModel->rowCount()-2, lvModel->columnCount()-1, QModelIndex());
+lvModel->setData(lvIndex, QVariant((2) * (2)));
 
 }
 
@@ -62,13 +71,71 @@ EgtFileReaderControls::EgtFileReaderControls( EgtExifIoEngine* theExifIoEngine, 
  *
  */
 
+void EgtFileReaderControls::open()
+{
+  QString lvFileName = QFileDialog::getOpenFileName( this, tr( "Open GPS File" ),QDir::currentPath(),
+                                          				tr( "GPS Files (*.gps *.xml)" ) );
+  if (lvFileName.isEmpty())
+    return;
+
+  QFile lvFile(lvFileName);
+  if (!lvFile.open(QFile::ReadOnly | QFile::Text)) 
+  {
+    QMessageBox::warning(this, tr("GPS Files"),
+                              tr("Cannot read file %1:\n%2.").arg(lvFileName).arg(lvFile.errorString()));
+    return;
+  }
+
+  QStandardItemModel* lvModel = new QStandardItemModel( );
+  tvFileContent->setModel( lvModel );
+  QModelIndex lvIndex ;
+
+  QTextStream stream( &lvFile );
+  QString lvLine;
+  QStringList lvList;
+
+  lvLine = stream.readLine();
+  lvList = lvLine.split(",");
+   
+  int lvColumnSize = lvList.size();
+  lvModel->insertColumns(lvModel->columnCount(),lvColumnSize);
+  lvModel->insertRows(lvModel->rowCount(),1);
+    
+  int lvColumnCount = 0;
+  for ( QStringList::Iterator it = lvList.begin(); it != lvList.end(); ++it ) 
+  {
+    lvIndex = lvModel->index(lvModel->rowCount()-1, lvColumnCount, QModelIndex());
+    lvModel->setData(lvIndex, QVariant(*it));
+    qDebug((*it).toStdString().c_str());
+    lvColumnCount++;
+  }
+
+  while( ! stream.atEnd() )
+  {
+    lvLine = stream.readLine();
+    lvList = lvLine.split(",");
+    
+    lvModel->insertRows(lvModel->rowCount(),1);
+    
+    lvColumnCount = 0;
+    for ( QStringList::Iterator it = lvList.begin(); it != lvList.end(); ++it ) 
+    {
+      lvIndex = lvModel->index(lvModel->rowCount()-1, lvColumnCount, QModelIndex());
+      lvModel->setData(lvIndex, QVariant(*it));
+      qDebug((*it).toStdString().c_str());
+      lvColumnCount++;
+    }
+  }
+}
+
+
 void EgtFileReaderControls::onthe_pbtnOpenFile_clicked()
 {qDebug("push the button"); 
 
   if( 0 == cvExifIoEngine ) { return; }
   
-  /*leLongitude->setText( QString::number( cvExifIoEngine->longitude(), 'f', 7  ) );
-  longitudeControls->setEnabled( false );*/
+  open(); 
+ 
 }
 
 void EgtFileReaderControls::onthe_pbtnTagPicture_clicked()
@@ -77,13 +144,5 @@ qDebug("push the button");
 
   if( 0 == cvExifIoEngine ) { return; }
   
-  /*if( !cvExifIoEngine->writeLongitude( leLongitude->text() ) )
-  {
-    QMessageBox::critical( this, tr( "Write Error" ), tr( "Unable to write value into exif header" ) ); 
-  }
-  else
-  {
-    leLongitude->setText( QString::number( cvExifIoEngine->longitude(), 'f', 7  ) );
-    longitudeControls->setEnabled( false );
-  }*/
+
 }

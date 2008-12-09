@@ -30,7 +30,7 @@
 
 class EgtFileReaderControls : public QWidget, public Ui::EgtFileReaderControlsGui
 {
-
+ Q_OBJECT
   public:
     EgtFileReaderControls( EgtExifIoEngine* theExifIoEngine = 0, QWidget* theParent = 0, Qt::WindowFlags theFlags = 0 );
 
@@ -41,5 +41,6 @@ class EgtFileReaderControls : public QWidget, public Ui::EgtFileReaderControlsGu
 
   private:
     EgtExifIoEngine* cvExifIoEngine;
+    void open();
 };
 #endif
