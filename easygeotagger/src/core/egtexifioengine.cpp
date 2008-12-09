@@ -1204,12 +1204,12 @@ bool EgtExifIoEngine::writeLatitude( QString theValue )
  */
 bool EgtExifIoEngine::writeLongitude( double theValue )
 {
-  EgtDebug( "entered writeLatitude(double)" );
+  EgtDebug( "entered writeLongitude(double)" );
   bool ok; 
 
   if( theValue < 0 )
   {
-    ok = write( "Exif.GPSInfo.GPSLatitudeRef", "S", "Ascii" );
+    ok = write( "Exif.GPSInfo.GPSLongitudeRef", "W", "Ascii" );
     if( !ok )
     {
       cvLastError = QString( "Unable to write file: " + cvImageFileName );
@@ -1218,7 +1218,7 @@ bool EgtExifIoEngine::writeLongitude( double theValue )
   }
   else
   {
-    ok = write( "Exif.GPSInfo.GPSLatitudeRef", "N", "Ascii" );
+    ok = write( "Exif.GPSInfo.GPSLongitudeRef", "E", "Ascii" );
     if( !ok )
     {
       cvLastError = QString( "Unable to write file: " + cvImageFileName );
