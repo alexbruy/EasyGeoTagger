@@ -100,6 +100,9 @@ public:
   /*! \brief Returns the processing method */
   QString processingMethod( bool * isValid=0 );
 
+  QVariant readTag( QString, bool * isValid = 0 );
+
+
   /*! \brief Returns the GPS satellites used for measurement */
   QString satellites( bool * isValid = 0 );
 
@@ -120,6 +123,8 @@ public:
  
   /*! \brief Returns the version of the GPS */
   int versionID( bool * isValid = 0 );
+
+  bool writeTag(QString, QString);
 
   /*! \brief writes the latitude from a double number */
   bool writeLatitude(double);

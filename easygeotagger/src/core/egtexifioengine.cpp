@@ -290,7 +290,7 @@ float EgtExifIoEngine::direction( char * theRefference, bool * isValid )
  * \param isValid if the access to the picture was successful
  * \returns the distance to the destination point
  */
-double EgtExifIoEngine::destDistance( char * theRefference, bool * isValid )
+double EgtExifIoEngine::destDistance( char * theUnit, bool * isValid )
 {
   EgtDebug( "entered destDistance(char, bool)" );
   
@@ -307,12 +307,12 @@ double EgtExifIoEngine::destDistance( char * theRefference, bool * isValid )
   } 
 
   if( QString::compare( QString( lvValue.toString().c_str() ), "N" ) == 0 )
-    *theRefference = 'N';
+    *theUnit = 'N';
   else
     if( QString::compare( QString( lvValue.toString().c_str() ), "M" ) == 0 )
-      *theRefference = 'M';
+      *theUnit = 'M';
     else
-      *theRefference = 'K';
+      *theUnit = 'K';
       
   const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSDestDistance" );
    
@@ -662,6 +662,16 @@ QString EgtExifIoEngine::processingMethod( bool * isValid )
   return QString(lvValue.toString(0).c_str());
 }
 
+
+QVariant EgtExifIoEngine::readTag ( QString theTag, bool * isValid )
+{
+  if(QString::compare( theTag, "Egt.Latitude" ) == 0)
+  {
+    return QVariant(latitude( isValid ));
+  }
+  if(QString::compare( theTag, "Egt.Longitude" ) == 0)
+    return QVariant(longitude( isValid ));
+}
 /*!
  *\param isValid if the access to the picture was successful
  *\returns the GPS satellites used for measurements. This tag can be used to describe the number of satellites, their ID number,
@@ -917,6 +927,14 @@ int EgtExifIoEngine::versionID( bool * isValid )
       *isValid =true;
   
   return lvDifferential;
+}
+
+bool EgtExifIoEngine::writeTag( QString theTag, QString theValue )
+{
+  if(QString::compare( theTag, "Egt.Latitude" ) == 0)
+    return writeLatitude( theValue );
+  if(QString::compare( theTag, "Egt.Longitude" ) == 0)
+    return writeLongitude( theValue );
 }
 
 /*!
