@@ -50,7 +50,7 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
             );
   runCommand( "outputConsole = wrapinstance(" + QString::number(( unsigned long ) tbOutput ) + ", QTextBrowser)" );
   runCommand( "logger = redirect( outputConsole ) " );
-  runCommand( "sys.stderr = sys.stdout = logger" );
+  runCommand( "sys.stdout = logger" );
   runCommand( "EgtInterface = wrapinstance(" + QString::number(( unsigned long ) theInterface ) + ", EgtApplicationInterface)" );
 }
 
@@ -78,6 +78,9 @@ void EgtPythonConsoleBase::on_pbtnRun_clicked()
 
 bool EgtPythonConsoleBase::getError( QString& errorClassName, QString& errorText )
 {
+  /*This method was taken from the QGIS project (www.qgis.org), the original source code can be found at
+   *https://svn.osgeo.org/qgis/trunk/qgis/src/python/qgspythonutilsimpl.cpp
+   */
   if ( !PyErr_Occurred() )
     return false;
 
@@ -113,6 +116,9 @@ bool EgtPythonConsoleBase::getError( QString& errorClassName, QString& errorText
 
 QString EgtPythonConsoleBase::getTypeAsString( PyObject* obj )
 {
+  /*This method was taken from the QGIS project (www.qgis.org), the original source code can be found at
+   *https://svn.osgeo.org/qgis/trunk/qgis/src/python/qgspythonutilsimpl.cpp
+   */
   if ( obj == NULL )
     return NULL;
 
