@@ -1,5 +1,5 @@
 /*
-** File: egtexifioengine.h
+** File: egtgpsexifengine.h
 ** Author(s): Roberto Garcia-Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-09-22
 **
@@ -21,30 +21,27 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTEXIFIOENGINE_H
-#define EGTEXIFIOENGINE_H
+#ifndef EGTGPSEXIFENGINE_H
+#define EGTGPSEXIFENGINE_H
 
-#include <QModelIndex>
-
-#include <exiv2/image.hpp>
-#include <exiv2/exif.hpp>
+#include "egtexifengine.h"
 
 /*! \brief Read and write EXIF data
  *
  * This class is largely a wrapper for Exiv2 to provide simple access to EXIF header data
  */
-class MS_DLL_SPEC EgtExifIoEngine
+class MS_DLL_SPEC EgtGPSExifEngine : public EgtExifEngine
 {
 
 public:
   /*! \brief Constructor */
-  EgtExifIoEngine();
+  EgtGPSExifEngine();
   
   /*! \brief Constructor */
-  EgtExifIoEngine( QString );
+  EgtGPSExifEngine( QString );
   
   /*! \brief Constructor */
-  EgtExifIoEngine( const QModelIndex& );
+  EgtGPSExifEngine( const QModelIndex& );
 
   /*! \brief Returns the altitude */
   double altitude( bool * isValid = 0 );
@@ -99,9 +96,6 @@ public:
 
   /*! \brief Returns the processing method */
   QString processingMethod( bool * isValid=0 );
-
-  QVariant readTag( QString, bool * isValid = 0 );
-
 
   /*! \brief Returns the GPS satellites used for measurement */
   QString satellites( bool * isValid = 0 );
@@ -196,34 +190,10 @@ public:
   bool writeVersionID( int );
 
 private:
-  /*! \brief Converts from decimal degrees to Rational notation */
+  
+   /*! \brief Converts from decimal degrees to Rational notation */
   QString convertToRational(QString);
-  
-  /*! \brief reads the value specified as parameter */
-  const Exiv2::Value& read(QString);
-  
-  /*! \brief reads the value specified as parameter and returns it as a QString */
-  QString readKeyValueAsString(QString);
-  
-  /*! \brief writes exif metadata */
-  bool write(QString, QString, QString);
-  
-  /*! \brief has the image GPS exif metadata? */
-  bool cvHasGpsExif;
 
-  /*! \brief Exiv2 data to handle the image */
-  Exiv2::Image::AutoPtr cvImage;
-  
-  /*! \brief Name of the file picture */
-  QString  cvImageFileName;
-  
-  /*! \brief is the image valid? */
-  bool cvIsValidImage;
-  
-  /*! \brief Last error occured */
-  QString cvLastError;
-  
-  /*! \brief Exiv2 data used in case we have to work with invalid data */
-  Exiv2::DataValue cvNotValidValue;
 };
 #endif
+

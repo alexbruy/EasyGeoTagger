@@ -1,5 +1,5 @@
 /*
-** File: egtexifioengine.cpp
+** File: egtgpsexifengine.cpp
 ** Author(s): Roberto Garcia-Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-09-22
 **
@@ -21,7 +21,7 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#include "egtexifioengine.h"
+#include "egtgpsexifengine.h"
 
 #include "egtpathbuilder.h"
 #include "egtlogger.h"
@@ -33,7 +33,7 @@
 #include <QDir>
 
 
-EgtExifIoEngine::EgtExifIoEngine()
+EgtGPSExifEngine::EgtGPSExifEngine() : EgtExifEngine()
 {
   Exiv2::DataValue notvalid(Exiv2::invalidTypeId );
   cvNotValidValue=  notvalid;
@@ -41,15 +41,15 @@ EgtExifIoEngine::EgtExifIoEngine()
   cvHasGpsExif = false;
 }
 
-EgtExifIoEngine::EgtExifIoEngine( QString theImageFilename )
+EgtGPSExifEngine::EgtGPSExifEngine( QString theImageFilename )
 {
-  EgtExifIoEngine();
+  EgtGPSExifEngine();
   setFile( theImageFilename );
 }
 
-EgtExifIoEngine::EgtExifIoEngine( const QModelIndex& theIndex )
+EgtGPSExifEngine::EgtGPSExifEngine( const QModelIndex& theIndex )
 {
-  EgtExifIoEngine();
+  EgtGPSExifEngine();
   EgtPathBuilder cvPathBuilder;
   setFile( cvPathBuilder.buildPath( theIndex ) );
 }
@@ -64,7 +64,7 @@ EgtExifIoEngine::EgtExifIoEngine( const QModelIndex& theIndex )
  * \param isValid if the access to the picture was successful
  * \returns the altitude where the picture was taken
  */
-double EgtExifIoEngine::altitude( bool * isValid )
+double EgtGPSExifEngine::altitude( bool * isValid )
 {
   EgtDebug( "entered altitude(bool)" );
   
@@ -115,7 +115,7 @@ double EgtExifIoEngine::altitude( bool * isValid )
  * \returns A QString recording the name of the GPS area. The first byte indicates the character code used, and this is 
  * followed by the name of the GPS area.
  */
-QString EgtExifIoEngine::areaInformation( bool * isValid )
+QString EgtGPSExifEngine::areaInformation( bool * isValid )
 {
   EgtDebug( "entered areaInformation(bool)" );
 
@@ -145,7 +145,7 @@ QString EgtExifIoEngine::areaInformation( bool * isValid )
  * \returns A Qstring recording date and time information relative to UTC (Coordinated Universal Time). The format is
  * "YYYY:MM:DD.".
  */
-QString EgtExifIoEngine::dateStamp( bool * isValid )
+QString EgtGPSExifEngine::dateStamp( bool * isValid )
 {
   EgtDebug( "entered dateStamp(bool)" );
 
@@ -175,7 +175,7 @@ QString EgtExifIoEngine::dateStamp( bool * isValid )
  * \param theRefference a char pointer containing the units of the measure (Kilometers, miles or knots)
  * \returns The bearing to the destination point. The range of values is from 0.00 to 359.99.
  */
-double EgtExifIoEngine::destBearing( char * theRefference, bool * isValid )
+double EgtGPSExifEngine::destBearing( char * theRefference, bool * isValid )
 {
   EgtDebug( "entered destBearing(bool)" );
   
@@ -219,7 +219,7 @@ double EgtExifIoEngine::destBearing( char * theRefference, bool * isValid )
  * \param isValid if the access to the picture was successful
  * \returns whether differential correction is applied to the GPS receiver.
  */
-int EgtExifIoEngine::differential( bool * isValid )
+int EgtGPSExifEngine::differential( bool * isValid )
 {
   EgtDebug( "entered differential(bool)" );
 
@@ -246,7 +246,7 @@ int EgtExifIoEngine::differential( bool * isValid )
  * \param isValid if the access to the picture was successful
  * \returns the direction of the image when it was captured. The range of values is from 0.00 to 359.99.
  */
-float EgtExifIoEngine::direction( char * theRefference, bool * isValid )
+float EgtGPSExifEngine::direction( char * theRefference, bool * isValid )
 {
   EgtDebug( "entered direction(char, bool)" );
   
@@ -290,7 +290,7 @@ float EgtExifIoEngine::direction( char * theRefference, bool * isValid )
  * \param isValid if the access to the picture was successful
  * \returns the distance to the destination point
  */
-double EgtExifIoEngine::destDistance( char * theUnit, bool * isValid )
+double EgtGPSExifEngine::destDistance( char * theUnit, bool * isValid )
 {
   EgtDebug( "entered destDistance(char, bool)" );
   
@@ -337,7 +337,7 @@ double EgtExifIoEngine::destDistance( char * theUnit, bool * isValid )
  * \param isValid if the access to the picture was successful
  * \returns the latitude of the destination point
  */
-double EgtExifIoEngine::destLatitude( bool * isValid )
+double EgtGPSExifEngine::destLatitude( bool * isValid )
 {
   EgtDebug( "entered destLatitude()" );
  
@@ -386,7 +386,7 @@ double EgtExifIoEngine::destLatitude( bool * isValid )
  * \param isValid if the access to the picture was successful
  * \returns the longitude of the destination point
  */
-double EgtExifIoEngine::destLongitude( bool * isValid )
+double EgtGPSExifEngine::destLongitude( bool * isValid )
 {
   EgtDebug( "entered destLongitude()" );
  
@@ -436,7 +436,7 @@ double EgtExifIoEngine::destLongitude( bool * isValid )
  * \returns the GPS DOP (data degree of precision). An HDOP value is written during two-dimensional measurement, and PDOP during
  * three-dimensional measurement.
  */
-double EgtExifIoEngine::gpsDOP( bool * isValid )
+double EgtGPSExifEngine::gpsDOP( bool * isValid )
 {
   EgtDebug( "entered gpsDOP(bool)" );
 
@@ -462,7 +462,7 @@ double EgtExifIoEngine::gpsDOP( bool * isValid )
 /*!
  * \returns whether the image contains gps exif metadata or not
  */
-bool EgtExifIoEngine::hasGpsExif()
+bool EgtGPSExifEngine::hasGpsExif()
 {
   return cvHasGpsExif;
 }
@@ -470,7 +470,7 @@ bool EgtExifIoEngine::hasGpsExif()
 /*!
  * \returns whether the image is valid or not
  */
-bool EgtExifIoEngine::isValidImage()
+bool EgtGPSExifEngine::isValidImage()
 {
   return cvIsValidImage;
 }
@@ -478,7 +478,7 @@ bool EgtExifIoEngine::isValidImage()
 /*!
  * \returns A message with the last error occured
  */
-QString EgtExifIoEngine::lastError() 
+QString EgtGPSExifEngine::lastError() 
 { 
   return cvLastError; 
 }
@@ -487,7 +487,7 @@ QString EgtExifIoEngine::lastError()
  *\param a boolean that indicates whether the operation was successful or not.
  * \returns the latitude of the current image
  */
-double EgtExifIoEngine::latitude( bool * isValid )
+double EgtGPSExifEngine::latitude( bool * isValid )
 {
   EgtDebug( "entered" );
   
@@ -538,7 +538,7 @@ double EgtExifIoEngine::latitude( bool * isValid )
 /*!
  * \returns the longitude of the current image
  */
-double EgtExifIoEngine::longitude( bool * isValid )
+double EgtGPSExifEngine::longitude( bool * isValid )
 {  
   EgtDebug( "entered" );
  
@@ -589,7 +589,7 @@ double EgtExifIoEngine::longitude( bool * isValid )
  * \returns the geodetic survey data used by the GPS receiver. If the survey data is restricted to Japan, the value of this tag is
  * "TOKYO" or "WGS-84".
  */
-QString EgtExifIoEngine::mapDatum( bool * isValid )
+QString EgtGPSExifEngine::mapDatum( bool * isValid )
 {
   EgtDebug( "entered mapDatum(bool)" );
 
@@ -615,7 +615,7 @@ QString EgtExifIoEngine::mapDatum( bool * isValid )
  *\returns the GPS measurement mode. "2" means two-dimensional measurement and "3" means three-dimensional measurement is in
  * progress.
  */
-QString EgtExifIoEngine::measureMode( bool * isValid )
+QString EgtGPSExifEngine::measureMode( bool * isValid )
 {
   EgtDebug( "entered measureMode(bool)" );
 
@@ -641,7 +641,7 @@ QString EgtExifIoEngine::measureMode( bool * isValid )
  *\returns A character string recording the name of the method used for location finding. The first byte indicates the character
  * code used, and this is followed by the name of the method.
  */
-QString EgtExifIoEngine::processingMethod( bool * isValid )
+QString EgtGPSExifEngine::processingMethod( bool * isValid )
 {
   EgtDebug( "entered processingMethod(bool)" );
 
@@ -663,25 +663,14 @@ QString EgtExifIoEngine::processingMethod( bool * isValid )
 }
 
 
-QVariant EgtExifIoEngine::readTag ( QString theTag, bool * isValid )
-{
-  //TODO: make compare case insensitive
-  if(QString::compare( theTag, "Egt.Latitude" ) == 0)
-  {
-    return QVariant( latitude( isValid ) );
-  }
-  else if( QString::compare( theTag, "Egt.Longitude" ) == 0)
-    return QVariant( longitude( isValid ) );
-  else
-    return QVariant( "" );
-}
+
 /*!
  *\param isValid if the access to the picture was successful
  *\returns the GPS satellites used for measurements. This tag can be used to describe the number of satellites, their ID number,
  * angle of elevation, azimuth, SNR and other information in ASCII notation. The format is not specified. If the GPS receiver is
  * incapable of taking measurements, value of the tag is set to NULL.
  */
-QString EgtExifIoEngine::satellites( bool * isValid )
+QString EgtGPSExifEngine::satellites( bool * isValid )
 {
   EgtDebug( "entered satellites(bool)" );
 
@@ -705,7 +694,7 @@ QString EgtExifIoEngine::satellites( bool * isValid )
 /*!
  * \param theImageFilename Absolute path to the image file that is going to be read/written
  */
-void EgtExifIoEngine::setFile( QString theImageFilename )
+void EgtGPSExifEngine::setFile( QString theImageFilename )
 {
 
   cvImageFileName = theImageFilename;
@@ -765,7 +754,7 @@ void EgtExifIoEngine::setFile( QString theImageFilename )
  * angle of elevation, azimuth, SNR and other information in ASCII notation. The format is not specified. If the GPS receiver is
  * incapable of taking measurements, value of the tag is set to NULL.
  */
-double EgtExifIoEngine::speed( char *theUnit, bool * isValid )
+double EgtGPSExifEngine::speed( char *theUnit, bool * isValid )
 {
   EgtDebug( "entered speed(char, bool)" );
   
@@ -811,7 +800,7 @@ double EgtExifIoEngine::speed( char *theUnit, bool * isValid )
  *\returns the status of the GPS receiver when the image is recorded. "A" means measurement is in progress, and "V" means the
  * measurement is Interoperability.
  */
-QString EgtExifIoEngine::status( bool * isValid )
+QString EgtGPSExifEngine::status( bool * isValid )
 {
   EgtDebug( "entered satellites(bool)" );
 
@@ -836,7 +825,7 @@ QString EgtExifIoEngine::status( bool * isValid )
  *\param isValid if the access to the picture was successful
  *\returns the timStamp
  */
-QString EgtExifIoEngine::timeStamp( bool * isValid )
+QString EgtGPSExifEngine::timeStamp( bool * isValid )
 {
   EgtDebug( "entered timeStamp(bool)" );
  
@@ -863,7 +852,7 @@ QString EgtExifIoEngine::timeStamp( bool * isValid )
  *\param isValid if the access to the picture was successful
  *\returns the direction of GPS receiver movement. The range of values is from 0.00 to 359.99.
  */
-double EgtExifIoEngine::track(char * theRefference, bool * isValid )
+double EgtGPSExifEngine::track(char * theRefference, bool * isValid )
 {
   EgtDebug( "entered track(char, bool)" );
   
@@ -909,7 +898,7 @@ double EgtExifIoEngine::track(char * theRefference, bool * isValid )
  * present. (Note: The <GPSVersionID> tag is given in bytes, unlike the <ExifVersion> tag. When the version is 2.0.0.0, the tag
  * value is 02000000.H).
  */
-int EgtExifIoEngine::versionID( bool * isValid )
+int EgtGPSExifEngine::versionID( bool * isValid )
 {
   EgtDebug( "entered versionID(bool)" );
 
@@ -936,7 +925,7 @@ int EgtExifIoEngine::versionID( bool * isValid )
  *\param theValue a double containing the altitude to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeAltitude( double theValue )
+bool EgtGPSExifEngine::writeAltitude( double theValue )
 {
   EgtDebug( "entered writeAltitude(double)" );
   bool ok; 
@@ -965,7 +954,7 @@ bool EgtExifIoEngine::writeAltitude( double theValue )
  *\param theValue a double containing the area information to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeAreaInformation( QString theValue )
+bool EgtGPSExifEngine::writeAreaInformation( QString theValue )
 {
   return write( "Exif.GPSInfo.GPSAreaInformation", theValue, "Undefined" );
 }
@@ -974,7 +963,7 @@ bool EgtExifIoEngine::writeAreaInformation( QString theValue )
  *\param theValue a double containing the date stamp to be written to the exif metadata.The format is "YYYY:MM:DD"
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeDateStamp( QString theValue )
+bool EgtGPSExifEngine::writeDateStamp( QString theValue )
 {
   return write( "Exif.GPSInfo.GPSDateStamp", theValue, "Ascii" );
 }
@@ -984,7 +973,7 @@ bool EgtExifIoEngine::writeDateStamp( QString theValue )
  *\param theRefference a char that indicates the refference(geographic north pole(T) or magnetic noth pole(M))
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeDestBearing( float theValue, char theRefference )
+bool EgtGPSExifEngine::writeDestBearing( float theValue, char theRefference )
 {
   EgtDebug( "entered writeDestBearing(float)" );
   bool ok; 
@@ -1014,7 +1003,7 @@ bool EgtExifIoEngine::writeDestBearing( float theValue, char theRefference )
  *\param theValue an integer containing the differential correction to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeDifferential( int theValue )
+bool EgtGPSExifEngine::writeDifferential( int theValue )
 {
   return write( "Exif.GPSInfo.GPSDifferential", QString( QString::number( theValue ) ), "Short" );
 }
@@ -1024,7 +1013,7 @@ bool EgtExifIoEngine::writeDifferential( int theValue )
  *\param theRefference a char that indicates the refference(geographic north pole(T) or magnetic noth pole(M))
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeDirection( float theValue, char theRefference )
+bool EgtGPSExifEngine::writeDirection( float theValue, char theRefference )
 {
   EgtDebug( "entered writeDirection(float)" );
   bool ok; 
@@ -1054,7 +1043,7 @@ bool EgtExifIoEngine::writeDirection( float theValue, char theRefference )
  *\param theUnit a char that indicates the unit used(Kilometers, Miles or Knots)
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeDestDistance( double theValue, char theUnit )
+bool EgtGPSExifEngine::writeDestDistance( double theValue, char theUnit )
 {
   EgtDebug( "entered :writeDestDistance(double)" );
   bool ok; 
@@ -1099,7 +1088,7 @@ bool EgtExifIoEngine::writeDestDistance( double theValue, char theUnit )
  *\param theRefference a char that indicates the refference(geographic north pole(T) or magnetic noth pole(M))
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeDestLatitude( double theValue, char theRefference )
+bool EgtGPSExifEngine::writeDestLatitude( double theValue, char theRefference )
 {
   EgtDebug( "entered writeDestLatitude(double)" );
   bool ok; 
@@ -1129,7 +1118,7 @@ bool EgtExifIoEngine::writeDestLatitude( double theValue, char theRefference )
  *\param theRefference a char that indicates the refference(geographic north pole(T) or magnetic noth pole(M))
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeDestLongitude( double theValue, char theRefference )
+bool EgtGPSExifEngine::writeDestLongitude( double theValue, char theRefference )
 {
   EgtDebug( "entered writeDestLongitude(double)" );
   bool ok; 
@@ -1158,7 +1147,7 @@ bool EgtExifIoEngine::writeDestLongitude( double theValue, char theRefference )
  *\param theValue a double containing the GPS DOP to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeGpsDOP( double theValue )
+bool EgtGPSExifEngine::writeGpsDOP( double theValue )
 {
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
@@ -1169,7 +1158,7 @@ bool EgtExifIoEngine::writeGpsDOP( double theValue )
  * \param theValue Latitude represented as a double value, to be written in the exif metadata
  * \returns Whether the operation was successful or not
  */
-bool EgtExifIoEngine::writeLatitude(double theValue)
+bool EgtGPSExifEngine::writeLatitude(double theValue)
 {
   EgtDebug( "entered writeLatitude(double)" );
   bool ok; 
@@ -1200,7 +1189,7 @@ bool EgtExifIoEngine::writeLatitude(double theValue)
  * \param theValue QString representing the Latitude to be written in the exif metadata
  * \returns Whether the operation was successful or not
  */
-bool EgtExifIoEngine::writeLatitude( QString theValue )
+bool EgtGPSExifEngine::writeLatitude( QString theValue )
 {
   EgtDebug( "entered writeLatitude(QString)" );
   bool ok; 
@@ -1215,7 +1204,7 @@ bool EgtExifIoEngine::writeLatitude( QString theValue )
  * \param theValue Longitude represented as a double value, to be written in the exif metadata
  * \returns Whether the operation was successful or not
  */
-bool EgtExifIoEngine::writeLongitude( double theValue )
+bool EgtGPSExifEngine::writeLongitude( double theValue )
 {
   EgtDebug( "entered writeLongitude(double)" );
   bool ok; 
@@ -1247,7 +1236,7 @@ bool EgtExifIoEngine::writeLongitude( double theValue )
  * \param theValue QString representing the Longitude to be written in the exif metadata
  * \returns Whether the operation was successful or not
  */
-bool EgtExifIoEngine::writeLongitude( QString theValue )
+bool EgtGPSExifEngine::writeLongitude( QString theValue )
 {
   EgtDebug( "entered writeLongitude(QString)" );
   bool ok; 
@@ -1262,7 +1251,7 @@ bool EgtExifIoEngine::writeLongitude( QString theValue )
  *\param theValue a QString containing the geodetic survey data used by the GPS receiver to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeMapDatum( QString theValue )
+bool EgtGPSExifEngine::writeMapDatum( QString theValue )
 {
   return write( "Exif.GPSInfo.GPSMapDatum", theValue, "Ascii" );
 }
@@ -1271,7 +1260,7 @@ bool EgtExifIoEngine::writeMapDatum( QString theValue )
  *\param theValue a QString containing the measure mode to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeMeasureMode( QString theValue)
+bool EgtGPSExifEngine::writeMeasureMode( QString theValue)
 {
   return write( "Exif.GPSInfo.GPSMeasureMode", theValue, "Ascii" );
 }
@@ -1280,7 +1269,7 @@ bool EgtExifIoEngine::writeMeasureMode( QString theValue)
  *\param theValue a QString containing the processing method to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeProcessingMethod( QString theValue)
+bool EgtGPSExifEngine::writeProcessingMethod( QString theValue)
 {
   return write( "Exif.GPSInfo.GPSProcessingMethod", theValue, "Undefined" );
 }
@@ -1289,7 +1278,7 @@ bool EgtExifIoEngine::writeProcessingMethod( QString theValue)
  *\param theValue a QString containing the satellites used for measurements to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeSatellites( QString theValue )
+bool EgtGPSExifEngine::writeSatellites( QString theValue )
 {
   return write( "Exif.GPSInfo.GPSSatellites", theValue, "Ascii" );
 }
@@ -1299,7 +1288,7 @@ bool EgtExifIoEngine::writeSatellites( QString theValue )
   *\param theUnit a char that indicates the units of the measurement(Kilometers, Miles or Knots)
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeSpeed( double theValue, char theUnit )
+bool EgtGPSExifEngine::writeSpeed( double theValue, char theUnit )
 {
   
   EgtDebug( "entered :writeSpeed(double)" );
@@ -1343,17 +1332,17 @@ bool EgtExifIoEngine::writeSpeed( double theValue, char theUnit )
  *\param theValue a QString containing the status of the GPS receiver to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeStatus( QString theValue )
+bool EgtGPSExifEngine::writeStatus( QString theValue )
 {
   return write( "Exif.GPSInfo.GPSStatus", theValue, "Ascii" );
 }
 
-bool EgtExifIoEngine::writeTag( QString theTag, QString theValue )
+bool EgtGPSExifEngine::writeTag( QString theTag, QString theValue )
 {
   //TODO: make compare case insensitive
-  if(QString::compare( theTag, "Egt.Latitude" ) == 0)
+  if(QString::compare( theTag, "Egt.Latitude" ,Qt::CaseInsensitive ) == 0)
     return writeLatitude( theValue );
-  else if(QString::compare( theTag, "Egt.Longitude" ) == 0)
+  else if(QString::compare( theTag, "Egt.Longitude" ,Qt::CaseInsensitive  ) == 0)
     return writeLongitude( theValue );
   else
     return false;
@@ -1363,7 +1352,7 @@ bool EgtExifIoEngine::writeTag( QString theTag, QString theValue )
  *\param theValue a QString containing the time stamp to be written to the exif metadata. the format is ""hh:mm:ss"
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeTimeStamp( QString theString )
+bool EgtGPSExifEngine::writeTimeStamp( QString theString )
 {
   EgtDebug( "entered writeTimeStamp(QString)" );
   int lvValue1 = 0;
@@ -1406,7 +1395,7 @@ bool EgtExifIoEngine::writeTimeStamp( QString theString )
  *\param theRefference a char that indicates what refference was used (Geographical norht pole or magnetical north pole)
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeTrack( float theValue, char theRefference )
+bool EgtGPSExifEngine::writeTrack( float theValue, char theRefference )
 {
   EgtDebug( "entered writeTrack(float)" );
   bool ok; 
@@ -1435,7 +1424,7 @@ bool EgtExifIoEngine::writeTrack( float theValue, char theRefference )
  *\param theValue a integer containing the version of GPS to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
-bool EgtExifIoEngine::writeVersionID( int theValue )
+bool EgtGPSExifEngine::writeVersionID( int theValue )
 {
   return write( "Exif.GPSInfo.GPSVersionID", QString::number( theValue ), "Byte" );
 }
@@ -1450,7 +1439,7 @@ bool EgtExifIoEngine::writeVersionID( int theValue )
  * \param theDegrees A QString that represents the decimal degrees to be converted to rational format
  * \returns A QString containing the rational value obtained
  */
-QString EgtExifIoEngine::convertToRational(QString theDegrees)
+QString EgtGPSExifEngine::convertToRational(QString theDegrees)
 {
 	bool ok;
 
@@ -1478,183 +1467,3 @@ QString EgtExifIoEngine::convertToRational(QString theDegrees)
 	return QString(lvTextDegrees + "/1" + " " +lvTextMinutes+ "/1"+ " " +lvTextSeconds+ "/99999");
 }
 
-/*!
- * \param theKey the key to be searched within the exif data
- * \returns the Value that has been readen from the exif data 
- */
-const Exiv2::Value& EgtExifIoEngine::read(QString theKey)
-{
-  EgtDebug( "entered" );
-  
-  if( isValidImage() )
-  {
-    try 
-    {
-      EgtDebug( "Valid image, reading..." );
-      cvImage->readMetadata();
-      Exiv2::ExifKey lvKey( theKey.toStdString() );
-      Exiv2::ExifData::iterator it = cvImage->exifData().findKey( lvKey );
-      if( it == cvImage->exifData().end() )
-      {
-        cvLastError = QString( "key ["+ theKey + "] no found" );
-        EgtDebug( QString( "key ["+ theKey + "] no found" ) );
-        return cvNotValidValue;
-      }
-
-      EgtDebug( QString( "key ["+ theKey + "] found" ) );
-      EgtDebug( QString( "Data Type ["+ QString(it->typeName()) +"]" ) );
-      
-      return it->value();
-    }
-    catch (Exiv2::AnyError& e)
-    {
-      cvLastError = QString( "Error caught ["+ QString( e.what() ) +"]" ) ;
-      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
-      return cvNotValidValue;
-    }
-  }
-  
-  EgtDebug( "Image is not valid" );
-  return cvNotValidValue; 
-}
-
-/*!
- * \param theKey the key to be searched within the exif data
- * \returns A QString that represents the readen value 
- */
-QString EgtExifIoEngine::readKeyValueAsString(QString theKey)
-{
-  EgtDebug( "entered" );
-  if( isValidImage() )
-  {
-    try 
-    {
-      EgtDebug( "Valid image, reading..." );
-      cvImage->readMetadata();
-      Exiv2::ExifKey lvKey( theKey.toStdString() );
-      Exiv2::ExifData::iterator it = cvImage->exifData().findKey( lvKey );
-      if( it == cvImage->exifData().end() )
-      {
-        cvLastError = QString( "key ["+ theKey + "] no found" );
-        EgtDebug( QString( "key ["+ theKey + "] no found" ) );
-        return "";
-      }
-
-      EgtDebug( QString( "key ["+ theKey + "] found" ) );
-      QString lvIteratorValue( it->value().toString().c_str() );
-      return lvIteratorValue;
-    }
-    catch (Exiv2::AnyError& e)
-    {
-      cvLastError = QString( "Error caught ["+ QString( e.what() ) +"]" );
-      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
-      return "";
-    }
-  }
-  
-  EgtDebug( "Image is not valid" );
-  return "";
-}
-
-/*!
- * \param theKey the key to be searched within the exif data
- * \param theString String containing the data to be written
- * \param theDefaultType The data type of what it is going to be written
- * \returns Whether the operation was succesful or not 
- */
-bool EgtExifIoEngine::write( QString theKey, QString theString, QString theDefaultType )
-{
-  EgtDebug( "entered" );
-  
-  try 
-  {
-    cvImage->readMetadata();
-    Exiv2::ExifData &exifData = cvImage->exifData();
-
-    Exiv2::ExifKey key( theKey.toStdString() );
-
-    QString lvTypeName = exifData[theKey.toStdString()].typeName(); 
-
-    if( QString::compare( lvTypeName, "Invalid" ,Qt::CaseInsensitive ) == 0 ) 
-      lvTypeName = theDefaultType;
-
-    EgtDebug( QString( "Data type ["+ lvTypeName +"]" ) );
-    
-    Exiv2::ExifData::iterator pos = exifData.findKey(key);
-    if (pos != exifData.end()) //If the data exist, we first delete it from the Exif data container
-      exifData.erase(pos);
-
-
-    if( QString::compare( lvTypeName, "Ascii" ,Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::asciiString );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "Rational",Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedRational );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "SRational",Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedRational );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "Short" ,Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedShort );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "SShort" ,Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedShort );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "Byte" ,Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedByte );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "SByte" ,Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedByte );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "Long" ,Qt::CaseInsensitive ) == 0)
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedLong );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "SLong" ,Qt::CaseInsensitive ) == 0)
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedLong  );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else //Undefined
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::undefined );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-      
-    // Writing the exif data to the image file
-    cvImage->setExifData( exifData );
-    cvImage->writeMetadata();
-    return true;      
-  }
-  catch ( Exiv2::AnyError& e )
-  {
-    cvLastError = QString( "Unable to write to file: " + cvImageFileName);
-    EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ));
-    return false;
-  }
-}
