@@ -665,12 +665,15 @@ QString EgtExifIoEngine::processingMethod( bool * isValid )
 
 QVariant EgtExifIoEngine::readTag ( QString theTag, bool * isValid )
 {
+  //TODO: make compare case insensitive
   if(QString::compare( theTag, "Egt.Latitude" ) == 0)
   {
-    return QVariant(latitude( isValid ));
+    return QVariant( latitude( isValid ) );
   }
-  if(QString::compare( theTag, "Egt.Longitude" ) == 0)
-    return QVariant(longitude( isValid ));
+  else if( QString::compare( theTag, "Egt.Longitude" ) == 0)
+    return QVariant( longitude( isValid ) );
+  else
+    return QVariant( "" );
 }
 /*!
  *\param isValid if the access to the picture was successful
@@ -927,14 +930,6 @@ int EgtExifIoEngine::versionID( bool * isValid )
       *isValid =true;
   
   return lvDifferential;
-}
-
-bool EgtExifIoEngine::writeTag( QString theTag, QString theValue )
-{
-  if(QString::compare( theTag, "Egt.Latitude" ) == 0)
-    return writeLatitude( theValue );
-  if(QString::compare( theTag, "Egt.Longitude" ) == 0)
-    return writeLongitude( theValue );
 }
 
 /*!
@@ -1351,6 +1346,17 @@ bool EgtExifIoEngine::writeSpeed( double theValue, char theUnit )
 bool EgtExifIoEngine::writeStatus( QString theValue )
 {
   return write( "Exif.GPSInfo.GPSStatus", theValue, "Ascii" );
+}
+
+bool EgtExifIoEngine::writeTag( QString theTag, QString theValue )
+{
+  //TODO: make compare case insensitive
+  if(QString::compare( theTag, "Egt.Latitude" ) == 0)
+    return writeLatitude( theValue );
+  else if(QString::compare( theTag, "Egt.Longitude" ) == 0)
+    return writeLongitude( theValue );
+  else
+    return false;
 }
 
 /*!
