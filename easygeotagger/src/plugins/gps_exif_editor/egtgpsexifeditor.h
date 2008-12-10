@@ -28,6 +28,7 @@
 #include "egtexiftagcontrols.h"
 #include "egtplugininterface.h"
 
+#include <QPushButton>
 #include <QModelIndex>
 #include <QDockWidget>
 #include <QString>
@@ -76,6 +77,9 @@ class EgtGpsExifEditor: public EgtPluginInterface
     
     /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel() { cvConfigurationControls.setVisible( true ); }
+
+  private slots:
+    void cvSaveButton_clicked();
   
   private:
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
@@ -92,7 +96,9 @@ class EgtGpsExifEditor: public EgtPluginInterface
 
     QList<EgtExifTagControls*> cvTagControls;
     QWidget cvEditorControls;
-    QWidget cvConfigurationControls;
+    QWidget cvConfigurationControls; //TODO make this a dialog rather than a widget
+
+    QPushButton cvSaveButton;
 
 };
 #endif

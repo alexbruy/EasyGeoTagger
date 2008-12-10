@@ -75,10 +75,16 @@ bool EgtExifTagControls::isEnabled()
   return cvEnabled.isChecked();
 }
 
+void EgtExifTagControls::setEnabled( bool enabled )
+{
+  cvEnabled.setChecked( enabled );
+}
+
 void EgtExifTagControls::setValue( QString const &theValue )
 {
     cvCachedValue = theValue;
     cvKeyValue.setText( theValue );
+    cvDiscardButton.setEnabled( false );
 }
 
 void EgtExifTagControls::setValue( QVariant const &theValue )
@@ -101,8 +107,11 @@ void EgtExifTagControls::setVisible( bool show )
 
 
 
-
-
+/*
+ *
+ * SIGNAL and SLOTS
+ *
+ */
 void EgtExifTagControls::cvDiscardButton_clicked()
 {
     cvKeyValue.setText( cvCachedValue );
@@ -114,10 +123,12 @@ void EgtExifTagControls::cvEnabled_stateChanged( int theState )
   if( Qt::Checked == theState )
   {
     cvEditorControls.setVisible( true );
+    emit controlEnabled( cvKey );
   }
   else
   {
     cvEditorControls.setVisible( false );
+    emit controlDisabled( cvKey );
   }
 }
 

@@ -43,10 +43,17 @@ class EgtExifTagControls : public QObject
     QWidget* configurationControls() { return &cvConfigurationControls; }
     QWidget* editorControls() { return &cvEditorControls; }
     bool isEnabled();
+    void setEnabled( bool );
+    QString key() { return QString( cvKey ); }
     void setValue( QString const &theValue );
     void setValue( QVariant const &theValue );
     void setVisible( bool show );
-    QString key() { return QString( cvKey ); }
+    QString value() { return cvKeyValue.text(); }
+
+
+  signals:
+    void controlEnabled( QString );
+    void controlDisabled( QString );
 
   private slots:
     void cvDiscardButton_clicked();

@@ -26,6 +26,7 @@
 #include "egtpathbuilder.h"
 #include "egtlogger.h"
 
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QMainWindow>
 #include <QPushButton>
@@ -67,8 +68,20 @@ EgtGpsExifEditor::EgtGpsExifEditor()
     cvConfigurationControls.layout()->addWidget( lvTagControls->configurationControls() );
   //end
 
+  //Add the save button
+  QWidget* lvPanel = new QWidget();
+  lvPanel->setLayout( new QHBoxLayout() );
+  lvPanel->layout()->setContentsMargins( 1, 1, 1, 1 );
+  ((QHBoxLayout*)lvPanel->layout())->insertStretch(-1, 1);
+  cvSaveButton.setText( tr( "Save" ) );
+  lvPanel->layout()->addWidget( &cvSaveButton );
+  connect( &cvSaveButton, SIGNAL( clicked() ), this, SLOT( cvSaveButton_clicked() ) );
+  cvEditorControls.layout()->addWidget( lvPanel );
+
+  //Add the spacer to push all the objects to the top
   ((QVBoxLayout*)cvConfigurationControls.layout())->insertStretch(-1, 1);
   ((QVBoxLayout*)cvEditorControls.layout())->insertStretch(-1, 1);
+
   cvDock.setWidget( &cvEditorControls );
 }
 
@@ -133,6 +146,21 @@ void EgtGpsExifEditor::acceptCoordinates( double theLongitude, double theLatitud
 {
   if( cvExifIoEngine.isValidImage() )
   {
+  }
+}
+
+void EgtGpsExifEditor::cvSaveButton_clicked()
+{
+  QList<EgtExifTagControls*>::iterator lvIterator = cvTagControls.begin();
+  while( lvIterator != cvTagControls.end() )
+  {
+    if( (*lvIterator)->isEnabled() )
+    {
+      EgtDebug( QString("Writing value to image for key: %1") .arg( (*lvIterator)->key() ) );
+      cvExifIoEngine.writeTag( (*lvIterator)->key(),  (*lvIterator)->value() );
+      (*lvIterator)->setValue( cvExifIoEngine.readTag( (*lvIterator)->key() ) );
+    }
+    lvIterator++;
   }
 }
 
