@@ -1,5 +1,5 @@
 /*
-** File: egtexiftagcontrols.cpp
+** File: egtexiftagcontrol.cpp
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-12-09
 **
@@ -21,7 +21,7 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#include "egtexiftagcontrols.h"
+#include "egtexiftagcontrol.h"
 #include "egtlogger.h"
 
 #include <QIcon>
@@ -30,7 +30,7 @@
 #include <QMessageBox>
 #include <QHBoxLayout>
 
-EgtExifTagControls::EgtExifTagControls( QString theKey, QString theDisplayName )
+EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName )
 {
     cvDisplayName = theDisplayName;
     cvCachedValue = "";
@@ -41,7 +41,7 @@ EgtExifTagControls::EgtExifTagControls( QString theKey, QString theDisplayName )
     cvEditorControls.layout()->setContentsMargins( 1, 1, 1, 1 );
 
     QLabel* lvLabel  = new QLabel(cvDisplayName);
-    lvLabel->setMinimumWidth( 150 );
+    lvLabel->setMinimumWidth( 100 );
     cvEditorControls.layout()->addWidget( lvLabel );
 
     cvKeyValue.setMinimumWidth( 150 );
@@ -57,37 +57,36 @@ EgtExifTagControls::EgtExifTagControls( QString theKey, QString theDisplayName )
 
     //Build the configuration options
     cvConfigurationControls.setLayout( new QHBoxLayout() );
-    cvConfigurationControls.setWindowTitle( tr( "Configure" ) );
     cvConfigurationControls.layout()->setContentsMargins( 1, 1, 1, 1 );
 
     cvEnabled.setChecked( true );
     cvConfigurationControls.layout()->addWidget( &cvEnabled );
 
-    lvLabel  = new QLabel(cvDisplayName);
+    lvLabel  = new QLabel( cvDisplayName );
     lvLabel->setMinimumWidth( 150 );
     cvConfigurationControls.layout()->addWidget( lvLabel );
     connect( &cvEnabled, SIGNAL( stateChanged( int ) ), this, SLOT( cvEnabled_stateChanged( int ) ) );
 
 }
 
-bool EgtExifTagControls::isEnabled()
+bool EgtExifTagControl::isEnabled()
 {
   return cvEnabled.isChecked();
 }
 
-void EgtExifTagControls::setEnabled( bool enabled )
+void EgtExifTagControl::setEnabled( bool enabled )
 {
   cvEnabled.setChecked( enabled );
 }
 
-void EgtExifTagControls::setValue( QString const &theValue )
+void EgtExifTagControl::setValue( QString const &theValue )
 {
     cvCachedValue = theValue;
     cvKeyValue.setText( theValue );
     cvDiscardButton.setEnabled( false );
 }
 
-void EgtExifTagControls::setValue( QVariant const &theValue )
+void EgtExifTagControl::setValue( QVariant const &theValue )
 {
   if( QVariant::Double == theValue.type() )
   {
@@ -100,7 +99,7 @@ void EgtExifTagControls::setValue( QVariant const &theValue )
 
 }
 
-void EgtExifTagControls::setVisible( bool show )
+void EgtExifTagControl::setVisible( bool show )
 {
     cvEditorControls.setVisible( show );
 }
@@ -112,13 +111,13 @@ void EgtExifTagControls::setVisible( bool show )
  * SIGNAL and SLOTS
  *
  */
-void EgtExifTagControls::cvDiscardButton_clicked()
+void EgtExifTagControl::cvDiscardButton_clicked()
 {
     cvKeyValue.setText( cvCachedValue );
     cvDiscardButton.setEnabled( false );
 }
 
-void EgtExifTagControls::cvEnabled_stateChanged( int theState )
+void EgtExifTagControl::cvEnabled_stateChanged( int theState )
 {
   if( Qt::Checked == theState )
   {
@@ -132,7 +131,7 @@ void EgtExifTagControls::cvEnabled_stateChanged( int theState )
   }
 }
 
-void EgtExifTagControls::cvKeyValue_textEdited( QString theValue )
+void EgtExifTagControl::cvKeyValue_textEdited( QString theValue )
 {
   cvDiscardButton.setEnabled( true );
 }

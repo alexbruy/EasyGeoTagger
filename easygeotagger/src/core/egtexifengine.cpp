@@ -72,7 +72,7 @@ bool EgtExifEngine::isValidImage()
  * \param theKey the key to be searched within the exif data
  * \returns the Value that has been readen from the exif data 
  */
-const Exiv2::Value& EgtExifEngine::read(QString theKey)
+const Exiv2::Value& EgtExifEngine::readTag(QString theKey)
 {
   EgtDebug( "entered" );
   
@@ -211,7 +211,7 @@ void EgtExifEngine::setFile( QString theImageFilename )
  * \param theDefaultType The data type of what it is going to be written
  * \returns Whether the operation was succesful or not 
  */
-bool EgtExifEngine::write( QString theKey, QString theString, QString theDefaultType )
+bool EgtExifEngine::writeTag( QString theKey, QString theString, QString theDefaultType )
 {
   EgtDebug( "entered" );
   
@@ -308,3 +308,10 @@ bool EgtExifEngine::write( QString theKey, QString theString, QString theDefault
   }
 }
 
+void EgtExifEngine::addKey( QString theKey, QString theCommonName )
+{
+  KeyMap lvMap;
+  lvMap.key = theKey;
+  lvMap.commonName = theCommonName;
+  cvKeys.append( lvMap );
+}

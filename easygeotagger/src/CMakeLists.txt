@@ -14,7 +14,8 @@ SET( EGT_INSTALL_HDRS
      app/egtplugininterface.h
      app/egtpythonconsolebase.h
 
-     core/egtexifioengine.h
+     core/egtexifengine.h
+     core/egtgpsexifengine.h
      core/egtimageengine.h
      core/egtlogger.h
      core/egtpathbuilder.h
@@ -23,7 +24,8 @@ SET( EGT_INSTALL_HDRS
    )
 
 SET( EGT_CORE_SRCS
-     core/egtexifioengine.cpp
+     core/egtexifengine.cpp
+     core/egtgpsexifengine.cpp
      core/egtimageengine.cpp
      core/egtpathbuilder.cpp
      core/egtrawimagereader.cpp

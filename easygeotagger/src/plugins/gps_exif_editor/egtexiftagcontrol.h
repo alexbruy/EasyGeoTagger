@@ -1,5 +1,5 @@
 /*
-** File: egtexiftagcontrols.h
+** File: egtexiftagcontrol.h
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-12-09
 **
@@ -21,24 +21,25 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTEXIFTAGCORCONTROLS_H
-#define EGTEXIFTAGCORCONTROLS_H
+#ifndef EGTEXIFTAGCORCONTROL_H
+#define EGTEXIFTAGCORCONTROL_H
 
 #include <QWidget>
 #include <QString>
 #include <QObject>
 #include <QVariant>
 #include <QLineEdit>
-#include <QPushButton>
 #include <QCheckBox>
+#include <QPushButton>
 
-class EgtExifTagControls : public QObject
+
+class EgtExifTagControl : public QObject
 {
 
   Q_OBJECT
 
   public:
-    EgtExifTagControls( QString, QString );
+    EgtExifTagControl( QString, QString );
 
     QWidget* configurationControls() { return &cvConfigurationControls; }
     QWidget* editorControls() { return &cvEditorControls; }

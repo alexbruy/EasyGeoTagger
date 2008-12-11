@@ -24,13 +24,14 @@
 #ifndef EGTGPSEXIFEDITOR_H
 #define EGTGPSEXIFEDITOR_H
 
-#include "egtexifioengine.h"
-#include "egtexiftagcontrols.h"
+#include "egtgpsexifengine.h"
+#include "egtexiftagcontrol.h"
 #include "egtplugininterface.h"
 
 #include <QPushButton>
 #include <QModelIndex>
 #include <QDockWidget>
+#include <QDialog>
 #include <QString>
 #include <QList>
 
@@ -80,13 +81,15 @@ class EgtGpsExifEditor: public EgtPluginInterface
 
   private slots:
     void cvSaveButton_clicked();
+    void controlDisabled( QString );
+    void controlEnabled( QString );
   
   private:
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
     QDockWidget cvDock;
     
     /*! \brief An instance of the EXIF reader writer */
-    EgtExifIoEngine cvExifIoEngine;
+    EgtGPSExifEngine cvExifEngine;
     
     /*! \brief Last file that sucessfully had GPS exif data extraced */
     QString cvLastFile;
@@ -94,9 +97,9 @@ class EgtGpsExifEditor: public EgtPluginInterface
     /*! \brief Slot that will update the fields with data a image file */
     void updateExifDisplay( QString );
 
-    QList<EgtExifTagControls*> cvTagControls;
+    QMap< QString, EgtExifTagControl* > cvTagControls;
     QWidget cvEditorControls;
-    QWidget cvConfigurationControls; //TODO make this a dialog rather than a widget
+    QDialog cvConfigurationControls;
 
     QPushButton cvSaveButton;
 

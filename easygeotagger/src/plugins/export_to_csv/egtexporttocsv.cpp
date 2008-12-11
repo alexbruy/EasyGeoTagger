@@ -22,7 +22,7 @@
 **
 **/
 #include "egtapplicationinterface.h"
-#include "egtexifioengine.h"
+#include "egtgpsexifengine.h"
 #include "egtexporttocsv.h"
 #include "egtpathbuilder.h"
 #include "egtlogger.h"
@@ -114,7 +114,7 @@ void EgtExportToCsv::run()
       int lvExportedImages = 0;
       int lvChildCount = 0;
 
-      EgtExifIoEngine lvExifIoEngine;
+      EgtGPSExifEngine lvExifEngine;
       QString lvImageFile;
       //Loop through the directory and examine each file
       while( cvCurrentIndex.child( lvChildCount, 0 ).isValid() )
@@ -122,10 +122,10 @@ void EgtExportToCsv::run()
         lvImageFile = lvPathBuilder.buildPath( cvCurrentIndex.child( lvChildCount, 0 ) );
         
         //If the file has exif data,then export it, otherwise skip it
-        lvExifIoEngine.setFile( lvImageFile );
-        if( lvExifIoEngine.hasGpsExif() )
+        lvExifEngine.setFile( lvImageFile );
+        if( lvExifEngine.hasGpsExif() )
         {
-          lvOutputWriter << lvExifIoEngine.longitude() << "," << lvExifIoEngine.latitude() << "," << lvImageFile << "\n";
+          lvOutputWriter << lvExifEngine.longitude() << "," << lvExifEngine.latitude() << "," << lvImageFile << "\n";
           lvExportedImages++;
         }
         lvChildCount++;

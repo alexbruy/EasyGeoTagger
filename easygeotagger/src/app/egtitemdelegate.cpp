@@ -22,7 +22,7 @@
 **
 **/
 #include "egtitemdelegate.h"
-#include "egtexifioengine.h"
+#include "egtgpsexifengine.h"
 
 #include <QPainter>
 #include <QPixmap>
@@ -63,10 +63,10 @@ void EgtItemDelegate::paint(QPainter* thePainter, const QStyleOptionViewItem& th
   //TODO: See if it is posisble to cache this data, tried but found the const to be problematic
   if(cvDisplayGpsExifAvailability && theIndex.column() == 0)
   {
-    EgtExifIoEngine lvExifIoEngine( theIndex );
-    if( lvExifIoEngine.isValidImage() )
+    EgtGPSExifEngine lvExifEngine( theIndex );
+    if( lvExifEngine.isValidImage() )
     {
-      if( lvExifIoEngine.hasGpsExif() )
+      if( lvExifEngine.hasGpsExif() )
       {
         QPixmap lvPixmap( lvViewOption.rect.x(),lvViewOption.rect.y() );
         lvPixmap.fill( QColor( 0,255,0,75 ) );

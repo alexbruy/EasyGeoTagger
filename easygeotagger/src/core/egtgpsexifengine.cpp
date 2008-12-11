@@ -35,23 +35,22 @@
 
 EgtGPSExifEngine::EgtGPSExifEngine() : EgtExifEngine()
 {
-  Exiv2::DataValue notvalid(Exiv2::invalidTypeId );
-  cvNotValidValue=  notvalid;
-  cvIsValidImage = false;
-  cvHasGpsExif = false;
+    addKey("Egt.GPS.Longitude", "Longitude");
+    addKey("Egt.GPS.Latitude", "Latitude");
+    addKey("Egt.GPS.Altitude", "Altitude");
+
+    cvDependencies["Egt.GPS.Longitude"] = "Egt.GPS.Latitude";
+    cvDependencies["Egt.GPS.Latitude"] = "Egt.GPS.Longitude";
 }
 
-EgtGPSExifEngine::EgtGPSExifEngine( QString theImageFilename )
+EgtGPSExifEngine::EgtGPSExifEngine( QString theImageFilename ) : EgtExifEngine( theImageFilename )
 {
-  EgtGPSExifEngine();
-  setFile( theImageFilename );
+    EgtGPSExifEngine();
 }
 
-EgtGPSExifEngine::EgtGPSExifEngine( const QModelIndex& theIndex )
+EgtGPSExifEngine::EgtGPSExifEngine( const QModelIndex& theIndex ) : EgtExifEngine( theIndex )
 {
-  EgtGPSExifEngine();
-  EgtPathBuilder cvPathBuilder;
-  setFile( cvPathBuilder.buildPath( theIndex ) );
+    EgtGPSExifEngine();
 }
 
 /*
@@ -68,7 +67,7 @@ double EgtGPSExifEngine::altitude( bool * isValid )
 {
   EgtDebug( "entered altitude(bool)" );
   
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSAltitudeRef" );
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSAltitudeRef" );
       
       
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
@@ -86,7 +85,7 @@ double EgtGPSExifEngine::altitude( bool * isValid )
   if( QString::compare( QString( lvValue.toString().c_str() ), "1" ) == 0 )
     lvSeaLevel = -1;
       
-  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSAltitude" );
+  const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSAltitude" );
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -119,7 +118,7 @@ QString EgtGPSExifEngine::areaInformation( bool * isValid )
 {
   EgtDebug( "entered areaInformation(bool)" );
 
-  const Exiv2::Value & lvValue = read( "Exif.GPSInfo.GPSAreaInformation" );
+  const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSAreaInformation" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -149,7 +148,7 @@ QString EgtGPSExifEngine::dateStamp( bool * isValid )
 {
   EgtDebug( "entered dateStamp(bool)" );
 
-  const Exiv2::Value & lvValue = read( "Exif.GPSInfo.GPSDateStamp" );
+  const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSDateStamp" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -179,7 +178,7 @@ double EgtGPSExifEngine::destBearing( char * theRefference, bool * isValid )
 {
   EgtDebug( "entered destBearing(bool)" );
   
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSDestBearingRef" );
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSDestBearingRef" );
       
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
   
@@ -196,7 +195,7 @@ double EgtGPSExifEngine::destBearing( char * theRefference, bool * isValid )
   else
     *theRefference = 'T';
       
-  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSDestBearing" );
+  const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSDestBearing" );
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -223,7 +222,7 @@ int EgtGPSExifEngine::differential( bool * isValid )
 {
   EgtDebug( "entered differential(bool)" );
 
-  const Exiv2::Value & lvValue = read( "Exif.GPSInfo.GPSDifferential" );
+  const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSDifferential" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -250,7 +249,7 @@ float EgtGPSExifEngine::direction( char * theRefference, bool * isValid )
 {
   EgtDebug( "entered direction(char, bool)" );
   
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSImgDirectionRef" );
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSImgDirectionRef" );
       
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
   
@@ -267,7 +266,7 @@ float EgtGPSExifEngine::direction( char * theRefference, bool * isValid )
   else
     *theRefference = 'T';
       
-  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSImgDirection" );
+  const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSImgDirection" );
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -294,7 +293,7 @@ double EgtGPSExifEngine::destDistance( char * theUnit, bool * isValid )
 {
   EgtDebug( "entered destDistance(char, bool)" );
   
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSDestDistanceRef" );
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSDestDistanceRef" );
       
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
   
@@ -314,7 +313,7 @@ double EgtGPSExifEngine::destDistance( char * theUnit, bool * isValid )
     else
       *theUnit = 'K';
       
-  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSDestDistance" );
+  const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSDestDistance" );
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -341,7 +340,7 @@ double EgtGPSExifEngine::destLatitude( bool * isValid )
 {
   EgtDebug( "entered destLatitude()" );
  
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSDestLatitudeRef" );   
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSDestLatitudeRef" );
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
 
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -356,7 +355,7 @@ double EgtGPSExifEngine::destLatitude( bool * isValid )
   if(QString::compare( QString(lvValue.toString().c_str()), "S" ) == 0)
     lvNorthing = -1;
       
-  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSDestLatitude" );
+  const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSDestLatitude" );
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -390,7 +389,7 @@ double EgtGPSExifEngine::destLongitude( bool * isValid )
 {
   EgtDebug( "entered destLongitude()" );
  
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSDestLongitudeRef" );   
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSDestLongitudeRef" );
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
 
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -405,7 +404,7 @@ double EgtGPSExifEngine::destLongitude( bool * isValid )
   if(QString::compare( QString(lvValue.toString().c_str()), "W" ) == 0)
     lvNorthing = -1;
       
-  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSDestLongitude" );
+  const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSDestLongitude" );
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -440,7 +439,7 @@ double EgtGPSExifEngine::gpsDOP( bool * isValid )
 {
   EgtDebug( "entered gpsDOP(bool)" );
 
-  const Exiv2::Value & lvValue = read( "Exif.GPSInfo.GPSDOP" );
+  const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSDOP" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -491,7 +490,7 @@ double EgtGPSExifEngine::latitude( bool * isValid )
 {
   EgtDebug( "entered" );
   
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLatitudeRef" );
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSLatitudeRef" );
       
       
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
@@ -509,7 +508,7 @@ double EgtGPSExifEngine::latitude( bool * isValid )
   if( QString::compare( QString( lvValue.toString().c_str() ), "S" ) == 0 )
     lvNorthing = -1;
       
-  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSLatitude" );
+  const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSLatitude" );
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -542,7 +541,7 @@ double EgtGPSExifEngine::longitude( bool * isValid )
 {  
   EgtDebug( "entered" );
  
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSLongitudeRef" );   
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSLongitudeRef" );
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
 
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -557,7 +556,7 @@ double EgtGPSExifEngine::longitude( bool * isValid )
   if(QString::compare( QString(lvValue.toString().c_str()), "W" ) == 0)
     lvNorthing = -1;
       
-  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSLongitude" );
+  const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSLongitude" );
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -593,7 +592,7 @@ QString EgtGPSExifEngine::mapDatum( bool * isValid )
 {
   EgtDebug( "entered mapDatum(bool)" );
 
-  const Exiv2::Value & lvValue = read( "Exif.GPSInfo.GPSMapDatum" );
+  const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSMapDatum" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -619,7 +618,7 @@ QString EgtGPSExifEngine::measureMode( bool * isValid )
 {
   EgtDebug( "entered measureMode(bool)" );
 
-  const Exiv2::Value & lvValue = read( "Exif.GPSInfo.GPSMeasureMode" );
+  const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSMeasureMode" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -645,7 +644,7 @@ QString EgtGPSExifEngine::processingMethod( bool * isValid )
 {
   EgtDebug( "entered processingMethod(bool)" );
 
-  const Exiv2::Value & lvValue = read( "Exif.GPSInfo.GPSProcessingMethod" );
+  const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSProcessingMethod" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -663,6 +662,23 @@ QString EgtGPSExifEngine::processingMethod( bool * isValid )
 }
 
 
+QVariant EgtGPSExifEngine::read( QString theTag, bool * isValid )
+{
+  //TODO: make compare case insensitive
+  if( QString::compare( theTag, "Egt.GPS.Altitude" ) == 0)
+  {
+    return QVariant( altitude( isValid ) );
+  }
+  else if( QString::compare( theTag, "Egt.GPS.Latitude" ) == 0 )
+  {
+    return QVariant( latitude( isValid ) );
+  }
+  else if( QString::compare( theTag, "Egt.GPS.Longitude" ) == 0)
+    return QVariant( longitude( isValid ) );
+  else
+    return QVariant( "" );
+}
+
 
 /*!
  *\param isValid if the access to the picture was successful
@@ -674,7 +690,7 @@ QString EgtGPSExifEngine::satellites( bool * isValid )
 {
   EgtDebug( "entered satellites(bool)" );
 
-  const Exiv2::Value & lvValue = read( "Exif.GPSInfo.GPSSatellites" );
+  const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSSatellites" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -758,7 +774,7 @@ double EgtGPSExifEngine::speed( char *theUnit, bool * isValid )
 {
   EgtDebug( "entered speed(char, bool)" );
   
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSSpeedRef" );
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSSpeedRef" );
       
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
   
@@ -778,7 +794,7 @@ double EgtGPSExifEngine::speed( char *theUnit, bool * isValid )
     else
       *theUnit = 'K';
       
-  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSSpeed" );
+  const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSSpeed" );
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -804,7 +820,7 @@ QString EgtGPSExifEngine::status( bool * isValid )
 {
   EgtDebug( "entered satellites(bool)" );
 
-  const Exiv2::Value & lvValue = read( "Exif.GPSInfo.GPSStatus" );
+  const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSStatus" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -829,7 +845,7 @@ QString EgtGPSExifEngine::timeStamp( bool * isValid )
 {
   EgtDebug( "entered timeStamp(bool)" );
  
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSTimeStamp" );   
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSTimeStamp" );
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
 
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -856,7 +872,7 @@ double EgtGPSExifEngine::track(char * theRefference, bool * isValid )
 {
   EgtDebug( "entered track(char, bool)" );
   
-  const Exiv2::Value& lvValue = read( "Exif.GPSInfo.GPSTrackRef" );
+  const Exiv2::Value& lvValue = readTag( "Exif.GPSInfo.GPSTrackRef" );
       
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
   
@@ -873,7 +889,7 @@ double EgtGPSExifEngine::track(char * theRefference, bool * isValid )
   else
     *theRefference = 'T';
       
-  const Exiv2::Value & lvValue2 = read( "Exif.GPSInfo.GPSTrack" );
+  const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSTrack" );
    
   lvTypeId = lvValue2.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -902,7 +918,7 @@ int EgtGPSExifEngine::versionID( bool * isValid )
 {
   EgtDebug( "entered versionID(bool)" );
 
-  const Exiv2::Value & lvValue = read( "Exif.GPSInfo.GPSVersionID" );
+  const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSVersionID" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
   if(lvTypeId == Exiv2::invalidTypeId)
@@ -921,6 +937,16 @@ int EgtGPSExifEngine::versionID( bool * isValid )
   return lvDifferential;
 }
 
+bool EgtGPSExifEngine::write( QString theTag, QString theValue )
+{
+  if(QString::compare( theTag, "Egt.GPS.Latitude" ,Qt::CaseInsensitive ) == 0)
+    return writeLatitude( theValue );
+  else if(QString::compare( theTag, "Egt.GPS.Longitude" ,Qt::CaseInsensitive  ) == 0)
+    return writeLongitude( theValue );
+  else
+    return false;
+}
+
 /*!
  *\param theValue a double containing the altitude to be written to the exif metadata
  *\returns a boolean that indicates whether the operation was succcessful or not
@@ -932,11 +958,11 @@ bool EgtGPSExifEngine::writeAltitude( double theValue )
     
   if( theValue < 0 )
   {
-    ok = write( "Exif.GPSInfo.GPSAltitudeRef", "1", "Byte" );
+    ok = writeTag( "Exif.GPSInfo.GPSAltitudeRef", "1", "Byte" );
   }
   else
   {
-    ok = write( "Exif.GPSInfo.GPSAltitudeRef", "0", "Byte" );
+    ok = writeTag( "Exif.GPSInfo.GPSAltitudeRef", "0", "Byte" );
   }
   
   if( !ok )
@@ -947,7 +973,7 @@ bool EgtGPSExifEngine::writeAltitude( double theValue )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return write( "Exif.GPSInfo.GPSAltitude", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSAltitude", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
 }
 
 /*!
@@ -956,7 +982,7 @@ bool EgtGPSExifEngine::writeAltitude( double theValue )
  */
 bool EgtGPSExifEngine::writeAreaInformation( QString theValue )
 {
-  return write( "Exif.GPSInfo.GPSAreaInformation", theValue, "Undefined" );
+  return writeTag( "Exif.GPSInfo.GPSAreaInformation", theValue, "Undefined" );
 }
 
 /*!
@@ -965,7 +991,7 @@ bool EgtGPSExifEngine::writeAreaInformation( QString theValue )
  */
 bool EgtGPSExifEngine::writeDateStamp( QString theValue )
 {
-  return write( "Exif.GPSInfo.GPSDateStamp", theValue, "Ascii" );
+  return writeTag( "Exif.GPSInfo.GPSDateStamp", theValue, "Ascii" );
 }
 
 /*!
@@ -980,12 +1006,12 @@ bool EgtGPSExifEngine::writeDestBearing( float theValue, char theRefference )
     
   if( theRefference=='M' )
   {
-    ok = write( "Exif.GPSInfo.GPSDestBearingRef", "M", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSDestBearingRef", "M", "Ascii" );
     
   }
   else
   {
-    ok = write( "Exif.GPSInfo.GPSDestBearingRef", "T", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSDestBearingRef", "T", "Ascii" );
   }
 
   if( !ok )
@@ -996,7 +1022,7 @@ bool EgtGPSExifEngine::writeDestBearing( float theValue, char theRefference )
  
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return write( "Exif.GPSInfo.GPSDestBearing", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSDestBearing", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
 }
 
 /*!
@@ -1005,7 +1031,7 @@ bool EgtGPSExifEngine::writeDestBearing( float theValue, char theRefference )
  */
 bool EgtGPSExifEngine::writeDifferential( int theValue )
 {
-  return write( "Exif.GPSInfo.GPSDifferential", QString( QString::number( theValue ) ), "Short" );
+  return writeTag( "Exif.GPSInfo.GPSDifferential", QString( QString::number( theValue ) ), "Short" );
 }
 
 /*!
@@ -1020,11 +1046,11 @@ bool EgtGPSExifEngine::writeDirection( float theValue, char theRefference )
     
   if( theRefference=='M' )
   {
-    ok = write( "Exif.GPSInfo.GPSImgDirectionRef", "M", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSImgDirectionRef", "M", "Ascii" );
   }
   else
   {
-    ok = write( "Exif.GPSInfo.GPSImgDirectionRef", "T", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSImgDirectionRef", "T", "Ascii" );
   }
  
   if( !ok )
@@ -1035,7 +1061,7 @@ bool EgtGPSExifEngine::writeDirection( float theValue, char theRefference )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return write( "Exif.GPSInfo.GPSImgDirection", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSImgDirection", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
 }
 
 /*!
@@ -1052,22 +1078,22 @@ bool EgtGPSExifEngine::writeDestDistance( double theValue, char theUnit )
   {
     case 'M':
     {
-      ok = write( "Exif.GPSInfo.GPSDestDistanceRef", "M", "Ascii" );
+      ok = writeTag( "Exif.GPSInfo.GPSDestDistanceRef", "M", "Ascii" );
     }
     break;
     case 'N':
     {
-      ok = write( "Exif.GPSInfo.GPSDestDistanceRef", "N", "Ascii" );
+      ok = writeTag( "Exif.GPSInfo.GPSDestDistanceRef", "N", "Ascii" );
     }
     break;
     case 'K':
     {
-      ok = write( "Exif.GPSInfo.GPSDestDistanceRef", "K", "Ascii" );
+      ok = writeTag( "Exif.GPSInfo.GPSDestDistanceRef", "K", "Ascii" );
     }
     break;
     default:
     {
-      ok = write( "Exif.GPSInfo.GPSDestDistanceRef", "K", "Ascii" );
+      ok = writeTag( "Exif.GPSInfo.GPSDestDistanceRef", "K", "Ascii" );
     }
     break;
   }
@@ -1080,7 +1106,7 @@ bool EgtGPSExifEngine::writeDestDistance( double theValue, char theUnit )
     
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return write( "Exif.GPSInfo.GPSDestDistance", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSDestDistance", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
 }
 
 /*!
@@ -1095,11 +1121,11 @@ bool EgtGPSExifEngine::writeDestLatitude( double theValue, char theRefference )
     
   if( theRefference=='N' )
   {
-    ok = write( "Exif.GPSInfo.GPSDestLatitudeRef", "N", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSDestLatitudeRef", "N", "Ascii" );
   }
   else
   {
-    ok = write( "Exif.GPSInfo.GPSDestLatitudeRef", "S", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSDestLatitudeRef", "S", "Ascii" );
   }
  
   if( !ok )
@@ -1110,7 +1136,7 @@ bool EgtGPSExifEngine::writeDestLatitude( double theValue, char theRefference )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return write( "Exif.GPSInfo.GPSDestLatitude", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSDestLatitude", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
 }
 
 /*!
@@ -1125,11 +1151,11 @@ bool EgtGPSExifEngine::writeDestLongitude( double theValue, char theRefference )
     
   if( theRefference=='N' )
   {
-    ok = write( "Exif.GPSInfo.GPSDestLongitudeRef", "N", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSDestLongitudeRef", "N", "Ascii" );
   }
   else
   {
-    ok = write( "Exif.GPSInfo.GPSDestLongitudeRef", "S", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSDestLongitudeRef", "S", "Ascii" );
   }
  
   if( !ok )
@@ -1140,7 +1166,7 @@ bool EgtGPSExifEngine::writeDestLongitude( double theValue, char theRefference )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return write( "Exif.GPSInfo.GPSDestLongitude", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSDestLongitude", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
 }
 
 /*!
@@ -1151,7 +1177,7 @@ bool EgtGPSExifEngine::writeGpsDOP( double theValue )
 {
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return write( "Exif.GPSInfo.GPSDOP", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSDOP", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
 }
 
 /*!
@@ -1165,7 +1191,7 @@ bool EgtGPSExifEngine::writeLatitude(double theValue)
     
   if( theValue < 0 )
   {
-    ok = write( "Exif.GPSInfo.GPSLatitudeRef", "S", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSLatitudeRef", "S", "Ascii" );
     if( !ok )
     {
       cvLastError = QString( "Unable to write file: " + cvImageFileName);
@@ -1174,7 +1200,7 @@ bool EgtGPSExifEngine::writeLatitude(double theValue)
   }
   else
   {
-    ok = write( "Exif.GPSInfo.GPSLatitudeRef", "N", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSLatitudeRef", "N", "Ascii" );
     if( !ok )
     {
       cvLastError = QString( "Unable to write file: " + cvImageFileName );
@@ -1182,7 +1208,7 @@ bool EgtGPSExifEngine::writeLatitude(double theValue)
     }
   }
   
-  return write( "Exif.GPSInfo.GPSLatitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSLatitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
 }
 
 /*!
@@ -1211,7 +1237,7 @@ bool EgtGPSExifEngine::writeLongitude( double theValue )
 
   if( theValue < 0 )
   {
-    ok = write( "Exif.GPSInfo.GPSLongitudeRef", "W", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSLongitudeRef", "W", "Ascii" );
     if( !ok )
     {
       cvLastError = QString( "Unable to write file: " + cvImageFileName );
@@ -1220,7 +1246,7 @@ bool EgtGPSExifEngine::writeLongitude( double theValue )
   }
   else
   {
-    ok = write( "Exif.GPSInfo.GPSLongitudeRef", "E", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSLongitudeRef", "E", "Ascii" );
     if( !ok )
     {
       cvLastError = QString( "Unable to write file: " + cvImageFileName );
@@ -1228,7 +1254,7 @@ bool EgtGPSExifEngine::writeLongitude( double theValue )
     }
   }
   
-  return write( "Exif.GPSInfo.GPSLongitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSLongitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
 }
 
 
@@ -1253,7 +1279,7 @@ bool EgtGPSExifEngine::writeLongitude( QString theValue )
  */
 bool EgtGPSExifEngine::writeMapDatum( QString theValue )
 {
-  return write( "Exif.GPSInfo.GPSMapDatum", theValue, "Ascii" );
+  return writeTag( "Exif.GPSInfo.GPSMapDatum", theValue, "Ascii" );
 }
 
 /*!
@@ -1262,7 +1288,7 @@ bool EgtGPSExifEngine::writeMapDatum( QString theValue )
  */
 bool EgtGPSExifEngine::writeMeasureMode( QString theValue)
 {
-  return write( "Exif.GPSInfo.GPSMeasureMode", theValue, "Ascii" );
+  return writeTag( "Exif.GPSInfo.GPSMeasureMode", theValue, "Ascii" );
 }
 
 /*!
@@ -1271,7 +1297,7 @@ bool EgtGPSExifEngine::writeMeasureMode( QString theValue)
  */
 bool EgtGPSExifEngine::writeProcessingMethod( QString theValue)
 {
-  return write( "Exif.GPSInfo.GPSProcessingMethod", theValue, "Undefined" );
+  return writeTag( "Exif.GPSInfo.GPSProcessingMethod", theValue, "Undefined" );
 }
 
 /*!
@@ -1280,7 +1306,7 @@ bool EgtGPSExifEngine::writeProcessingMethod( QString theValue)
  */
 bool EgtGPSExifEngine::writeSatellites( QString theValue )
 {
-  return write( "Exif.GPSInfo.GPSSatellites", theValue, "Ascii" );
+  return writeTag( "Exif.GPSInfo.GPSSatellites", theValue, "Ascii" );
 }
 
 /*!
@@ -1298,22 +1324,22 @@ bool EgtGPSExifEngine::writeSpeed( double theValue, char theUnit )
   {
     case 'M':
     {
-      ok = write( "Exif.GPSInfo.GPSSpeedRef", "M", "Ascii" );
+      ok = writeTag( "Exif.GPSInfo.GPSSpeedRef", "M", "Ascii" );
     }
     break;
     case 'N':
     {
-      ok = write( "Exif.GPSInfo.GPSSpeedRef", "N", "Ascii" );
+      ok = writeTag( "Exif.GPSInfo.GPSSpeedRef", "N", "Ascii" );
     }
     break;
     case 'K':
     {
-      ok = write( "Exif.GPSInfo.GPSSpeedRef", "K", "Ascii" );
+      ok = writeTag( "Exif.GPSInfo.GPSSpeedRef", "K", "Ascii" );
     }
     break;
     default:
     {
-      ok = write( "Exif.GPSInfo.GPSSpeedRef", "K", "Ascii" );
+      ok = writeTag( "Exif.GPSInfo.GPSSpeedRef", "K", "Ascii" );
     }
     break;
   }
@@ -1326,7 +1352,7 @@ bool EgtGPSExifEngine::writeSpeed( double theValue, char theUnit )
     
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return write( "Exif.GPSInfo.GPSDestDistance", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSDestDistance", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
 }
 /*!
  *\param theValue a QString containing the status of the GPS receiver to be written to the exif metadata
@@ -1334,18 +1360,7 @@ bool EgtGPSExifEngine::writeSpeed( double theValue, char theUnit )
  */
 bool EgtGPSExifEngine::writeStatus( QString theValue )
 {
-  return write( "Exif.GPSInfo.GPSStatus", theValue, "Ascii" );
-}
-
-bool EgtGPSExifEngine::writeTag( QString theTag, QString theValue )
-{
-  //TODO: make compare case insensitive
-  if(QString::compare( theTag, "Egt.Latitude" ,Qt::CaseInsensitive ) == 0)
-    return writeLatitude( theValue );
-  else if(QString::compare( theTag, "Egt.Longitude" ,Qt::CaseInsensitive  ) == 0)
-    return writeLongitude( theValue );
-  else
-    return false;
+  return writeTag( "Exif.GPSInfo.GPSStatus", theValue, "Ascii" );
 }
 
 /*!
@@ -1387,7 +1402,7 @@ bool EgtGPSExifEngine::writeTimeStamp( QString theString )
 
  lvValue3 =lvValue;
           
- return write( "Exif.GPSInfo.GPSTimeStamp", QString( QString::number( lvValue1 ) +"/1"+ QString::number( lvValue2 ) +"/1"+ QString::number( lvValue3 )) +"/1", "Rational" );
+ return writeTag( "Exif.GPSInfo.GPSTimeStamp", QString( QString::number( lvValue1 ) +"/1"+ QString::number( lvValue2 ) +"/1"+ QString::number( lvValue3 )) +"/1", "Rational" );
 }
 
 /*!
@@ -1402,11 +1417,11 @@ bool EgtGPSExifEngine::writeTrack( float theValue, char theRefference )
     
   if( theRefference=='M' )
   {
-    ok = write( "Exif.Exif.GPSInfo.GPSTrackRef", "M", "Ascii" );
+    ok = writeTag( "Exif.Exif.GPSInfo.GPSTrackRef", "M", "Ascii" );
   }
   else
   {
-    ok = write( "Exif.GPSInfo.GPSTrackRef", "T", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSTrackRef", "T", "Ascii" );
   }
  
   if( !ok )
@@ -1417,7 +1432,7 @@ bool EgtGPSExifEngine::writeTrack( float theValue, char theRefference )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return write( "Exif.GPSInfo.GPSTrack", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
+  return writeTag( "Exif.GPSInfo.GPSTrack", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
 }
 
 /*!
@@ -1426,7 +1441,7 @@ bool EgtGPSExifEngine::writeTrack( float theValue, char theRefference )
  */
 bool EgtGPSExifEngine::writeVersionID( int theValue )
 {
-  return write( "Exif.GPSInfo.GPSVersionID", QString::number( theValue ), "Byte" );
+  return writeTag( "Exif.GPSInfo.GPSVersionID", QString::number( theValue ), "Byte" );
 }
 
 /*

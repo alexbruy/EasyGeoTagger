@@ -78,7 +78,7 @@ public:
   
   /*! \brief is the image valid? */
   bool isValidImage();
-  
+
   /*! \brief Returns the last error occured */
   QString lastError(); 
 
@@ -96,6 +96,8 @@ public:
 
   /*! \brief Returns the processing method */
   QString processingMethod( bool * isValid=0 );
+
+  QVariant read( QString, bool * isValid = 0 );
 
   /*! \brief Returns the GPS satellites used for measurement */
   QString satellites( bool * isValid = 0 );
@@ -118,7 +120,7 @@ public:
   /*! \brief Returns the version of the GPS */
   int versionID( bool * isValid = 0 );
 
-  bool writeTag(QString, QString);
+  bool write(QString, QString);
 
   /*! \brief writes the latitude from a double number */
   bool writeLatitude(double);
@@ -190,7 +192,6 @@ public:
   bool writeVersionID( int );
 
 private:
-  
    /*! \brief Converts from decimal degrees to Rational notation */
   QString convertToRational(QString);
 

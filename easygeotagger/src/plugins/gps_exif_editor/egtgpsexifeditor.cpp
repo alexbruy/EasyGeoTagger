@@ -32,6 +32,7 @@
 #include <QPushButton>
 #include <QFileInfo>
 #include <QtPlugin>
+#include <QMap>
 
 static const QString cvCategories = QObject::tr( "EXIF Editors" );
 static const QString cvDescription = QObject::tr( "Edit/add GPS EXIF entries" );
@@ -52,21 +53,26 @@ EgtGpsExifEditor::EgtGpsExifEditor()
   cvEditorControls.layout()->setSpacing( 0 );
   cvEditorControls.layout()->setContentsMargins( 1, 1, 1, 1 );
 
+  cvConfigurationControls.setWindowTitle( tr( "Configure" ) );
+  cvConfigurationControls.setModal( true );
   cvConfigurationControls.setLayout( new QVBoxLayout() );
   cvConfigurationControls.layout()->setSpacing( 0 );
   cvConfigurationControls.layout()->setContentsMargins( 1, 1, 1, 1 );
 
-  //TODO: Make this into a loop
-    EgtExifTagControls* lvTagControls = new EgtExifTagControls( "Egt.Longitude", "Longitude" );
-    cvTagControls << lvTagControls;
+  //Build Editor and confiuration panels
+  QList< EgtExifEngine::KeyMap > lvKeys = cvExifEngine.keys();
+  QList< EgtExifEngine::KeyMap >::iterator lvIterator = lvKeys.begin();
+  EgtExifTagControl* lvTagControls;
+  while( lvIterator != lvKeys.end() )
+  {
+    lvTagControls = new EgtExifTagControl( lvIterator->key, lvIterator->commonName );
+    cvTagControls[ lvIterator->key ] = lvTagControls;
     cvEditorControls.layout()->addWidget( lvTagControls->editorControls() );
     cvConfigurationControls.layout()->addWidget( lvTagControls->configurationControls() );
-
-    lvTagControls = new EgtExifTagControls( "Egt.Latitude", "Latitude" );
-    cvTagControls << lvTagControls;
-    cvEditorControls.layout()->addWidget( lvTagControls->editorControls() );
-    cvConfigurationControls.layout()->addWidget( lvTagControls->configurationControls() );
-  //end
+    connect( lvTagControls, SIGNAL( controlDisabled( QString ) ), this, SLOT( controlDisabled( QString ) ) );
+    connect( lvTagControls, SIGNAL( controlEnabled( QString ) ), this, SLOT( controlEnabled( QString ) ) );
+    lvIterator++;
+  }
 
   //Add the save button
   QWidget* lvPanel = new QWidget();
@@ -144,21 +150,39 @@ QString EgtGpsExifEditor::name()
  */
 void EgtGpsExifEditor::acceptCoordinates( double theLongitude, double theLatitude )
 {
-  if( cvExifIoEngine.isValidImage() )
+  if( cvExifEngine.isValidImage() )
   {
+  }
+}
+
+void EgtGpsExifEditor::controlDisabled( QString theKey )
+{
+  QString lvDependency = cvExifEngine.dependency( theKey );
+  if( !lvDependency.isNull() )
+  {
+    cvTagControls[ lvDependency ]->setEnabled( false );
+  }
+}
+
+void EgtGpsExifEditor::controlEnabled( QString theKey )
+{
+  QString lvDependency = cvExifEngine.dependency( theKey );
+  if( !lvDependency.isNull() )
+  {
+    cvTagControls[ lvDependency ]->setEnabled( true );
   }
 }
 
 void EgtGpsExifEditor::cvSaveButton_clicked()
 {
-  QList<EgtExifTagControls*>::iterator lvIterator = cvTagControls.begin();
+  QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
   while( lvIterator != cvTagControls.end() )
   {
-    if( (*lvIterator)->isEnabled() )
+    if( lvIterator.value()->isEnabled() )
     {
-      EgtDebug( QString("Writing value to image for key: %1") .arg( (*lvIterator)->key() ) );
-      cvExifIoEngine.writeTag( (*lvIterator)->key(),  (*lvIterator)->value() );
-      (*lvIterator)->setValue( cvExifIoEngine.readTag( (*lvIterator)->key() ) );
+      EgtDebug( QString("Writing value to image for key: %1") .arg( lvIterator.value()->key() ) );
+      cvExifEngine.write( lvIterator.value()->key(),  lvIterator.value()->value() );
+      (*lvIterator)->setValue( cvExifEngine.read( lvIterator.value()->key() ) );
     }
     lvIterator++;
   }
@@ -223,20 +247,17 @@ void EgtGpsExifEditor::updateExifDisplay( const QModelIndex& theIndex )
 void EgtGpsExifEditor::updateExifDisplay( QString theFilename )
 {
   EgtDebug( "entered" );
-  cvExifIoEngine.setFile( theFilename );
+  cvExifEngine.setFile( theFilename );
   cvLastFile = theFilename;
 
-  //check to make sure the dock is visible
-  if( !cvDock.isVisible() ) { return; }
-
   //Get data if it exists
-  QList<EgtExifTagControls*>::iterator lvIterator = cvTagControls.begin();
-  if( theFilename == "" || !cvExifIoEngine.hasGpsExif() )
+  QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
+  if( theFilename == "" || !cvExifEngine.hasGpsExif() )
   {
     QString lvBlank = "";
     while( lvIterator != cvTagControls.end() )
     {
-      (*lvIterator)->setValue( lvBlank );
+      lvIterator.value()->setValue( lvBlank );
       lvIterator++;
     }
   }
@@ -244,7 +265,7 @@ void EgtGpsExifEditor::updateExifDisplay( QString theFilename )
   {
     while( lvIterator != cvTagControls.end() )
     {
-      (*lvIterator)->setValue( cvExifIoEngine.readTag( (*lvIterator)->key() ) );
+      lvIterator.value()->setValue( cvExifEngine.read( lvIterator.value()->key() ) );
       lvIterator++;
     }
   }

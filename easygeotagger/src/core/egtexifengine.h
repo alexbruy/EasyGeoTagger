@@ -25,6 +25,8 @@
 #define EGTEXIFENGINE_H
 
 #include <QModelIndex>
+#include <QList>
+#include <QMap>
 
 #include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
@@ -37,6 +39,13 @@ class MS_DLL_SPEC EgtExifEngine
 {
 
 public:
+
+  struct KeyMap
+  {
+      QString key;
+      QString commonName;
+  };
+
   /*! \brief Constructor */
   EgtExifEngine();
   
@@ -46,11 +55,15 @@ public:
   /*! \brief Constructor */
   EgtExifEngine( const QModelIndex& );
 
-  /*! \brief reads the value specified as parameter */
-  const Exiv2::Value& read(QString);
-  
+  QString dependency( QString theKey ) { return cvDependencies.value( theKey ); }
+
   /*! \brief is the image valid? */
   bool isValidImage();
+
+  QList< KeyMap > keys() { return cvKeys; }
+
+  /*! \brief reads the value specified as parameter */
+  const Exiv2::Value& readTag(QString);
 
   /*! \brief reads the value specified as parameter and returns it as a QString */
   QString readKeyValueAsString(QString);
@@ -59,9 +72,10 @@ public:
   void setFile( QString theImageFilename );
 
   /*! \brief writes exif metadata */
-  bool write(QString, QString, QString);
+  bool writeTag(QString, QString, QString);
 
 protected:
+  QMap< QString, QString > cvDependencies;
 
   /*! \brief has the image GPS exif metadata? */
   bool cvHasGpsExif;
@@ -74,12 +88,18 @@ protected:
   
   /*! \brief is the image valid? */
   bool cvIsValidImage;
-  
+
+  QList< KeyMap > cvKeys;
+
   /*! \brief Last error occured */
   QString cvLastError;
   
   /*! \brief Exiv2 data used in case we have to work with invalid data */
   Exiv2::DataValue cvNotValidValue;
+
+
+
+  void addKey( QString, QString );
 
 };
 #endif
