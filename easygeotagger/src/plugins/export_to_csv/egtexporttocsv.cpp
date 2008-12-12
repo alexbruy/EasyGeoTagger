@@ -38,13 +38,11 @@
 #include <QObject>
 #include <QDir>
 
-static const QString cvCategories = QObject::tr( "Utilities" );
-static const QString cvDescription = QObject::tr( "Export a directory of image to a csv file. It will only export latitude and longitude from images with GPS EXIF data." );
-static const QString cvName = QObject::tr( "EXIF to CSV" );
-
-QStringList EgtExportToCsv::categories()
+EgtExportToCsv::EgtExportToCsv()
 {
-  return cvCategories.split("|");
+  cvCategories = QObject::tr( "Utilities" );
+  cvDescription = QObject::tr( "Export a directory of image to a csv file. It will only export latitude and longitude from images with GPS EXIF data." );
+  cvName = QObject::tr( "EXIF to CSV" );
 }
 
 void EgtExportToCsv::connectConfigurationButton( QPushButton* theButton )
@@ -55,11 +53,6 @@ void EgtExportToCsv::connectConfigurationButton( QPushButton* theButton )
 void EgtExportToCsv::connectRunButton( QPushButton* theButton )
 {
   connect( theButton, SIGNAL( clicked() ), this, SLOT( run() ) );
-}
-
-QString EgtExportToCsv::description()
-{
-  return cvDescription;
 }
 
 void EgtExportToCsv::indexSelected( const QModelIndex& theIndex )
@@ -74,11 +67,6 @@ void EgtExportToCsv::initPlugin()
   {
     connect( cvApplicationInterface, SIGNAL( indexSelected( const QModelIndex& ) ), this, SLOT( indexSelected( const QModelIndex& ) ) );
   }
-}
-
-QString EgtExportToCsv::name()
-{
-  return cvName;
 }
 
 void EgtExportToCsv::run()

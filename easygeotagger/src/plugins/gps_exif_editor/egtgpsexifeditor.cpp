@@ -26,20 +26,17 @@
 #include "egtpathbuilder.h"
 #include "egtlogger.h"
 
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QMainWindow>
 #include <QPushButton>
 #include <QFileInfo>
 #include <QtPlugin>
 #include <QMap>
 
-static const QString cvCategories = QObject::tr( "EXIF Editors" );
-static const QString cvDescription = QObject::tr( "Edit/add GPS EXIF entries" );
-static const QString cvName = QObject::tr( "GPS EXIF Editor" );
-
 EgtGpsExifEditor::EgtGpsExifEditor()
 {
+  cvCategories = QObject::tr( "EXIF Editors" );
+  cvDescription = QObject::tr( "Edit/add GPS EXIF entries" );
+  cvName = QObject::tr( "GPS EXIF Editor" );
   cvLastFile = "";
 
   cvDock.setWindowTitle( cvName );
@@ -47,48 +44,7 @@ EgtGpsExifEditor::EgtGpsExifEditor()
   cvDock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
   cvDock.setMinimumSize( 250,150 );
 
-   //Layout editor controls
-  cvEditorControls.setParent( &cvDock );
-  cvEditorControls.setLayout( new QVBoxLayout() );
-  cvEditorControls.layout()->setSpacing( 0 );
-  cvEditorControls.layout()->setContentsMargins( 1, 1, 1, 1 );
-
-  cvConfigurationControls.setWindowTitle( tr( "Configure" ) );
-  cvConfigurationControls.setModal( true );
-  cvConfigurationControls.setLayout( new QVBoxLayout() );
-  cvConfigurationControls.layout()->setSpacing( 0 );
-  cvConfigurationControls.layout()->setContentsMargins( 1, 1, 1, 1 );
-
-  //Build Editor and confiuration panels
-  QList< EgtExifEngine::KeyMap > lvKeys = cvExifEngine.keys();
-  QList< EgtExifEngine::KeyMap >::iterator lvIterator = lvKeys.begin();
-  EgtExifTagControl* lvTagControls;
-  while( lvIterator != lvKeys.end() )
-  {
-    lvTagControls = new EgtExifTagControl( lvIterator->key, lvIterator->commonName );
-    cvTagControls[ lvIterator->key ] = lvTagControls;
-    cvEditorControls.layout()->addWidget( lvTagControls->editorControls() );
-    cvConfigurationControls.layout()->addWidget( lvTagControls->configurationControls() );
-    connect( lvTagControls, SIGNAL( controlDisabled( QString ) ), this, SLOT( controlDisabled( QString ) ) );
-    connect( lvTagControls, SIGNAL( controlEnabled( QString ) ), this, SLOT( controlEnabled( QString ) ) );
-    lvIterator++;
-  }
-
-  //Add the save button
-  QWidget* lvPanel = new QWidget();
-  lvPanel->setLayout( new QHBoxLayout() );
-  lvPanel->layout()->setContentsMargins( 1, 1, 1, 1 );
-  ((QHBoxLayout*)lvPanel->layout())->insertStretch(-1, 1);
-  cvSaveButton.setText( tr( "Save" ) );
-  lvPanel->layout()->addWidget( &cvSaveButton );
-  connect( &cvSaveButton, SIGNAL( clicked() ), this, SLOT( cvSaveButton_clicked() ) );
-  cvEditorControls.layout()->addWidget( lvPanel );
-
-  //Add the spacer to push all the objects to the top
-  ((QVBoxLayout*)cvConfigurationControls.layout())->insertStretch(-1, 1);
-  ((QVBoxLayout*)cvEditorControls.layout())->insertStretch(-1, 1);
-
-  cvDock.setWidget( &cvEditorControls );
+  cvEditorWidgets = new EgtExifEditorWidgets( &cvExifEngine, &cvDock );
 }
 
 /*
@@ -96,11 +52,6 @@ EgtGpsExifEditor::EgtGpsExifEditor()
  * PUBLIC FUNCTIONS
  *
  */
-
-QStringList EgtGpsExifEditor::categories()
-{
-  return cvCategories.split("|");
-}
 
 /*!
  * \param theButton pointer to a QPushButton that is to be connect to the  showConfigureationPanel slot
@@ -118,11 +69,6 @@ void EgtGpsExifEditor::connectRunButton( QPushButton* theButton )
   connect( theButton, SIGNAL( clicked() ), this, SLOT( run() ) );
 }
 
-QString EgtGpsExifEditor::description()
-{
-  return cvDescription;
-}
-
 void EgtGpsExifEditor::initPlugin()
 {
   //Hook listeners into the application interface
@@ -133,15 +79,9 @@ void EgtGpsExifEditor::initPlugin()
     cvDock.setVisible( false );
 
     connect( cvApplicationInterface, SIGNAL( coordinatesReceived( double, double ) ), this, SLOT( acceptCoordinates( double, double ) ) );
-    connect( cvApplicationInterface, SIGNAL( indexSelected( const QModelIndex& ) ), this, SLOT( updateExifDisplay( const QModelIndex& ) ) );
+    connect( cvApplicationInterface, SIGNAL( indexSelected( const QModelIndex& ) ), this, SLOT( updateEditorControls( const QModelIndex& ) ) );
   }
 }
-
-QString EgtGpsExifEditor::name()
-{
-  return cvName;
-}
-
 
 /*
  *
@@ -155,39 +95,6 @@ void EgtGpsExifEditor::acceptCoordinates( double theLongitude, double theLatitud
   }
 }
 
-void EgtGpsExifEditor::controlDisabled( QString theKey )
-{
-  QString lvDependency = cvExifEngine.dependency( theKey );
-  if( !lvDependency.isNull() )
-  {
-    cvTagControls[ lvDependency ]->setEnabled( false );
-  }
-}
-
-void EgtGpsExifEditor::controlEnabled( QString theKey )
-{
-  QString lvDependency = cvExifEngine.dependency( theKey );
-  if( !lvDependency.isNull() )
-  {
-    cvTagControls[ lvDependency ]->setEnabled( true );
-  }
-}
-
-void EgtGpsExifEditor::cvSaveButton_clicked()
-{
-  QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
-  while( lvIterator != cvTagControls.end() )
-  {
-    if( lvIterator.value()->isEnabled() )
-    {
-      EgtDebug( QString("Writing value to image for key: %1") .arg( lvIterator.value()->key() ) );
-      cvExifEngine.write( lvIterator.value()->key(),  lvIterator.value()->value() );
-      (*lvIterator)->setValue( cvExifEngine.read( lvIterator.value()->key() ) );
-    }
-    lvIterator++;
-  }
-}
-
 void EgtGpsExifEditor::run()
 {
   EgtDebug( "entered" );
@@ -198,26 +105,18 @@ void EgtGpsExifEditor::run()
     EgtDebug( "dock is already open and visible" );
     return;
   }
-  else if( !cvDock.isVisible() || cvDock.isMinimized() )
-  {
-    EgtDebug( "dock is already open but not visible" );
-    cvDock.showMaximized();
-    return;
-  }
-  
-  //On redisplay of the widget, update the exif data incase the index has changed
-  if( "" != cvLastFile )
-  {
-    updateExifDisplay( cvLastFile );
-  }
-  
+
+  EgtDebug( "dock is already open but not visible" );
+  cvDock.showMaximized();
+  updateEditorControls( cvLastFile );
+
   EgtDebug( "done" );
 }
 
 /*!
  * \param theIndex the QModelIndex representing the file from which to extract exif data
  */
-void EgtGpsExifEditor::updateExifDisplay( const QModelIndex& theIndex )
+void EgtGpsExifEditor::updateEditorControls( const QModelIndex& theIndex )
 {
   EgtDebug( "entered" );
   
@@ -228,11 +127,11 @@ void EgtGpsExifEditor::updateExifDisplay( const QModelIndex& theIndex )
   //If the index points a file, try to extract the exif data
   if( !lvFileInfo.isDir() )
   {
-    updateExifDisplay( lvFilename ); 
+    updateEditorControls( lvFilename );
   }
   else
   {
-    updateExifDisplay( "" ); 
+    updateEditorControls( "" );
   }
 } 
 
@@ -244,32 +143,17 @@ void EgtGpsExifEditor::updateExifDisplay( const QModelIndex& theIndex )
 /*!
  * \param theFilename the name of the file from which to extract exif data
  */
-void EgtGpsExifEditor::updateExifDisplay( QString theFilename )
+void EgtGpsExifEditor::updateEditorControls( QString theFilename )
 {
   EgtDebug( "entered" );
+
+  if( 0 == cvEditorWidgets) { return; }
+
   cvExifEngine.setFile( theFilename );
   cvLastFile = theFilename;
 
-  //Get data if it exists
-  QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
-  if( theFilename == "" || !cvExifEngine.hasGpsExif() )
-  {
-    QString lvBlank = "";
-    while( lvIterator != cvTagControls.end() )
-    {
-      lvIterator.value()->setValue( lvBlank );
-      lvIterator++;
-    }
-  }
-  else
-  {
-    while( lvIterator != cvTagControls.end() )
-    {
-      lvIterator.value()->setValue( cvExifEngine.read( lvIterator.value()->key() ) );
-      lvIterator++;
-    }
-  }
+  cvEditorWidgets->updateEditorControls( cvExifEngine.hasGpsExif() );
   
 }
 
- Q_EXPORT_PLUGIN2( minimalexifeditor, EgtGpsExifEditor );
+ Q_EXPORT_PLUGIN2( gpsexifeditor, EgtGpsExifEditor );

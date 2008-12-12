@@ -39,26 +39,20 @@ class EgtExportToCsv: public EgtPluginInterface
   Q_INTERFACES(EgtPluginInterface)
   
   public:
-    /*! \brief Return the list of categories that the plugin will show up in */
-    QStringList categories();
-    
+    /*! \brief Constructor */
+    EgtExportToCsv();
+
     /*! \brief Connects the provided button to the showConfigurationPanel function */
     void connectConfigurationButton( QPushButton* );
     
     /*! \brief Connects the provided button to the run function */
     void connectRunButton( QPushButton* );
     
-    /*! \brief Returns the description for this plugin */
-    QString description();
-    
     /*! \brief Returns the ability of this plugin to be configured */
     bool isConfigurable() { return false; }
 
     /*! \brief Initialization plugin*/
     void initPlugin();
-    
-    /*! \brief Returns the name of this plugin */
-    QString name();
 
   public slots:
     /* \brief Receives mouse clicks from the file browser */

@@ -25,6 +25,7 @@
 #define EGTEXIFENGINE_H
 
 #include <QModelIndex>
+#include <QVariant>
 #include <QList>
 #include <QMap>
 
@@ -62,6 +63,8 @@ public:
 
   QList< KeyMap > keys() { return cvKeys; }
 
+  virtual QVariant read( QString theKey, bool* isValid = 0 ) { if ( 0 != isValid ) { *isValid = false; } return QVariant(); }
+
   /*! \brief reads the value specified as parameter */
   const Exiv2::Value& readTag(QString);
 
@@ -70,6 +73,8 @@ public:
 
    /*! \brief Sets the image to be managed with this class */
   void setFile( QString theImageFilename );
+
+  virtual bool write( QString theKey, QString theValue ) { return false; }
 
   /*! \brief writes exif metadata */
   bool writeTag(QString, QString, QString);

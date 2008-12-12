@@ -26,13 +26,11 @@
 
 #include <QtPlugin>
 
-static const QString cvCategories = QObject::tr( "Tests" );
-static const QString cvDescription = QObject::tr( "This plugin really does not do anything" );
-static const QString cvName = QObject::tr( "Test Plugin" );
-
-QStringList EgtTestPlugin::categories()
+EgtTestPlugin::EgtTestPlugin()
 {
-  return cvCategories.split("|");
+  cvCategories = QObject::tr( "Tests" );
+  cvDescription = QObject::tr( "This plugin really does not do anything" );
+  cvName = QObject::tr( "Test Plugin" );
 }
 
 void EgtTestPlugin::connectConfigurationButton( QPushButton* theButton )
@@ -43,16 +41,6 @@ void EgtTestPlugin::connectConfigurationButton( QPushButton* theButton )
 void EgtTestPlugin::connectRunButton( QPushButton* theButton )
 {
   connect( theButton, SIGNAL( clicked() ), this, SLOT( run() ) );
-}
-
-QString EgtTestPlugin::description()
-{
-  return cvDescription;
-}
-
-QString EgtTestPlugin::name()
-{
-  return cvName;
 }
 
 void EgtTestPlugin::run()

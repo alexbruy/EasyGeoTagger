@@ -47,7 +47,7 @@ class MS_DLL_SPEC EgtPluginInterface : public QObject
     virtual ~EgtPluginInterface() { }
     
     /*! \brief Pure virtual function to return the list of categories that the plugin will show up in */
-    virtual QStringList categories() = 0;
+    QStringList categories() { return cvCategories.split("|"); }
     
     /*! \brief Pure virtual function to connect the provided button to the showConfigurationPanel function */
     virtual void connectConfigurationButton( QPushButton* ) = 0;
@@ -56,17 +56,16 @@ class MS_DLL_SPEC EgtPluginInterface : public QObject
     virtual void connectRunButton( QPushButton* ) = 0;
     
     /*! \brief Pure virtual function to return the description for this plugin */
-    virtual QString description() = 0;
+    QString description() { return cvDescription; }
     
     /*! \brief Pure virtual function to return the ability of this plugin to be configured */
     virtual bool isConfigurable() = 0;
     
     /*! \brief Pure virtual function to return the name of this plugin */
-    virtual QString name() = 0;
+    QString name() { return cvName; }
     
     /*! \brief Virtual function to run initialization steps if needed */
     virtual void initPlugin() {}
-    
     
     /*! \brief Set the pointer to the EasyGeoTagger application interface */
     void setApplicationInterface( EgtApplicationInterface* theInterface ) { cvApplicationInterface = theInterface; }
@@ -80,6 +79,9 @@ class MS_DLL_SPEC EgtPluginInterface : public QObject
   
   protected:
     EgtApplicationInterface* cvApplicationInterface;
+    QString cvCategories;
+    QString cvDescription;
+    QString cvName;
 };
 
  Q_DECLARE_INTERFACE(EgtPluginInterface, "org.amnh.bif.Plugin.EgtPluginInterface/1.0");

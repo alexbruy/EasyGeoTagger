@@ -25,13 +25,12 @@
 #define EGTGPSEXIFEDITOR_H
 
 #include "egtgpsexifengine.h"
-#include "egtexiftagcontrol.h"
+#include "egtexifeditorwidgets.h"
 #include "egtplugininterface.h"
 
 #include <QPushButton>
 #include <QModelIndex>
 #include <QDockWidget>
-#include <QDialog>
 #include <QString>
 #include <QList>
 
@@ -44,45 +43,30 @@ class EgtGpsExifEditor: public EgtPluginInterface
     /*! \brief Constuctor */
     EgtGpsExifEditor();
     
-    /*! \brief Return the list of categories that the plugin will show up in */
-    QStringList categories();
-    
     /*! \brief Connect the provided button to the showConfigurationPanel function */
     void connectConfigurationButton( QPushButton* );
     
     /*! \brief Connect the provided button to the run function */
     void connectRunButton( QPushButton* );
     
-    /*! \brief Return the description for this plugin */
-    QString description();
-
     /*! \brief Initialization plugin*/
     void initPlugin();
     
     /*! \brief Return the ability of this plugin to be configured */
     bool isConfigurable() { return true; }
 
-    
-    /*! \brief Return the name of this plugin */
-    QString name();
-
   public slots:
     /*! \brief Slot that allows external components to pass coordinates to the plugin */
     void acceptCoordinates( double, double );
     
     /*! \brief Slot that will update the fields with data from the currently selected object in the file browser */
-    void updateExifDisplay( const QModelIndex& );
+    void updateEditorControls( const QModelIndex& );
     
     /*! \brief Slot called to activate or launch the plugin */
     void run();
     
     /*! \brief Slot to display the condifuration panel */
-    void showConfigurationPanel() { cvConfigurationControls.setVisible( true ); }
-
-  private slots:
-    void cvSaveButton_clicked();
-    void controlDisabled( QString );
-    void controlEnabled( QString );
+    void showConfigurationPanel() { cvEditorWidgets->showConfigurationPanel(); }
   
   private:
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
@@ -95,13 +79,9 @@ class EgtGpsExifEditor: public EgtPluginInterface
     QString cvLastFile;
 
     /*! \brief Slot that will update the fields with data a image file */
-    void updateExifDisplay( QString );
+    void updateEditorControls( QString );
 
-    QMap< QString, EgtExifTagControl* > cvTagControls;
-    QWidget cvEditorControls;
-    QDialog cvConfigurationControls;
-
-    QPushButton cvSaveButton;
+    EgtExifEditorWidgets* cvEditorWidgets;
 
 };
 #endif

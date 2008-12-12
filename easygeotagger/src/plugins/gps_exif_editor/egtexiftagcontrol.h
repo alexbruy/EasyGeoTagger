@@ -48,7 +48,7 @@ class EgtExifTagControl : public QObject
     QString key() { return QString( cvKey ); }
     void setValue( QString const &theValue );
     void setValue( QVariant const &theValue );
-    void setVisible( bool show );
+    void setVisible( bool );
     QString value() { return cvKeyValue.text(); }
 
 
