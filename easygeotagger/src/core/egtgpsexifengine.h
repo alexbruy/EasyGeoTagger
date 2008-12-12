@@ -53,16 +53,16 @@ public:
   QString dateStamp( bool * isValid = 0 );
 
   /*! \brief Returns the bearing to the destination point */
-  double destBearing( char*, bool * isValid = 0 );
+  double destBearing( bool * isValid = 0 );
 
   /*! \brief Returns the differential correction applied to the gps receiver */
   int differential( bool * isValid = 0 );
 
   /*! \brief Returns the direction of the image when it was captured */
-  float direction( char *, bool * isValid = 0 );
+  float direction(  bool * isValid = 0 );
 
   /*! \brief Returns the distance to the destination point */
-  double destDistance( char *, bool * isValid = 0 );
+  double destDistance( bool * isValid = 0 );
 
   /*! \brief Returns the latitude of the destination point*/
   double destLatitude( bool * isValid = 0 );
@@ -106,7 +106,7 @@ public:
   void setFile( QString theImageFilename );
   
   /*! \brief Returns the longitude */
-  double speed( char *, bool * isValid = 0 );
+  double speed(  bool * isValid = 0 );
 
   /*! \brief Returns the status of the GPS receiver when the picture was taken */
   QString status( bool * isValid = 0 );
@@ -115,7 +115,7 @@ public:
   QString timeStamp( bool * isValid = 0 );
 
   /*! \brief Returns the direction of the GPS receiver movement*/
-  double track( char *, bool * isValid = 0 );
+  double track( bool * isValid = 0 );
  
   /*! \brief Returns the version of the GPS */
   int versionID( bool * isValid = 0 );
@@ -137,6 +137,8 @@ public:
   /*! \brief writes the altitude */
   bool writeAltitude( double );
 
+  bool writeAltitude( QString );
+
   /*! \brief writes the area information */
   bool writeAreaInformation( QString );
 
@@ -146,27 +148,41 @@ public:
   /*! \brief writes the bearing of the destination point */
   bool writeDestBearing( float, char theRefference = 'T' );
 
+  bool writeDestBearing( QString );
+
   /*! \brief writes the differential correction applied to the GPS received */
   bool writeDifferential( int );
+
+  bool writeDifferential( QString );
 
   /*! \brief writes the direction of the image when it was taken */
   bool writeDirection( float, char theRefference = 'T' );
 
+  bool writeDirection( QString );
+
   /*! \brief writes the distance to the destination point*/
   bool writeDestDistance( double, char theUnit = 'K' );
 
+  bool writeDestDistance( QString );
+
   /*! \brief writes the latitude of the destination point */
-  bool writeDestLatitude( double, char theRefference = 'N' );
+  bool writeDestLatitude( double );
+
+  bool writeDestLatitude( QString );  
 
   /*! \brief writes the longitude of the destination point */
-  bool writeDestLongitude( double, char theRefference = 'N' );
-  
+  bool writeDestLongitude( double );
+
+  bool writeDestLongitude( QString );
+
   /*! \brief writes the Gps DOP */
   bool writeGpsDOP( double );
   
+  bool writeGpsDOP( QString );
+
   /*! \brief writes the Map Datum */
   bool writeMapDatum( QString );
- 
+
   /*! \brief writes the Measure mode */
   bool writeMeasureMode( QString );
 
@@ -179,6 +195,8 @@ public:
   /*! \brief writes the speed of the GPS receiver movement */
   bool writeSpeed( double, char theUnit = 'K' );
 
+  bool writeSpeed( QString); 
+
   /*! \brief writes the status of the GPS receiver in the moment the picture was taken */
   bool writeStatus( QString );
 
@@ -188,8 +206,12 @@ public:
   /*! \brief writes the direction of the receiver movement */
   bool writeTrack( float, char theRefference = 'T' );
 
+  bool writeTrack( QString );
+
   /*! \brief writes the version of GPS */
   bool writeVersionID( int );
+
+  bool writeVersionID( QString );
 
 private:
    /*! \brief Converts from decimal degrees to Rational notation */
