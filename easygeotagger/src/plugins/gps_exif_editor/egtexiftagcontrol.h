@@ -32,28 +32,51 @@
 #include <QCheckBox>
 #include <QPushButton>
 
-
+/*! \brief Editor and configuration controls for a exif tag
+ *
+ */
 class EgtExifTagControl : public QObject
 {
 
   Q_OBJECT
 
   public:
+    /*! \brief Constructor */
     EgtExifTagControl( QString, QString );
 
+    /*! \brief Returns a pointer the configuration control */
     QWidget* configurationControls() { return &cvConfigurationControls; }
+
+    /*! \brief Returns a pointer to the editor controls */
     QWidget* editorControls() { return &cvEditorControls; }
+
+    /*! \brief Returns the current enabeled state of the control */
     bool isEnabled();
+
+    /*! \brief Sets the current enabled state of rhte control */
     void setEnabled( bool );
+
+    /*! \brief Returns the key identifying this control */
     QString key() { return QString( cvKey ); }
-    void setValue( QString const &theValue );
-    void setValue( QVariant const &theValue );
+
+    /*! \brief Sets the value in the editor's line edit */
+    void setValue( QString const &theValue, bool setCachedValue = true );
+
+    /*! \brief Sets the value in the editor's line edit */
+    void setValue( QVariant const &theValue, bool setCachedValue = true );
+
+    /*! \brief Sets the visibility of the editor controls */
     void setVisible( bool );
+
+    /*! \brief Return the current value in the editors line edit */
     QString value() { return cvKeyValue.text(); }
 
 
   signals:
+    /*! \brief Signal to indicate that a particular control as been enabled, the controls key is passed as an argument */
     void controlEnabled( QString );
+
+    /*! \brief Signal to indicate that a particular control as been disabled, the controls key is passed as an argument */
     void controlDisabled( QString );
 
   private slots:

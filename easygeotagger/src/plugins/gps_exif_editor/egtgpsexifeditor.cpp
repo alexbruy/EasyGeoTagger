@@ -23,6 +23,7 @@
 **/
 #include "egtapplicationinterface.h"
 #include "egtgpsexifeditor.h"
+#include "egtexiftaggroup.h"
 #include "egtpathbuilder.h"
 #include "egtlogger.h"
 
@@ -39,12 +40,25 @@ EgtGpsExifEditor::EgtGpsExifEditor()
   cvName = QObject::tr( "GPS EXIF Editor" );
   cvLastFile = "";
 
+  cvEditor = new EgtExifEditor( &cvExifEngine );
+  //Create custom tag groups
+  EgtExifTagGroup* lvTagGroup = new EgtExifTagGroup( "Clear all" );
+  cvEditor->addTagGroup( lvTagGroup );
+
+  lvTagGroup = new EgtExifTagGroup( "X, Y" );
+  lvTagGroup->addKey("Egt.GPS.Longitude" );
+  cvEditor->addTagGroup( lvTagGroup );
+
+  lvTagGroup = new EgtExifTagGroup( "X, Y, Z" );
+  lvTagGroup->addKey("Egt.GPS.Longitude" );
+  lvTagGroup->addKey("Egt.GPS.Altitude" );
+  cvEditor->addTagGroup( lvTagGroup );
+
   cvDock.setWindowTitle( cvName );
   cvDock.setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
   cvDock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
   cvDock.setMinimumSize( 250,150 );
-
-  cvEditorWidgets = new EgtExifEditorWidgets( &cvExifEngine, &cvDock );
+  cvDock.setWidget( cvEditor->editorWidget() );
 }
 
 /*
@@ -79,7 +93,7 @@ void EgtGpsExifEditor::initPlugin()
     cvDock.setVisible( false );
 
     connect( cvApplicationInterface, SIGNAL( coordinatesReceived( double, double ) ), this, SLOT( acceptCoordinates( double, double ) ) );
-    connect( cvApplicationInterface, SIGNAL( indexSelected( const QModelIndex& ) ), this, SLOT( updateEditorControls( const QModelIndex& ) ) );
+    connect( cvApplicationInterface, SIGNAL( indexSelected( const QModelIndex& ) ), this, SLOT( loadExifData( const QModelIndex& ) ) );
   }
 }
 
@@ -108,7 +122,7 @@ void EgtGpsExifEditor::run()
 
   EgtDebug( "dock is already open but not visible" );
   cvDock.showMaximized();
-  updateEditorControls( cvLastFile );
+  loadExifData( cvLastFile );
 
   EgtDebug( "done" );
 }
@@ -116,7 +130,7 @@ void EgtGpsExifEditor::run()
 /*!
  * \param theIndex the QModelIndex representing the file from which to extract exif data
  */
-void EgtGpsExifEditor::updateEditorControls( const QModelIndex& theIndex )
+void EgtGpsExifEditor::loadExifData( const QModelIndex& theIndex )
 {
   EgtDebug( "entered" );
   
@@ -127,11 +141,11 @@ void EgtGpsExifEditor::updateEditorControls( const QModelIndex& theIndex )
   //If the index points a file, try to extract the exif data
   if( !lvFileInfo.isDir() )
   {
-    updateEditorControls( lvFilename );
+    loadExifData( lvFilename );
   }
   else
   {
-    updateEditorControls( "" );
+    loadExifData( "" );
   }
 } 
 
@@ -143,16 +157,16 @@ void EgtGpsExifEditor::updateEditorControls( const QModelIndex& theIndex )
 /*!
  * \param theFilename the name of the file from which to extract exif data
  */
-void EgtGpsExifEditor::updateEditorControls( QString theFilename )
+void EgtGpsExifEditor::loadExifData( QString theFilename )
 {
   EgtDebug( "entered" );
 
-  if( 0 == cvEditorWidgets) { return; }
+  if( 0 == cvEditor) { return; }
 
   cvExifEngine.setFile( theFilename );
   cvLastFile = theFilename;
 
-  cvEditorWidgets->updateEditorControls( cvExifEngine.hasGpsExif() );
+  cvEditor->loadExifData( cvExifEngine.hasGpsExif() );
   
 }
 

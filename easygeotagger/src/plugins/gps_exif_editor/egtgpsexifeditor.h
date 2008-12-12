@@ -25,7 +25,7 @@
 #define EGTGPSEXIFEDITOR_H
 
 #include "egtgpsexifengine.h"
-#include "egtexifeditorwidgets.h"
+#include "egtexifeditor.h"
 #include "egtplugininterface.h"
 
 #include <QPushButton>
@@ -60,13 +60,13 @@ class EgtGpsExifEditor: public EgtPluginInterface
     void acceptCoordinates( double, double );
     
     /*! \brief Slot that will update the fields with data from the currently selected object in the file browser */
-    void updateEditorControls( const QModelIndex& );
+    void loadExifData( const QModelIndex& );
     
     /*! \brief Slot called to activate or launch the plugin */
     void run();
     
     /*! \brief Slot to display the condifuration panel */
-    void showConfigurationPanel() { cvEditorWidgets->showConfigurationPanel(); }
+    void showConfigurationPanel() { cvEditor->showConfigurationDialog(); }
   
   private:
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
@@ -78,10 +78,10 @@ class EgtGpsExifEditor: public EgtPluginInterface
     /*! \brief Last file that sucessfully had GPS exif data extraced */
     QString cvLastFile;
 
-    /*! \brief Slot that will update the fields with data a image file */
-    void updateEditorControls( QString );
+    /*! \brief Update the editor fields with exif data from an image file */
+    void loadExifData( QString );
 
-    EgtExifEditorWidgets* cvEditorWidgets;
+    EgtExifEditor* cvEditor;
 
 };
 #endif

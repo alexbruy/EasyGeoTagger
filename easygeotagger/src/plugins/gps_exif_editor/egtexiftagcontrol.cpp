@@ -30,6 +30,11 @@
 #include <QMessageBox>
 #include <QHBoxLayout>
 
+/*!
+ *
+ * \param theKey The key for this control
+ * \param theDisplayName The common name for the key, used for labels
+ */
 EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName )
 {
     cvDisplayName = theDisplayName;
@@ -79,26 +84,46 @@ void EgtExifTagControl::setEnabled( bool enabled )
   cvEnabled.setChecked( enabled );
 }
 
-void EgtExifTagControl::setValue( QString const &theValue )
+/*!
+ * This function sets the value display in the line edit, replaces the cached value and disabled the discard button
+ * If setCache is false, then the value in the line edit is replaced but the cached values is not changed and the discard
+ * button is not disbaled, in other words, it acts like someone typing at the console.
+ *
+ * \param theValue The value to display in the line edit
+ * \param setCache A flag to indicate if the cached value should be replaced
+ */
+void EgtExifTagControl::setValue( QString const &theValue, bool setCache )
 {
-    cvCachedValue = theValue;
     cvKeyValue.setText( theValue );
-    cvDiscardButton.setEnabled( false );
+    if( setCache )
+    {
+      cvCachedValue = theValue;
+      cvDiscardButton.setEnabled( false );
+    }
 }
 
-void EgtExifTagControl::setValue( QVariant const &theValue )
+/*!
+ *
+ * \param theValue The value to display in the line edit
+ * \param setCache A flag to indicate if the cached value should be replaced
+ */
+void EgtExifTagControl::setValue( QVariant const &theValue, bool setCachedValue )
 {
   if( QVariant::Double == theValue.type() )
   {
-    setValue( QString::number( theValue.toDouble(), 'f', 7 ) );
+    setValue( QString::number( theValue.toDouble(), 'f', 7 ), setCachedValue );
   }
   else
   {
-    setValue( theValue.toString() );
+    setValue( theValue.toString(), setCachedValue );
   }
 
 }
 
+/*!
+ *
+ * \param show Flag to indcate if the this editor control should be visible, i.e., enabled
+ */
 void EgtExifTagControl::setVisible( bool show )
 {
     cvEditorControls.setVisible( show );

@@ -14,14 +14,16 @@ INCLUDE_DIRECTORIES(
 )
 
 SET( GPS_EXIF_EDITOR_SRCS
-    egtexifeditorwidgets.cpp
+    egtexifeditor.cpp
     egtexiftagcontrol.cpp
+    egtexiftaggroup.cpp
     egtgpsexifeditor.cpp
    )
 
 SET( GPS_EXIF_EDITOR_MOC_HDRS
-    egtexifeditorwidgets.h
+    egtexifeditor.h
     egtexiftagcontrol.h
+    egtexiftaggroup.h
     egtgpsexifeditor.h
    )
 

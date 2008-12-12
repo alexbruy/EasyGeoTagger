@@ -1,7 +1,7 @@
 /*
-** File: egtexifeditorwidgets.h
+** File: egttaggroup.h
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-12-11
+** Creation Date: 2008-12-12
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 **
@@ -21,40 +21,31 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTEXIFEDITORWIDGETS_H
-#define EGTEXIFEDITORWIDGETS_H
-#include "egtexiftagcontrol.h"
-#include "egtexifengine.h"
+#ifndef EGTEXIFTAGGROUP_H
+#define EGTEXIFTAGGROUP_H
 
-#include <QDockWidget>
+#include <QStringList>
 #include <QPushButton>
-#include <QObject>
-#include <QDialog>
 #include <QWidget>
-#include <QMap>
+#include <QSet>
 
-class EgtExifEditorWidgets : public QObject
+class EgtExifTagGroup : public QWidget
 {
   Q_OBJECT
 
   public:
-    EgtExifEditorWidgets( EgtExifEngine*, QDockWidget* );
-    void updateEditorControls( bool );
-    void showConfigurationPanel() { cvConfigurationControls.show(); }
+    EgtExifTagGroup( QString );
+    void addKey( QString theKey ) { cvKeys.insert( theKey ); }
+
+  signals:
+    void tagGroupActivated( QStringList );
 
   private slots:
-    void cvSaveButton_clicked();
-    void controlDisabled( QString );
-    void controlEnabled( QString );
+    void cvActivate_clicked();
 
   private:
-    QDialog cvConfigurationControls;
-    QWidget cvEditorControls;
+    QPushButton cvActivate;
+    QSet< QString > cvKeys;
 
-    QMap< QString, EgtExifTagControl* > cvTagControls;
-    QPushButton cvSaveButton;
-
-    EgtExifEngine* cvExifEngine;
-
-  };
+};
 #endif
