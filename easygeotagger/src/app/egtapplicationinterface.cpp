@@ -39,16 +39,16 @@ EgtApplicationInterface::EgtApplicationInterface( QMainWindow* theMainWindow )
  * PUBLIC SLOTS
  *
  */
-void EgtApplicationInterface::acceptCoordinates( double theLongitude, double theLatitude )
-{
-  EgtDebug( "Received Lon: "+ QString::number( theLongitude ) +"\tLat: "+ QString::number( theLatitude ) );
-  emit coordinatesReceived( theLongitude, theLatitude );
-}
-
 void EgtApplicationInterface::acceptModelIndexSelections( const QModelIndex& theIndex)
 {
   EgtDebug( "Received model index selection signal" );
   emit( indexSelected( theIndex ) );
+}
+
+void EgtApplicationInterface::acceptKeyValuePair( QString theKey, QString theData )
+{
+  EgtDebug( "Received key: "+ theKey +"\tCargo: "+ theData );
+  emit keyValuePair( theKey, theData );
 }
 
 void EgtApplicationInterface::refreshFileBrowser()

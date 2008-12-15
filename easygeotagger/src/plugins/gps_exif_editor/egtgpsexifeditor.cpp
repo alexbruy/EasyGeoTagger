@@ -92,7 +92,7 @@ void EgtGpsExifEditor::initPlugin()
     cvApplicationInterface->gui()->addDockWidget( Qt::RightDockWidgetArea, &cvDock );
     cvDock.setVisible( false );
 
-    connect( cvApplicationInterface, SIGNAL( coordinatesReceived( double, double ) ), this, SLOT( acceptCoordinates( double, double ) ) );
+    connect( cvApplicationInterface, SIGNAL( keyValuePair( QString, QString ) ), this, SLOT( acceptKeyValuePair( QString, QString ) ) );
     connect( cvApplicationInterface, SIGNAL( indexSelected( const QModelIndex& ) ), this, SLOT( loadExifData( const QModelIndex& ) ) );
   }
 }
@@ -102,10 +102,11 @@ void EgtGpsExifEditor::initPlugin()
  * SIGNAL and SLOTS
  *
  */
-void EgtGpsExifEditor::acceptCoordinates( double theLongitude, double theLatitude )
+void EgtGpsExifEditor::acceptKeyValuePair( QString theKey, QString theData )
 {
   if( cvExifEngine.isValidImage() )
   {
+    cvEditor->setTagData( theKey, theData, false );
   }
 }
 

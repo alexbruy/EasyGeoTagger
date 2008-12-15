@@ -76,7 +76,8 @@ void EasyGeoTaggerIdTool::canvasReleaseEvent( QMouseEvent* mouseEvent )
     QgsPoint lvTransformedLocation = lvTransformer.transform( mCanvas->getCoordinateTransform()->toMapCoordinates( mouseEvent->x(), mouseEvent->y() ) );
     
     //TODO: If not WGS84 reproject point
-    emit locationSelected( lvTransformedLocation.x(), lvTransformedLocation.y() );
+    emit keyValuePair( "Egt.GPS.Longitude", QString::number( lvTransformedLocation.x() ) );
+    emit keyValuePair( "Egt.GPS.Latitude", QString::number( lvTransformedLocation.y() ) );
   }
   else
   {

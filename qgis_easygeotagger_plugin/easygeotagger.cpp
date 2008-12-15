@@ -107,7 +107,7 @@ void EasyGeoTagger::run()
     cvEasyGeoTaggerApplication = new EgtApplication( "/usr/local/lib/easygt" );
     if( 0 == cvEasyGeoTaggerApplication) { return; }
     
-    connect( cvIdTool, SIGNAL( locationSelected( double, double ) ), cvEasyGeoTaggerApplication->applicationInterface(), SLOT( acceptCoordinates( double, double ) ) );
+    connect( cvIdTool, SIGNAL( keyValuePair( QString, QString ) ), cvEasyGeoTaggerApplication->applicationInterface(), SLOT( acceptKeyValuePair( QString,QString ) ) );
   }
   else
   {

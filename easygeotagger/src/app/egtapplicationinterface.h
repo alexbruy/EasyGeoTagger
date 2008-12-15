@@ -49,8 +49,8 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     QMainWindow* gui() { return cvGui; }
 
   public slots:
-    /*! \brief Slot accept coordinates from other plugins or external applications */
-    void acceptCoordinates( double, double );
+    /*! \brief Accepts a key and data data pair for re broadcasting */
+    void acceptKeyValuePair( QString, QString );
 
     /*! \brief Slot to accept item selections */
     void acceptModelIndexSelections( const QModelIndex& theIndex);
@@ -59,8 +59,8 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     void refreshFileBrowser();
 
   signals:
-    /*! \brief Relays coordinates received by acceptCoordinates( double, double ) */
-    void coordinatesReceived( double, double );
+    /*! \brief Rebroadcasts key and tag data pair */
+    void keyValuePair( QString, QString );
 
     /* \brief Signal to broad cast a mouse click event in the file browser */
     void indexSelected( const QModelIndex& );

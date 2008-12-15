@@ -56,15 +56,15 @@ class EgtGpsExifEditor: public EgtPluginInterface
     bool isConfigurable() { return true; }
 
   public slots:
-    /*! \brief Slot that allows external components to pass coordinates to the plugin */
-    void acceptCoordinates( double, double );
+    /*! \brief Slot that allows external components to pass data such as coordinates to the plugin */
+    void acceptKeyValuePair( QString, QString );
     
     /*! \brief Slot that will update the fields with data from the currently selected object in the file browser */
     void loadExifData( const QModelIndex& );
     
     /*! \brief Slot called to activate or launch the plugin */
     void run();
-    
+
     /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel() { cvEditor->showConfigurationDialog(); }
   

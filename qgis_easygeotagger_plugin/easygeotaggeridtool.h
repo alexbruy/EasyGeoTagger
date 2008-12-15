@@ -52,7 +52,7 @@ class EasyGeoTaggerIdTool : public QgsMapTool
     void canvasReleaseEvent(QMouseEvent*);
 
   signals:
-    void locationSelected( double, double );
+    void keyValuePair( QString, QString );
     
   private:
     /*! \brief The destination CRS for transforming points */

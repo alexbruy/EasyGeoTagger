@@ -58,6 +58,10 @@ class EgtExifEditor : public QObject
     /*! \brief Show the configuration dialog */
     void showConfigurationDialog() { cvConfigurationDialog.show(); }
 
+  public slots:
+    void setTagData( QString theKey, QString theValue, bool setCachedValue = true );
+    void setTagData( QString theKey, QVariant theValue, bool setCachedValue = true );
+
   private slots:
     void controlDisabled( QString );
     void controlEnabled( QString );

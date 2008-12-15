@@ -209,3 +209,19 @@ void EgtExifEditor::tagGroupActivated( QStringList theKeys )
     lvTagRunner++;
   }
 }
+
+void EgtExifEditor::setTagData( QString theKey, QString theValue, bool setCachedValue )
+{
+  if( cvTagControls.contains( theKey ) )
+  {
+    cvTagControls[ theKey ]->setValue( theValue, setCachedValue );
+  }
+}
+
+void EgtExifEditor::setTagData( QString theKey, QVariant theValue, bool setCachedValue )
+{
+  if( cvTagControls.contains( theKey ) )
+  {
+    cvTagControls[ theKey ]->setValue( theValue, setCachedValue );
+  }
+}
