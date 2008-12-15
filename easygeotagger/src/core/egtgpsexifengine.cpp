@@ -30,32 +30,33 @@
 #include <cassert>
 
 #include <QFileInfo>
+#include <QObject>
 #include <QDir>
 
 
 EgtGPSExifEngine::EgtGPSExifEngine() : EgtExifEngine()
 {
-    addKey("Egt.GPS.Longitude", "Longitude");
-    addKey("Egt.GPS.Latitude", "Latitude");
-    addKey("Egt.GPS.Altitude", "Altitude");
-    addKey("Egt.GPS.TimeStamp", "Timestamp");
-    addKey("Egt.GPS.DateStamp", "Datestamp");
-    addKey("Egt.GPS.Speed", "Speed");
-    addKey("Egt.GPS.Track", "Track");
-    addKey("Egt.GPS.ImageDirection", "Image direction");
-    addKey("Egt.GPS.DestLatitude", "Destination latitude");
-    addKey("Egt.GPS.DestLongitude", "Destination longitude");
-    addKey("Egt.GPS.DestBearing", "Destination bearing");
-    addKey("Egt.GPS.DestDistance", "Destination distance");
-    addKey("Egt.GPS.VersionID", "Version id");
-    addKey("Egt.GPS.Satellites", "Satellites");
-    addKey("Egt.GPS.Status", "Status");
-    addKey("Egt.GPS.MeasureMode", "Measure mode");
-    addKey("Egt.GPS.DOP", "GPS DOP");
-    addKey("Egt.GPS.ProcessingMethod", "Processing method");
-    addKey("Egt.GPS.AreaInformation", "Area information");
-    addKey("Egt.GPS.MapDatum", "Map datum");
-    addKey("Egt.GPS.Differential", "GPS differential");
+    addKey("Egt.GPS.DateStamp", QObject::tr( "Datestamp" ) );
+    addKey("Egt.GPS.TimeStamp", QObject::tr( "Timestamp" ) );
+    addKey("Egt.GPS.Longitude", QObject::tr( "Longitude" ) );
+    addKey("Egt.GPS.Latitude", QObject::tr( "Latitude" ) );
+    addKey("Egt.GPS.Altitude", QObject::tr( "Altitude" ) );
+    addKey("Egt.GPS.ImageDirection", QObject::tr( "Image direction" ) );
+    addKey("Egt.GPS.MapDatum", QObject::tr( "Map datum" ) );
+    addKey("Egt.GPS.Speed", QObject::tr( "Speed" ) );
+    addKey("Egt.GPS.Track", QObject::tr( "Track" ) );
+    addKey("Egt.GPS.DestLatitude", QObject::tr( "Destination latitude" ) );
+    addKey("Egt.GPS.DestLongitude", QObject::tr( "Destination longitude" ) );
+    addKey("Egt.GPS.DestBearing", QObject::tr( "Destination bearing" ) );
+    addKey("Egt.GPS.DestDistance", QObject::tr( "Destination distance" ) );
+    addKey("Egt.GPS.VersionID", QObject::tr( "Version id" ) );
+    addKey("Egt.GPS.Satellites", QObject::tr( "Satellites" ) );
+    addKey("Egt.GPS.Status", QObject::tr( "Status" ) );
+    addKey("Egt.GPS.MeasureMode", QObject::tr( "Measure mode" ) );
+    addKey("Egt.GPS.DOP", QObject::tr( "GPS DOP" ) );
+    addKey("Egt.GPS.ProcessingMethod", QObject::tr( "Processing method" ) );
+    addKey("Egt.GPS.AreaInformation", QObject::tr( "Area information" ) );
+    addKey("Egt.GPS.Differential", QObject::tr( "GPS differential" ) );
 
     cvDependencies["Egt.GPS.Longitude"] = "Egt.GPS.Latitude";
     cvDependencies["Egt.GPS.Latitude"] = "Egt.GPS.Longitude";

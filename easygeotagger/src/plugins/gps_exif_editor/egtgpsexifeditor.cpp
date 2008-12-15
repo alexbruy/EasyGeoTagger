@@ -42,17 +42,32 @@ EgtGpsExifEditor::EgtGpsExifEditor()
 
   cvEditor = new EgtExifEditor( &cvExifEngine );
   //Create custom tag groups
-  EgtExifTagGroup* lvTagGroup = new EgtExifTagGroup( "Clear all" );
+  EgtExifTagGroup* lvTagGroup = new EgtExifTagGroup( tr( "Clear all" ) );
   cvEditor->addTagGroup( lvTagGroup );
 
   lvTagGroup = new EgtExifTagGroup( "X, Y" );
-  lvTagGroup->addKey("Egt.GPS.Longitude" );
+  lvTagGroup->addKey( "Egt.GPS.Longitude" );
+  cvEditor->addTagGroup( lvTagGroup );
+
+  lvTagGroup = new EgtExifTagGroup( tr( "X, Y, Direction" ) );
+  lvTagGroup->addKey( "Egt.GPS.Longitude" );
+  lvTagGroup->addKey( "Egt.GPS.ImageDirection" );
   cvEditor->addTagGroup( lvTagGroup );
 
   lvTagGroup = new EgtExifTagGroup( "X, Y, Z" );
-  lvTagGroup->addKey("Egt.GPS.Longitude" );
-  lvTagGroup->addKey("Egt.GPS.Altitude" );
+  lvTagGroup->addKey( "Egt.GPS.Longitude" );
+  lvTagGroup->addKey( "Egt.GPS.Altitude" );
   cvEditor->addTagGroup( lvTagGroup );
+
+  lvTagGroup = new EgtExifTagGroup( tr( "X, Y, Z, Direction" ) );
+  lvTagGroup->addKey( "Egt.GPS.Longitude" );
+  lvTagGroup->addKey( "Egt.GPS.Altitude" );
+  lvTagGroup->addKey( "Egt.GPS.ImageDirection" );
+  cvEditor->addTagGroup( lvTagGroup );
+
+
+
+
 
   cvDock.setWindowTitle( cvName );
   cvDock.setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );

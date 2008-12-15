@@ -46,10 +46,10 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName )
     cvEditorControls.layout()->setContentsMargins( 1, 1, 1, 1 );
 
     QLabel* lvLabel  = new QLabel(cvDisplayName);
-    lvLabel->setMinimumWidth( 100 );
+    lvLabel->setMinimumWidth( 125 );
     cvEditorControls.layout()->addWidget( lvLabel );
 
-    cvKeyValue.setMinimumWidth( 150 );
+    cvKeyValue.setMinimumWidth( 100 );
     cvEditorControls.layout()->addWidget( &cvKeyValue );
 
     cvDiscardButton.setMaximumSize( 24,24 );
