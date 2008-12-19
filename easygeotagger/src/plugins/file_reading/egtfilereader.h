@@ -24,7 +24,7 @@
 #ifndef EGTFILEREADER_H
 #define EGTFILEREADER_H
 
-#include "egtexifioengine.h"
+#include "egtgpsexifengine.h"
 #include "egtplugininterface.h"
 #include "egtfilereadercontrols.h"
 #include "ui_egtfilereadercontrolsgui.h"
@@ -77,7 +77,7 @@ class EgtFileReader: public EgtPluginInterface
     QDockWidget* cvDock;
     
     /*! \brief An instance of the EXIF reader writer */
-    EgtExifIoEngine cvExifIoEngine;
+    EgtGPSExifEngine cvExifIoEngine;
     
     /*! \brief The GUI components that visual portion of the plugin */
     EgtFileReaderControls* cvControls;

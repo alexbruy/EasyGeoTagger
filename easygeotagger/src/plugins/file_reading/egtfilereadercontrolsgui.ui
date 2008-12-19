@@ -25,27 +25,14 @@
     <string>Open file</string>
    </property>
   </widget>
-  <widget class="QTableView" name="tvFileContent" >
+  <widget class="QTableWidget" name="twFieldsList" >
    <property name="geometry" >
     <rect>
      <x>10</x>
      <y>10</y>
      <width>256</width>
-     <height>211</height>
+     <height>192</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pbtnTagPicture" >
-   <property name="geometry" >
-    <rect>
-     <x>160</x>
-     <y>230</y>
-     <width>75</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Tag Picture</string>
    </property>
   </widget>
  </widget>

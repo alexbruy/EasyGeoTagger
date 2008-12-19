@@ -32,18 +32,18 @@
 #include <QStandardItemModel>
 #include <QtGui>
 
-EgtFileReaderControls::EgtFileReaderControls( EgtExifIoEngine* theExifIoEngine, QWidget* theParent, Qt::WindowFlags theFlags ) : QWidget( theParent, theFlags )
+
+EgtFileReaderControls::EgtFileReaderControls( EgtGPSExifEngine* theExifIoEngine, QWidget* theParent, Qt::WindowFlags theFlags ) : QWidget( theParent, theFlags )
 {qDebug("constructor"); 
   setupUi( this );
- connect( pbtnOpenFile, SIGNAL( clicked() ), this, SLOT( onthe_pbtnOpenFile_clicked() ) );  
- connect( pbtnTagPicture, SIGNAL( clicked() ), this, SLOT( onthe_pbtnTagPicture_clicked() ) ); 
 
 
   cvExifIoEngine = theExifIoEngine;
 
   //Set up the file browser window
-  QStandardItemModel* lvModel = new QStandardItemModel( );
+ /* QStandardItemModel* lvModel = new QStandardItemModel( );
   tvFileContent->setModel( lvModel );
+
   QModelIndex lvIndex ;
   for (int lvRow = 0; lvRow < 4; ++lvRow) 
   {
@@ -63,6 +63,19 @@ lvModel->insertColumns(lvModel->columnCount(),1);
 lvIndex = lvModel->index(lvModel->rowCount()-2, lvModel->columnCount()-1, QModelIndex());
 lvModel->setData(lvIndex, QVariant((2) * (2)));
 
+ QStringList list;
+     list << "Bill Murray" << "John Doe" << "Bill Clinton" << "Marilyn Manson";
+lvModel->setHorizontalHeaderLabels ( list );*/
+
+
+     //tableWidget = new QTableWidget(12, 3, this);
+     twView->setRowCount(10);
+     twView->setColumnCount(5);
+int row = 2;
+int column = 4;
+QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg((row+1)*(column+1)));
+     twView->setItem(row, column, newItem);
+connect( twView , SIGNAL(clicked ( const QModelIndex & )  ), this, SLOT( header_clicked( const QModelIndex & ) ) );
 }
 
 /*
@@ -87,7 +100,7 @@ void EgtFileReaderControls::open()
   }
 
   QStandardItemModel* lvModel = new QStandardItemModel( );
-  tvFileContent->setModel( lvModel );
+  //tvFileContent->setModel( lvModel );
   QModelIndex lvIndex ;
 
   QTextStream stream( &lvFile );
@@ -128,8 +141,11 @@ void EgtFileReaderControls::open()
   }
 }
 
-
-void EgtFileReaderControls::onthe_pbtnOpenFile_clicked()
+void EgtFileReaderControls::header_clicked( const QModelIndex & item )
+{
+qDebug("clicking");
+}
+void EgtFileReaderControls::on_pbtnOpenFile_clicked()
 {qDebug("push the button"); 
 
   if( 0 == cvExifIoEngine ) { return; }
@@ -138,7 +154,7 @@ void EgtFileReaderControls::onthe_pbtnOpenFile_clicked()
  
 }
 
-void EgtFileReaderControls::onthe_pbtnTagPicture_clicked()
+void EgtFileReaderControls::on_pbtnTagPicture_clicked()
 {
 qDebug("push the button"); 
 

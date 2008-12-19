@@ -23,24 +23,25 @@
 
 
 #include "ui_egtfilereadercontrolsgui.h"
-#include "egtexifioengine.h"
+#include "egtgpsexifengine.h"
 
 #include <QWidget>
 #include <QString>
-
+#include <QTableWidget>
 class EgtFileReaderControls : public QWidget, public Ui::EgtFileReaderControlsGui
 {
  Q_OBJECT
   public:
-    EgtFileReaderControls( EgtExifIoEngine* theExifIoEngine = 0, QWidget* theParent = 0, Qt::WindowFlags theFlags = 0 );
+    EgtFileReaderControls( EgtGPSExifEngine* theExifIoEngine = 0, QWidget* theParent = 0, Qt::WindowFlags theFlags = 0 );
 
   
   private slots:
-    void onthe_pbtnOpenFile_clicked();
-    void onthe_pbtnTagPicture_clicked();
-
+    void on_pbtnOpenFile_clicked();
+    void on_pbtnTagPicture_clicked();
+    void header_clicked( const QModelIndex & item  );
   private:
-    EgtExifIoEngine* cvExifIoEngine;
+    EgtGPSExifEngine* cvExifIoEngine;
+    QTableWidget* tableWidget;
     void open();
 };
 #endif
