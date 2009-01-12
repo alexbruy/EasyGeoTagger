@@ -15,10 +15,12 @@ INCLUDE_DIRECTORIES(
 
 SET( GPS_PLUGIN_SRCS
     egtgpsplugin.cpp
+    egtgpsdatatable.cpp
    )
 
 SET( GPS_PLUGIN_MOC_HDRS
     egtgpsplugin.h
+    egtgpsdatatable.h
    )
 
 SET( GPS_PLUGIN_UIS

@@ -28,6 +28,8 @@
 
 #include <QTableWidget>
 #include <QWidget>
+#include <QPushButton>
+#include <QHeaderView>
 
 class EgtGpsDataTable : public QWidget
 {
@@ -35,15 +37,26 @@ class EgtGpsDataTable : public QWidget
 
   public:
     EgtGpsDataTable( );
-
-  signals:
-    void rowSelected( int );
+    QMap<QString,QString>* getRowItems();
 
   private slots:
-    void setFileReader();
+    //void setFileReader();
+    void cell_selected(int, int);
+    void cvHorizontalHeader_clicked(int);
+    void cvVerticalHeader_clicked(int);
+    void cvTagButton_clicked();
+
+  signals:
+    void rowSelected();
 
   private:
-    QTableWidget cvTable;
+    QHeaderView *  cvHorizontalHeader;
+    QHeaderView *  cvVerticalHeader;
+    QMap<QString,QString> * cvMapItems;
+    QTableWidget* cvTable;
+    QPushButton cvTagButton;
 
+    void populateTable();
 };
 #endif
+

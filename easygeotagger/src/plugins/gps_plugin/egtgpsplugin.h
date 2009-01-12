@@ -25,7 +25,6 @@
 #define EGTGPSPLUGIN_H
 
 #include "egtgpsdatatable.h"
-#include "egtreaderfactory.h"
 #include "egtplugininterface.h"
 
 #include <QPushButton>
@@ -55,8 +54,11 @@ class EgtGpsPlugin: public EgtPluginInterface
     /*! \brief Return the ability of this plugin to be configured */
     bool isConfigurable() { return false; }
 
+  
   public slots:
     
+    void acceptRowSelected( );   
+
     void on_pbtnOpenFile_clicked();
 
     /*! \brief Slot called to activate or launch the plugin */
@@ -64,12 +66,16 @@ class EgtGpsPlugin: public EgtPluginInterface
 
     /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel() { }
-  
+
+  signals:
+    void keyValuePair( QString, QString );
+
   private:
+    EgtGpsDataTable cvDataTable; 
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
     QDockWidget cvDock;
-
-    EgtExifEditor* cvEditor;
+    
 
 };
 #endif
+

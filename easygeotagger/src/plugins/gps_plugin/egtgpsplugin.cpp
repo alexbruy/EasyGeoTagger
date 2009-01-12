@@ -1,7 +1,7 @@
 /*
-** File: egtgpsexifeditor.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-12-09
+** File: 
+** Author(s): 
+** Creation Date: 
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -42,7 +42,7 @@ EgtGpsPlugin::EgtGpsPlugin()
   cvDock.setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
   cvDock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
   cvDock.setMinimumSize( 250,150 );
-  cvDock.setWidget( cvEditor->editorWidget() );
+  cvDock.setWidget( &cvDataTable );
 }
 
 /*
@@ -78,6 +78,8 @@ void EgtGpsPlugin::initPlugin()
 
     //connect to application interface
     connect( this, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
+    connect( &cvDataTable, SIGNAL( rowSelected(  ) ), this, SLOT( acceptRowSelected(  ) ) );
+    
   }
 }
 
@@ -88,6 +90,20 @@ void EgtGpsPlugin::initPlugin()
  */
 void EgtGpsPlugin::on_pbtnOpenFile_clicked()
 {
+}
+
+void EgtGpsPlugin::acceptRowSelected( )
+{
+  
+  QMap<QString,QString>* lvMap = cvDataTable.getRowItems();
+
+  QMapIterator<QString, QString> lvMapIterator(*lvMap);
+  while (lvMapIterator.hasNext())
+  {
+     lvMapIterator.next();
+     //qDebug(lvMapIterator.key().toStdString().c_str());
+     emit(keyValuePair("Egt.GPS."+lvMapIterator.key(),lvMapIterator.value()));
+ }
 }
 
 void EgtGpsPlugin::run()
@@ -103,8 +119,6 @@ void EgtGpsPlugin::run()
 
   EgtDebug( "dock is already open but not visible" );
   cvDock.showMaximized();
-  loadExifData( cvLastFile );
-
   EgtDebug( "done" );
 }
 
@@ -118,3 +132,4 @@ void EgtGpsPlugin::run()
 
 
  Q_EXPORT_PLUGIN2( gpsplugin, EgtGpsPlugin );
+
