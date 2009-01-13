@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <QtPlugin>
 #include <QMap>
+#include <QVBoxLayout>
 
 EgtGpsPlugin::EgtGpsPlugin()
 {
@@ -42,7 +43,17 @@ EgtGpsPlugin::EgtGpsPlugin()
   cvDock.setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
   cvDock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
   cvDock.setMinimumSize( 250,150 );
-  cvDock.setWidget( &cvDataTable );
+
+  QWidget* lvPanel = new QWidget();
+  lvPanel->setLayout( new QVBoxLayout() );
+  lvPanel->layout()->setContentsMargins( 1, 1, 1, 1 );
+  //((QVBoxLayout*)lvPanel->layout())->insertStretch(-1, 1);
+  cvSaveButton.setText( tr( "Tag picture" ) );
+  lvPanel->layout()->addWidget( &cvDataTable );
+  lvPanel->layout()->addWidget( &cvSaveButton );
+  connect( &cvSaveButton, SIGNAL( clicked() ), this, SLOT( cvTagButton_clicked() ) );
+
+  cvDock.setWidget( lvPanel );
 }
 
 /*
@@ -78,7 +89,7 @@ void EgtGpsPlugin::initPlugin()
 
     //connect to application interface
     connect( this, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
-    connect( &cvDataTable, SIGNAL( rowSelected(  ) ), this, SLOT( acceptRowSelected(  ) ) );
+    
     
   }
 }
@@ -88,14 +99,10 @@ void EgtGpsPlugin::initPlugin()
  * SIGNAL and SLOTS
  *
  */
-void EgtGpsPlugin::on_pbtnOpenFile_clicked()
-{
-}
 
-void EgtGpsPlugin::acceptRowSelected( )
+void EgtGpsPlugin::cvTagButton_clicked() 
 {
-  
-  QMap<QString,QString>* lvMap = cvDataTable.getRowItems();
+   QMap<QString,QString>* lvMap = cvDataTable.getRowItems();
 
   QMapIterator<QString, QString> lvMapIterator(*lvMap);
   while (lvMapIterator.hasNext())
@@ -104,7 +111,14 @@ void EgtGpsPlugin::acceptRowSelected( )
      //qDebug(lvMapIterator.key().toStdString().c_str());
      emit(keyValuePair("Egt.GPS."+lvMapIterator.key(),lvMapIterator.value()));
  }
+
 }
+
+void EgtGpsPlugin::on_pbtnOpenFile_clicked()
+{
+}
+
+
 
 void EgtGpsPlugin::run()
 {

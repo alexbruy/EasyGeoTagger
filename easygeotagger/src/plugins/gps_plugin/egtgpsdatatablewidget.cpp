@@ -21,41 +21,31 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#include "egtgpsdatatable.h"
+#include "egtgpsdatatablewidget.h"
 
 #include <QVBoxLayout>
 
 
-EgtGpsDataTable::EgtGpsDataTable( )
+EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
-  setLayout( new QVBoxLayout() );
-  layout()->setContentsMargins( 1, 1, 1, 1 );
-
-  cvTable = new QTableWidget(this);
-  cvTable->setRowCount(10);
-  cvTable->setColumnCount(3);
+  setRowCount(10);
+  setColumnCount(3);
 
   QStringList lvTags;
   lvTags << "Longitude" << "Latitude" << "Altitude";
-  cvTable->setHorizontalHeaderLabels(lvTags);
+  setHorizontalHeaderLabels(lvTags);
 
   cvMapItems = new QMap<QString,QString>;
 
   //Populate the table with some data
   populateTable();
 
-  layout()->addWidget( cvTable );
+  connect( this, SIGNAL( cellClicked(int, int) ), this, SLOT( cell_selected(int, int) ) );  
 
-  cvTagButton.setText( tr( "Tag picture" ) );
-  layout()->addWidget( &cvTagButton );
-  connect( &cvTagButton, SIGNAL( clicked() ), this, SLOT( cvTagButton_clicked() ) );
-
-  connect( cvTable, SIGNAL( cellClicked(int, int) ), this, SLOT( cell_selected(int, int) ) );  
-
-  cvHorizontalHeader = cvTable->horizontalHeader();
+  cvHorizontalHeader = horizontalHeader();
   connect( cvHorizontalHeader, SIGNAL( sectionClicked( int ) ), this, SLOT( cvHorizontalHeader_clicked(int) ) ); 
 
-  cvVerticalHeader = cvTable->verticalHeader();
+  cvVerticalHeader = verticalHeader();
   connect( cvVerticalHeader, SIGNAL( sectionClicked( int ) ), this, SLOT( cvVerticalHeader_clicked(int) ) ); 
 }
 
@@ -65,7 +55,7 @@ EgtGpsDataTable::EgtGpsDataTable( )
  *
  */
 
-QMap<QString,QString>* EgtGpsDataTable::getRowItems()
+QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems()
 {
   return cvMapItems;
 }
@@ -76,14 +66,14 @@ QMap<QString,QString>* EgtGpsDataTable::getRowItems()
  *
  */
 
-void EgtGpsDataTable::populateTable()
+void EgtGpsDataTableWidget::populateTable()
 {
   for( int lvRowCounter= 0; lvRowCounter<10; lvRowCounter++ )
     for( int lvColumnCounter= 0; lvColumnCounter<3; lvColumnCounter++ )
     {
       QTableWidgetItem *lvNewItem = new QTableWidgetItem(tr("%1").arg(
          (lvRowCounter+1)*(lvColumnCounter+1)));
-       cvTable->setItem( lvRowCounter, lvColumnCounter, lvNewItem );
+       setItem( lvRowCounter, lvColumnCounter, lvNewItem );
     }
 }
 /*
@@ -92,40 +82,37 @@ void EgtGpsDataTable::populateTable()
  *
  */
 
-void EgtGpsDataTable::cvHorizontalHeader_clicked( int theIndex )
+void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
 {
 qDebug(("Horizontal header clicked: "+QString::number(theIndex)).toStdString().c_str());
 }
 
-void EgtGpsDataTable::cvVerticalHeader_clicked(int theIndex)
+void EgtGpsDataTableWidget::cvVerticalHeader_clicked(int theIndex)
 { 
   delete cvMapItems;
   cvMapItems = new QMap<QString,QString>;
  
   QTableWidgetItem* lvHeaderItem;
-  for(int lvColumnCount = 0; lvColumnCount < cvTable->columnCount(); lvColumnCount++)
+  for(int lvColumnCount = 0; lvColumnCount < columnCount(); lvColumnCount++)
   {
     QString lvText;
-    lvHeaderItem = cvTable->horizontalHeaderItem ( lvColumnCount );
+    lvHeaderItem = horizontalHeaderItem ( lvColumnCount );
     lvText = lvHeaderItem->text();
-    cvMapItems->insert( lvText, cvTable->item( theIndex, lvColumnCount )->text() );
+    cvMapItems->insert( lvText, item( theIndex, lvColumnCount )->text() );
   } 
 }
 
 
-void EgtGpsDataTable::cell_selected(int row, int column)
+void EgtGpsDataTableWidget::cell_selected(int row, int column)
 { 
-  QTableWidgetItem * lvItem =cvTable->item ( row, column );
+  QTableWidgetItem * lvItem =item ( row, column );
   double x = lvItem->data(0).toDouble();
   qDebug(("Cell clicked: "+QString::number(x)).toStdString().c_str());
 }
 
-void EgtGpsDataTable::cvTagButton_clicked()
-{
-  emit( rowSelected() );
-}
 
-/*void EgtGpsDataTable::void setFileReader()
+
+/*void EgtGpsDataTableWidget::void setFileReader()
 {
 }*/
 

@@ -24,7 +24,7 @@
 #ifndef EGTGPSPLUGIN_H
 #define EGTGPSPLUGIN_H
 
-#include "egtgpsdatatable.h"
+#include "egtgpsdatatablewidget.h"
 #include "egtplugininterface.h"
 
 #include <QPushButton>
@@ -56,8 +56,6 @@ class EgtGpsPlugin: public EgtPluginInterface
 
   
   public slots:
-    
-    void acceptRowSelected( );   
 
     void on_pbtnOpenFile_clicked();
 
@@ -67,13 +65,18 @@ class EgtGpsPlugin: public EgtPluginInterface
     /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel() { }
 
+  private slots:
+    void cvTagButton_clicked();
+
   signals:
     void keyValuePair( QString, QString );
 
   private:
-    EgtGpsDataTable cvDataTable; 
+    EgtGpsDataTableWidget cvDataTable; 
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
     QDockWidget cvDock;
+  
+    QPushButton cvSaveButton;
     
 
 };

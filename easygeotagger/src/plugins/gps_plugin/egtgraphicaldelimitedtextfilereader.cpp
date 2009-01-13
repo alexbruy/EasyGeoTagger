@@ -21,13 +21,18 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#include "egtdelimitedtextfilereader.h"
+#include "egtgraphicaldelimitedtextfilereader.h"
 
 
 
-EgtDelimitedTextFileReader::EgtDelimitedTextFileReader( QString theFileName )
+EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  )
 {
-  setFileName( theFileName );
+  //Setup the Select Delimiter Dialog
+  cvSelectDelimiterDialog.setWindowTitle( tr( "Select Delimiter" ) );
+  cvSelectDelimiterDialog.setModal( true );
+  cvSelectDelimiterDialog.setLayout( new QVBoxLayout() );
+  cvSelectDelimiterDialog.layout()->setSpacing( 5 );
+  cvSelectDelimiterDialog.layout()->setContentsMargins( 1, 1, 1, 1 );
 }
 
 /*
@@ -39,60 +44,21 @@ EgtDelimitedTextFileReader::EgtDelimitedTextFileReader( QString theFileName )
 /*!
  * \param theButton pointer to a QPushButton that is to be connect to the  showConfigureationPanel slot
  */
-QStringList read( bool* ok)
-{
-  QFile lvFile(cvFileName);
-  if (!lvFile.open(QFile::ReadOnly | QFile::Text)) 
-  {
-    if (ok)
-      *ok = false;
-    return;
-  }
-
-  QTextStream stream( &lvFile );
-  QString lvLine;
-  QStringList lvList;
-
-  if( hasColumnHeaders() )
-  {
-    stream.readLine();
-  }
-
-  while( ! stream.atEnd() )
-  {
-    lvLine = stream.readLine();
-    lvList << lvLine.split( cvDelimiter );
-  }
-}
-
-QStringList columnHeaders()
-{
-}
-
-bool hasColumnHeaders()
-{
-  return false; 
-}
-
-void setFileName( QString theFileName )
-{
-  cvFileName = theFileName;
-}
-
-void setDelimiter( char theDelimiter )
-{
-  cvDelimiter = theDelimiter;
-}
-
-bool preprocessFile( QString )
+void EgtGraphicalDelimitedTextFileReader::selectFile()
 {
 
 }
 
+void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
+{
+  QLabel* lvLabel = new QLabel( this );
+  lvLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+  lvLabel->setText("Specify a delimiter:");
+  lvLabel->setAlignment(Qt::AlignBottom | Qt::AlignRight);
 
-/*
- *
- * PRIVATE FUNCTIONS
- *
- */
+  QTextEdit* lvText = new QTextEdit( this );
+
+  QPushButton *lvAccept = new QPushButton("&Ok", this);
+}
+
 

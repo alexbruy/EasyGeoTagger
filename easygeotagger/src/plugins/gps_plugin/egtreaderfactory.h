@@ -21,42 +21,24 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTGPSDATATABLE_H
-#define EGTGPSDATATABLE_H
+#ifndef EGTREADERFACTORY_H
+#define EGTREADERFACTORY_H
 
 #include "egtfilereader.h"
 
-#include <QTableWidget>
-#include <QWidget>
-#include <QPushButton>
-#include <QHeaderView>
-
-class EgtGpsDataTable : public QWidget
+class EgtReaderFactory
 {
   Q_OBJECT
 
   public:
-    EgtGpsDataTable( );
-    QMap<QString,QString>* getRowItems();
+    EgtReaderFactory( );
+    show();
 
   private slots:
-    //void setFileReader();
-    void cell_selected(int, int);
-    void cvHorizontalHeader_clicked(int);
-    void cvVerticalHeader_clicked(int);
-    void cvTagButton_clicked();
-
-  signals:
-    void rowSelected();
 
   private:
-    QHeaderView *  cvHorizontalHeader;
-    QHeaderView *  cvVerticalHeader;
-    QMap<QString,QString> * cvMapItems;
-    QTableWidget* cvTable;
-    QPushButton cvTagButton;
-
-    void populateTable();
+  
+  signals:
+    fileReaderCreated( EgtFileReader );
 };
 #endif
-
