@@ -38,7 +38,7 @@ EgtExifEngine::EgtExifEngine()
   Exiv2::DataValue notvalid(Exiv2::invalidTypeId );
   cvNotValidValue=  notvalid;
   cvIsValidImage = false;
-  cvHasGpsExif = false;
+  cvHasExpectedExif = false;
 }
 
 EgtExifEngine::EgtExifEngine( QString theImageFilename )
@@ -59,6 +59,38 @@ EgtExifEngine::EgtExifEngine( const QModelIndex& theIndex )
  * PUBLIC FUNCTIONS
  *
  */
+
+bool EgtExifEngine::hasKey( QString thePartialKey )
+{
+  if( cvIsValidImage )
+  {
+    try
+    {
+      //Read the metadata
+      cvImage->readMetadata();
+
+      //TODO: update this functionality, there has to be a better way to do this
+      QString lvKey;
+      Exiv2::ExifData::const_iterator end = cvImage->exifData().end();
+      for (Exiv2::ExifData::const_iterator i = cvImage->exifData().begin(); i != end; ++i)
+      {
+        lvKey = QString( i->key().c_str() );
+        lvKey = lvKey.left(12);
+        if( QString::compare( lvKey, thePartialKey ,Qt::CaseInsensitive ) == 0 )
+        {
+          return true;
+        }
+      }
+    }
+    catch ( Exiv2::AnyError& e )
+    {
+      cvLastError = QString( "Error caught ["+ QString( e.what() ) +"]" );
+      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
+    }
+  }
+
+  return false;
+}
 
 /*!
  * \returns whether the image is valid or not
@@ -150,57 +182,10 @@ QString EgtExifEngine::readKeyValueAsString(QString theKey)
 /*!
  * \param theImageFilename Absolute path to the image file that is going to be read/written
  */
-void EgtExifEngine::setFile( QString theImageFilename )
+void EgtExifEngine::setFile( QString theFileName )
 {
-
-  cvImageFileName = theImageFilename;
-  cvIsValidImage = false;
-  cvHasGpsExif = false;
-  
-  //If the file is a directory just bail no need to try an open it as an image
-  QFileInfo lvFileToTest( theImageFilename );
-  if( lvFileToTest.isDir() ) { return; }
-  
-  try 
-  {
-    //Try to open the image
-    cvImage = Exiv2::ImageFactory::open( theImageFilename.toStdString() );
-    assert( cvImage.get() != 0 );
-    
-    //Assert passed so we have an image
-    cvIsValidImage = true;
-    try 
-    {
-      //Read the metadata
-      cvImage->readMetadata();
-      
-      //Search through the exif data looking for gps header
-      //TODO: update this functionality, there has to be a better way to do this, if not make it a function
-      QString lvKey;
-      Exiv2::ExifData::const_iterator end = cvImage->exifData().end();
-      for (Exiv2::ExifData::const_iterator i = cvImage->exifData().begin(); i != end; ++i)
-      {
-        lvKey = QString( i->key().c_str() );
-        lvKey = lvKey.left(12);  //Exif.GPSInfo...
-        if( QString::compare( lvKey, "Exif.GPSInfo" ,Qt::CaseInsensitive ) == 0 )
-        {
-	   cvHasGpsExif = true;
-	   EgtDebug( "["+ theImageFilename +"] has gps exif" );
-	   break;	
-	}  
-      }
-    }
-    catch ( Exiv2::AnyError& e )
-    {
-      cvLastError = QString( "Error caught ["+ QString( e.what() ) +"]" );
-      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
-    }
-  }
-  catch ( Exiv2::AnyError& e )
-  {
-    cvLastError = QString( "Unable to open file: "+ theImageFilename);
-    EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
-  }
+  openFile( theFileName );
+  cvHasExpectedExif = true; //set true in base class because we can access any all/tag
 }
 
 
@@ -308,6 +293,12 @@ bool EgtExifEngine::writeTag( QString theKey, QString theString, QString theDefa
   }
 }
 
+/*
+ *
+ * PROTECTED FUNCTIONS
+ *
+ */
+
 void EgtExifEngine::addKey( QString theKey, QString theCommonName )
 {
   KeyMap lvMap;
@@ -315,3 +306,30 @@ void EgtExifEngine::addKey( QString theKey, QString theCommonName )
   lvMap.commonName = theCommonName;
   cvKeys.append( lvMap );
 }
+
+void EgtExifEngine::openFile( QString theFileName )
+{
+  cvImageFileName = theFileName;
+  cvIsValidImage = false;
+  cvHasExpectedExif = false;
+
+  //If the file is a directory just bail no need to try an open it as an image
+  QFileInfo lvFileToTest( theFileName );
+  if( lvFileToTest.isDir() ) { return; }
+
+  try
+  {
+    //Try to open the image
+    cvImage = Exiv2::ImageFactory::open( theFileName.toStdString() );
+    assert( cvImage.get() != 0 );
+
+    //Assert passed so we have an image
+    cvIsValidImage = true;
+  }
+  catch ( Exiv2::AnyError& e )
+  {
+    cvLastError = QString( "Unable to open file: "+ theFileName);
+    EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
+  }
+}
+

@@ -28,6 +28,7 @@
 
 #include "egtimageengine.h"
 #include "egtpathbuilder.h"
+#include "egtphotoexifengine.h"
 
 #include <QToolBox>
 #include <QFileInfo>
@@ -73,6 +74,7 @@ private:
   QFileInfo cvFileInfo;
   EgtImageEngine cvImageEngine;
   EgtPathBuilder cvPathBuilder;
+  EgtPhotoExifEngine cvPhotoExifEngine;
   QDockWidget* cvPluginDock;
 };
 #endif

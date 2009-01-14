@@ -36,8 +36,8 @@
 
 EgtGPSExifEngine::EgtGPSExifEngine() : EgtExifEngine()
 {
-    addKey("Egt.GPS.DateStamp", QObject::tr( "Datestamp" ) );
-    addKey("Egt.GPS.TimeStamp", QObject::tr( "Timestamp" ) );
+    addKey("Egt.GPS.DateStamp", QObject::tr( "Date stamp" ) );
+    addKey("Egt.GPS.TimeStamp", QObject::tr( "Time stamp" ) );
     addKey("Egt.GPS.Longitude", QObject::tr( "Longitude" ) );
     addKey("Egt.GPS.Latitude", QObject::tr( "Latitude" ) );
     addKey("Egt.GPS.Altitude", QObject::tr( "Altitude" ) );
@@ -425,14 +425,6 @@ double EgtGPSExifEngine::gpsDOP( bool * isValid )
 }
 
 /*!
- * \returns whether the image contains gps exif metadata or not
- */
-bool EgtGPSExifEngine::hasGpsExif()
-{
-  return cvHasGpsExif;
-}
-
-/*!
  * \returns whether the image is valid or not
  */
 bool EgtGPSExifEngine::isValidImage()
@@ -630,7 +622,7 @@ QString EgtGPSExifEngine::processingMethod( bool * isValid )
 
 
 QVariant EgtGPSExifEngine::read( QString theTag, bool * isValid )
-{ char * lvunits;
+{
   //TODO: make compare case insensitive
   if( QString::compare( theTag, "Egt.GPS.Altitude" ) == 0)
   {
@@ -751,57 +743,10 @@ QString EgtGPSExifEngine::satellites( bool * isValid )
 /*!
  * \param theImageFilename Absolute path to the image file that is going to be read/written
  */
-void EgtGPSExifEngine::setFile( QString theImageFilename )
+void EgtGPSExifEngine::setFile( QString theFileName )
 {
-
-  cvImageFileName = theImageFilename;
-  cvIsValidImage = false;
-  cvHasGpsExif = false;
-  
-  //If the file is a directory just bail no need to try an open it as an image
-  QFileInfo lvFileToTest( theImageFilename );
-  if( lvFileToTest.isDir() ) { return; }
-  
-  try 
-  {
-    //Try to open the image
-    cvImage = Exiv2::ImageFactory::open( theImageFilename.toStdString() );
-    assert( cvImage.get() != 0 );
-    
-    //Assert passed so we have an image
-    cvIsValidImage = true;
-    try 
-    {
-      //Read the metadata
-      cvImage->readMetadata();
-      
-      //Search through the exif data looking for gps header
-      //TODO: update this functionality, there has to be a better way to do this, if not make it a function
-      QString lvKey;
-      Exiv2::ExifData::const_iterator end = cvImage->exifData().end();
-      for (Exiv2::ExifData::const_iterator i = cvImage->exifData().begin(); i != end; ++i)
-      {
-        lvKey = QString( i->key().c_str() );
-        lvKey = lvKey.left(12);  //Exif.GPSInfo...
-        if( QString::compare( lvKey, "Exif.GPSInfo" ,Qt::CaseInsensitive ) == 0 )
-        {
-	   cvHasGpsExif = true;
-	   EgtDebug( "["+ theImageFilename +"] has gps exif" );
-	   break;	
-	}  
-      }
-    }
-    catch ( Exiv2::AnyError& e )
-    {
-      cvLastError = QString( "Error caught ["+ QString( e.what() ) +"]" );
-      EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
-    }
-  }
-  catch ( Exiv2::AnyError& e )
-  {
-    cvLastError = QString( "Unable to open file: "+ theImageFilename);
-    EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
-  }
+  openFile( theFileName );
+  cvHasExpectedExif = hasKey( "Exif.GPSInfo" );
 }
 
 /*!

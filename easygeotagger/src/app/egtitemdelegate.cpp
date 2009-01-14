@@ -66,7 +66,7 @@ void EgtItemDelegate::paint(QPainter* thePainter, const QStyleOptionViewItem& th
     EgtGPSExifEngine lvExifEngine( theIndex );
     if( lvExifEngine.isValidImage() )
     {
-      if( lvExifEngine.hasGpsExif() )
+      if( lvExifEngine.hasExpectedExif() )
       {
         QPixmap lvPixmap( lvViewOption.rect.x(),lvViewOption.rect.y() );
         lvPixmap.fill( QColor( 0,255,0,75 ) );

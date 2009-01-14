@@ -111,7 +111,7 @@ void EgtExportToCsv::run()
         
         //If the file has exif data,then export it, otherwise skip it
         lvExifEngine.setFile( lvImageFile );
-        if( lvExifEngine.hasGpsExif() )
+        if( lvExifEngine.hasExpectedExif() )
         {
           lvOutputWriter << lvExifEngine.longitude() << "," << lvExifEngine.latitude() << "," << lvImageFile << "\n";
           lvExportedImages++;

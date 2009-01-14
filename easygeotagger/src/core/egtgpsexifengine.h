@@ -28,7 +28,7 @@
 
 /*! \brief Read and write EXIF data
  *
- * This class is largely a wrapper for Exiv2 to provide simple access to EXIF header data
+ * This class is largely a wrapper for Exiv2 to provide simple access to GPS EXIF header data
  */
 class MS_DLL_SPEC EgtGPSExifEngine : public EgtExifEngine
 {
@@ -73,9 +73,6 @@ public:
   /*! \brief Returns the GPS DOP (data degree of precision)*/
   double gpsDOP( bool * isValid = 0 );
 
-  /*! \brief has the image gps exif metadata? */
-  bool hasGpsExif();
-  
   /*! \brief is the image valid? */
   bool isValidImage();
 
@@ -103,7 +100,7 @@ public:
   QString satellites( bool * isValid = 0 );
 
   /*! \brief Sets the image to be managed with this class */
-  void setFile( QString theImageFilename );
+  void setFile( QString theFileName );
   
   /*! \brief Returns the longitude */
   double speed(  bool * isValid = 0 );
@@ -214,8 +211,14 @@ public:
   bool writeVersionID( QString );
 
 private:
-   /*! \brief Converts from decimal degrees to Rational notation */
+  /*! \brief has the image GPS exif metadata? */
+  bool cvHasGpsExif;
+
+
+  /*! \brief Converts from decimal degrees to Rational notation */
   QString convertToRational(QString);
+
+
 
 };
 #endif

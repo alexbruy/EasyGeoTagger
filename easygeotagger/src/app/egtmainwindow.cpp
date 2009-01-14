@@ -98,7 +98,13 @@ void EgtMainWindow::setPluginToolBox( QToolBox* theToolBox)
 void EgtMainWindow::clicked( const QModelIndex& theIndex )
 {
   EgtDebug( "entered" );
-  cvImageEngine.setFile( cvPathBuilder.buildPath( theIndex ) );
+  QString lvFileName = cvPathBuilder.buildPath( theIndex );
+
+  cvPhotoExifEngine.setFile( lvFileName );
+  labelDateTimeOriginal->setText( cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString() );
+
+  cvImageEngine.setFile( lvFileName );
+
   emit( fileBrowserItemSelected( theIndex ) );
 }
 

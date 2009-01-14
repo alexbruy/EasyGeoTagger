@@ -182,7 +182,7 @@ void EgtGpsExifEditor::loadExifData( QString theFilename )
   cvExifEngine.setFile( theFilename );
   cvLastFile = theFilename;
 
-  cvEditor->loadExifData( cvExifEngine.hasGpsExif() );
+  cvEditor->loadExifData( cvExifEngine.hasExpectedExif() );
   
 }
 

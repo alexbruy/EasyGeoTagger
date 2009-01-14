@@ -58,6 +58,10 @@ public:
 
   QString dependency( QString theKey ) { return cvDependencies.value( theKey ); }
 
+  bool hasExpectedExif() { return cvHasExpectedExif; }
+
+  bool hasKey( QString );
+
   /*! \brief is the image valid? */
   bool isValidImage();
 
@@ -72,7 +76,7 @@ public:
   QString readKeyValueAsString(QString);
 
    /*! \brief Sets the image to be managed with this class */
-  void setFile( QString theImageFilename );
+  void setFile( QString theFileName );
 
   virtual bool write( QString theKey, QString theValue ) { return false; }
 
@@ -82,8 +86,7 @@ public:
 protected:
   QMap< QString, QString > cvDependencies;
 
-  /*! \brief has the image GPS exif metadata? */
-  bool cvHasGpsExif;
+  bool cvHasExpectedExif;
 
   /*! \brief Exiv2 data to handle the image */
   Exiv2::Image::AutoPtr cvImage;
@@ -105,7 +108,7 @@ protected:
 
 
   void addKey( QString, QString );
-
+  void openFile( QString theFileName );
 };
 #endif
 

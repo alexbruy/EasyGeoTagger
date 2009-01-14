@@ -19,6 +19,7 @@ SET( EGT_INSTALL_HDRS
      core/egtimageengine.h
      core/egtlogger.h
      core/egtpathbuilder.h
+     core/egtphotoexifengine.h
      core/egtrawimagereader.h
 
    )
@@ -28,6 +29,7 @@ SET( EGT_CORE_SRCS
      core/egtgpsexifengine.cpp
      core/egtimageengine.cpp
      core/egtpathbuilder.cpp
+     core/egtphotoexifengine.cpp
      core/egtrawimagereader.cpp
    )
 
