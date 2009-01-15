@@ -44,8 +44,13 @@ public:
   EgtPhotoExifEngine( const QModelIndex& );
 
   QString dateTimeOriginal( bool* isValid );
+
   QVariant read( QString theTag, bool* isValid=0 );
+
   void setFile( QString theFileName );
+
+  bool write( QString, QString );
+  bool writeDateTimeOriginal( QString );
 
 
 };

@@ -65,7 +65,11 @@ public:
   /*! \brief is the image valid? */
   bool isValidImage();
 
+  bool isValidImageWithExpectedExif() { return cvIsValidImage && cvHasExpectedExif; }
+
   QList< KeyMap > keys() { return cvKeys; }
+
+  const QString &lastError() { return cvLastError; }
 
   virtual QVariant read( QString theKey, bool* isValid = 0 ) { if ( 0 != isValid ) { *isValid = false; } return QVariant(); }
 

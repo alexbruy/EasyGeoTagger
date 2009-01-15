@@ -75,7 +75,7 @@ bool EgtExifEngine::hasKey( QString thePartialKey )
       for (Exiv2::ExifData::const_iterator i = cvImage->exifData().begin(); i != end; ++i)
       {
         lvKey = QString( i->key().c_str() );
-        lvKey = lvKey.left(12);
+        lvKey = lvKey.left( thePartialKey.size() );
         if( QString::compare( lvKey, thePartialKey ,Qt::CaseInsensitive ) == 0 )
         {
           return true;
