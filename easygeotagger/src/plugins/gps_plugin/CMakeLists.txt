@@ -16,11 +16,18 @@ INCLUDE_DIRECTORIES(
 SET( GPS_PLUGIN_SRCS
     egtgpsplugin.cpp
     egtgpsdatatablewidget.cpp
+    egtdelimitedtextfilereader.cpp
+    egtgraphicaldelimitedtextfilereader.cpp
+    egtreaderfactory.cpp
    )
 
 SET( GPS_PLUGIN_MOC_HDRS
     egtgpsplugin.h
     egtgpsdatatablewidget.h
+    egtfilereader.h
+    egtdelimitedtextfilereader.h
+    egtgraphicaldelimitedtextfilereader.h
+    egtreaderfactory.h
    )
 
 SET( GPS_PLUGIN_UIS
@@ -40,6 +47,7 @@ QT4_WRAP_CPP( GPS_PLUGIN_MOC_SRCS ${GPS_PLUGIN_MOC_HDRS} )
 ADD_DEFINITIONS( -DQT_PLUGIN )
 
 ADD_library( gpsplugin MODULE 
+             ${GPS_PLUGIN_HDRS}
              ${GPS_PLUGIN_SRCS}
              ${GPS_PLUGIN_MOC_SRCS}
              ${GPS_PLUGIN_RCCS_SRCS}

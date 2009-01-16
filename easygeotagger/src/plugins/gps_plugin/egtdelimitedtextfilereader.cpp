@@ -23,11 +23,13 @@
 **/
 #include "egtdelimitedtextfilereader.h"
 
+#include <QFile>
+#include <QTextStream>
 
-
-EgtDelimitedTextFileReader::EgtDelimitedTextFileReader( QString theFileName )
+EgtDelimitedTextFileReader::EgtDelimitedTextFileReader():EgtFileReader()
 {
-  setFileName( theFileName );
+cvFileName = "AAAA";
+qDebug("constructor");
 }
 
 /*
@@ -39,19 +41,20 @@ EgtDelimitedTextFileReader::EgtDelimitedTextFileReader( QString theFileName )
 /*!
  * \param theButton pointer to a QPushButton that is to be connect to the  showConfigureationPanel slot
  */
-QStringList read( bool* ok)
+QStringList EgtDelimitedTextFileReader::read( bool* ok)
 {
-  QFile lvFile(cvFileName);
+  QFile lvFile( cvFileName );
+  QStringList lvList;
   if (!lvFile.open(QFile::ReadOnly | QFile::Text)) 
   {
     if (ok)
       *ok = false;
-    return;
+    return lvList;
   }
 
   QTextStream stream( &lvFile );
   QString lvLine;
-  QStringList lvList;
+  
 
   if( hasColumnHeaders() )
   {
@@ -65,26 +68,30 @@ QStringList read( bool* ok)
   }
 }
 
-QStringList columnHeaders()
+QStringList EgtDelimitedTextFileReader::columnHeaders()
 {
+  QStringList lvList;
+  return lvList;
 }
 
-bool hasColumnHeaders()
+bool EgtDelimitedTextFileReader::hasColumnHeaders()
 {
   return false; 
 }
 
-void setFileName( QString theFileName )
+void EgtDelimitedTextFileReader::setFileName( QString theFileName )
 {
+
+qDebug(cvFileName.toStdString().c_str());
   cvFileName = theFileName;
 }
 
-void setDelimiter( char theDelimiter )
+void EgtDelimitedTextFileReader::setDelimiter( QString theDelimiter )
 {
   cvDelimiter = theDelimiter;
 }
 
-bool preprocessFile( QString )
+bool EgtDelimitedTextFileReader::preprocessFile( QString )
 {
 
 }

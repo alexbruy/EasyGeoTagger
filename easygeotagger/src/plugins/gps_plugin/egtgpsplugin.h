@@ -26,6 +26,8 @@
 
 #include "egtgpsdatatablewidget.h"
 #include "egtplugininterface.h"
+#include "egtfilereader.h"
+#include "egtreaderfactory.h"
 
 #include <QPushButton>
 #include <QModelIndex>
@@ -57,7 +59,7 @@ class EgtGpsPlugin: public EgtPluginInterface
   
   public slots:
 
-    void on_pbtnOpenFile_clicked();
+    void cvOpenFile_clicked();
 
     /*! \brief Slot called to activate or launch the plugin */
     void run();
@@ -67,16 +69,18 @@ class EgtGpsPlugin: public EgtPluginInterface
 
   private slots:
     void cvTagButton_clicked();
-
+    void fileReader_set( EgtFileReader* );
   signals:
     void keyValuePair( QString, QString );
 
   private:
     EgtGpsDataTableWidget cvDataTable; 
+    EgtReaderFactory cvReaderFactory;
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
     QDockWidget cvDock;
   
     QPushButton cvSaveButton;
+    QPushButton cvOpenFileButton;
     
 
 };

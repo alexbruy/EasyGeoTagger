@@ -28,7 +28,7 @@
 
 EgtReaderFactory::EgtReaderFactory( )
 {
-
+cvFileReader = new EgtGraphicalDelimitedTextFileReader();
 }
 
 /*
@@ -36,8 +36,11 @@ EgtReaderFactory::EgtReaderFactory( )
  * PUBLIC FUNCTIONS
  *
  */
-EgtReaderFactory::show()
+void EgtReaderFactory::show()
 {
+  //cvFileReader->selectFile();
+  //cvFileReader->selectDelimiter();
+  //emit(fileReaderCreated( cvFileReader ));
 }
 
 

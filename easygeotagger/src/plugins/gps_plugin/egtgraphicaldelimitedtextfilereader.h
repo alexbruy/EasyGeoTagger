@@ -24,19 +24,26 @@
 #ifndef EGTGRAPHICALDELIMITEDTEXFILEREADER_H
 #define EGTGRAPHICALDELIMITEDTEXFILEREADER_H
 
+#include "egtdelimitedtextfilereader.h"
 
-
+#include <QDialog>
+#include <QTextEdit>
+#include <QWidget>
 class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
 {
+  Q_OBJECT
+
   public:
     /*! \brief Constuctor */
     EgtGraphicalDelimitedTextFileReader();
-    
-    selectFile();
-    selectDelimiter();
 
+
+    void selectFile();
+    void selectDelimiter();
+  public slots:
+    void lvAcceptButton_clicked();
   private:
     QDialog cvSelectDelimiterDialog;
-
+    QTextEdit* cvDelimiterText;
 };
 #endif

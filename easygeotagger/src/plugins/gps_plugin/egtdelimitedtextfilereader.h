@@ -30,22 +30,24 @@
 
 class EgtDelimitedTextFileReader: public EgtFileReader
 {
+  Q_OBJECT
+
   public:
     /*! \brief Constuctor */
-    EgtDelimitedTextFileReader( QString );
+    EgtDelimitedTextFileReader();
     
-    QStringList read( bool * ok = 0 );
-    QStringList columnHeaders();
-    bool hasColumnHeaders();
+    virtual QStringList read( bool * ok = 0 );
+    virtual QStringList columnHeaders();
+    virtual bool hasColumnHeaders();
+
     void setFileName( QString );
     void setDelimiter( QString );
     bool preprocessFile( QString );
 
-  private:
-    QString cvFileName;
+  protected:
+    QString cvFileName; 
     QString cvDelimiter;
-
-    EgtExifEditor* cvEditor;
 
 };
 #endif
+

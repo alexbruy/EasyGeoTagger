@@ -22,10 +22,13 @@
 **
 **/
 #include "egtgraphicaldelimitedtextfilereader.h"
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QFileDialog>
+#include <QTextStream>
 
-
-
-EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  )
+EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):EgtDelimitedTextFileReader()
 {
   //Setup the Select Delimiter Dialog
   cvSelectDelimiterDialog.setWindowTitle( tr( "Select Delimiter" ) );
@@ -33,6 +36,19 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  )
   cvSelectDelimiterDialog.setLayout( new QVBoxLayout() );
   cvSelectDelimiterDialog.layout()->setSpacing( 5 );
   cvSelectDelimiterDialog.layout()->setContentsMargins( 1, 1, 1, 1 );
+
+  QLabel* lvLabel = new QLabel( &cvSelectDelimiterDialog );
+  lvLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+  lvLabel->setText("Specify a delimiter:");
+  lvLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
+  cvSelectDelimiterDialog.layout()->addWidget( lvLabel );
+
+  cvDelimiterText = new QTextEdit( &cvSelectDelimiterDialog );
+  cvSelectDelimiterDialog.layout()->addWidget( cvDelimiterText );
+
+  QPushButton *lvAcceptButton = new QPushButton( "&Ok", &cvSelectDelimiterDialog );
+  cvSelectDelimiterDialog.layout()->addWidget( lvAcceptButton );
+  connect( lvAcceptButton, SIGNAL( clicked() ), this, SLOT( lvAcceptButton_clicked() ) ); 
 }
 
 /*
@@ -47,18 +63,23 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  )
 void EgtGraphicalDelimitedTextFileReader::selectFile()
 {
 
+  QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
+
+qDebug(lvFileName.toStdString().c_str());
+  setFileName( lvFileName );
+
 }
 
 void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
 {
-  QLabel* lvLabel = new QLabel( this );
-  lvLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  lvLabel->setText("Specify a delimiter:");
-  lvLabel->setAlignment(Qt::AlignBottom | Qt::AlignRight);
-
-  QTextEdit* lvText = new QTextEdit( this );
-
-  QPushButton *lvAccept = new QPushButton("&Ok", this);
+  cvSelectDelimiterDialog.show();
 }
+
+void EgtGraphicalDelimitedTextFileReader::lvAcceptButton_clicked()
+{
+  setDelimiter( cvDelimiterText->toPlainText() );
+}
+
+
 
 

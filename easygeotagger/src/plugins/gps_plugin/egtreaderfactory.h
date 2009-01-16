@@ -24,21 +24,24 @@
 #ifndef EGTREADERFACTORY_H
 #define EGTREADERFACTORY_H
 
-#include "egtfilereader.h"
+#include "egtgraphicaldelimitedtextfilereader.h"
 
-class EgtReaderFactory
+
+
+#include <QObject>
+
+class EgtReaderFactory: public QObject
 {
   Q_OBJECT
-
   public:
     EgtReaderFactory( );
-    show();
+    void show();
 
   private slots:
 
   private:
-  
+    EgtGraphicalDelimitedTextFileReader* cvFileReader;
   signals:
-    fileReaderCreated( EgtFileReader );
+    void fileReaderCreated( EgtFileReader* );
 };
 #endif

@@ -32,7 +32,8 @@
 #include <QtPlugin>
 #include <QMap>
 #include <QVBoxLayout>
-
+//
+#include <QFileDialog>
 EgtGpsPlugin::EgtGpsPlugin()
 {
   cvCategories = QObject::tr( "GPS reader" );
@@ -45,15 +46,22 @@ EgtGpsPlugin::EgtGpsPlugin()
   cvDock.setMinimumSize( 250,150 );
 
   QWidget* lvPanel = new QWidget();
+  QWidget* lvPanelButtons = new QWidget();
+  lvPanelButtons->setLayout( new QHBoxLayout() );
   lvPanel->setLayout( new QVBoxLayout() );
   lvPanel->layout()->setContentsMargins( 1, 1, 1, 1 );
   //((QVBoxLayout*)lvPanel->layout())->insertStretch(-1, 1);
   cvSaveButton.setText( tr( "Tag picture" ) );
   lvPanel->layout()->addWidget( &cvDataTable );
-  lvPanel->layout()->addWidget( &cvSaveButton );
+  lvPanelButtons->layout()->addWidget( &cvSaveButton );
+  cvOpenFileButton.setText( tr( "Open file" ) );
+  lvPanelButtons->layout()->addWidget( &cvOpenFileButton );
+  lvPanel->layout()->addWidget( lvPanelButtons );
   connect( &cvSaveButton, SIGNAL( clicked() ), this, SLOT( cvTagButton_clicked() ) );
-
+  connect( &cvOpenFileButton, SIGNAL( clicked() ), this, SLOT( cvOpenFile_clicked() ) );
   cvDock.setWidget( lvPanel );
+
+  connect(&cvReaderFactory, SIGNAL(fileReaderCreated( EgtFileReader* )),this, SLOT( fileReader_set( EgtFileReader* ) ));
 }
 
 /*
@@ -114,10 +122,15 @@ void EgtGpsPlugin::cvTagButton_clicked()
 
 }
 
-void EgtGpsPlugin::on_pbtnOpenFile_clicked()
+void EgtGpsPlugin::cvOpenFile_clicked()
 {
+  cvReaderFactory.show();
 }
 
+void EgtGpsPlugin::fileReader_set( EgtFileReader* theFileReader )
+{
+  cvDataTable.setFileReader( theFileReader );
+}
 
 
 void EgtGpsPlugin::run()

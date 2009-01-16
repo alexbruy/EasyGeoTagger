@@ -23,16 +23,14 @@
 **/
 #include "egtgpsdatatablewidget.h"
 
-#include <QVBoxLayout>
-
 
 EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
   setRowCount(10);
-  setColumnCount(3);
+  setColumnCount(2);
 
   QStringList lvTags;
-  lvTags << "Longitude" << "Latitude" << "Altitude";
+  lvTags << "Longitude" << "Latitude";
   setHorizontalHeaderLabels(lvTags);
 
   cvMapItems = new QMap<QString,QString>;
@@ -69,7 +67,7 @@ QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems()
 void EgtGpsDataTableWidget::populateTable()
 {
   for( int lvRowCounter= 0; lvRowCounter<10; lvRowCounter++ )
-    for( int lvColumnCounter= 0; lvColumnCounter<3; lvColumnCounter++ )
+    for( int lvColumnCounter= 0; lvColumnCounter<2; lvColumnCounter++ )
     {
       QTableWidgetItem *lvNewItem = new QTableWidgetItem(tr("%1").arg(
          (lvRowCounter+1)*(lvColumnCounter+1)));
@@ -112,7 +110,8 @@ void EgtGpsDataTableWidget::cell_selected(int row, int column)
 
 
 
-/*void EgtGpsDataTableWidget::void setFileReader()
+void EgtGpsDataTableWidget::setFileReader(EgtFileReader* theFileReader)
 {
-}*/
+  cvFileReader= theFileReader;
+}
 

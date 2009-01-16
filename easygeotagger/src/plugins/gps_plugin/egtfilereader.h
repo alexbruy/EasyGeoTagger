@@ -24,17 +24,17 @@
 #ifndef EGTFILEREADER_H
 #define EGTFILEREADER_H
 
- #include <QStringList>
+#include <QStringList>
 
-class EgtFileReader 
+class EgtFileReader: public QObject
 {
-
+  Q_OBJECT
   public:
-    EgtFileReader( QString );
+    EgtFileReader();
 
-    virtual QStringList read() const=0;
-    virtual QStringList columnHeaders() const=0;
-    virtual bool hasColumnHeaders() const=0;
+    virtual QStringList read( bool* ) = 0;
+    virtual QStringList columnHeaders() = 0;
+    virtual bool hasColumnHeaders() = 0;
  
 };
 #endif
