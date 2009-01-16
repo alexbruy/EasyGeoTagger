@@ -46,7 +46,7 @@ EgtPluginDisplayWidget::EgtPluginDisplayWidget( EgtPluginInterface* thePlugin, Q
   {
     cvConfigureButton.setMaximumSize( 20, 20 );
     cvConfigureButton.setToolTip( tr( "Configure plugin" ) );
-    cvConfigureButton.setIcon ( QIcon( ":/GUI/icons/wrench.png" ) );
+    cvConfigureButton.setIcon ( QIcon( ":/icons/configure.png" ) );
     layout()->addWidget( &cvConfigureButton );
   }
   

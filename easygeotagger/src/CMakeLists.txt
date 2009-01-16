@@ -11,6 +11,9 @@ ENDIF (WIN32)
 SET( EGT_INSTALL_HDRS
      app/egtapplication.h
      app/egtapplicationinterface.h
+     app/egtexifeditor.h
+     app/egtexiftagcontrol.h
+     app/egtexiftaggroup.h
      app/egtplugininterface.h
      app/egtpythonconsolebase.h
 
@@ -41,6 +44,9 @@ SET( EGT_CORE_MOC_HDRS
 SET( EGT_APP_SRCS
     app/egtapplication.cpp
     app/egtapplicationinterface.cpp
+    app/egtexifeditor.cpp
+    app/egtexiftagcontrol.cpp
+    app/egtexiftaggroup.cpp
     app/egtitemdelegate.cpp
     app/egtmainwindow.cpp
     app/egtpluginmanager.cpp
@@ -51,6 +57,9 @@ SET( EGT_APP_SRCS
 SET( EGT_APP_MOC_HDRS
     app/egtapplication.h
     app/egtapplicationinterface.h
+    app/egtexifeditor.h
+    app/egtexiftagcontrol.h
+    app/egtexiftaggroup.h
     app/egtitemdelegate.h
     app/egtmainwindow.h
     app/egtplugininterface.h

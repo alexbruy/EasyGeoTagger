@@ -14,16 +14,10 @@ INCLUDE_DIRECTORIES(
 )
 
 SET( GPS_EXIF_EDITOR_SRCS
-    egtexifeditor.cpp
-    egtexiftagcontrol.cpp
-    egtexiftaggroup.cpp
     egtgpsexifeditor.cpp
    )
 
 SET( GPS_EXIF_EDITOR_MOC_HDRS
-    egtexifeditor.h
-    egtexiftagcontrol.h
-    egtexiftaggroup.h
     egtgpsexifeditor.h
    )
 
@@ -31,7 +25,6 @@ SET( GPS_EXIF_EDITOR_UIS
    )
    
 SET ( GPS_EXIF_EDITOR_RCCS
-     egtgpsexifeditor.qrc
     )
 
 QT4_WRAP_UI( GPS_EXIF_EDITOR_UIS_H ${GPS_EXIF_EDITOR_UIS} )
@@ -44,17 +37,17 @@ QT4_WRAP_CPP( GPS_EXIF_EDITOR_MOC_SRCS ${GPS_EXIF_EDITOR_MOC_HDRS} )
 
 ADD_DEFINITIONS( -DQT_PLUGIN )
 
-ADD_library( exifeditor MODULE
+ADD_library( gpsexifeditor MODULE
              ${GPS_EXIF_EDITOR_SRCS}
              ${GPS_EXIF_EDITOR_MOC_SRCS}
              ${GPS_EXIF_EDITOR_RCCS_SRCS}
              ${GPS_EXIF_EDITOR_UIS_H}
            )
 
-TARGET_LINK_LIBRARIES( exifeditor
+TARGET_LINK_LIBRARIES( gpsexifeditor
   ${QT_LIBRARIES}
   ${EXIV2_LIBRARY}
   easygt
   )
 
-INSTALL( TARGETS exifeditor DESTINATION ${EASYGT_PLUGIN_SUBDIR} )
+INSTALL( TARGETS gpsexifeditor DESTINATION ${EASYGT_PLUGIN_SUBDIR} )

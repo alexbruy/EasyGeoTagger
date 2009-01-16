@@ -54,7 +54,7 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName )
 
     cvDiscardButton.setMaximumSize( 24,24 );
     cvDiscardButton.setEnabled( false );
-    cvDiscardButton.setIcon( QIcon( ":/ExifEditor/cancel.png" ) );
+    cvDiscardButton.setIcon( QIcon( ":/icons/discard.png" ) );
     cvDiscardButton.setToolTip( tr( "Discard changes" ) );
     cvEditorControls.layout()->addWidget( &cvDiscardButton );
     connect( &cvDiscardButton, SIGNAL( clicked() ), this, SLOT( cvDiscardButton_clicked() ) );

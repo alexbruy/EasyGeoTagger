@@ -33,7 +33,7 @@ EgtExifTagGroup::EgtExifTagGroup( QString theLabel )
   layout()->setContentsMargins( 1, 1, 1, 1 );
 
   cvActivate.setMaximumSize( 24, 24 );
-  cvActivate.setIcon( QIcon( ":/ExifEditor/group.png" ) );
+  cvActivate.setIcon( QIcon( ":/icons/group.png" ) );
   layout()->addWidget( &cvActivate );
 
   QLabel* lvLabel = new QLabel( theLabel );

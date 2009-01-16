@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/ExifEditor" >
-        <file>cancel.png</file>
-        <file>group.png</file>
-        <file>wrench.png</file>
-    </qresource>
-</RCC>
