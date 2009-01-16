@@ -41,7 +41,7 @@
 EgtExportToCsv::EgtExportToCsv()
 {
   cvCategories = QObject::tr( "Utilities" );
-  cvDescription = QObject::tr( "Export a directory of image to a csv file. It will only export latitude and longitude from images with GPS EXIF data." );
+  cvDescription = QObject::tr( "Export a directory of images to a csv file. Exports all GPS tags from images with GPS EXIF data." );
   cvName = QObject::tr( "EXIF to CSV" );
 }
 
@@ -95,14 +95,20 @@ void EgtExportToCsv::run()
     QFile lvOutputFile( QDir::toNativeSeparators( lvCurrentFile + "/" + cvCurrentIndex.data().toString() + "_Export_" + lvTimestamp.toString( "yyyyMMdd_hhmmss" ) + ".csv" ) );
     if( lvOutputFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
+      EgtGPSExifEngine lvExifEngine;
+      QList< EgtExifEngine::KeyMap > lvKeyMap = lvExifEngine.keys();
       QTextStream lvOutputWriter( &lvOutputFile );
-      lvOutputWriter.setRealNumberPrecision( 10 );
-      lvOutputWriter << "Longitude,Latitude,File\n";
+      lvOutputWriter.setRealNumberPrecision( 7 );
+
+      lvOutputWriter << "File";
+      for( int lvIterator = 0; lvIterator < lvKeyMap.size(); lvIterator++ )
+      {
+        lvOutputWriter << "," + lvKeyMap[ lvIterator ].commonName;
+      }
+      lvOutputWriter << "\n";
       
       int lvExportedImages = 0;
       int lvChildCount = 0;
-
-      EgtGPSExifEngine lvExifEngine;
       QString lvImageFile;
       //Loop through the directory and examine each file
       while( cvCurrentIndex.child( lvChildCount, 0 ).isValid() )
@@ -113,7 +119,12 @@ void EgtExportToCsv::run()
         lvExifEngine.setFile( lvImageFile );
         if( lvExifEngine.hasExpectedExif() )
         {
-          lvOutputWriter << lvExifEngine.longitude() << "," << lvExifEngine.latitude() << "," << lvImageFile << "\n";
+          lvOutputWriter << lvImageFile;
+          for( int lvIterator = 0; lvIterator < lvKeyMap.size(); lvIterator++ )
+          {
+            lvOutputWriter << "," + lvExifEngine.read( lvKeyMap[ lvIterator ].key ).toString();
+          }
+          lvOutputWriter  << "\n";
           lvExportedImages++;
         }
         lvChildCount++;

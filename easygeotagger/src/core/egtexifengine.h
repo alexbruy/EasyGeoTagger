@@ -67,7 +67,7 @@ public:
 
   bool isValidImageWithExpectedExif() { return cvIsValidImage && cvHasExpectedExif; }
 
-  QList< KeyMap > keys() { return cvKeys; }
+  const QList< KeyMap > &keys() { return cvKeys; }
 
   const QString &lastError() { return cvLastError; }
 
