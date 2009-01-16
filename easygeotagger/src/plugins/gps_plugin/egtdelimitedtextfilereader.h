@@ -36,9 +36,9 @@ class EgtDelimitedTextFileReader: public EgtFileReader
     /*! \brief Constuctor */
     EgtDelimitedTextFileReader();
     
-    virtual QStringList read( bool * ok = 0 );
     virtual QStringList columnHeaders();
     virtual bool hasColumnHeaders();
+    virtual QStringList read( bool * ok = 0 );
 
     void setFileName( QString );
     void setDelimiter( QString );

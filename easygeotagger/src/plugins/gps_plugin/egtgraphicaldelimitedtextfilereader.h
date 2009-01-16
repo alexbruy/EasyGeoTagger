@@ -37,9 +37,9 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
     /*! \brief Constuctor */
     EgtGraphicalDelimitedTextFileReader();
 
-
     void selectFile();
     void selectDelimiter();
+
   public slots:
     void lvAcceptButton_clicked();
   private:

@@ -30,9 +30,9 @@ class EgtFileReader: public QObject
 {
   Q_OBJECT
   public:
-    EgtFileReader();
+    EgtFileReader(){};
 
-    virtual QStringList read( bool* ) = 0;
+    virtual QStringList read( bool* = 0 ) = 0;
     virtual QStringList columnHeaders() = 0;
     virtual bool hasColumnHeaders() = 0;
  

@@ -23,9 +23,6 @@
 **/
 #include "egtreaderfactory.h"
 
-
-
-
 EgtReaderFactory::EgtReaderFactory( )
 {
 cvFileReader = new EgtGraphicalDelimitedTextFileReader();
@@ -38,9 +35,9 @@ cvFileReader = new EgtGraphicalDelimitedTextFileReader();
  */
 void EgtReaderFactory::show()
 {
-  //cvFileReader->selectFile();
-  //cvFileReader->selectDelimiter();
-  //emit(fileReaderCreated( cvFileReader ));
+  cvFileReader->selectFile();
+  cvFileReader->selectDelimiter();
+  emit(fileReaderCreated( cvFileReader ));
 }
 
 

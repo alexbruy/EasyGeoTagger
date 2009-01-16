@@ -34,7 +34,7 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):Egt
   cvSelectDelimiterDialog.setWindowTitle( tr( "Select Delimiter" ) );
   cvSelectDelimiterDialog.setModal( true );
   cvSelectDelimiterDialog.setLayout( new QVBoxLayout() );
-  cvSelectDelimiterDialog.layout()->setSpacing( 5 );
+  cvSelectDelimiterDialog.layout()->setSpacing( 1 );
   cvSelectDelimiterDialog.layout()->setContentsMargins( 1, 1, 1, 1 );
 
   QLabel* lvLabel = new QLabel( &cvSelectDelimiterDialog );
@@ -57,27 +57,30 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):Egt
  *
  */
 
-/*!
- * \param theButton pointer to a QPushButton that is to be connect to the  showConfigureationPanel slot
- */
-void EgtGraphicalDelimitedTextFileReader::selectFile()
-{
-
-  QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
-
-qDebug(lvFileName.toStdString().c_str());
-  setFileName( lvFileName );
-
-}
-
 void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
 {
   cvSelectDelimiterDialog.show();
 }
 
+/*!
+ * \param theButton pointer to a QPushButton that is to be connect to the  showConfigureationPanel slot
+ */
+void EgtGraphicalDelimitedTextFileReader::selectFile()
+{
+  QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
+  setFileName( lvFileName );
+}
+
+
+/*
+ *
+ * SIGNAL and SLOTS
+ *
+ */
 void EgtGraphicalDelimitedTextFileReader::lvAcceptButton_clicked()
 {
   setDelimiter( cvDelimiterText->toPlainText() );
+  cvSelectDelimiterDialog.close();
 }
 
 

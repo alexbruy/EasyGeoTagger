@@ -24,7 +24,7 @@
 #include "egtapplicationinterface.h"
 #include "egtgpsplugin.h"
 #include "egtlogger.h"
-#include "ui_egtgpsplugincontrolsgui.h"
+//#include "ui_egtgpsplugincontrolsgui.h"
 
 #include <QMainWindow>
 #include <QPushButton>
@@ -97,8 +97,6 @@ void EgtGpsPlugin::initPlugin()
 
     //connect to application interface
     connect( this, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
-    
-    
   }
 }
 

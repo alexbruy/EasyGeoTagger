@@ -26,8 +26,6 @@
 
 #include "egtgraphicaldelimitedtextfilereader.h"
 
-
-
 #include <QObject>
 
 class EgtReaderFactory: public QObject

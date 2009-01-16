@@ -21,22 +21,24 @@ SET( GPS_PLUGIN_SRCS
     egtreaderfactory.cpp
    )
 
+
+
 SET( GPS_PLUGIN_MOC_HDRS
     egtgpsplugin.h
     egtgpsdatatablewidget.h
-    egtfilereader.h
+    egtreaderfactory.h
     egtdelimitedtextfilereader.h
     egtgraphicaldelimitedtextfilereader.h
-    egtreaderfactory.h
+    egtfilereader.h
    )
 
-SET( GPS_PLUGIN_UIS
-    egtgpsplugincontrolsgui.ui
-   )
+#SET( GPS_PLUGIN_UIS
+#    egtgpsplugincontrolsgui.ui
+#   )
 
 
 
-QT4_WRAP_UI( GPS_PLUGIN_UIS_H ${GPS_PLUGIN_UIS} )
+#QT4_WRAP_UI( GPS_PLUGIN_UIS_H ${GPS_PLUGIN_UIS} )
 
 QT4_ADD_RESOURCES( GPS_PLUGIN_RCCS_SRCS ${GPS_PLUGIN_RCCS} )
 

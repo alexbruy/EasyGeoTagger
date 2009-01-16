@@ -28,8 +28,7 @@
 
 EgtDelimitedTextFileReader::EgtDelimitedTextFileReader():EgtFileReader()
 {
-cvFileName = "AAAA";
-qDebug("constructor");
+  cvDelimiter = ",";
 }
 
 /*
@@ -66,6 +65,8 @@ QStringList EgtDelimitedTextFileReader::read( bool* ok)
     lvLine = stream.readLine();
     lvList << lvLine.split( cvDelimiter );
   }
+
+  return lvList;
 }
 
 QStringList EgtDelimitedTextFileReader::columnHeaders()

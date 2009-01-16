@@ -40,11 +40,11 @@ class EgtGpsDataTableWidget : public QTableWidget
     QMap<QString,QString>* getRowItems();
 
   private slots:
-    void setFileReader();
     void cell_selected(int, int);
     void cvHorizontalHeader_clicked(int);
-    void cvVerticalHeader_clicked(int);
     void cvTagButton_clicked();
+    void cvVerticalHeader_clicked(int);
+    void setFileReader();
   public slots:
     void setFileReader( EgtFileReader* );
   private:

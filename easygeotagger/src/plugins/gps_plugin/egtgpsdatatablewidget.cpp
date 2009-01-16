@@ -26,17 +26,17 @@
 
 EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
-  setRowCount(10);
-  setColumnCount(2);
+  //setRowCount(10);
+  //setColumnCount(2);
 
-  QStringList lvTags;
-  lvTags << "Longitude" << "Latitude";
-  setHorizontalHeaderLabels(lvTags);
+  //QStringList lvTags;
+  //lvTags << "Longitude" << "Latitude";
+  //setHorizontalHeaderLabels(lvTags);
 
   cvMapItems = new QMap<QString,QString>;
 
   //Populate the table with some data
-  populateTable();
+  //populateTable();
 
   connect( this, SIGNAL( cellClicked(int, int) ), this, SLOT( cell_selected(int, int) ) );  
 
@@ -66,13 +66,28 @@ QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems()
 
 void EgtGpsDataTableWidget::populateTable()
 {
-  for( int lvRowCounter= 0; lvRowCounter<10; lvRowCounter++ )
+  QStringList lvDummy =cvFileReader->read();
+
+  setRowCount(lvDummy.size());
+  setColumnCount(1);
+
+  QStringList lvTags;
+  lvTags << "Longitude";
+  setHorizontalHeaderLabels(lvTags);
+
+  for(int i = 0; i < lvDummy.size(); ++i)
+  {
+   QTableWidgetItem *lvNewItem = new QTableWidgetItem(lvDummy.at(i));
+       setItem( i, 0, lvNewItem );
+
+  }
+ /* for( int lvRowCounter= 0; lvRowCounter<10; lvRowCounter++ )
     for( int lvColumnCounter= 0; lvColumnCounter<2; lvColumnCounter++ )
     {
       QTableWidgetItem *lvNewItem = new QTableWidgetItem(tr("%1").arg(
          (lvRowCounter+1)*(lvColumnCounter+1)));
        setItem( lvRowCounter, lvColumnCounter, lvNewItem );
-    }
+    }*/
 }
 /*
  *
@@ -113,5 +128,6 @@ void EgtGpsDataTableWidget::cell_selected(int row, int column)
 void EgtGpsDataTableWidget::setFileReader(EgtFileReader* theFileReader)
 {
   cvFileReader= theFileReader;
+  populateTable();
 }
 
