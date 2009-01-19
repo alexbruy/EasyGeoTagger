@@ -32,14 +32,18 @@ class EgtReaderFactory: public QObject
 {
   Q_OBJECT
   public:
+    /*! \brief Constructor */
     EgtReaderFactory( );
+    /*! \brief Shows the windows to open a file (delimited text or gps) */
     void show();
 
   private slots:
-
+    void reEmitDelimiterSelected();
   private:
+    /*! \brief Instance of the concrete file reader to be used */
     EgtGraphicalDelimitedTextFileReader* cvFileReader;
   signals:
+    /*! \brief Signal to notify that the file reader has been created */
     void fileReaderCreated( EgtFileReader* );
 };
 #endif

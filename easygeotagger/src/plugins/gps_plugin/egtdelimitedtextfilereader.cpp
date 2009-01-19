@@ -80,6 +80,9 @@ bool EgtDelimitedTextFileReader::hasColumnHeaders()
   return false; 
 }
 
+/*!
+ * \param theFileName A
+ */
 void EgtDelimitedTextFileReader::setFileName( QString theFileName )
 {
 

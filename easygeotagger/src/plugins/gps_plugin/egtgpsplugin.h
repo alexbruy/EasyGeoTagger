@@ -31,7 +31,7 @@
 
 #include <QPushButton>
 #include <QModelIndex>
-#include <QDockWidget>
+#include <QDialog>
 #include <QString>
 #include <QList>
 
@@ -77,7 +77,7 @@ class EgtGpsPlugin: public EgtPluginInterface
     EgtGpsDataTableWidget cvDataTable; 
     EgtReaderFactory cvReaderFactory;
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
-    QDockWidget cvDock;
+    QDialog cvDialog;
   
     QPushButton cvSaveButton;
     QPushButton cvOpenFileButton;

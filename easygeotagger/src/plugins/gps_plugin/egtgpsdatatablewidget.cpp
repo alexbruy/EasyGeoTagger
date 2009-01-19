@@ -68,26 +68,20 @@ void EgtGpsDataTableWidget::populateTable()
 {
   QStringList lvDummy =cvFileReader->read();
 
-  setRowCount(lvDummy.size());
-  setColumnCount(1);
+  setRowCount( lvDummy.size()/2 );
+  setColumnCount(2);
 
   QStringList lvTags;
-  lvTags << "Longitude";
+  lvTags << "Longitude"<<"Latitude";
   setHorizontalHeaderLabels(lvTags);
 
-  for(int i = 0; i < lvDummy.size(); ++i)
+  for(int i = 0; i < lvDummy.size(); i+=2)
   {
    QTableWidgetItem *lvNewItem = new QTableWidgetItem(lvDummy.at(i));
-       setItem( i, 0, lvNewItem );
-
+       setItem( i/2, 0, lvNewItem );
+   QTableWidgetItem *lvNewItem2 = new QTableWidgetItem(lvDummy.at(i+1));
+       setItem( i/2, 1, lvNewItem2 );
   }
- /* for( int lvRowCounter= 0; lvRowCounter<10; lvRowCounter++ )
-    for( int lvColumnCounter= 0; lvColumnCounter<2; lvColumnCounter++ )
-    {
-      QTableWidgetItem *lvNewItem = new QTableWidgetItem(tr("%1").arg(
-         (lvRowCounter+1)*(lvColumnCounter+1)));
-       setItem( lvRowCounter, lvColumnCounter, lvNewItem );
-    }*/
 }
 /*
  *

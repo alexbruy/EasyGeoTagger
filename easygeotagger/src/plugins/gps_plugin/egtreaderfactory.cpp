@@ -21,10 +21,13 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
+#include <QFileDialog>
+
 #include "egtreaderfactory.h"
 
 EgtReaderFactory::EgtReaderFactory( )
 {
+
 cvFileReader = new EgtGraphicalDelimitedTextFileReader();
 }
 
@@ -33,11 +36,14 @@ cvFileReader = new EgtGraphicalDelimitedTextFileReader();
  * PUBLIC FUNCTIONS
  *
  */
+
 void EgtReaderFactory::show()
 {
-  cvFileReader->selectFile();
+ QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
+  cvFileReader->setFileName( lvFileName );
   cvFileReader->selectDelimiter();
-  emit(fileReaderCreated( cvFileReader ));
+  connect( cvFileReader, SIGNAL( delimiterSelected() ), this, SLOT( reEmitDelimiterSelected() ) );
+
 }
 
 
@@ -53,7 +59,10 @@ void EgtReaderFactory::show()
  * SIGNAL and SLOTS
  *
  */
-
+void EgtReaderFactory::reEmitDelimiterSelected()
+{
+    emit(fileReaderCreated( cvFileReader ));
+}
 
 
 

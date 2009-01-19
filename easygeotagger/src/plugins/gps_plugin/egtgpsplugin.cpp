@@ -40,10 +40,10 @@ EgtGpsPlugin::EgtGpsPlugin()
   cvDescription = QObject::tr( "Reads data from GPS files" );
   cvName = QObject::tr( "GPS Reader" );
 
-  cvDock.setWindowTitle( cvName );
-  cvDock.setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
-  cvDock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-  cvDock.setMinimumSize( 250,150 );
+  cvDialog.setWindowTitle( cvName );
+  //cvDialog.setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
+ // cvDialog.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+  cvDialog.setMinimumSize( 250,150 );
 
   QWidget* lvPanel = new QWidget();
   QWidget* lvPanelButtons = new QWidget();
@@ -59,8 +59,9 @@ EgtGpsPlugin::EgtGpsPlugin()
   lvPanel->layout()->addWidget( lvPanelButtons );
   connect( &cvSaveButton, SIGNAL( clicked() ), this, SLOT( cvTagButton_clicked() ) );
   connect( &cvOpenFileButton, SIGNAL( clicked() ), this, SLOT( cvOpenFile_clicked() ) );
-  cvDock.setWidget( lvPanel );
-
+  //cvDialog.setWidget( lvPanel );
+  cvDialog.setLayout( new QVBoxLayout() );
+  cvDialog.layout()->addWidget( lvPanel );
   connect(&cvReaderFactory, SIGNAL(fileReaderCreated( EgtFileReader* )),this, SLOT( fileReader_set( EgtFileReader* ) ));
 }
 
@@ -92,8 +93,8 @@ void EgtGpsPlugin::initPlugin()
   if( 0 != cvApplicationInterface )
   {
     //Add the dock but keep it hidden until the user askes for it
-    cvApplicationInterface->gui()->addDockWidget( Qt::RightDockWidgetArea, &cvDock );
-    cvDock.setVisible( false );
+    //cvApplicationInterface->gui()->addDockWidget( Qt::RightDockWidgetArea, &cvDialog );
+    cvDialog.setVisible( false );
 
     //connect to application interface
     connect( this, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
@@ -136,14 +137,14 @@ void EgtGpsPlugin::run()
   EgtDebug( "entered" );
   
   //Build or reshow the plugins GUI component
-  if( cvDock.isVisible() )
+  if( cvDialog.isVisible() )
   {
     EgtDebug( "dock is already open and visible" );
     return;
   }
 
   EgtDebug( "dock is already open but not visible" );
-  cvDock.showMaximized();
+  cvDialog.show();
   EgtDebug( "done" );
 }
 

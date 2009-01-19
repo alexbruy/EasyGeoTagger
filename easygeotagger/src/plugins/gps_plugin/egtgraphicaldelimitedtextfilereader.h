@@ -37,7 +37,6 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
     /*! \brief Constuctor */
     EgtGraphicalDelimitedTextFileReader();
 
-    void selectFile();
     void selectDelimiter();
 
   public slots:
@@ -45,5 +44,7 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
   private:
     QDialog cvSelectDelimiterDialog;
     QTextEdit* cvDelimiterText;
+  signals:
+    void delimiterSelected();
 };
 #endif

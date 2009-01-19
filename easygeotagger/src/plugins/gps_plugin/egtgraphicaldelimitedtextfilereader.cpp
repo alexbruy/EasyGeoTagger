@@ -40,10 +40,11 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):Egt
   QLabel* lvLabel = new QLabel( &cvSelectDelimiterDialog );
   lvLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
   lvLabel->setText("Specify a delimiter:");
-  lvLabel->setAlignment( Qt::AlignBottom | Qt::AlignRight );
+  lvLabel->setAlignment( Qt::AlignBottom | Qt::AlignCenter );
   cvSelectDelimiterDialog.layout()->addWidget( lvLabel );
 
   cvDelimiterText = new QTextEdit( &cvSelectDelimiterDialog );
+  cvDelimiterText->setMaximumHeight( 30 );
   cvSelectDelimiterDialog.layout()->addWidget( cvDelimiterText );
 
   QPushButton *lvAcceptButton = new QPushButton( "&Ok", &cvSelectDelimiterDialog );
@@ -62,14 +63,7 @@ void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
   cvSelectDelimiterDialog.show();
 }
 
-/*!
- * \param theButton pointer to a QPushButton that is to be connect to the  showConfigureationPanel slot
- */
-void EgtGraphicalDelimitedTextFileReader::selectFile()
-{
-  QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
-  setFileName( lvFileName );
-}
+
 
 
 /*
@@ -81,6 +75,7 @@ void EgtGraphicalDelimitedTextFileReader::lvAcceptButton_clicked()
 {
   setDelimiter( cvDelimiterText->toPlainText() );
   cvSelectDelimiterDialog.close();
+  emit delimiterSelected();
 }
 
 
