@@ -1,7 +1,7 @@
 /*
-** File: 
-** Author(s): 
-** Creation Date: 
+** File: egtgpsdatatablewidget.h
+** Author(s): Roberto Garcia Yunta
+** Creation Date: 2008-12-19
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 **
@@ -36,23 +36,47 @@ class EgtGpsDataTableWidget : public QTableWidget
   Q_OBJECT
 
   public:
+
+     /*! \brief Constructor */
     EgtGpsDataTableWidget( );
+
+     /*! \brief Returns a QMap that contains all the items of the selected row */
     QMap<QString,QString>* getRowItems();
 
-  private slots:
-    void cell_selected(int, int);
-    void cvHorizontalHeader_clicked(int);
-    void cvTagButton_clicked();
-    void cvVerticalHeader_clicked(int);
-    void setFileReader();
   public slots:
+
+    /*! \brief Slot used to set the specific file reader */
     void setFileReader( EgtFileReader* );
+
+  private slots:
+
+     /*! \brief Slot used when a cell of the table is selected */
+    void cell_selected(int, int);
+
+    /*! \brief Slot used when the horizontal header is clicked */
+    void cvHorizontalHeader_clicked(int);
+
+    /*! \brief Slot used when the tag button is clicked*/
+    void cvTagButton_clicked();
+ 
+    /*! \brief Slot used when the vertical header is clicked */
+    void cvVerticalHeader_clicked(int);
+
   private:
+    
+    /*! \brief Pointer to the horizontal header */
     QHeaderView *  cvHorizontalHeader;
+
+    /*! \brief Pointer to the vertical header */
     QHeaderView *  cvVerticalHeader;
+
+    /*! \brief QMap to store the items of the selected row */
     QMap<QString,QString> * cvMapItems;
+
+    /*! \brief Pointer to the concrete instance of the file reader */
     EgtFileReader* cvFileReader;
 
+    /*! \brief Function used to populate the table */
     void populateTable();
 };
 #endif

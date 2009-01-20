@@ -1,7 +1,7 @@
 /*
-** File: 
-** Author(s): 
-** Creation Date: 
+** File: egtgpsplugin.h
+** Author(s): Roberto Garcia Yunta
+** Creation Date: 2008-12-19
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -58,9 +58,7 @@ class EgtGpsPlugin: public EgtPluginInterface
 
   
   public slots:
-
-    void cvOpenFile_clicked();
-
+    
     /*! \brief Slot called to activate or launch the plugin */
     void run();
 
@@ -68,18 +66,32 @@ class EgtGpsPlugin: public EgtPluginInterface
     void showConfigurationPanel() { }
 
   private slots:
+    /*! \brief Slot called to open a gps file */
+    void cvOpenFile_clicked();
+    
+    /*! \brief Slot called to tag a picture */
     void cvTagButton_clicked();
+    
+    /*! \brief Slot called to set the file reader object to be used */
     void fileReader_set( EgtFileReader* );
   signals:
+    /*! \brief Slot called to tag a picture */
     void keyValuePair( QString, QString );
 
   private:
+    /*! \brief Instance of the data table which contains the gps data */
     EgtGpsDataTableWidget cvDataTable; 
+
+    /*! \brief Instance of the reader factory */
     EgtReaderFactory cvReaderFactory;
+
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
     QDialog cvDialog;
   
-    QPushButton cvSaveButton;
+    /*! \brief Push button to tag a picture */
+    QPushButton cvTagButton;
+   
+    /*! \brief Push button to open a file */
     QPushButton cvOpenFileButton;
     
 

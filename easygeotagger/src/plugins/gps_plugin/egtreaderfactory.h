@@ -1,7 +1,7 @@
 /*
-** File: 
-** Author(s): 
-** Creation Date: 
+** File: egtfilereaderfactory.h
+** Author(s): Roberto Garcia Yunta
+** Creation Date: 2008-12-19
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 **
@@ -31,17 +31,24 @@
 class EgtReaderFactory: public QObject
 {
   Q_OBJECT
+
   public:
+
     /*! \brief Constructor */
     EgtReaderFactory( );
+
     /*! \brief Shows the windows to open a file (delimited text or gps) */
     void show();
 
   private slots:
+
+    /*! \brief Slot used to re-emit the signal emited from the graphical file reader */
     void reEmitDelimiterSelected();
+
   private:
     /*! \brief Instance of the concrete file reader to be used */
     EgtGraphicalDelimitedTextFileReader* cvFileReader;
+
   signals:
     /*! \brief Signal to notify that the file reader has been created */
     void fileReaderCreated( EgtFileReader* );

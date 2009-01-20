@@ -1,7 +1,7 @@
 /*
-** File: 
-** Author(s): 
-** Creation Date: 
+** File: egtfilereader.h
+** Author(s): Roberto Garcia Yunta
+** Creation Date: 2008-12-19
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 **
@@ -30,10 +30,17 @@ class EgtFileReader: public QObject
 {
   Q_OBJECT
   public:
+
+    /*! \brief Constructor */
     EgtFileReader(){};
 
+    /*! \brief Function used to read a gps file */
     virtual QStringList read( bool* = 0 ) = 0;
+
+    /*! \brief Function that returns the column headers*/
     virtual QStringList columnHeaders() = 0;
+
+    /*! \brief Returns whether the file has column headers or not */
     virtual bool hasColumnHeaders() = 0;
  
 };

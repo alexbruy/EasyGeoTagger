@@ -1,7 +1,7 @@
 /*
-** File: 
-** Author(s): 
-** Creation Date: 
+** File: egtgraphicaldelimitedtextfilereader.h
+** Author(s): Roberto Garcia Yunta
+** Creation Date: 2008-12-19
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -36,15 +36,19 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
   public:
     /*! \brief Constuctor */
     EgtGraphicalDelimitedTextFileReader();
-
+    /*! \brief Selects the character that will be considered as delimiter when reading a text file */
     void selectDelimiter();
 
   public slots:
+    /*! \brief Slot used to perform the needed actions when the user selects a delimiter */
     void lvAcceptButton_clicked();
   private:
+    /*! \brief Dialog where the user specifies a delimiter */
     QDialog cvSelectDelimiterDialog;
+    /*! \brief Text edit where the user specifies the delimiter*/
     QTextEdit* cvDelimiterText;
   signals:
+    /*! \brief Signal emited when the user specifies a delimiter*/
     void delimiterSelected();
 };
 #endif

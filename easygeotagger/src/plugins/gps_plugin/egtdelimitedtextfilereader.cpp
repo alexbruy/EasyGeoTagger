@@ -1,7 +1,7 @@
 /*
-** File: 
-** Author(s): 
-** Creation Date: 
+** File: egtdelimitedtextfilereader.cpp
+** Author(s): Roberto Garcia Yunta
+** Creation Date: 2008-12-19
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -38,7 +38,7 @@ EgtDelimitedTextFileReader::EgtDelimitedTextFileReader():EgtFileReader()
  */
 
 /*!
- * \param theButton pointer to a QPushButton that is to be connect to the  showConfigureationPanel slot
+ * \param ok pointer to boolean that indicates whether the read was performed correctly or not
  */
 QStringList EgtDelimitedTextFileReader::read( bool* ok)
 {
@@ -69,27 +69,34 @@ QStringList EgtDelimitedTextFileReader::read( bool* ok)
   return lvList;
 }
 
+/*!
+ * \return a QString that contains the column headers
+ */
 QStringList EgtDelimitedTextFileReader::columnHeaders()
 {
   QStringList lvList;
   return lvList;
 }
 
+/*!
+ * \return a boolean that indicates whether the file has column headers or not
+ */
 bool EgtDelimitedTextFileReader::hasColumnHeaders()
 {
   return false; 
 }
 
 /*!
- * \param theFileName A
+ * \param theFileName a QString that contains the name of the file to be read
  */
 void EgtDelimitedTextFileReader::setFileName( QString theFileName )
 {
-
-qDebug(cvFileName.toStdString().c_str());
   cvFileName = theFileName;
 }
 
+/*!
+ * \param a QString that contains a delimiter
+ */
 void EgtDelimitedTextFileReader::setDelimiter( QString theDelimiter )
 {
   cvDelimiter = theDelimiter;

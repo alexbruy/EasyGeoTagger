@@ -1,7 +1,7 @@
 /*
-** File: 
-** Author(s): 
-** Creation Date: 
+** File: egtreaderfactory.cpp
+** Author(s): Roberto Garcia Yunta
+** Creation Date: 2008-12-19
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 **
@@ -27,8 +27,7 @@
 
 EgtReaderFactory::EgtReaderFactory( )
 {
-
-cvFileReader = new EgtGraphicalDelimitedTextFileReader();
+  cvFileReader = new EgtGraphicalDelimitedTextFileReader();
 }
 
 /*
@@ -39,11 +38,10 @@ cvFileReader = new EgtGraphicalDelimitedTextFileReader();
 
 void EgtReaderFactory::show()
 {
- QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
+  QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
   cvFileReader->setFileName( lvFileName );
   cvFileReader->selectDelimiter();
   connect( cvFileReader, SIGNAL( delimiterSelected() ), this, SLOT( reEmitDelimiterSelected() ) );
-
 }
 
 
@@ -61,7 +59,7 @@ void EgtReaderFactory::show()
  */
 void EgtReaderFactory::reEmitDelimiterSelected()
 {
-    emit(fileReaderCreated( cvFileReader ));
+  emit(fileReaderCreated( cvFileReader ));
 }
 
 

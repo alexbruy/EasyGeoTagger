@@ -1,7 +1,7 @@
 /*
-** File: 
-** Author(s): 
-** Creation Date: 
+** File: egtdelimitedtextfilereader.h
+** Author(s): Roberto Garcia Yunta
+** Creation Date: 2008-12-19
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -36,16 +36,30 @@ class EgtDelimitedTextFileReader: public EgtFileReader
     /*! \brief Constuctor */
     EgtDelimitedTextFileReader();
     
+    /*! \brief Returns the column headers */
     virtual QStringList columnHeaders();
+
+    /*! \brief Returns whether the file has headers or not */
     virtual bool hasColumnHeaders();
+
+    /*! \brief Function used to read a gps file */
     virtual QStringList read( bool * ok = 0 );
 
+    /*! \brief Function to set the name of the file to be read */
     void setFileName( QString );
+
+    /*! \brief Function to set the text delimiter */
     void setDelimiter( QString );
+
+    /*! \brief Function that performs preprocessing actions */
     bool preprocessFile( QString );
 
   protected:
+
+    /*! \brief QString that contains the name of the file to be read */
     QString cvFileName; 
+
+    /*! \brief QString that contains the delimiter */
     QString cvDelimiter;
 
 };

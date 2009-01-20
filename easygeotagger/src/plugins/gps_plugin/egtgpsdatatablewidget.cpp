@@ -1,7 +1,7 @@
 /*
-** File: 
-** Author(s): 
-** Creation Date: 
+** File: egtgpsdatatablewidget.cpp
+** Author(s): Roberto Garcia Yunta
+** Creation Date: 2008-12-19
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 **
@@ -26,17 +26,7 @@
 
 EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
-  //setRowCount(10);
-  //setColumnCount(2);
-
-  //QStringList lvTags;
-  //lvTags << "Longitude" << "Latitude";
-  //setHorizontalHeaderLabels(lvTags);
-
   cvMapItems = new QMap<QString,QString>;
-
-  //Populate the table with some data
-  //populateTable();
 
   connect( this, SIGNAL( cellClicked(int, int) ), this, SLOT( cell_selected(int, int) ) );  
 
@@ -114,7 +104,6 @@ void EgtGpsDataTableWidget::cell_selected(int row, int column)
 { 
   QTableWidgetItem * lvItem =item ( row, column );
   double x = lvItem->data(0).toDouble();
-  qDebug(("Cell clicked: "+QString::number(x)).toStdString().c_str());
 }
 
 

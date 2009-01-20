@@ -1,7 +1,7 @@
 /*
-** File: 
-** Author(s): 
-** Creation Date: 
+** File: egtgpsplugin.cpp
+** Author(s): Roberto Garcia Yunta
+** Creation Date: 2008-12-19
 **
 ** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
 ** 
@@ -24,7 +24,6 @@
 #include "egtapplicationinterface.h"
 #include "egtgpsplugin.h"
 #include "egtlogger.h"
-//#include "ui_egtgpsplugincontrolsgui.h"
 
 #include <QMainWindow>
 #include <QPushButton>
@@ -41,8 +40,6 @@ EgtGpsPlugin::EgtGpsPlugin()
   cvName = QObject::tr( "GPS Reader" );
 
   cvDialog.setWindowTitle( cvName );
-  //cvDialog.setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
- // cvDialog.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
   cvDialog.setMinimumSize( 250,150 );
 
   QWidget* lvPanel = new QWidget();
@@ -50,14 +47,13 @@ EgtGpsPlugin::EgtGpsPlugin()
   lvPanelButtons->setLayout( new QHBoxLayout() );
   lvPanel->setLayout( new QVBoxLayout() );
   lvPanel->layout()->setContentsMargins( 1, 1, 1, 1 );
-  //((QVBoxLayout*)lvPanel->layout())->insertStretch(-1, 1);
-  cvSaveButton.setText( tr( "Tag picture" ) );
+  cvTagButton.setText( tr( "Tag picture" ) );
   lvPanel->layout()->addWidget( &cvDataTable );
-  lvPanelButtons->layout()->addWidget( &cvSaveButton );
+  lvPanelButtons->layout()->addWidget( &cvTagButton );
   cvOpenFileButton.setText( tr( "Open file" ) );
   lvPanelButtons->layout()->addWidget( &cvOpenFileButton );
   lvPanel->layout()->addWidget( lvPanelButtons );
-  connect( &cvSaveButton, SIGNAL( clicked() ), this, SLOT( cvTagButton_clicked() ) );
+  connect( &cvTagButton, SIGNAL( clicked() ), this, SLOT( cvTagButton_clicked() ) );
   connect( &cvOpenFileButton, SIGNAL( clicked() ), this, SLOT( cvOpenFile_clicked() ) );
   //cvDialog.setWidget( lvPanel );
   cvDialog.setLayout( new QVBoxLayout() );
@@ -106,6 +102,15 @@ void EgtGpsPlugin::initPlugin()
  * SIGNAL and SLOTS
  *
  */
+void EgtGpsPlugin::fileReader_set( EgtFileReader* theFileReader )
+{
+  cvDataTable.setFileReader( theFileReader );
+}
+
+void EgtGpsPlugin::cvOpenFile_clicked()
+{
+  cvReaderFactory.show();
+}
 
 void EgtGpsPlugin::cvTagButton_clicked() 
 {
@@ -115,22 +120,10 @@ void EgtGpsPlugin::cvTagButton_clicked()
   while (lvMapIterator.hasNext())
   {
      lvMapIterator.next();
-     //qDebug(lvMapIterator.key().toStdString().c_str());
      emit(keyValuePair("Egt.GPS."+lvMapIterator.key(),lvMapIterator.value()));
  }
 
 }
-
-void EgtGpsPlugin::cvOpenFile_clicked()
-{
-  cvReaderFactory.show();
-}
-
-void EgtGpsPlugin::fileReader_set( EgtFileReader* theFileReader )
-{
-  cvDataTable.setFileReader( theFileReader );
-}
-
 
 void EgtGpsPlugin::run()
 {
