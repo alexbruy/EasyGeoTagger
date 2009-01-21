@@ -211,14 +211,9 @@ public:
   bool writeVersionID( QString );
 
 private:
-  /*! \brief has the image GPS exif metadata? */
-  bool cvHasGpsExif;
-
 
   /*! \brief Converts from decimal degrees to Rational notation */
   QString convertToRational(QString);
-
-
 
 };
 #endif
