@@ -25,7 +25,7 @@
 #include "egtlogger.h"
 
 #include <QtPlugin>
-
+#include <QMessageBox>
 static const QString cvCategories = QObject::tr( "Utilities" );
 static const QString cvDescription = QObject::tr( "Opens a python console" );
 static const QString cvName = QObject::tr( "Python Console" );
@@ -62,12 +62,20 @@ QString EgtPythonConsole::name()
 
 void EgtPythonConsole::run()
 {
-  if( 0 == cvConsole )
+  try
   {
-    cvConsole = new EgtPythonConsoleBase( cvApplicationInterface );
+      if( 0 == cvConsole )
+      {
+        cvConsole = new EgtPythonConsoleBase( cvApplicationInterface );
+      }
+      cvConsole->show();
   }
-
-  cvConsole->show();
+  catch(...)
+  {
+    QMessageBox::warning(0, tr("Python plugin"),
+                   tr("Error loading Python plugin, Python is not installed in your system"),
+                   QMessageBox::Ok );     
+  }
 }
 
  Q_EXPORT_PLUGIN2( pythonconsole, EgtPythonConsole );

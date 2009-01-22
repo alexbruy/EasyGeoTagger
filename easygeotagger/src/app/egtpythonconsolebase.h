@@ -25,11 +25,9 @@
 #define EGTPYTHONCONSOLEBASE_H
 
 #include <Python.h>
-
 #include <QWidget>
 
 #include "ui_egtpythonconsoledialog.h"
-
 #include "egtapplicationinterface.h"
 
 class MS_DLL_SPEC EgtPythonConsoleBase : public QWidget, Ui::EgtPythonConsoleDialog
@@ -41,8 +39,8 @@ public:
     bool runCommand( QString theCommand );
     QString getVariableFromMain( QString name );
 //const char* getPyObjStringRepr( PyObject* );
-bool getError( QString&, QString&);
-QString getTypeAsString( PyObject* );
+    bool getError( QString&, QString&);
+    QString getTypeAsString( PyObject* );
 public slots:
     void on_pbtnRun_clicked();
 

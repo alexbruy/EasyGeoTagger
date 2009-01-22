@@ -13,8 +13,8 @@ class EgtApplicationInterface : QObject
     QMainWindow* gui();
 
   public slots:
-    /*! \brief Slot accept coordinates from other plugins or external applications */
-    void acceptCoordinates( double, double );
+    /*! \brief Accepts a key and data data pair for re broadcasting */
+    void acceptKeyValuePair( QString, QString );
 
     /*! \brief Slot to accept item selections */
     void acceptModelIndexSelections( const QModelIndex& theIndex);
