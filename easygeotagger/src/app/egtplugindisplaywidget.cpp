@@ -44,7 +44,7 @@ EgtPluginDisplayWidget::EgtPluginDisplayWidget( EgtPluginInterface* thePlugin, Q
    //Add configuration button if necessary.
   if( thePlugin->isConfigurable() )
   {
-    cvConfigureButton.setMaximumSize( 20, 20 );
+    cvConfigureButton.setMaximumSize( 24, 24 );
     cvConfigureButton.setToolTip( tr( "Configure plugin" ) );
     cvConfigureButton.setIcon ( QIcon( ":/icons/configure.png" ) );
     layout()->addWidget( &cvConfigureButton );
