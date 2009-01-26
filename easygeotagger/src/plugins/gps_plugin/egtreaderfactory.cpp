@@ -28,6 +28,14 @@
 EgtReaderFactory::EgtReaderFactory( )
 {
   cvFileReader = new EgtGraphicalDelimitedTextFileReader();
+
+  
+  cvUiFileType.setupUi(&cvFileTypeDialog);
+
+  connect( cvUiFileType.pbtnOk, SIGNAL( clicked() ), this, SLOT( on_pbtnOk_clicked() ) ); 
+  connect( cvUiFileType.pbtnCancel, SIGNAL( clicked() ), this, SLOT( on_pbtnCancel_clicked() ) );
+  connect( cvUiFileType.rbDelimitedText, SIGNAL( toggled(bool) ), this, SLOT( on_rbDelimitedText_toggled(bool) ) );
+  connect( cvUiFileType.rbGPSFile, SIGNAL( toggled(bool) ), this, SLOT( on_rbGPSFile_toggled(bool) ) );
 }
 
 /*
@@ -38,9 +46,8 @@ EgtReaderFactory::EgtReaderFactory( )
 
 void EgtReaderFactory::show()
 {
-  QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
-  cvFileReader->setFileName( lvFileName );
-  cvFileReader->selectDelimiter();
+  cvFileTypeDialog.show();
+
   connect( cvFileReader, SIGNAL( delimiterSelected() ), this, SLOT( reEmitDelimiterSelected() ) );
 }
 
@@ -62,6 +69,27 @@ void EgtReaderFactory::reEmitDelimiterSelected()
   emit(fileReaderCreated( cvFileReader ));
 }
 
+void EgtReaderFactory::on_pbtnOk_clicked()
+{
+qDebug("ok clicked");
+cvFileTypeDialog.setVisible(false);
+cvFileReader->show();
+}
 
+void EgtReaderFactory::on_pbtnCancel_clicked()
+{
+qDebug("cancel clicked");
+}
 
+void EgtReaderFactory::on_rbDelimitedText_toggled( bool theChange )
+{
+if( theChange )
+qDebug("delimited text activated");
+}
+
+void EgtReaderFactory::on_rbGPSFile_toggled( bool theChange )
+{
+if( theChange )
+qDebug("gps activated");
+}
 

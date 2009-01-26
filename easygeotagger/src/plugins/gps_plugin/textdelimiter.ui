@@ -1,0 +1,142 @@
+<ui version="4.0" >
+ <class>TextDelimiterDialog</class>
+ <widget class="QDialog" name="TextDelimiterDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>309</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Select Text Delimiter</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>261</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="title" >
+    <string/>
+   </property>
+   <widget class="QLineEdit" name="leCustom" >
+    <property name="geometry" >
+     <rect>
+      <x>100</x>
+      <y>80</y>
+      <width>51</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbtnComma" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>92</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Comma ( , )</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbtnPipe" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>92</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Pipe ( | )</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbtnCustom" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>92</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Custom</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbtnBlank" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>92</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Blank spaces</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>241</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="title" >
+     <string>Preview</string>
+    </property>
+    <widget class="QTextEdit" name="tePreview" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>221</width>
+       <height>121</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="pbtnOk" >
+   <property name="geometry" >
+    <rect>
+     <x>300</x>
+     <y>100</y>
+     <width>75</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>OK</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pbtnCancel" >
+   <property name="geometry" >
+    <rect>
+     <x>300</x>
+     <y>160</y>
+     <width>75</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Cancel</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

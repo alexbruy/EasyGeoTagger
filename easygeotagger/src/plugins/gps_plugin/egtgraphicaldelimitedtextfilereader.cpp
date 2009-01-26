@@ -30,26 +30,8 @@
 
 EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):EgtDelimitedTextFileReader()
 {
-  //Setup the Select Delimiter Dialog
-  cvSelectDelimiterDialog.setWindowTitle( tr( "Select Delimiter" ) );
-  cvSelectDelimiterDialog.setModal( true );
-  cvSelectDelimiterDialog.setLayout( new QVBoxLayout() );
-  cvSelectDelimiterDialog.layout()->setSpacing( 1 );
-  cvSelectDelimiterDialog.layout()->setContentsMargins( 1, 1, 1, 1 );
-
-  QLabel* lvLabel = new QLabel( &cvSelectDelimiterDialog );
-  lvLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-  lvLabel->setText("Specify a delimiter:");
-  lvLabel->setAlignment( Qt::AlignBottom | Qt::AlignCenter );
-  cvSelectDelimiterDialog.layout()->addWidget( lvLabel );
-
-  cvDelimiterText = new QTextEdit( &cvSelectDelimiterDialog );
-  cvDelimiterText->setMaximumHeight( 30 );
-  cvSelectDelimiterDialog.layout()->addWidget( cvDelimiterText );
-
-  QPushButton *lvAcceptButton = new QPushButton( "&Ok", &cvSelectDelimiterDialog );
-  cvSelectDelimiterDialog.layout()->addWidget( lvAcceptButton );
-  connect( lvAcceptButton, SIGNAL( clicked() ), this, SLOT( lvAcceptButton_clicked() ) ); 
+  cvUiTextDelimiter.setupUi(&cvSelectDelimiterDialog);
+  connect( cvUiTextDelimiter.pbtnOk, SIGNAL( clicked() ), this, SLOT( on_pbtnOk_clicked() ) ); 
 }
 
 /*
@@ -61,9 +43,17 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):Egt
 void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
 {
   cvSelectDelimiterDialog.show();
+  QStringList lvFileData = read();
+  QString lvString = lvFileData.join(",");
+  cvUiTextDelimiter.tePreview->setPlainText( "THIS IS NOT WORKING:"+lvString );
 }
 
-
+void EgtGraphicalDelimitedTextFileReader::show()
+{
+  QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
+  setFileName( lvFileName );
+  selectDelimiter();
+} 
 
 
 /*
@@ -71,9 +61,9 @@ void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
  * SIGNAL and SLOTS
  *
  */
-void EgtGraphicalDelimitedTextFileReader::lvAcceptButton_clicked()
+void EgtGraphicalDelimitedTextFileReader::on_pbtnOk_clicked()
 {
-  setDelimiter( cvDelimiterText->toPlainText() );
+  setDelimiter( cvUiTextDelimiter.leCustom->text() );
   cvSelectDelimiterDialog.close();
   emit delimiterSelected();
 }

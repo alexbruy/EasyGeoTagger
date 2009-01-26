@@ -1,0 +1,99 @@
+<ui version="4.0" >
+ <class>FileTypeDialog</class>
+ <widget class="QDialog" name="FileTypeDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>250</width>
+    <height>235</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Dialog</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox" >
+   <property name="geometry" >
+    <rect>
+     <x>19</x>
+     <y>69</y>
+     <width>211</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="title" >
+    <string/>
+   </property>
+   <widget class="QRadioButton" name="rbDelimitedText" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>98</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Delimited text</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbGPSFile" >
+    <property name="enabled" >
+     <bool>false</bool>
+    </property>
+    <property name="geometry" >
+     <rect>
+      <x>120</x>
+      <y>20</y>
+      <width>72</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>GPS File</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbtnOk" >
+    <property name="geometry" >
+     <rect>
+      <x>20</x>
+      <y>70</y>
+      <width>75</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Ok</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pbtnCancel" >
+    <property name="geometry" >
+     <rect>
+      <x>120</x>
+      <y>70</y>
+      <width>75</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Cancel</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="label" >
+   <property name="geometry" >
+    <rect>
+     <x>60</x>
+     <y>40</y>
+     <width>140</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Select the file type to read</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
