@@ -22,14 +22,12 @@
 **
 **/
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include "egtreaderfactory.h"
 
 EgtReaderFactory::EgtReaderFactory( )
 {
-  cvFileReader = new EgtGraphicalDelimitedTextFileReader();
-
-  
   cvUiFileType.setupUi(&cvFileTypeDialog);
 
   connect( cvUiFileType.pbtnOk, SIGNAL( clicked() ), this, SLOT( on_pbtnOk_clicked() ) ); 
@@ -47,8 +45,6 @@ EgtReaderFactory::EgtReaderFactory( )
 void EgtReaderFactory::show()
 {
   cvFileTypeDialog.show();
-
-  connect( cvFileReader, SIGNAL( delimiterSelected() ), this, SLOT( reEmitDelimiterSelected() ) );
 }
 
 
@@ -71,25 +67,40 @@ void EgtReaderFactory::reEmitDelimiterSelected()
 
 void EgtReaderFactory::on_pbtnOk_clicked()
 {
-qDebug("ok clicked");
-cvFileTypeDialog.setVisible(false);
-cvFileReader->show();
+  
+  if( cvUiFileType.rbDelimitedText ->isChecked() )
+    cvFileReader = new EgtGraphicalDelimitedTextFileReader();
+  else
+    if( cvUiFileType.rbGPSFile ->isChecked() )
+    {
+      //Nothing so far
+      cvFileReader = new EgtGraphicalDelimitedTextFileReader();
+    }
+    else
+    {
+      QMessageBox::warning( 0, tr("Error"),tr("You must select a file type"),QMessageBox::Ok );
+    }
+
+  connect( cvFileReader, SIGNAL( delimiterSelected() ), this, SLOT( reEmitDelimiterSelected() ) );
+
+  cvFileTypeDialog.setVisible(false);
+  cvFileReader->show();
 }
 
 void EgtReaderFactory::on_pbtnCancel_clicked()
 {
-qDebug("cancel clicked");
+  cvFileTypeDialog.setVisible(false);
 }
 
 void EgtReaderFactory::on_rbDelimitedText_toggled( bool theChange )
 {
-if( theChange )
-qDebug("delimited text activated");
+/*if( theChange )
+qDebug("delimited text activated");*/
 }
 
 void EgtReaderFactory::on_rbGPSFile_toggled( bool theChange )
 {
-if( theChange )
-qDebug("gps activated");
+/*if( theChange )
+qDebug("gps activated");*/
 }
 

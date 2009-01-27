@@ -31,7 +31,20 @@
 EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):EgtDelimitedTextFileReader()
 {
   cvUiTextDelimiter.setupUi(&cvSelectDelimiterDialog);
+
   connect( cvUiTextDelimiter.pbtnOk, SIGNAL( clicked() ), this, SLOT( on_pbtnOk_clicked() ) ); 
+  connect( cvUiTextDelimiter.pbtnCancel, SIGNAL( clicked() ), this, SLOT( on_pbtnCancel_clicked() ) ); 
+  connect( cvUiTextDelimiter.rbtnComma, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnComma_toggled( bool ) ) ); 
+  connect( cvUiTextDelimiter.rbtnPipe, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnPipe_toggled( bool ) ) ); 
+  connect( cvUiTextDelimiter.rbtnBlank, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnBlank_toggled( bool ) ) ); 
+  connect( cvUiTextDelimiter.rbtnCustom, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnCustom_toggled( bool ) ) ); 
+
+  connect( this, SIGNAL( delimiterChanged() ), this, SLOT( on_delimiter_changed() ) ); 
+
+  connect( cvUiTextDelimiter.leCustom, SIGNAL( textEdited( QString ) ), this, SLOT( on_leCustom_changed() ) ); 
+
+  connect( cvUiTextDelimiter.cbHeader, SIGNAL( stateChanged( int ) ), this, SLOT( on_cbHeader_changed() ) );
+  
 }
 
 /*
@@ -43,16 +56,17 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):Egt
 void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
 {
   cvSelectDelimiterDialog.show();
-  QStringList lvFileData = read();
-  QString lvString = lvFileData.join(",");
-  cvUiTextDelimiter.tePreview->setPlainText( "THIS IS NOT WORKING:"+lvString );
+
 }
 
 void EgtGraphicalDelimitedTextFileReader::show()
 {
   QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
-  setFileName( lvFileName );
-  selectDelimiter();
+  if ( lvFileName != "" )
+  {
+    setFileName( lvFileName );
+    selectDelimiter();
+  }
 } 
 
 
@@ -61,13 +75,93 @@ void EgtGraphicalDelimitedTextFileReader::show()
  * SIGNAL and SLOTS
  *
  */
+
+void EgtGraphicalDelimitedTextFileReader::on_delimiter_changed()
+{
+  QList<QStringList> lvFileData = read();
+
+  if( lvFileData.size() == 0 )
+    cvUiTextDelimiter.lbStatus->setText( cvLastError );
+  else
+    cvUiTextDelimiter.lbStatus->setText( "" );
+
+  QString lvHTML = "<table border=\"1\">";
+
+  int lvNumRows = (lvFileData.size() > 3)? 3: lvFileData.size(); // We just show up to 3 rows
+
+  for( int i = 0; i < lvNumRows; i++ )
+  { 
+    lvHTML +="<tr>";
+    for( int j = 0; j < lvFileData[0].size(); j++ )
+    {
+      lvHTML = lvHTML+"<td>"+lvFileData.at(i).at(j)+"</td>";
+    }
+    lvHTML +="</tr>";
+  }
+  lvHTML +="</table>";
+
+  cvUiTextDelimiter.tePreview->setHtml( lvHTML );
+}
+
 void EgtGraphicalDelimitedTextFileReader::on_pbtnOk_clicked()
 {
-  setDelimiter( cvUiTextDelimiter.leCustom->text() );
   cvSelectDelimiterDialog.close();
   emit delimiterSelected();
 }
 
+void EgtGraphicalDelimitedTextFileReader::on_pbtnCancel_clicked()
+{
+  cvSelectDelimiterDialog.close();
+}
 
+void EgtGraphicalDelimitedTextFileReader::on_rbtnComma_toggled( bool theValue )
+{
+  if( theValue )
+  {
+    setDelimiter( "," );
+    emit delimiterChanged();
+  }
+}
 
+void EgtGraphicalDelimitedTextFileReader::on_rbtnPipe_toggled( bool theValue )
+{
+  if( theValue )
+  {
+    setDelimiter( "|" );
+    emit delimiterChanged();
+  }
+}
+
+void EgtGraphicalDelimitedTextFileReader::on_rbtnBlank_toggled( bool theValue )
+{
+  if( theValue )
+  {
+    setDelimiter( " " );
+    emit delimiterChanged();
+  }
+}
+
+void EgtGraphicalDelimitedTextFileReader::on_rbtnCustom_toggled( bool theValue )
+{
+  if( theValue )
+  {
+    setDelimiter( cvUiTextDelimiter.leCustom->text() );
+    emit delimiterChanged();
+  }
+}
+
+void EgtGraphicalDelimitedTextFileReader::on_leCustom_changed()
+{
+  if( cvUiTextDelimiter.rbtnCustom->isChecked() )
+  {
+  setDelimiter( cvUiTextDelimiter.leCustom->text() );
+    emit delimiterChanged();
+  }
+}
+
+void EgtGraphicalDelimitedTextFileReader::on_cbHeader_changed()
+{
+  cvHasColumnHeaders = cvUiTextDelimiter.cbHeader->isChecked();
+  emit delimiterChanged();
+}
 

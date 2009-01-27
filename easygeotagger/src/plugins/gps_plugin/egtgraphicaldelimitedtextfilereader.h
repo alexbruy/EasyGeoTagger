@@ -44,8 +44,26 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
     void show();
 
   public slots:
+    
+    void on_cbHeader_changed();
+
     /*! \brief Slot used to perform the needed actions when the user selects a delimiter */
+    void on_delimiter_changed();
+
+    void on_leCustom_changed();
+
+    void on_pbtnCancel_clicked();
+ 
+    void on_rbtnComma_toggled( bool );
+
     void on_pbtnOk_clicked();
+  
+    void on_rbtnBlank_toggled( bool );
+
+    void on_rbtnCustom_toggled( bool );
+
+    void on_rbtnPipe_toggled( bool );
+
   private:
     /*! \brief Dialog where the user specifies a delimiter */
     QDialog cvSelectDelimiterDialog;
@@ -57,5 +75,7 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
   signals:
     /*! \brief Signal emited when the user specifies a delimiter*/
     void delimiterSelected();
+
+    void delimiterChanged();
 };
 #endif

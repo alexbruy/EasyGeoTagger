@@ -43,7 +43,7 @@ class EgtDelimitedTextFileReader: public EgtFileReader
     virtual bool hasColumnHeaders();
 
     /*! \brief Function used to read a gps file */
-    virtual QStringList read( bool * ok = 0 );
+    virtual QList<QStringList> read( bool * ok = 0 );
 
     /*! \brief Function to set the name of the file to be read */
     void setFileName( QString );
@@ -61,6 +61,12 @@ class EgtDelimitedTextFileReader: public EgtFileReader
 
     /*! \brief QString that contains the delimiter */
     QString cvDelimiter;
+
+    QString cvLastError;
+
+    bool cvHasColumnHeaders;
+
+    QStringList cvColumnHeaders;
 
 };
 #endif

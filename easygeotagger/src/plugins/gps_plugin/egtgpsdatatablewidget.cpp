@@ -56,21 +56,23 @@ QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems()
 
 void EgtGpsDataTableWidget::populateTable()
 {
-  QStringList lvDummy =cvFileReader->read();
+  QList<QStringList> lvDummy =cvFileReader->read();
 
-  setRowCount( lvDummy.size()/2 );
-  setColumnCount(2);
+  setRowCount( lvDummy.size() );
+  setColumnCount( lvDummy[0].size() );
 
-  QStringList lvTags;
-  lvTags << "Longitude"<<"Latitude";
-  setHorizontalHeaderLabels(lvTags);
-
-  for(int i = 0; i < lvDummy.size(); i+=2)
+  if( cvFileReader->hasColumnHeaders() ) 
   {
-   QTableWidgetItem *lvNewItem = new QTableWidgetItem(lvDummy.at(i));
-       setItem( i/2, 0, lvNewItem );
-   QTableWidgetItem *lvNewItem2 = new QTableWidgetItem(lvDummy.at(i+1));
-       setItem( i/2, 1, lvNewItem2 );
+    QStringList lvTags;
+    lvTags = cvFileReader -> columnHeaders();
+    setHorizontalHeaderLabels(lvTags);
+  }
+
+  for(int i = 0; i < lvDummy.size(); i++ )
+   for(int j = 0; j < lvDummy[0].size(); j++ )
+  {
+   QTableWidgetItem *lvNewItem = new QTableWidgetItem(lvDummy.at(i).at(j));
+       setItem( i, j, lvNewItem );
   }
 }
 /*

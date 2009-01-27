@@ -29,6 +29,7 @@
 EgtDelimitedTextFileReader::EgtDelimitedTextFileReader():EgtFileReader()
 {
   cvDelimiter = ",";
+  cvHasColumnHeaders = false;
 }
 
 /*
@@ -40,10 +41,14 @@ EgtDelimitedTextFileReader::EgtDelimitedTextFileReader():EgtFileReader()
 /*!
  * \param ok pointer to boolean that indicates whether the read was performed correctly or not
  */
-QStringList EgtDelimitedTextFileReader::read( bool* ok)
+QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok)
 {
   QFile lvFile( cvFileName );
-  QStringList lvList;
+  QStringList lvStringList;
+  QList<QStringList>  lvList;
+
+  int lvNumFields;
+
   if (!lvFile.open(QFile::ReadOnly | QFile::Text)) 
   {
     if (ok)
@@ -57,15 +62,31 @@ QStringList EgtDelimitedTextFileReader::read( bool* ok)
 
   if( hasColumnHeaders() )
   {
-    stream.readLine();
+    lvLine = stream.readLine(); 
+    cvColumnHeaders = lvLine.split( cvDelimiter );
+    lvNumFields = lvLine.split( cvDelimiter ).size();
+  }
+  else
+  {
+    lvLine = stream.readLine();
+    lvList << lvLine.split( cvDelimiter );
+    lvNumFields = lvLine.split( cvDelimiter ).size();
   }
 
   while( ! stream.atEnd() )
   {
     lvLine = stream.readLine();
-    lvList << lvLine.split( cvDelimiter );
+   
+    if( lvLine.split( cvDelimiter ).size() == lvNumFields ) 
+      lvList << lvLine.split( cvDelimiter );
+    else
+    {
+      cvLastError = QObject::tr( "The file is not well formed") + ": " + cvFileName;
+      lvList.clear();
+      return lvList;
+    }
   }
-
+  cvLastError = "";
   return lvList;
 }
 
@@ -74,8 +95,7 @@ QStringList EgtDelimitedTextFileReader::read( bool* ok)
  */
 QStringList EgtDelimitedTextFileReader::columnHeaders()
 {
-  QStringList lvList;
-  return lvList;
+  return cvColumnHeaders;
 }
 
 /*!
@@ -83,7 +103,7 @@ QStringList EgtDelimitedTextFileReader::columnHeaders()
  */
 bool EgtDelimitedTextFileReader::hasColumnHeaders()
 {
-  return false; 
+  return cvHasColumnHeaders; 
 }
 
 /*!

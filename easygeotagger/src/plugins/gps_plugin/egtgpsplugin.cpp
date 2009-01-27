@@ -53,8 +53,10 @@ EgtGpsPlugin::EgtGpsPlugin()
   cvOpenFileButton.setText( tr( "Open file" ) );
   lvPanelButtons->layout()->addWidget( &cvOpenFileButton );
   lvPanel->layout()->addWidget( lvPanelButtons );
+
   connect( &cvTagButton, SIGNAL( clicked() ), this, SLOT( cvTagButton_clicked() ) );
   connect( &cvOpenFileButton, SIGNAL( clicked() ), this, SLOT( cvOpenFile_clicked() ) );
+
   //cvDialog.setWidget( lvPanel );
   cvDialog.setLayout( new QVBoxLayout() );
   cvDialog.layout()->addWidget( lvPanel );
@@ -88,8 +90,6 @@ void EgtGpsPlugin::initPlugin()
   //Hook listeners into the application interface
   if( 0 != cvApplicationInterface )
   {
-    //Add the dock but keep it hidden until the user askes for it
-    //cvApplicationInterface->gui()->addDockWidget( Qt::RightDockWidgetArea, &cvDialog );
     cvDialog.setVisible( false );
 
     //connect to application interface
