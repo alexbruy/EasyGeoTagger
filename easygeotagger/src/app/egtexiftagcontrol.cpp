@@ -35,7 +35,7 @@
  * \param theKey The key for this control
  * \param theDisplayName The common name for the key, used for labels
  */
-EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName )
+EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, bool theAssociatedData )
 {
     cvDisplayName = theDisplayName;
     cvCachedValue = "";
@@ -51,6 +51,13 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName )
 
     cvKeyValue.setMinimumWidth( 100 );
     cvEditorControls.layout()->addWidget( &cvKeyValue );
+
+    cvHasAssociatedData = theAssociatedData;
+    if( theAssociatedData )
+    {
+      cvAssociatedData.setMinimumWidth(40);
+      cvEditorControls.layout()->addWidget( &cvAssociatedData );
+    }
 
     cvDiscardButton.setMaximumSize( 24,24 );
     cvDiscardButton.setEnabled( false );
@@ -120,6 +127,19 @@ void EgtExifTagControl::setValue( QVariant const &theValue, bool setCachedValue 
 
 }
 
+
+void EgtExifTagControl::setValueAssociatedData( QString const &theValue )
+{
+  QStringList lvDataList = theValue.split( "|" );
+  cvAssociatedData.clear();
+  cvAssociatedData.addItems( lvDataList );
+  
+}
+
+void EgtExifTagControl::setValueAssociatedData( QVariant const &theValue )
+{
+  setValueAssociatedData( theValue.toString() );
+}
 /*!
  *
  * \param show Flag to indcate if the this editor control should be visible, i.e., enabled

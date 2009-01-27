@@ -299,11 +299,12 @@ bool EgtExifEngine::writeTag( QString theKey, QString theString, QString theDefa
  *
  */
 
-void EgtExifEngine::addKey( QString theKey, QString theCommonName )
+void EgtExifEngine::addKey( QString theKey, QString theCommonName, bool theAssociatedUnits )
 {
   KeyMap lvMap;
   lvMap.key = theKey;
   lvMap.commonName = theCommonName;
+  lvMap.hasUnits = theAssociatedUnits;
   cvKeys.append( lvMap );
 }
 

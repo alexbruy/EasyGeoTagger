@@ -45,6 +45,7 @@ public:
   {
       QString key;
       QString commonName;
+      bool hasUnits;
   };
 
   /*! \brief Constructor */
@@ -111,7 +112,7 @@ protected:
 
 
 
-  void addKey( QString, QString );
+  void addKey( QString, QString, bool );
   void openFile( QString theFileName );
 };
 #endif

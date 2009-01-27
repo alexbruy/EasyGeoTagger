@@ -32,6 +32,8 @@
 #include <QCheckBox>
 #include <QPushButton>
 
+#include <QComboBox>
+
 /*! \brief Editor and configuration controls for a exif tag
  *
  */
@@ -42,7 +44,9 @@ class EgtExifTagControl : public QObject
 
   public:
     /*! \brief Constructor */
-    EgtExifTagControl( QString, QString );
+    EgtExifTagControl( QString, QString, bool );
+
+    QString AssociatedDataValue(){ return cvAssociatedData.itemText( cvAssociatedData.currentIndex() ); }
 
     /*! \brief Returns a pointer the configuration control */
     QWidget* configurationControls() { return &cvConfigurationControls; }
@@ -65,12 +69,17 @@ class EgtExifTagControl : public QObject
     /*! \brief Sets the value in the editor's line edit */
     void setValue( QVariant const &theValue, bool setCachedValue = true );
 
+    void setValueAssociatedData( QString const &theValue );
+
+    void setValueAssociatedData( QVariant const &theValue );
+
     /*! \brief Sets the visibility of the editor controls */
     void setVisible( bool );
 
     /*! \brief Return the current value in the editors line edit */
     QString value() { return cvKeyValue.text(); }
 
+    
 
   signals:
     /*! \brief Signal to indicate that a particular control as been enabled, the controls key is passed as an argument */
@@ -85,6 +94,8 @@ class EgtExifTagControl : public QObject
     void cvKeyValue_textEdited( QString );
 
   private:
+    bool cvHasAssociatedData;   
+
     QString cvCachedValue;
     QString cvDisplayName;
     QString cvKey;
@@ -92,6 +103,8 @@ class EgtExifTagControl : public QObject
     QPushButton cvDiscardButton;
     QWidget cvEditorControls;
     QLineEdit cvKeyValue;
+
+    QComboBox cvAssociatedData;
 
     QWidget cvConfigurationControls;
     QCheckBox cvEnabled;
