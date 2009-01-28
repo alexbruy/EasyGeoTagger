@@ -44,7 +44,7 @@ class EgtExifEditor : public QObject
 
   public:
     /*! \brief Constructor */
-    EgtExifEditor( EgtExifEngine* );
+    EgtExifEditor( QString, EgtExifEngine* );
 
     /*! \brief Add a tag group to the editor */
     void addTagGroup( EgtExifTagGroup* );
@@ -76,6 +76,8 @@ class EgtExifEditor : public QObject
     QPushButton cvSaveButton;
 
     EgtExifEngine* cvExifEngine;
+
+    QString cvId;
 
     QGroupBox cvTagGroups;
 

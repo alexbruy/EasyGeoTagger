@@ -27,14 +27,16 @@
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QSettings>
 
 /*!
  * TODO: This should relaly be moved into a GUI lib so that you could build editor plugins on the fly
  *
  * \param theEngine Pointer to the Exif engine that will be used to build the editor
  */
-EgtExifEditor::EgtExifEditor( EgtExifEngine* theEngine )
+EgtExifEditor::EgtExifEditor( QString theId, EgtExifEngine* theEngine )
 {
+  cvId = theId;
   cvExifEngine = theEngine;
 
   if( 0 == theEngine ) { return; }
@@ -72,7 +74,7 @@ EgtExifEditor::EgtExifEditor( EgtExifEngine* theEngine )
   EgtExifTagControl* lvTagControls;
   while( lvIterator != lvKeys.end() ) //Loop through the keys and create the control objects
   {
-    lvTagControls = new EgtExifTagControl( lvIterator->key, lvIterator->commonName, lvIterator->hasUnits );//////////////////////////
+    lvTagControls = new EgtExifTagControl( lvIterator->key, lvIterator->commonName, lvIterator->hasUnits );
     cvTagControls[ lvIterator->key ] = lvTagControls;
     cvEditorWidget.layout()->addWidget( lvTagControls->editorControls() );
     lvGroupBox->layout()->addWidget( lvTagControls->configurationControls() );
@@ -106,6 +108,17 @@ EgtExifEditor::EgtExifEditor( EgtExifEngine* theEngine )
   lvPanel->layout()->addWidget( lvCloseButton );
   connect( lvCloseButton, SIGNAL( clicked() ), &cvConfigurationDialog, SLOT( accept() ) );
   cvConfigurationDialog.layout()->addWidget( lvPanel );
+
+  //Loop through the controls and restore setting from last session
+  QSettings lvSettings;
+  lvSettings.setFallbacksEnabled( false );
+
+  QMap< QString, EgtExifTagControl* >::iterator lvTagIterator = cvTagControls.begin();
+  while( lvTagIterator != cvTagControls.end() )
+  {
+    lvTagIterator.value()->setEnabled( lvSettings.value( cvId + "/" +  lvTagIterator.value()->key(), true ).toBool() );
+    lvTagIterator++;
+  }
 }
 
 /*
@@ -168,10 +181,14 @@ void EgtExifEditor::controlDisabled( QString theKey )
 {
   if( 0 == cvExifEngine ) { return; }
 
+  QSettings lvSettings;
+  lvSettings.setValue( cvId + "/" + theKey, false );
+
   QString lvDependency = cvExifEngine->dependency( theKey );
   if( !lvDependency.isNull() )
   {
     cvTagControls[ lvDependency ]->setEnabled( false );
+    lvSettings.setValue( cvId + "/" + lvDependency, false );
   }
 }
 
@@ -183,10 +200,14 @@ void EgtExifEditor::controlEnabled( QString theKey )
 {
   if( 0 == cvExifEngine ) { return; }
 
+  QSettings lvSettings;
+  lvSettings.setValue( cvId + "/" + theKey, true );
+
   QString lvDependency = cvExifEngine->dependency( theKey );
   if( !lvDependency.isNull() )
   {
     cvTagControls[ lvDependency ]->setEnabled( true );
+    lvSettings.setValue( cvId + "/" + lvDependency, true );
   }
 }
 
@@ -214,7 +235,7 @@ void EgtExifEditor::tagGroupActivated( QStringList theKeys )
   QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
   while( lvIterator != cvTagControls.end() )
   {
-    lvIterator.value()->setEnabled( false );
+    cvTagControls[ lvIterator.value()->key( ) ]->setEnabled( false );
     lvIterator++;
   }
   QStringList::iterator lvTagRunner = theKeys.begin();

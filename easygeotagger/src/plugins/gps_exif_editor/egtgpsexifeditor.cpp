@@ -33,6 +33,7 @@
 #include <QtPlugin>
 #include <QMap>
 
+static const QString editorId = "EgtGpsExifEditor_0ook8ujn";
 EgtGpsExifEditor::EgtGpsExifEditor()
 {
   cvCategories = QObject::tr( "EXIF Editors" );
@@ -40,7 +41,7 @@ EgtGpsExifEditor::EgtGpsExifEditor()
   cvName = QObject::tr( "GPS EXIF Editor" );
   cvLastFile = "";
 
-  cvEditor = new EgtExifEditor( &cvExifEngine );
+  cvEditor = new EgtExifEditor( editorId, &cvExifEngine );
   //Create custom tag groups
   EgtExifTagGroup* lvTagGroup = new EgtExifTagGroup( tr( "Clear all" ) );
   cvEditor->addTagGroup( lvTagGroup );
@@ -64,10 +65,6 @@ EgtGpsExifEditor::EgtGpsExifEditor()
   lvTagGroup->addKey( "Egt.GPS.Altitude" );
   lvTagGroup->addKey( "Egt.GPS.ImageDirection" );
   cvEditor->addTagGroup( lvTagGroup );
-
-
-
-
 
   cvDock.setWindowTitle( cvName );
   cvDock.setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
