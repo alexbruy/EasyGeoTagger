@@ -26,13 +26,12 @@
 
 #include "egtfilereader.h"
 
-#include <QString>
-
 class EgtDelimitedTextFileReader: public EgtFileReader
 {
   Q_OBJECT
 
   public:
+
     /*! \brief Constuctor */
     EgtDelimitedTextFileReader();
     
@@ -41,6 +40,9 @@ class EgtDelimitedTextFileReader: public EgtFileReader
 
     /*! \brief Returns whether the file has headers or not */
     virtual bool hasColumnHeaders();
+
+    /*! \brief Function that performs preprocessing actions */
+    bool preprocessFile( QString );
 
     /*! \brief Function used to read a gps file */
     virtual QList<QStringList> read( bool * ok = 0 );
@@ -51,10 +53,9 @@ class EgtDelimitedTextFileReader: public EgtFileReader
     /*! \brief Function to set the text delimiter */
     void setDelimiter( QString );
 
-    /*! \brief Function that performs preprocessing actions */
-    bool preprocessFile( QString );
-
   protected:
+
+    QStringList cvColumnHeaders;
 
     /*! \brief QString that contains the name of the file to be read */
     QString cvFileName; 
@@ -62,12 +63,9 @@ class EgtDelimitedTextFileReader: public EgtFileReader
     /*! \brief QString that contains the delimiter */
     QString cvDelimiter;
 
-    QString cvLastError;
-
     bool cvHasColumnHeaders;
 
-    QStringList cvColumnHeaders;
-
+    QString cvLastError;
 };
 #endif
 

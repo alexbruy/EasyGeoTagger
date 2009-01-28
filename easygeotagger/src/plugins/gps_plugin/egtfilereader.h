@@ -25,7 +25,6 @@
 #define EGTFILEREADER_H
 
 #include <QStringList>
-#include <QList>
 
 class EgtFileReader: public QObject
 {
@@ -35,14 +34,14 @@ class EgtFileReader: public QObject
     /*! \brief Constructor */
     EgtFileReader(){};
 
-    /*! \brief Function used to read a gps file */
-    virtual QList<QStringList> read( bool* = 0 ) = 0;
-
     /*! \brief Function that returns the column headers*/
     virtual QStringList columnHeaders() = 0;
 
     /*! \brief Returns whether the file has column headers or not */
     virtual bool hasColumnHeaders() = 0;
+
+    /*! \brief Function used to read a gps file */
+    virtual QList<QStringList> read( bool* = 0 ) = 0;
  
 };
 #endif

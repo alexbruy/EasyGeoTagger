@@ -29,18 +29,13 @@
 #include "egtfilereader.h"
 #include "egtreaderfactory.h"
 
-#include <QPushButton>
-#include <QModelIndex>
-#include <QDialog>
-#include <QString>
-#include <QList>
-
 class EgtGpsPlugin: public EgtPluginInterface
 {
   Q_OBJECT
   Q_INTERFACES(EgtPluginInterface)
   
   public:
+
     /*! \brief Constuctor */
     EgtGpsPlugin();
     
@@ -66,6 +61,7 @@ class EgtGpsPlugin: public EgtPluginInterface
     void showConfigurationPanel() { }
 
   private slots:
+
     /*! \brief Slot called to open a gps file */
     void cvOpenFile_clicked();
     
@@ -79,22 +75,21 @@ class EgtGpsPlugin: public EgtPluginInterface
     void keyValuePair( QString, QString );
 
   private:
+
     /*! \brief Instance of the data table which contains the gps data */
     EgtGpsDataTableWidget cvDataTable; 
+
+    /*! \brief The main dock window that forms the base for the visual component of this plugin */
+    QDialog cvDialog;
+
+    /*! \brief Push button to open a file */
+    QPushButton cvOpenFileButton;
 
     /*! \brief Instance of the reader factory */
     EgtReaderFactory cvReaderFactory;
 
-    /*! \brief The main dock window that forms the base for the visual component of this plugin */
-    QDialog cvDialog;
-  
     /*! \brief Push button to tag a picture */
     QPushButton cvTagButton;
-   
-    /*! \brief Push button to open a file */
-    QPushButton cvOpenFileButton;
-    
-
 };
 #endif
 

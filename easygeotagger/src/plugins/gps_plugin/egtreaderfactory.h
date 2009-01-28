@@ -27,8 +27,6 @@
 #include "egtgraphicaldelimitedtextfilereader.h"
 #include "ui_filetypedialog.h"
 
-#include <QObject>
-#include <QWidget>
 class EgtReaderFactory: public QObject
 {
   Q_OBJECT
@@ -43,22 +41,24 @@ class EgtReaderFactory: public QObject
 
   private slots:
 
-    /*! \brief Slot used to re-emit the signal emited from the graphical file reader */
-    void reEmitDelimiterSelected();
+    void on_pbtnCancel_clicked();   
 
     void on_pbtnOk_clicked();
-
-    void on_pbtnCancel_clicked();
 
     void on_rbDelimitedText_toggled( bool );
 
     void on_rbGPSFile_toggled( bool );
 
+    /*! \brief Slot used to re-emit the signal emited from the graphical file reader */
+    void reEmitDelimiterSelected();
+
   private:
+
     /*! \brief Instance of the concrete file reader to be used */
     EgtGraphicalDelimitedTextFileReader* cvFileReader;
 
     QDialog cvFileTypeDialog;
+
     Ui::FileTypeDialog cvUiFileType;
 
   signals:

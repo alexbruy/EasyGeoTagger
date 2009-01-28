@@ -25,14 +25,9 @@
 #include "egtgpsplugin.h"
 #include "egtlogger.h"
 
-#include <QMainWindow>
-#include <QPushButton>
-#include <QFileInfo>
 #include <QtPlugin>
-#include <QMap>
 #include <QVBoxLayout>
-//
-#include <QFileDialog>
+
 EgtGpsPlugin::EgtGpsPlugin()
 {
   cvCategories = QObject::tr( "GPS reader" );
@@ -57,7 +52,6 @@ EgtGpsPlugin::EgtGpsPlugin()
   connect( &cvTagButton, SIGNAL( clicked() ), this, SLOT( cvTagButton_clicked() ) );
   connect( &cvOpenFileButton, SIGNAL( clicked() ), this, SLOT( cvOpenFile_clicked() ) );
 
-  //cvDialog.setWidget( lvPanel );
   cvDialog.setLayout( new QVBoxLayout() );
   cvDialog.layout()->addWidget( lvPanel );
   connect(&cvReaderFactory, SIGNAL(fileReaderCreated( EgtFileReader* )),this, SLOT( fileReader_set( EgtFileReader* ) ));
@@ -102,11 +96,6 @@ void EgtGpsPlugin::initPlugin()
  * SIGNAL and SLOTS
  *
  */
-void EgtGpsPlugin::fileReader_set( EgtFileReader* theFileReader )
-{
-  cvDataTable.setFileReader( theFileReader );
-}
-
 void EgtGpsPlugin::cvOpenFile_clicked()
 {
   cvReaderFactory.show();
@@ -123,6 +112,12 @@ void EgtGpsPlugin::cvTagButton_clicked()
      emit(keyValuePair("Egt.GPS."+lvMapIterator.key(),lvMapIterator.value()));
  }
 
+}
+
+
+void EgtGpsPlugin::fileReader_set( EgtFileReader* theFileReader )
+{
+  cvDataTable.setFileReader( theFileReader );
 }
 
 void EgtGpsPlugin::run()

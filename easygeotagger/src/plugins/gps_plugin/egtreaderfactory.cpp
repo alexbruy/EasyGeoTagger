@@ -21,10 +21,10 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
+#include "egtreaderfactory.h"
+
 #include <QFileDialog>
 #include <QMessageBox>
-
-#include "egtreaderfactory.h"
 
 EgtReaderFactory::EgtReaderFactory( )
 {
@@ -60,9 +60,9 @@ void EgtReaderFactory::show()
  * SIGNAL and SLOTS
  *
  */
-void EgtReaderFactory::reEmitDelimiterSelected()
+void EgtReaderFactory::on_pbtnCancel_clicked()
 {
-  emit(fileReaderCreated( cvFileReader ));
+  cvFileTypeDialog.setVisible(false);
 }
 
 void EgtReaderFactory::on_pbtnOk_clicked()
@@ -78,18 +78,13 @@ void EgtReaderFactory::on_pbtnOk_clicked()
     }
     else
     {
-      QMessageBox::warning( 0, tr("Error"),tr("You must select a file type"),QMessageBox::Ok );
+      QMessageBox::warning( &cvFileTypeDialog, tr("Error"),tr("You must select a file type"),QMessageBox::Ok );
     }
 
   connect( cvFileReader, SIGNAL( delimiterSelected() ), this, SLOT( reEmitDelimiterSelected() ) );
 
   cvFileTypeDialog.setVisible(false);
   cvFileReader->show();
-}
-
-void EgtReaderFactory::on_pbtnCancel_clicked()
-{
-  cvFileTypeDialog.setVisible(false);
 }
 
 void EgtReaderFactory::on_rbDelimitedText_toggled( bool theChange )
@@ -104,3 +99,7 @@ void EgtReaderFactory::on_rbGPSFile_toggled( bool theChange )
 qDebug("gps activated");*/
 }
 
+void EgtReaderFactory::reEmitDelimiterSelected()
+{
+  emit(fileReaderCreated( cvFileReader ));
+}

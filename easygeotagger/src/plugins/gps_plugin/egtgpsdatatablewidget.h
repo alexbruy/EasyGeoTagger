@@ -25,10 +25,10 @@
 #define EGTGPSDATATABLEWIDGET_H
 
 #include "egtfilereader.h"
+#include "ui_columnmeaningdialog.h"
+
 
 #include <QTableWidget>
-#include <QWidget>
-#include <QPushButton>
 #include <QHeaderView>
 
 class EgtGpsDataTableWidget : public QTableWidget
@@ -62,22 +62,38 @@ class EgtGpsDataTableWidget : public QTableWidget
     /*! \brief Slot used when the vertical header is clicked */
     void cvVerticalHeader_clicked(int);
 
+    void on_pbtnOk_clicked();
+
   private:
     
-    /*! \brief Pointer to the horizontal header */
-    QHeaderView *  cvHorizontalHeader;
+    int cvColumnSelected;
 
-    /*! \brief Pointer to the vertical header */
-    QHeaderView *  cvVerticalHeader;
-
-    /*! \brief QMap to store the items of the selected row */
-    QMap<QString,QString> * cvMapItems;
+    QDialog cvColumnMeaningDialog;
 
     /*! \brief Pointer to the concrete instance of the file reader */
     EgtFileReader* cvFileReader;
 
+    bool cvHeadersAreSet;
+
+    QList<int> cvHeadersThatAreSet;
+
+    /*! \brief Pointer to the horizontal header */
+    QHeaderView *  cvHorizontalHeader;
+
+    /*! \brief QMap to store the items of the selected row */
+    QMap<QString,QString> * cvMapItems;
+
+    Ui::ColumnMeaningDialog cvUiColumnMeaning;
+
+    /*! \brief Pointer to the vertical header */
+    QHeaderView *  cvVerticalHeader;
+
+
+    bool areAllTheColumnsSet();
+
     /*! \brief Function used to populate the table */
     void populateTable();
+
 };
 #endif
 

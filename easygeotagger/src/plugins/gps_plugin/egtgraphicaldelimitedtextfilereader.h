@@ -27,10 +27,6 @@
 #include "egtdelimitedtextfilereader.h"
 #include "ui_textdelimiter.h"
 
-
-#include <QDialog>
-#include <QTextEdit>
-
 class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
 {
   Q_OBJECT
@@ -38,6 +34,7 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
   public:
     /*! \brief Constuctor */
     EgtGraphicalDelimitedTextFileReader();
+
     /*! \brief Selects the character that will be considered as delimiter when reading a text file */
     void selectDelimiter();
 
@@ -53,29 +50,34 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
     void on_leCustom_changed();
 
     void on_pbtnCancel_clicked();
- 
-    void on_rbtnComma_toggled( bool );
 
     void on_pbtnOk_clicked();
-  
+
     void on_rbtnBlank_toggled( bool );
+
+    void on_rbtnComma_toggled( bool );
 
     void on_rbtnCustom_toggled( bool );
 
     void on_rbtnPipe_toggled( bool );
 
   private:
+
     /*! \brief Dialog where the user specifies a delimiter */
     QDialog cvSelectDelimiterDialog;
+
     /*! \brief Text edit where the user specifies the delimiter*/
     QTextEdit* cvDelimiterText;
+
+    QList<QStringList> cvFileData;
 
     Ui::TextDelimiterDialog cvUiTextDelimiter;
 
   signals:
-    /*! \brief Signal emited when the user specifies a delimiter*/
-    void delimiterSelected();
 
     void delimiterChanged();
+
+    /*! \brief Signal emited when the user specifies a delimiter*/
+    void delimiterSelected();
 };
 #endif

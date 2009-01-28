@@ -37,6 +37,26 @@ EgtDelimitedTextFileReader::EgtDelimitedTextFileReader():EgtFileReader()
  * PUBLIC FUNCTIONS
  *
  */
+/*!
+ * \return a QString that contains the column headers
+ */
+QStringList EgtDelimitedTextFileReader::columnHeaders()
+{
+  return cvColumnHeaders;
+}
+
+/*!
+ * \return a boolean that indicates whether the file has column headers or not
+ */
+bool EgtDelimitedTextFileReader::hasColumnHeaders()
+{
+  return cvHasColumnHeaders; 
+}
+
+bool EgtDelimitedTextFileReader::preprocessFile( QString )
+{
+
+}
 
 /*!
  * \param ok pointer to boolean that indicates whether the read was performed correctly or not
@@ -59,7 +79,6 @@ QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok)
   QTextStream stream( &lvFile );
   QString lvLine;
   
-
   if( hasColumnHeaders() )
   {
     lvLine = stream.readLine(); 
@@ -91,22 +110,6 @@ QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok)
 }
 
 /*!
- * \return a QString that contains the column headers
- */
-QStringList EgtDelimitedTextFileReader::columnHeaders()
-{
-  return cvColumnHeaders;
-}
-
-/*!
- * \return a boolean that indicates whether the file has column headers or not
- */
-bool EgtDelimitedTextFileReader::hasColumnHeaders()
-{
-  return cvHasColumnHeaders; 
-}
-
-/*!
  * \param theFileName a QString that contains the name of the file to be read
  */
 void EgtDelimitedTextFileReader::setFileName( QString theFileName )
@@ -121,16 +124,3 @@ void EgtDelimitedTextFileReader::setDelimiter( QString theDelimiter )
 {
   cvDelimiter = theDelimiter;
 }
-
-bool EgtDelimitedTextFileReader::preprocessFile( QString )
-{
-
-}
-
-
-/*
- *
- * PRIVATE FUNCTIONS
- *
- */
-

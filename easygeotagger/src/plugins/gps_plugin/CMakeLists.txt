@@ -35,6 +35,7 @@ SET( GPS_PLUGIN_MOC_HDRS
 SET( GPS_PLUGIN_UIS
     filetypedialog.ui
     textdelimiter.ui
+    columnmeaningdialog.ui
    )
 
 QT4_WRAP_UI( GPS_PLUGIN_UIS_H ${GPS_PLUGIN_UIS} )
