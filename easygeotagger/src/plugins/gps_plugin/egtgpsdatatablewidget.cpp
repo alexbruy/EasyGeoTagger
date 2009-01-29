@@ -25,13 +25,14 @@
 
 #include <QMessageBox>
 
+#define COLUMN "Ignorame"
+
 EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
   cvUiColumnMeaning.setupUi( &cvColumnMeaningDialog );
-
-  QStringList lvAvailableFields;
-  lvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude";
-  cvUiColumnMeaning.cbFields->insertItems(0,lvAvailableFields);
+cvColumnMeaningDialog.setParent(this);
+  cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"(Ignore this column)";
+  cvUiColumnMeaning.cbFields->insertItems(0,cvAvailableFields);
 
   cvColumnSelected = 0;
   cvHeadersAreSet = false;
@@ -129,6 +130,19 @@ void EgtGpsDataTableWidget::cell_selected(int row, int column)
 void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
 {
   cvColumnSelected = theIndex;
+
+  QTableWidgetItem* lvHeaderItem;
+      QString lvText;
+      lvHeaderItem = horizontalHeaderItem ( theIndex );
+      lvText = lvHeaderItem->text();
+
+      bool ok;
+      lvText.toInt( &ok ); 
+
+      if(  lvText != "(Ignore this column)" && !ok )
+        cvUiColumnMeaning.cbFields->addItem( lvText );
+    
+
   cvColumnMeaningDialog.show();
 }
 
@@ -137,7 +151,6 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
   delete cvMapItems;
   cvMapItems = new QMap<QString,QString>;
  
-
   if( areAllTheColumnsSet() )
   {
     QTableWidgetItem* lvHeaderItem;
@@ -146,18 +159,21 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
       QString lvText;
       lvHeaderItem = horizontalHeaderItem ( lvColumnCount );
       lvText = lvHeaderItem->text();
-      cvMapItems->insert( lvText, item( theIndex, lvColumnCount )->text() );
+
+      if( lvText != "(Ignore this column)" )
+        cvMapItems->insert( lvText, item( theIndex, lvColumnCount )->text() );
     }
-  }
-  else
-  {
-    QMessageBox::critical( this, tr("Error"),tr("All headers must be set"),QMessageBox::Ok );
   }
 }
 
 void EgtGpsDataTableWidget::on_pbtnOk_clicked()
 {   
   QString lvSelectedItem = cvUiColumnMeaning.cbFields->currentText();
+  int lvIndex = cvUiColumnMeaning.cbFields->currentIndex();
+
+  if( lvSelectedItem != "(Ignore this column)" )
+    cvUiColumnMeaning.cbFields->removeItem( lvIndex );
+
   setHorizontalHeaderItem(cvColumnSelected, new QTableWidgetItem( lvSelectedItem ));
   cvHeadersThatAreSet<<cvColumnSelected;
   cvColumnMeaningDialog.close();

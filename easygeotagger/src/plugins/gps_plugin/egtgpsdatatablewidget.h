@@ -40,6 +40,8 @@ class EgtGpsDataTableWidget : public QTableWidget
      /*! \brief Constructor */
     EgtGpsDataTableWidget( );
 
+    bool areAllTheColumnsSet();
+
      /*! \brief Returns a QMap that contains all the items of the selected row */
     QMap<QString,QString>* getRowItems();
 
@@ -66,6 +68,8 @@ class EgtGpsDataTableWidget : public QTableWidget
 
   private:
     
+    QStringList cvAvailableFields;
+
     int cvColumnSelected;
 
     QDialog cvColumnMeaningDialog;
@@ -87,9 +91,6 @@ class EgtGpsDataTableWidget : public QTableWidget
 
     /*! \brief Pointer to the vertical header */
     QHeaderView *  cvVerticalHeader;
-
-
-    bool areAllTheColumnsSet();
 
     /*! \brief Function used to populate the table */
     void populateTable();

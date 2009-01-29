@@ -27,6 +27,7 @@
 
 #include <QtPlugin>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 EgtGpsPlugin::EgtGpsPlugin()
 {
@@ -103,14 +104,21 @@ void EgtGpsPlugin::cvOpenFile_clicked()
 
 void EgtGpsPlugin::cvTagButton_clicked() 
 {
-   QMap<QString,QString>* lvMap = cvDataTable.getRowItems();
-
-  QMapIterator<QString, QString> lvMapIterator(*lvMap);
-  while (lvMapIterator.hasNext())
+  if( cvDataTable.areAllTheColumnsSet() )
   {
-     lvMapIterator.next();
-     emit(keyValuePair("Egt.GPS."+lvMapIterator.key(),lvMapIterator.value()));
- }
+    QMap<QString,QString>* lvMap = cvDataTable.getRowItems();
+
+    QMapIterator<QString, QString> lvMapIterator(*lvMap);
+    while (lvMapIterator.hasNext())
+    {
+      lvMapIterator.next();
+      emit(keyValuePair("Egt.GPS."+lvMapIterator.key(),lvMapIterator.value()));
+    }
+  }
+  else
+  {
+    QMessageBox::critical( &cvDataTable, tr("Error"),tr("All headers must be set"),QMessageBox::Ok );
+  }
 
 }
 

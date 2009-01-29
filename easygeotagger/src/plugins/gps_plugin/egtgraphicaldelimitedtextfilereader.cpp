@@ -82,10 +82,8 @@ void EgtGraphicalDelimitedTextFileReader::on_delimiter_changed()
 {
   cvFileData = read();
 
-  if( cvFileData.size() == 0 )
-    cvUiTextDelimiter.lbStatus->setText( cvLastError );
-  else
-    cvUiTextDelimiter.lbStatus->setText( "" );
+  cvUiTextDelimiter.lbStatus->setText( cvLastError );
+
 
   QString lvHTML = "<table border=\"1\">";
 

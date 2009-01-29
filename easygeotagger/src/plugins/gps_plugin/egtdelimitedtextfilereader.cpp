@@ -67,12 +67,15 @@ QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok)
   QStringList lvStringList;
   QList<QStringList>  lvList;
 
+  bool lvError = false;
+
   int lvNumFields;
 
   if (!lvFile.open(QFile::ReadOnly | QFile::Text)) 
   {
     if (ok)
       *ok = false;
+    cvLastError = QObject::tr( "Can't read the file") + ": " + cvFileName;
     return lvList;
   }
 
@@ -100,12 +103,12 @@ QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok)
       lvList << lvLine.split( cvDelimiter );
     else
     {
-      cvLastError = QObject::tr( "The file is not well formed") + ": " + cvFileName;
-      lvList.clear();
-      return lvList;
+      lvError = true;
+      cvLastError = QObject::tr( "One or more rows have been discarded") + ": " + cvFileName;
     }
   }
-  cvLastError = "";
+  if( !lvError )
+    cvLastError = "";
   return lvList;
 }
 
