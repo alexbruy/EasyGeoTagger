@@ -223,7 +223,7 @@ QString EgtGPSExifEngine::destBearingRef( bool * isValid )
   EgtDebug( "entered destBearingRef(bool)" );
 
   if( 0 != isValid ) { *isValid =false; }
-  if( !isValidImageWithExpectedExif() ) { return ""; }
+  if( !isValidImageWithExpectedExif() ) { return QString("")+"|"+"T"+"|"+"M"; }
 
   QString lvRefferencesList;
 
@@ -233,7 +233,7 @@ QString EgtGPSExifEngine::destBearingRef( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    return "";  
+    return QString("")+"|"+"T"+"|"+"M";  
   }  
 
   if( isValid )
@@ -241,9 +241,9 @@ QString EgtGPSExifEngine::destBearingRef( bool * isValid )
   
   QString lvRefference = QString(lvValue.toString().c_str());
   if(QString::compare( lvRefference, "M" ) == 0)
-    lvRefferencesList = QString("M")+"|"+"T";
+    lvRefferencesList = QString("M")+"|"+"T"+"|"+"";
   else
-    lvRefferencesList = QString("T")+"|"+"M";
+    lvRefferencesList = QString("T")+"|"+"M"+"|"+"";
   
   return lvRefferencesList;
 }
@@ -314,7 +314,7 @@ QString EgtGPSExifEngine::directionRef( bool * isValid )
   EgtDebug( "entered directionRef(bool)" );
 
   if( 0 != isValid ) { *isValid =false; }
-  if( !isValidImageWithExpectedExif() ) { return ""; }
+  if( !isValidImageWithExpectedExif() ) { return QString("")+"|"+"T"+"|"+"M"; }
 
   QString lvRefferencesList;
 
@@ -324,7 +324,7 @@ QString EgtGPSExifEngine::directionRef( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    return "";  
+    return QString("")+"|"+"T"+"|"+"M";  
   }  
 
   if( isValid )
@@ -332,9 +332,9 @@ QString EgtGPSExifEngine::directionRef( bool * isValid )
   
   QString lvRefference = QString(lvValue.toString().c_str());
   if(QString::compare( lvRefference, "M" ) == 0)
-    lvRefferencesList = QString("M")+"|"+"T";
+    lvRefferencesList = QString("M")+"|"+"T"+"|"+"";
   else
-    lvRefferencesList = QString("T")+"|"+"M";
+    lvRefferencesList = QString("T")+"|"+"M"+"|"+"";
   
   return lvRefferencesList;
 }
@@ -373,7 +373,7 @@ QString EgtGPSExifEngine::destDistanceRef( bool * isValid )
   EgtDebug( "entered destDistanceRef(bool)" );
 
   if( 0 != isValid ) { *isValid =false; }
-  if( !isValidImageWithExpectedExif() ) { return ""; }
+  if( !isValidImageWithExpectedExif() ) { return QString("")+"|"+"K"+"|"+"M"+"|"+"N"; }
 
   QString lvRefferencesList;
 
@@ -383,7 +383,7 @@ QString EgtGPSExifEngine::destDistanceRef( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    return "";  
+    return QString("")+"|"+"K"+"|"+"M"+"|"+"N";  
   }  
 
   if( isValid )
@@ -391,12 +391,12 @@ QString EgtGPSExifEngine::destDistanceRef( bool * isValid )
   
   QString lvRefference = QString(lvValue.toString().c_str());
   if(QString::compare( lvRefference, "N" ) == 0)
-    lvRefferencesList = QString("N")+"|"+"K"+"|"+"M";
+    lvRefferencesList = QString("N")+"|"+"K"+"|"+"M"+"|"+"";
   else
     if(QString::compare( lvRefference, "M" ) == 0)
-      lvRefferencesList = QString("M")+"|"+"K"+"|"+"N";
+      lvRefferencesList = QString("M")+"|"+"K"+"|"+"N"+"|"+"";
     else
-      lvRefferencesList = QString("K")+"|"+"M"+"|"+"N";
+      lvRefferencesList = QString("K")+"|"+"M"+"|"+"N"+"|"+"";
   
   return lvRefferencesList;
 }
@@ -910,7 +910,7 @@ QString EgtGPSExifEngine::speedRef( bool * isValid )
   EgtDebug( "entered speedRef(bool)" );
 
   if( 0 != isValid ) { *isValid =false; }
-  if( !isValidImageWithExpectedExif() ) { return ""; }
+  if( !isValidImageWithExpectedExif() ) { return QString("")+"|"+"K"+"|"+"M"+"|"+"N"; }
 
   QString lvRefferencesList;
 
@@ -920,7 +920,7 @@ QString EgtGPSExifEngine::speedRef( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    return "";  
+    return QString("")+"|"+"K"+"|"+"M"+"|"+"N";  
   }  
 
   if( isValid )
@@ -928,12 +928,12 @@ QString EgtGPSExifEngine::speedRef( bool * isValid )
   
   QString lvRefference = QString(lvValue.toString().c_str());
   if(QString::compare( lvRefference, "N" ) == 0)
-    lvRefferencesList = QString("N")+"|"+"K"+"|"+"M";
+    lvRefferencesList = QString("N")+"|"+"K"+"|"+"M"+"|"+"";
   else
     if(QString::compare( lvRefference, "M" ) == 0)
-      lvRefferencesList = QString("M")+"|"+"K"+"|"+"N";
+      lvRefferencesList = QString("M")+"|"+"K"+"|"+"N"+"|"+"";
     else
-      lvRefferencesList = QString("K")+"|"+"M"+"|"+"N";
+      lvRefferencesList = QString("K")+"|"+"M"+"|"+"N"+"|"+"";
   
   return lvRefferencesList;
 }
@@ -1027,7 +1027,7 @@ QString EgtGPSExifEngine::trackRef( bool * isValid )
   EgtDebug( "entered trackRef(bool)" );
 
   if( 0 != isValid ) { *isValid =false; }
-  if( !isValidImageWithExpectedExif() ) { return ""; }
+  if( !isValidImageWithExpectedExif() ) { return QString("")+"|"+"T"+"|"+"M"; }
 
   QString lvRefferencesList;
 
@@ -1037,7 +1037,7 @@ QString EgtGPSExifEngine::trackRef( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    return "";  
+    return QString("")+"|"+"T"+"|"+"M";  
   }  
 
   if( isValid )
@@ -1045,9 +1045,9 @@ QString EgtGPSExifEngine::trackRef( bool * isValid )
   
   QString lvRefference = QString(lvValue.toString().c_str());
   if(QString::compare( lvRefference, "M" ) == 0)
-    lvRefferencesList = QString("M")+"|"+"T";
+    lvRefferencesList = QString("M")+"|"+"T"+"|"+"";
   else
-    lvRefferencesList = QString("T")+"|"+"M";
+    lvRefferencesList = QString("T")+"|"+"M"+"|"+"";
   
   return lvRefferencesList;
 }

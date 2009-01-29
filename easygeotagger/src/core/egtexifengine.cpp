@@ -218,68 +218,69 @@ bool EgtExifEngine::writeTag( QString theKey, QString theString, QString theDefa
     if (pos != exifData.end()) //If the data exist, we first delete it from the Exif data container
       exifData.erase(pos);
 
-
-    if( QString::compare( lvTypeName, "Ascii" ,Qt::CaseInsensitive ) == 0 )
+    if( theString != "" )
     {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::asciiString );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
+      if( QString::compare( lvTypeName, "Ascii" ,Qt::CaseInsensitive ) == 0 )
+      {
+       Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::asciiString );
+       lvNewValue->read( theString.toStdString() );
+       exifData.add( key, lvNewValue.get() );
+      }
+      else if( QString::compare( lvTypeName, "Rational",Qt::CaseInsensitive ) == 0 )
+      {
+       Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedRational );
+       lvNewValue->read( theString.toStdString() );
+       exifData.add( key, lvNewValue.get() );
+      }
+      else if( QString::compare( lvTypeName, "SRational",Qt::CaseInsensitive ) == 0 )
+      {
+       Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedRational );
+       lvNewValue->read( theString.toStdString() );
+       exifData.add( key, lvNewValue.get() );
+      }
+      else if( QString::compare( lvTypeName, "Short" ,Qt::CaseInsensitive ) == 0 )
+      {
+       Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedShort );
+       lvNewValue->read( theString.toStdString() );
+       exifData.add( key, lvNewValue.get() );
+      }
+      else if( QString::compare( lvTypeName, "SShort" ,Qt::CaseInsensitive ) == 0 )
+      {
+       Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedShort );
+       lvNewValue->read( theString.toStdString() );
+       exifData.add( key, lvNewValue.get() );
+      }
+      else if( QString::compare( lvTypeName, "Byte" ,Qt::CaseInsensitive ) == 0 )
+      {
+       Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedByte );
+       lvNewValue->read( theString.toStdString() );
+       exifData.add( key, lvNewValue.get() );
+      }
+      else if( QString::compare( lvTypeName, "SByte" ,Qt::CaseInsensitive ) == 0 )
+      {
+       Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedByte );
+       lvNewValue->read( theString.toStdString() );
+       exifData.add( key, lvNewValue.get() );
+      }
+      else if( QString::compare( lvTypeName, "Long" ,Qt::CaseInsensitive ) == 0)
+      {
+       Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedLong );
+       lvNewValue->read( theString.toStdString() );
+       exifData.add( key, lvNewValue.get() );
+      }
+      else if( QString::compare( lvTypeName, "SLong" ,Qt::CaseInsensitive ) == 0)
+      {
+       Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedLong  );
+       lvNewValue->read( theString.toStdString() );
+       exifData.add( key, lvNewValue.get() );
+      }
+      else //Undefined
+      {
+       Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::undefined );
+       lvNewValue->read( theString.toStdString() );
+       exifData.add( key, lvNewValue.get() );
+      }
     }
-    else if( QString::compare( lvTypeName, "Rational",Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedRational );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "SRational",Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedRational );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "Short" ,Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedShort );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "SShort" ,Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedShort );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "Byte" ,Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedByte );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "SByte" ,Qt::CaseInsensitive ) == 0 )
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedByte );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "Long" ,Qt::CaseInsensitive ) == 0)
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::unsignedLong );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else if( QString::compare( lvTypeName, "SLong" ,Qt::CaseInsensitive ) == 0)
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::signedLong  );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-    else //Undefined
-    {
-     Exiv2::Value::AutoPtr lvNewValue = Exiv2::Value::create( Exiv2::undefined );
-     lvNewValue->read( theString.toStdString() );
-     exifData.add( key, lvNewValue.get() );
-    }
-      
     // Writing the exif data to the image file
     cvImage->setExifData( exifData );
     cvImage->writeMetadata();
