@@ -30,7 +30,6 @@
 EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
   cvUiColumnMeaning.setupUi( &cvColumnMeaningDialog );
-cvColumnMeaningDialog.setParent(this);
   cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"(Ignore this column)";
   cvUiColumnMeaning.cbFields->insertItems(0,cvAvailableFields);
 
