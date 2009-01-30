@@ -76,7 +76,7 @@ class EgtGpsDataTableWidget : public QTableWidget
     int cvColumnSelected;
 
     /*! \brief Dialog to show the user all the available fields */
-    QDialog cvColumnMeaningDialog;
+    QDialog* cvColumnMeaningDialog;
 
     /*! \brief Pointer to the concrete instance of the file reader */
     EgtFileReader* cvFileReader;

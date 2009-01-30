@@ -23,6 +23,7 @@
 **/
 #include "egtgraphicaldelimitedtextfilereader.h"
 
+
 #include <QVBoxLayout>
 #include <QFileDialog>
 #include <QMessageBox>

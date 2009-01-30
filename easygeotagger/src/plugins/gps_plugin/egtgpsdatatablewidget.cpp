@@ -29,7 +29,8 @@
 
 EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
-  cvUiColumnMeaning.setupUi( &cvColumnMeaningDialog );
+  cvColumnMeaningDialog = new QDialog(this);
+  cvUiColumnMeaning.setupUi( cvColumnMeaningDialog );
   cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"(Ignore this column)";
   cvUiColumnMeaning.cbFields->insertItems(0,cvAvailableFields);
 
@@ -142,7 +143,7 @@ void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
         cvUiColumnMeaning.cbFields->addItem( lvText );
     
 
-  cvColumnMeaningDialog.show();
+  cvColumnMeaningDialog->show();
 }
 
 void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
@@ -175,7 +176,7 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked()
 
   setHorizontalHeaderItem(cvColumnSelected, new QTableWidgetItem( lvSelectedItem ));
   cvHeadersThatAreSet<<cvColumnSelected;
-  cvColumnMeaningDialog.close();
+  cvColumnMeaningDialog->close();
 }
 
 void EgtGpsDataTableWidget::setFileReader(EgtFileReader* theFileReader)

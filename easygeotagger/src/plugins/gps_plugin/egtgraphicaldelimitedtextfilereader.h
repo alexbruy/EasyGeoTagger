@@ -32,7 +32,7 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
   Q_OBJECT
 
   public:
-    /*! \brief Constuctor */
+    /*! \brief Constuctor */ 
     EgtGraphicalDelimitedTextFileReader();
 
     /*! \brief Selects the character that will be considered as delimiter when reading a text file */

@@ -77,7 +77,7 @@ class EgtGpsPlugin: public EgtPluginInterface
   private:
 
     /*! \brief Instance of the data table which contains the gps data */
-    EgtGpsDataTableWidget cvDataTable; 
+    EgtGpsDataTableWidget* cvDataTable; 
 
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
     QDialog cvDialog;

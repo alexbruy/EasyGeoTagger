@@ -35,6 +35,9 @@ EgtGpsPlugin::EgtGpsPlugin()
   cvDescription = QObject::tr( "Reads data from GPS files" );
   cvName = QObject::tr( "GPS Reader" );
 
+  //cvDialog = new QDialog( cvApplicationInterface );
+  cvDataTable = new EgtGpsDataTableWidget();  
+
   cvDialog.setWindowTitle( cvName );
   cvDialog.setMinimumSize( 250,150 );
 
@@ -44,7 +47,7 @@ EgtGpsPlugin::EgtGpsPlugin()
   lvPanel->setLayout( new QVBoxLayout() );
   lvPanel->layout()->setContentsMargins( 1, 1, 1, 1 );
   cvTagButton.setText( tr( "Tag picture" ) );
-  lvPanel->layout()->addWidget( &cvDataTable );
+  lvPanel->layout()->addWidget( cvDataTable );
   lvPanelButtons->layout()->addWidget( &cvTagButton );
   cvOpenFileButton.setText( tr( "Open file" ) );
   lvPanelButtons->layout()->addWidget( &cvOpenFileButton );
@@ -104,9 +107,9 @@ void EgtGpsPlugin::cvOpenFile_clicked()
 
 void EgtGpsPlugin::cvTagButton_clicked() 
 {
-  if( cvDataTable.areAllTheColumnsSet() )
+  if( cvDataTable->areAllTheColumnsSet() )
   {
-    QMap<QString,QString>* lvMap = cvDataTable.getRowItems();
+    QMap<QString,QString>* lvMap = cvDataTable->getRowItems();
 
     QMapIterator<QString, QString> lvMapIterator(*lvMap);
     while (lvMapIterator.hasNext())
@@ -117,7 +120,7 @@ void EgtGpsPlugin::cvTagButton_clicked()
   }
   else
   {
-    QMessageBox::critical( &cvDataTable, tr("Error"),tr("All headers must be set"),QMessageBox::Ok );
+    QMessageBox::critical( cvDataTable, tr("Error"),tr("All headers must be set"),QMessageBox::Ok );
   }
 
 }
@@ -125,7 +128,7 @@ void EgtGpsPlugin::cvTagButton_clicked()
 
 void EgtGpsPlugin::fileReader_set( EgtFileReader* theFileReader )
 {
-  cvDataTable.setFileReader( theFileReader );
+  cvDataTable->setFileReader( theFileReader );
 }
 
 void EgtGpsPlugin::run()

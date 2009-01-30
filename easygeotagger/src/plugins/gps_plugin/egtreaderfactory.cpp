@@ -25,6 +25,7 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QApplication>
 
 EgtReaderFactory::EgtReaderFactory( )
 {
@@ -44,7 +45,10 @@ EgtReaderFactory::EgtReaderFactory( )
 
 void EgtReaderFactory::show()
 {
-  cvFileTypeDialog.show();
+  QWidget* lvActiveWindow = QApplication::activeWindow ();
+  QPoint lvPosition = lvActiveWindow->pos();
+  cvFileTypeDialog.move( lvPosition.x(), lvPosition.y() );
+  cvFileTypeDialog.show(); 
 }
 
 /*
