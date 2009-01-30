@@ -41,12 +41,16 @@ class EgtReaderFactory: public QObject
 
   private slots:
 
+    /*! \brief Slot used when the user clicks on the cancel button of the file type dialog */
     void on_pbtnCancel_clicked();   
 
+    /*! \brief Slot used when the user clicks on the ok button of the file type dialog */
     void on_pbtnOk_clicked();
 
+    /*! \brief Slot used when the user clicks on the delimited text radio button */
     void on_rbDelimitedText_toggled( bool );
 
+    /*! \brief Slot used when the user clicks on the gps file radio button */
     void on_rbGPSFile_toggled( bool );
 
     /*! \brief Slot used to re-emit the signal emited from the graphical file reader */
@@ -57,8 +61,10 @@ class EgtReaderFactory: public QObject
     /*! \brief Instance of the concrete file reader to be used */
     EgtGraphicalDelimitedTextFileReader* cvFileReader;
 
+    /*! \brief QDialog to let the user select the type of file to be read */
     QDialog cvFileTypeDialog;
 
+    /*! \brief Desginer object */
     Ui::FileTypeDialog cvUiFileType;
 
   signals:

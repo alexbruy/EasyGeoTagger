@@ -95,7 +95,7 @@ double EgtGPSExifEngine::altitude( bool * isValid )
       
   Exiv2::TypeId lvTypeId = lvValue.typeId ();
   
-  if(lvTypeId == Exiv2::invalidTypeId)
+  if( lvTypeId == Exiv2::invalidTypeId )
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
     return 0.0;  
@@ -104,12 +104,14 @@ double EgtGPSExifEngine::altitude( bool * isValid )
   int lvSeaLevel = 1;
 
   if( QString::compare( QString( lvValue.toString().c_str() ), "1" ) == 0 )
+  {
     lvSeaLevel = -1;
-      
+  }      
+
   const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSAltitude" );
    
   lvTypeId = lvValue2.typeId ();   
-  if(lvTypeId == Exiv2::invalidTypeId)
+  if( lvTypeId == Exiv2::invalidTypeId )
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
     return 0.0;  
@@ -117,13 +119,13 @@ double EgtGPSExifEngine::altitude( bool * isValid )
   
   double lvAltitude = 0.0;
 
-  for(int i=lvValue2.count()-1; i>=0; i--)
+  for( int i=lvValue2.count()-1; i>=0; i-- )
   {
     lvAltitude+= (double)lvValue2.toFloat(i);
   }
 
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
+      
   
   return lvAltitude*lvSeaLevel;
 }
@@ -152,9 +154,7 @@ QString EgtGPSExifEngine::areaInformation( bool * isValid )
   QString lvAreaInformation;
   lvAreaInformation= QString(lvValue.toString(0).c_str());
   
-
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return lvAreaInformation;
 }
@@ -183,8 +183,7 @@ QString EgtGPSExifEngine::dateStamp( bool * isValid )
   QString lvDateStamp;
   lvDateStamp= QString(lvValue.toString(0).c_str());
 
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return lvDateStamp;
 }
@@ -212,8 +211,7 @@ double EgtGPSExifEngine::destBearing( bool * isValid )
   
   double lvBearing = (double)lvValue.toFloat(0);
 
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return lvBearing;
 }
@@ -236,15 +234,17 @@ QString EgtGPSExifEngine::destBearingRef( bool * isValid )
     return QString("")+"|"+"T"+"|"+"M";  
   }  
 
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   QString lvRefference = QString(lvValue.toString().c_str());
   if(QString::compare( lvRefference, "M" ) == 0)
+  {
     lvRefferencesList = QString("M")+"|"+"T"+"|"+"";
+  }
   else
+  {
     lvRefferencesList = QString("T")+"|"+"M"+"|"+"";
-  
+  }
   return lvRefferencesList;
 }
  
@@ -272,8 +272,7 @@ int EgtGPSExifEngine::differential( bool * isValid )
   
   int lvDifferential = int(lvValue.toFloat(0));
   
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return lvDifferential;
 }
@@ -295,15 +294,15 @@ float EgtGPSExifEngine::direction( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    if(isValid)
-      *isValid =false;
+
+    if( isValid ){ *isValid =true; }
+
     return 0.0;  
   }  
   
   int lvDirection = int(lvValue2.toFloat(0));
   
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return lvDirection;
 }
@@ -327,15 +326,18 @@ QString EgtGPSExifEngine::directionRef( bool * isValid )
     return QString("")+"|"+"T"+"|"+"M";  
   }  
 
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   QString lvRefference = QString(lvValue.toString().c_str());
   if(QString::compare( lvRefference, "M" ) == 0)
+  {
     lvRefferencesList = QString("M")+"|"+"T"+"|"+"";
+  }
   else
+  {
     lvRefferencesList = QString("T")+"|"+"M"+"|"+"";
-  
+  }
+
   return lvRefferencesList;
 }
 
@@ -361,8 +363,7 @@ double EgtGPSExifEngine::destDistance( bool * isValid )
   
   double lvDistance = double(lvValue2.toFloat(0));
   
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return lvDistance;
 }
@@ -386,18 +387,24 @@ QString EgtGPSExifEngine::destDistanceRef( bool * isValid )
     return QString("")+"|"+"K"+"|"+"M"+"|"+"N";  
   }  
 
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   QString lvRefference = QString(lvValue.toString().c_str());
   if(QString::compare( lvRefference, "N" ) == 0)
+  {
     lvRefferencesList = QString("N")+"|"+"K"+"|"+"M"+"|"+"";
+  }
   else
+  {
     if(QString::compare( lvRefference, "M" ) == 0)
+    {
       lvRefferencesList = QString("M")+"|"+"K"+"|"+"N"+"|"+"";
+    }
     else
+    {
       lvRefferencesList = QString("K")+"|"+"M"+"|"+"N"+"|"+"";
-  
+    }
+  }
   return lvRefferencesList;
 }
 /*!
@@ -438,12 +445,11 @@ double EgtGPSExifEngine::destLatitude( bool * isValid )
   for(int i=lvValue2.count()-1; i>=0; i--)
   {
     lvDestLatitude+= (double)lvValue2.toFloat(i);
-    if(i>0)
-      lvDestLatitude/= 60;
+    if( i> 0){ lvDestLatitude/= 60; }
+      
   }
 
-  if( isValid )
-    *isValid = true;
+  if( isValid ){ *isValid =true; }
  
   return lvDestLatitude*lvNorthing;
 }
@@ -486,12 +492,11 @@ double EgtGPSExifEngine::destLongitude( bool * isValid )
   for(int i=lvValue2.count()-1; i>=0; i--)
   {
     lvDestLongitude+= (double)lvValue2.toFloat(i);
-    if( i>0 )
-      lvDestLongitude/= 60;
+    if( i > 0 ){ lvDestLongitude/= 60; }
+      
   }
 
-  if( isValid )
-    *isValid = true;
+  if( isValid ){ *isValid =true; }
  
   return lvDestLongitude*lvNorthing;
 }
@@ -519,8 +524,7 @@ double EgtGPSExifEngine::gpsDOP( bool * isValid )
   
   double lvDop = double(lvValue.toFloat(0));
   
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return lvDop;
 }
@@ -566,7 +570,9 @@ double EgtGPSExifEngine::latitude( bool * isValid )
   int lvNorthing = 1;
 
   if( QString::compare( QString( lvValue.toString().c_str() ), "S" ) == 0 )
+  {
     lvNorthing = -1;
+  }
       
   const Exiv2::Value & lvValue2 = readTag( "Exif.GPSInfo.GPSLatitude" );
    
@@ -582,12 +588,10 @@ double EgtGPSExifEngine::latitude( bool * isValid )
   for(int i=lvValue2.count()-1; i>=0; i--)
   {
     lvLatitude+= (double)lvValue2.toFloat(i);
-    if(i>0)
-      lvLatitude/= 60;
+    if( i > 0 ){ lvLatitude/= 60; }
   }
 
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return lvLatitude*lvNorthing;
 }
@@ -629,13 +633,11 @@ double EgtGPSExifEngine::longitude( bool * isValid )
   for(int i=lvValue2.count()-1; i>=0; i--)
   {
     lvLongitude+= (double)lvValue2.toFloat(i);
-    if(i>0)
-      lvLongitude/= 60;
+    if(i > 0){ lvLongitude/= 60; }
   }
 
-  if( isValid )
-    *isValid = true;
- 
+  if( isValid ){ *isValid = true; }
+    
   return lvLongitude*lvNorthing;
 }
 
@@ -661,8 +663,7 @@ QString EgtGPSExifEngine::mapDatum( bool * isValid )
     return "";  
   }  
 
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return QString(lvValue.toString(0).c_str());
 }
@@ -682,15 +683,14 @@ QString EgtGPSExifEngine::measureMode( bool * isValid )
   const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSMeasureMode" );
    
   Exiv2::TypeId lvTypeId = lvValue.typeId ();   
-  if(lvTypeId == Exiv2::invalidTypeId)
+  if( lvTypeId == Exiv2::invalidTypeId )
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
     return "";  
   }  
   
-  if( isValid )
-      *isValid =true;
-  
+  if( isValid ){ *isValid =true; }
+      
   return QString(lvValue.toString(0).c_str());
 }
 
@@ -715,8 +715,7 @@ QString EgtGPSExifEngine::processingMethod( bool * isValid )
     return "";  
   }  
   
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return QString(lvValue.toString(0).c_str());
 }
@@ -860,8 +859,7 @@ QString EgtGPSExifEngine::satellites( bool * isValid )
     return "";  
   }  
   
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return QString(lvValue.toString(0).c_str());
 }
@@ -898,8 +896,7 @@ double EgtGPSExifEngine::speed( bool * isValid )
     return 0.0;  
   }  
 
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return double(lvValue2.toFloat(0));
 }
@@ -923,18 +920,25 @@ QString EgtGPSExifEngine::speedRef( bool * isValid )
     return QString("")+"|"+"K"+"|"+"M"+"|"+"N";  
   }  
 
-  if( isValid )
-      *isValid =true;
-  
+  if( isValid ){ *isValid =true; }
+      
   QString lvRefference = QString(lvValue.toString().c_str());
   if(QString::compare( lvRefference, "N" ) == 0)
+  {
     lvRefferencesList = QString("N")+"|"+"K"+"|"+"M"+"|"+"";
+  }
   else
+  {
     if(QString::compare( lvRefference, "M" ) == 0)
+    {
       lvRefferencesList = QString("M")+"|"+"K"+"|"+"N"+"|"+"";
+    }
     else
+    {
       lvRefferencesList = QString("K")+"|"+"M"+"|"+"N"+"|"+"";
-  
+    }
+  }
+
   return lvRefferencesList;
 }
 
@@ -959,9 +963,8 @@ QString EgtGPSExifEngine::status( bool * isValid )
     return "";  
   }  
   
-  if( isValid )
-      *isValid =true;
-  
+  if( isValid ){ *isValid =true; }
+      
   return QString(lvValue.toString(0).c_str());
 }
 
@@ -987,8 +990,7 @@ QString EgtGPSExifEngine::timeStamp( bool * isValid )
 
   QString lvTimeStamp = QString(QString::number(int(lvValue.toFloat(0))) +":"+ QString::number(int(lvValue.toFloat(1))) +":"+ QString::number(int(lvValue.toFloat(2))) );
 
-  if( isValid )
-    *isValid = true;
+  if( isValid ){ *isValid = true; }
  
   return lvTimeStamp;
 }
@@ -1015,8 +1017,8 @@ double EgtGPSExifEngine::track( bool * isValid )
   
   double lvDirection = double(lvValue2.toFloat(0));
   
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
+      
   
   return lvDirection;
 }
@@ -1040,14 +1042,18 @@ QString EgtGPSExifEngine::trackRef( bool * isValid )
     return QString("")+"|"+"T"+"|"+"M";  
   }  
 
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
+      
   
   QString lvRefference = QString(lvValue.toString().c_str());
   if(QString::compare( lvRefference, "M" ) == 0)
+  {
     lvRefferencesList = QString("M")+"|"+"T"+"|"+"";
+  }
   else
+  {
     lvRefferencesList = QString("T")+"|"+"M"+"|"+"";
+  }
   
   return lvRefferencesList;
 }
@@ -1075,8 +1081,7 @@ int EgtGPSExifEngine::versionID( bool * isValid )
   
   int lvDifferential = int(lvValue.toFloat(0));
   
-  if( isValid )
-      *isValid =true;
+  if( isValid ){ *isValid =true; }
   
   return lvDifferential;
 }
@@ -1191,8 +1196,8 @@ bool EgtGPSExifEngine::write( QString theTag, QString theValue )
   {
     return writeDifferential( theValue );
   }
-  else
-    return false;
+  else{ return false; }
+    
 
 }
 
@@ -1237,9 +1242,13 @@ bool EgtGPSExifEngine::writeAltitude( QString theValue )
   bool ok; 
   double lvAltitude=theValue.toDouble( &ok );
   if( ok )
+  {
     return writeAltitude( lvAltitude );
+  }
   else 
+  {
     return false;
+  }
 }
 
 /*!
@@ -1286,9 +1295,11 @@ bool EgtGPSExifEngine::writeDestBearing( QString theValue )
   bool ok; 
   float lvDestBearing=theValue.toFloat( &ok );
   if( ok )
-    return writeDestBearing( lvDestBearing );
-  else 
-    return false;
+  {
+   return writeDestBearing( lvDestBearing ); 
+  } 
+  else { return false; }
+    
 }
 
 
@@ -1319,9 +1330,10 @@ bool EgtGPSExifEngine::writeDifferential( QString theValue )
   bool ok; 
   int lvDifferential=theValue.toInt( &ok );
   if( ok )
+  {
     return writeDifferential( lvDifferential);
-  else 
-    return false;
+  }
+  else{ return false; }
 }
 
 /*!
@@ -1349,9 +1361,13 @@ bool EgtGPSExifEngine::writeDirection( QString theValue )
   bool ok; 
   float lvDirection=theValue.toFloat( &ok );
   if( ok )
+  {
     return writeDirection( lvDirection );
+  }
   else 
+  {
     return false;
+  }
 }
 
 
@@ -1389,9 +1405,13 @@ bool EgtGPSExifEngine::writeDestDistance( QString theValue )
   bool ok; 
   double lvDestDistance=theValue.toDouble( &ok );
   if( ok )
+  {
     return writeDestDistance( lvDestDistance );
-  else 
+  }
+  else
+  { 
     return false;
+  }
 }
 
 bool EgtGPSExifEngine::writeDestDistanceRef( QString theValue )
@@ -1447,9 +1467,13 @@ bool EgtGPSExifEngine::writeDestLatitude( QString theValue )
   bool ok; 
   double lvDestLatitude=theValue.toDouble( &ok );
   if( ok )
+  {
     return writeDestLatitude( lvDestLatitude );
+  }
   else 
+  {
     return false;
+  }
 }
 
 /*!
@@ -1496,9 +1520,13 @@ bool EgtGPSExifEngine::writeDestLongitude( QString theValue )
   bool ok; 
   double lvDestLongitude=theValue.toDouble( &ok );
   if( ok )
+  {
     return writeDestLongitude( lvDestLongitude );
+  }
   else 
+  {
     return false;
+  }
 }
 
 /*!
@@ -1524,9 +1552,13 @@ bool EgtGPSExifEngine::writeGpsDOP( QString theValue )
   bool ok; 
   double lvGpsDOP=theValue.toDouble( &ok );
   if( ok )
+  {
     return writeGpsDOP( lvGpsDOP );
+  }
   else 
+  {
     return false;
+  }
 }
 
 /*!
@@ -1574,9 +1606,13 @@ bool EgtGPSExifEngine::writeLatitude( QString theValue )
   bool ok; 
   double lvLatitude=theValue.toDouble( &ok );
   if( ok )
+  {
     return writeLatitude( lvLatitude );
+  }
   else 
+  {
     return false;
+  }
 }
 
 /*!
@@ -1625,9 +1661,13 @@ bool EgtGPSExifEngine::writeLongitude( QString theValue )
   bool ok; 
   double lvLongitude=theValue.toDouble( &ok );
   if( ok )
+  {
     return writeLongitude( lvLongitude );
-  else 
+  }
+  else
+  { 
     return false;
+  }
 }
 
 /*!
@@ -1695,9 +1735,13 @@ bool EgtGPSExifEngine::writeSpeed( QString theValue )
   bool ok; 
   double lvSpeed=theValue.toDouble( &ok );
   if( ok )
+  {
     return writeSpeed( lvSpeed );
+  }
   else 
+  {
     return false;
+  }
 }
 
 
@@ -1787,9 +1831,13 @@ bool EgtGPSExifEngine::writeTrack( QString theValue )
   bool ok; 
   float lvTrack=theValue.toFloat( &ok );
   if( ok )
+  {
     return writeTrack( lvTrack );
+  }
   else 
+  {
     return false;
+  }
 }
 
 
@@ -1820,9 +1868,13 @@ bool EgtGPSExifEngine::writeVersionID( QString theValue )
   bool ok; 
   int lvVersionID=theValue.toInt( &ok );
   if( ok )
+  {
     return writeVersionID( lvVersionID );
+  }
   else 
+  {
     return false;
+  }
 }
 
 /*
@@ -1840,9 +1892,8 @@ QString EgtGPSExifEngine::convertToRational(QString theDegrees)
   bool ok;
 
   double lvTheDegrees =fabs(theDegrees.toDouble(&ok));
-  if(!ok)
-    return "";
-	
+  if(!ok){ return ""; }
+    
   double lvDegrees, lvMinutes, lvSeconds, lvAux;
   /*decomposes num into its integer and fractional parts.*/
   lvAux = modf(lvTheDegrees, &lvDegrees);

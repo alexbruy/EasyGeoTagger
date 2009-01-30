@@ -38,6 +38,7 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
     /*! \brief Selects the character that will be considered as delimiter when reading a text file */
     void selectDelimiter();
 
+    /*! \brief Shows the file selection dialog. It also perfoms all the associated tasks*/
     void show();
 
   public slots:
@@ -69,15 +70,18 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
     /*! \brief Text edit where the user specifies the delimiter*/
     QTextEdit* cvDelimiterText;
 
+    /*! \brief QList that contains the data from the file to be read*/
     QList<QStringList> cvFileData;
 
+    /*! \brief QDesigner object*/
     Ui::TextDelimiterDialog cvUiTextDelimiter;
 
   signals:
 
+    /*! \brief Signal emited when the user changes the delimiter (not when she/he selects it)*/
     void delimiterChanged();
 
-    /*! \brief Signal emited when the user specifies a delimiter*/
+    /*! \brief Signal emited when the user selects a delimiter*/
     void delimiterSelected();
 };
 #endif

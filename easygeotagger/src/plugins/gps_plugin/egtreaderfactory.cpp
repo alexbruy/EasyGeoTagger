@@ -32,8 +32,8 @@ EgtReaderFactory::EgtReaderFactory( )
 
   connect( cvUiFileType.pbtnOk, SIGNAL( clicked() ), this, SLOT( on_pbtnOk_clicked() ) ); 
   connect( cvUiFileType.pbtnCancel, SIGNAL( clicked() ), this, SLOT( on_pbtnCancel_clicked() ) );
-  connect( cvUiFileType.rbDelimitedText, SIGNAL( toggled(bool) ), this, SLOT( on_rbDelimitedText_toggled(bool) ) );
-  connect( cvUiFileType.rbGPSFile, SIGNAL( toggled(bool) ), this, SLOT( on_rbGPSFile_toggled(bool) ) );
+  connect( cvUiFileType.rbDelimitedText, SIGNAL( toggled( bool ) ), this, SLOT( on_rbDelimitedText_toggled( bool ) ) );
+  connect( cvUiFileType.rbGPSFile, SIGNAL( toggled( bool ) ), this, SLOT( on_rbGPSFile_toggled( bool ) ) );
 }
 
 /*
@@ -47,30 +47,26 @@ void EgtReaderFactory::show()
   cvFileTypeDialog.show();
 }
 
-
-/*
- *
- * PRIVATE FUNCTIONS
- *
- */
-
-
 /*
  *
  * SIGNAL and SLOTS
  *
  */
+
 void EgtReaderFactory::on_pbtnCancel_clicked()
 {
-  cvFileTypeDialog.setVisible(false);
+  cvFileTypeDialog.setVisible( false );
 }
 
 void EgtReaderFactory::on_pbtnOk_clicked()
 {
   
   if( cvUiFileType.rbDelimitedText ->isChecked() )
+  {
     cvFileReader = new EgtGraphicalDelimitedTextFileReader();
+  }
   else
+  {
     if( cvUiFileType.rbGPSFile ->isChecked() )
     {
       //Nothing so far
@@ -80,6 +76,7 @@ void EgtReaderFactory::on_pbtnOk_clicked()
     {
       QMessageBox::warning( &cvFileTypeDialog, tr("Error"),tr("You must select a file type"),QMessageBox::Ok );
     }
+  }
 
   connect( cvFileReader, SIGNAL( delimiterSelected() ), this, SLOT( reEmitDelimiterSelected() ) );
 

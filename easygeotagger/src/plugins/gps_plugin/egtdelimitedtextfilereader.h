@@ -54,7 +54,8 @@ class EgtDelimitedTextFileReader: public EgtFileReader
     void setDelimiter( QString );
 
   protected:
-
+    
+    /*! \brief Contains the headers from the file */
     QStringList cvColumnHeaders;
 
     /*! \brief QString that contains the name of the file to be read */
@@ -63,8 +64,10 @@ class EgtDelimitedTextFileReader: public EgtFileReader
     /*! \brief QString that contains the delimiter */
     QString cvDelimiter;
 
+    /*! \brief Indicates if the file has a header */
     bool cvHasColumnHeaders;
 
+    /*! \brief Contains the last error occurred */
     QString cvLastError;
 };
 #endif

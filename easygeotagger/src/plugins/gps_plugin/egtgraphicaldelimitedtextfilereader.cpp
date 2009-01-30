@@ -58,7 +58,7 @@ void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
 void EgtGraphicalDelimitedTextFileReader::show()
 {
   QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
-  if ( lvFileName != "" )
+  if ( "" != lvFileName )
   {
     setFileName( lvFileName );
     selectDelimiter();
@@ -107,7 +107,7 @@ void EgtGraphicalDelimitedTextFileReader::on_leCustom_changed()
 {
   if( cvUiTextDelimiter.rbtnCustom->isChecked() )
   {
-  setDelimiter( cvUiTextDelimiter.leCustom->text() );
+    setDelimiter( cvUiTextDelimiter.leCustom->text() );
     emit delimiterChanged();
   }
 }
@@ -119,8 +119,10 @@ void EgtGraphicalDelimitedTextFileReader::on_pbtnCancel_clicked()
 
 void EgtGraphicalDelimitedTextFileReader::on_pbtnOk_clicked()
 {
-  if( cvFileData.size() == 0 )
+  if( 0 == cvFileData.size() )
+  {
     QMessageBox::critical( &cvSelectDelimiterDialog, tr("Error"),tr("You must have a valid file"),QMessageBox::Ok );
+  }
   else
   {
     cvSelectDelimiterDialog.close();

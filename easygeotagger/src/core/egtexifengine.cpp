@@ -210,13 +210,17 @@ bool EgtExifEngine::writeTag( QString theKey, QString theString, QString theDefa
     QString lvTypeName = exifData[theKey.toStdString()].typeName(); 
 
     if( QString::compare( lvTypeName, "Invalid" ,Qt::CaseInsensitive ) == 0 ) 
+    {
       lvTypeName = theDefaultType;
+    }
 
     EgtDebug( QString( "Data type ["+ lvTypeName +"]" ) );
     
     Exiv2::ExifData::iterator pos = exifData.findKey(key);
     if (pos != exifData.end()) //If the data exist, we first delete it from the Exif data container
+    {
       exifData.erase(pos);
+    }
 
     if( theString != "" )
     {

@@ -61,7 +61,7 @@ bool EgtDelimitedTextFileReader::preprocessFile( QString )
 /*!
  * \param ok pointer to boolean that indicates whether the read was performed correctly or not
  */
-QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok)
+QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok )
 {
   QFile lvFile( cvFileName );
   QStringList lvStringList;
@@ -100,15 +100,20 @@ QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok)
     lvLine = stream.readLine();
    
     if( lvLine.split( cvDelimiter ).size() == lvNumFields ) 
+    {
       lvList << lvLine.split( cvDelimiter );
+    }
     else
     {
       lvError = true;
       cvLastError = QObject::tr( "One or more rows have been discarded") + ": " + cvFileName;
     }
   }
+
   if( !lvError )
+  {
     cvLastError = "";
+  }
   return lvList;
 }
 

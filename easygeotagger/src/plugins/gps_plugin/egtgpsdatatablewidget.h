@@ -40,9 +40,10 @@ class EgtGpsDataTableWidget : public QTableWidget
      /*! \brief Constructor */
     EgtGpsDataTableWidget( );
 
+    /*! \brief Indicates if the user has set all the columns with a valid value */
     bool areAllTheColumnsSet();
 
-     /*! \brief Returns a QMap that contains all the items of the selected row */
+    /*! \brief Returns a QMap that contains all the items of the selected row */
     QMap<QString,QString>* getRowItems();
 
   public slots:
@@ -68,17 +69,22 @@ class EgtGpsDataTableWidget : public QTableWidget
 
   private:
     
+    /*! \brief Contains all the possible fields that can be used for taggin a picture */
     QStringList cvAvailableFields;
 
+    /*! \brief Contains the last column that the user selected */
     int cvColumnSelected;
 
+    /*! \brief Dialog to show the user all the available fields */
     QDialog cvColumnMeaningDialog;
 
     /*! \brief Pointer to the concrete instance of the file reader */
     EgtFileReader* cvFileReader;
 
+    /*! \brief Indicates if all the headers are set */
     bool cvHeadersAreSet;
 
+    /*! \brief A QList with all the headers that are set so far */
     QList<int> cvHeadersThatAreSet;
 
     /*! \brief Pointer to the horizontal header */
@@ -87,6 +93,7 @@ class EgtGpsDataTableWidget : public QTableWidget
     /*! \brief QMap to store the items of the selected row */
     QMap<QString,QString> * cvMapItems;
 
+    /*! \brief QDesigner object of the dialog with the available fields*/
     Ui::ColumnMeaningDialog cvUiColumnMeaning;
 
     /*! \brief Pointer to the vertical header */
