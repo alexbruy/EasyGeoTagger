@@ -25,14 +25,15 @@
 #include "egtlogger.h"
 
 #include <QtPlugin>
+#include <QLibrary>
 #include <QMessageBox>
-static const QString cvCategories = QObject::tr( "Utilities" );
-static const QString cvDescription = QObject::tr( "Opens a python console" );
-static const QString cvName = QObject::tr( "Python Console" );
 
 EgtPythonConsole::EgtPythonConsole()
 {
   cvConsole = 0;
+  cvCategories = QObject::tr( "Utilities" );
+  cvDescription = QObject::tr( "Opens a python console" );
+  cvName = QObject::tr( "Python Console" );
 }
 
 QStringList EgtPythonConsole::categories()
@@ -62,21 +63,20 @@ QString EgtPythonConsole::name()
 
 void EgtPythonConsole::run()
 {
-  try
+  if( 0 == cvApplicationInterface ) { return; }
+
+  if( QLibrary::resolve( "easygt", "pythonConsoleIncluded" ) )
   {
-      if( 0 == cvConsole )
-      {
-        cvConsole = new EgtPythonConsoleBase( cvApplicationInterface );
-      }
+    cvConsole = new EgtPythonConsoleBase( cvApplicationInterface );
+    if( cvConsole->pythonFound() )
+    {
       cvConsole->show();
+    }
   }
-  catch(...)
+  else
   {
-    QMessageBox::warning(0, tr("Python plugin"),
-                   tr("Error loading Python plugin, Python is not installed in your system"),
-                   QMessageBox::Ok );     
+    QMessageBox::warning( cvApplicationInterface->gui(), tr( "Error" ), tr( "Python support was not built into this version the the EasyGT library" ) );
   }
 }
 
  Q_EXPORT_PLUGIN2( pythonconsole, EgtPythonConsole );
-

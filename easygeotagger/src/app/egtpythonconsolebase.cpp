@@ -24,44 +24,81 @@
 #include "egtpythonconsolebase.h"
 #include "egtlogger.h"
 
+#include <QLibrary>
+#include <QMessageBox>
+
+/*!
+ * This function is used by way of QLibrary::resolve to see if python support
+ * has been compiled into the easygt lib
+ */
+extern "C"
+{
+  bool pythonConsoleIncluded() { return true; }
+}
+
 EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterface )
 {
   EgtDebug( "entered" );
 
   setupUi(this);
 
-  Py_Initialize();
-  cvMainModule = PyImport_AddModule( "__main__" );
-  cvDictionary = PyModule_GetDict( cvMainModule );
+  QLibrary lvPythonLibrary2_4( "python2.5" );
+  QLibrary lvPythonLibrary2_5( "python2.4" );
+  cvPythonFound = false;
+  if( lvPythonLibrary2_5.load() )
+  {
+    cvPythonFound = true;
+    EgtDebug( "Found Python 2.5" );
+  }
+  else if( lvPythonLibrary2_4.load() )
+  {
+    cvPythonFound = true;
+    EgtDebug( "Found Python 2.4" );
+  }
 
-  runCommand( "import sys" );
-  runCommand( "import __main__" );
-  runCommand( "from PyEasyGT import *" );
-  runCommand( "from sip import wrapinstance" );
-  runCommand( "from PyQt4.QtCore import *" );
-  runCommand( "from PyQt4.QtGui import *" );
-  runCommand( "class redirect:\n"
-              "  def __init__( self, textbrowser ):\n"
-              "    self.console = textbrowser\n"
-              "  def write( self, message ):\n"
-              "    if message.__ne__('\\n'):\n"
-              "        self.console.append( message )\n"
-              "\n"
-            );
-  runCommand( "outputConsole = wrapinstance(" + QString::number(( unsigned long ) tbOutput ) + ", QTextBrowser)" );
-  runCommand( "logger = redirect( outputConsole ) " );
-  runCommand( "sys.stdout = logger" );
-  runCommand( "EgtInterface = wrapinstance(" + QString::number(( unsigned long ) theInterface ) + ", EgtApplicationInterface)" );
+  if( 0 != theInterface && cvPythonFound )
+  {
+    Py_Initialize();
+    cvMainModule = PyImport_AddModule( "__main__" );
+    cvDictionary = PyModule_GetDict( cvMainModule );
+
+    runCommand( "import sys" );
+    runCommand( "import __main__" );
+    runCommand( "from PyEasyGT import *" );
+    runCommand( "from sip import wrapinstance" );
+    runCommand( "from PyQt4.QtCore import *" );
+    runCommand( "from PyQt4.QtGui import *" );
+    runCommand( "class redirect:\n"
+                "  def __init__( self, textbrowser ):\n"
+                "    self.console = textbrowser\n"
+                "  def write( self, message ):\n"
+                "    if message.__ne__('\\n'):\n"
+                "        self.console.append( message )\n"
+                "\n"
+              );
+    runCommand( "outputConsole = wrapinstance(" + QString::number(( unsigned long ) tbOutput ) + ", QTextBrowser)" );
+    runCommand( "logger = redirect( outputConsole ) " );
+    runCommand( "sys.stdout = logger" );
+    runCommand( "EgtInterface = wrapinstance(" + QString::number(( unsigned long ) theInterface ) + ", EgtApplicationInterface)" );
+  }
+  else if( 0 != theInterface )
+  {
+    QMessageBox::warning( theInterface->gui(), tr( "Warning" ), tr( "The required python libraries could not be found on your system, python console disabled" ) );
+  }
 }
 
 bool  EgtPythonConsoleBase::runCommand( QString theCommand )
 {
+  if( !cvPythonFound ) { return false; }
+
   PyRun_String( qPrintable( theCommand ), Py_single_input, cvDictionary, cvDictionary );//Py_file_input
   return ( PyErr_Occurred() == 0 );
 }
 
 void EgtPythonConsoleBase::on_pbtnRun_clicked()
 {
+  if( !cvPythonFound ) { return; }
+
   EgtDebug( QString("run python command\n%1") .arg( teInput->toPlainText() ) );
 
   tbOutput->append( ">>"+( teInput->toPlainText() ).replace( "\n","\n>>" ) );
@@ -78,6 +115,8 @@ void EgtPythonConsoleBase::on_pbtnRun_clicked()
 
 bool EgtPythonConsoleBase::getError( QString& errorClassName, QString& errorText )
 {
+  if( !cvPythonFound ) { return false; }
+
   /*This method was taken from the QGIS project (www.qgis.org), the original source code can be found at
    *https://svn.osgeo.org/qgis/trunk/qgis/src/python/qgspythonutilsimpl.cpp
    */
@@ -116,6 +155,8 @@ bool EgtPythonConsoleBase::getError( QString& errorClassName, QString& errorText
 
 QString EgtPythonConsoleBase::getTypeAsString( PyObject* obj )
 {
+  if( !cvPythonFound ) { return false; }
+
   /*This method was taken from the QGIS project (www.qgis.org), the original source code can be found at
    *https://svn.osgeo.org/qgis/trunk/qgis/src/python/qgspythonutilsimpl.cpp
    */

@@ -37,19 +37,20 @@ class MS_DLL_SPEC EgtPythonConsoleBase : public QWidget, Ui::EgtPythonConsoleDia
 public:
     EgtPythonConsoleBase( EgtApplicationInterface* );
     bool runCommand( QString theCommand );
-    QString getVariableFromMain( QString name );
-//const char* getPyObjStringRepr( PyObject* );
+
     bool getError( QString&, QString&);
     QString getTypeAsString( PyObject* );
+
+    bool pythonFound() { return cvPythonFound; }
+
 public slots:
     void on_pbtnRun_clicked();
 
 private:
     PyObject* cvMainModule;
     PyObject* cvDictionary;
-/*PyObject* mainModObj;
-PyObject* returnObj;
-PyObject* resultObj;*/
+
+    bool cvPythonFound;
 
 };
 
