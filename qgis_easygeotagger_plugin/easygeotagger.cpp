@@ -31,6 +31,8 @@
 
 #include <QAction>
 #include <QToolBar>
+#include <QLibrary>
+#include <QMessageBox>
 
 
 static const char * const sIdent = "$Id: plugin.cpp 9327 2008-09-14 11:18:44Z jef $";
@@ -93,21 +95,29 @@ void EasyGeoTagger::help()
 // not be enough
 void EasyGeoTagger::run()
 {
-  
-  if( 0 == cvIdTool )
-  {
-    cvIdTool = new EasyGeoTaggerIdTool( mQGisIface->mapCanvas() );
-    if( 0 == cvIdTool) { return; }
-  }
-  
+
   if( 0 == cvEasyGeoTaggerApplication )
   {
-    //TODO: Add default options for linux/mac/windows
-    //TODO: Figureout if this can this be set from cmake???
-    cvEasyGeoTaggerApplication = new EgtApplication( "/usr/local/lib/easygt" );
-    if( 0 == cvEasyGeoTaggerApplication) { return; }
-    
-    connect( cvIdTool, SIGNAL( keyValuePair( QString, QString ) ), cvEasyGeoTaggerApplication->applicationInterface(), SLOT( acceptKeyValuePair( QString,QString ) ) );
+    //Check for the python libs to prevent segfaults if python is not available on the user's system
+    QLibrary lvEasyGTLibrary( "easygt" );
+    if( lvEasyGTLibrary.load() )
+    {
+      if( 0 == cvIdTool )
+      {
+        cvIdTool = new EasyGeoTaggerIdTool( mQGisIface->mapCanvas() );
+        if( 0 == cvIdTool) { return; }
+      }
+
+      cvEasyGeoTaggerApplication = new EgtApplication( PLUGINPATH );
+      if( 0 == cvEasyGeoTaggerApplication) { return; }
+
+      connect( cvIdTool, SIGNAL( keyValuePair( QString, QString ) ), cvEasyGeoTaggerApplication->applicationInterface(), SLOT( acceptKeyValuePair( QString,QString ) ) );
+    }
+    else
+    {
+      QMessageBox::warning( mQGisIface->mainWindow(), tr( "Warning" ), tr( "The EasyGeoTagger library could not be found on your system" ) );
+      return;
+    }
   }
   else
   {

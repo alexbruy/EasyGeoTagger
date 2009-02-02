@@ -111,7 +111,6 @@ EgtExifEditor::EgtExifEditor( QString theId, EgtExifEngine* theEngine )
 
   //Loop through the controls and restore setting from last session
   QSettings lvSettings;
-  lvSettings.setFallbacksEnabled( false );
 
   QMap< QString, EgtExifTagControl* >::iterator lvTagIterator = cvTagControls.begin();
   while( lvTagIterator != cvTagControls.end() )

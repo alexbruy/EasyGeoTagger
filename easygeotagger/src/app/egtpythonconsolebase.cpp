@@ -42,6 +42,7 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
 
   setupUi(this);
 
+  //Check for the python libs to prevent segfaults if python is not available on the user's system
   QLibrary lvPythonLibrary2_4( "python2.5" );
   QLibrary lvPythonLibrary2_5( "python2.4" );
   cvPythonFound = false;
@@ -56,6 +57,7 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
     EgtDebug( "Found Python 2.4" );
   }
 
+  //If python was found initiate the environment
   if( 0 != theInterface && cvPythonFound )
   {
     Py_Initialize();
