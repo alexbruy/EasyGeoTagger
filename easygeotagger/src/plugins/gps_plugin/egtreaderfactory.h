@@ -67,6 +67,7 @@ class EgtReaderFactory: public QObject
     /*! \brief Desginer object */
     Ui::FileTypeDialog cvUiFileType;
 
+
   signals:
     /*! \brief Signal to notify that the file reader has been created */
     void fileReaderCreated( EgtFileReader* );

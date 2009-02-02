@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Dialog</string>
+   <string>Available fields</string>
   </property>
   <widget class="QGroupBox" name="groupBox" >
    <property name="geometry" >

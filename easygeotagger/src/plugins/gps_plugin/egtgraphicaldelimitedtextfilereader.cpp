@@ -27,6 +27,7 @@
 #include <QVBoxLayout>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QApplication>
 
 EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):EgtDelimitedTextFileReader()
 {
@@ -52,13 +53,33 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):Egt
 
 void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
 {
-  cvSelectDelimiterDialog.show();
+  QWidgetList lvActiveWindows = QApplication::topLevelWidgets();
+  QWidget* lvParent = 0;
 
+  for( int i =0; i < lvActiveWindows.size(); i++ )
+    if( tr("GPS Reader") == lvActiveWindows[i]->windowTitle() )
+    {
+      lvParent = lvActiveWindows[i];
+    }
+
+  QPoint lvPosition = lvParent->pos();
+  //center the window over the parent
+  cvSelectDelimiterDialog.move( lvPosition.x() + lvParent->width()/2 - cvSelectDelimiterDialog.width()/2, lvPosition.y() + lvParent->height()/2 - cvSelectDelimiterDialog.height()/2 );
+  cvSelectDelimiterDialog.show();
 }
 
 void EgtGraphicalDelimitedTextFileReader::show()
 {
-  QString lvFileName = QFileDialog::getOpenFileName(0, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
+  QWidgetList lvActiveWindows = QApplication::topLevelWidgets();
+  QWidget* lvParent = 0;
+
+  for( int i =0; i < lvActiveWindows.size(); i++ )
+    if( tr("Select file type") == lvActiveWindows[i]->windowTitle() )
+    {
+      lvParent = lvActiveWindows[i];
+    }
+
+  QString lvFileName = QFileDialog::getOpenFileName( lvParent, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
   if ( "" != lvFileName )
   {
     setFileName( lvFileName );

@@ -47,7 +47,8 @@ void EgtReaderFactory::show()
 {
   QWidget* lvActiveWindow = QApplication::activeWindow ();
   QPoint lvPosition = lvActiveWindow->pos();
-  cvFileTypeDialog.move( lvPosition.x(), lvPosition.y() );
+  //center the window over the parent
+  cvFileTypeDialog.move( lvPosition.x() + lvActiveWindow->width()/2 - cvFileTypeDialog.width()/2, lvPosition.y() + lvActiveWindow->height()/2 - cvFileTypeDialog.height()/2 );
   cvFileTypeDialog.show(); 
 }
 

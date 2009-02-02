@@ -80,7 +80,7 @@ class EgtGpsPlugin: public EgtPluginInterface
     EgtGpsDataTableWidget* cvDataTable; 
 
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
-    QDialog cvDialog;
+    QWidget cvMainWidget;
 
     /*! \brief Push button to open a file */
     QPushButton cvOpenFileButton;

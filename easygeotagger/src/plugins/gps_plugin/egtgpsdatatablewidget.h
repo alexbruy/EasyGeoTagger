@@ -41,7 +41,7 @@ class EgtGpsDataTableWidget : public QTableWidget
     EgtGpsDataTableWidget( );
 
     /*! \brief Indicates if the user has set all the columns with a valid value */
-    bool areAllTheColumnsSet();
+    bool isThereAnyColumnSet();
 
     /*! \brief Returns a QMap that contains all the items of the selected row */
     QMap<QString,QString>* getRowItems();

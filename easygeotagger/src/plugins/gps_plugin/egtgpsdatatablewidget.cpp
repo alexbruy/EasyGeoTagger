@@ -31,7 +31,7 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
   cvColumnMeaningDialog = new QDialog(this);
   cvUiColumnMeaning.setupUi( cvColumnMeaningDialog );
-  cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"(Ignore this column)";
+  cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"(clear)";
   cvUiColumnMeaning.cbFields->insertItems(0,cvAvailableFields);
 
   cvColumnSelected = 0;
@@ -67,16 +67,15 @@ QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems()
  *
  */
 
-bool EgtGpsDataTableWidget::areAllTheColumnsSet()
+bool EgtGpsDataTableWidget::isThereAnyColumnSet()
 {
   if( cvHeadersAreSet ) return true;
 
-  bool lvReturn = true;
+  bool lvReturn = false;
   for( int i = 0; i < columnCount(); i++ )
   {
-    lvReturn = lvReturn && cvHeadersThatAreSet.contains( i );
-  }
-  cvHeadersAreSet = lvReturn;  
+    lvReturn = lvReturn || cvHeadersThatAreSet.contains( i );
+  } 
 
   return lvReturn;
 }
@@ -132,16 +131,18 @@ void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
   cvColumnSelected = theIndex;
 
   QTableWidgetItem* lvHeaderItem;
-      QString lvText;
-      lvHeaderItem = horizontalHeaderItem ( theIndex );
-      lvText = lvHeaderItem->text();
+      
+  QString lvText;
+  lvHeaderItem = horizontalHeaderItem ( theIndex );
+  lvText = lvHeaderItem->text();
 
-      bool ok;
-      lvText.toInt( &ok ); 
+  bool ok;
+  lvText.toInt( &ok ); 
 
-      if( "(Ignore this column)" != lvText && !ok )
-        cvUiColumnMeaning.cbFields->addItem( lvText );
-    
+  if( !ok )
+  {
+    cvUiColumnMeaning.cbFields->addItem( lvText );
+  }
 
   cvColumnMeaningDialog->show();
 }
@@ -151,7 +152,7 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
   delete cvMapItems;
   cvMapItems = new QMap<QString,QString>;
  
-  if( areAllTheColumnsSet() )
+  if( isThereAnyColumnSet() )
   {
     QTableWidgetItem* lvHeaderItem;
     for(int lvColumnCount = 0; lvColumnCount < columnCount(); lvColumnCount++)
@@ -160,8 +161,13 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
       lvHeaderItem = horizontalHeaderItem ( lvColumnCount );
       lvText = lvHeaderItem->text();
 
-      if( "(Ignore this column)" != lvText )
+      bool ok;
+      lvText.toInt( &ok ); 
+
+      if( !ok )
+      {
         cvMapItems->insert( lvText, item( theIndex, lvColumnCount )->text() );
+      }
     }
   }
 }
@@ -169,13 +175,22 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
 void EgtGpsDataTableWidget::on_pbtnOk_clicked()
 {   
   QString lvSelectedItem = cvUiColumnMeaning.cbFields->currentText();
+  
   int lvIndex = cvUiColumnMeaning.cbFields->currentIndex();
 
-  if( "(Ignore this column)" != lvSelectedItem )
+  if( "(clear)" != lvSelectedItem )
+  {
     cvUiColumnMeaning.cbFields->removeItem( lvIndex );
+    cvHeadersThatAreSet<<cvColumnSelected;
+  }
+  else
+  {
+    lvSelectedItem = QString::number( cvColumnSelected +1 );
+    cvHeadersThatAreSet.removeAll( cvColumnSelected );
+  }
 
   setHorizontalHeaderItem(cvColumnSelected, new QTableWidgetItem( lvSelectedItem ));
-  cvHeadersThatAreSet<<cvColumnSelected;
+  
   cvColumnMeaningDialog->close();
 }
 

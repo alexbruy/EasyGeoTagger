@@ -28,6 +28,7 @@
 #include <QtPlugin>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QApplication>
 
 EgtGpsPlugin::EgtGpsPlugin()
 {
@@ -35,11 +36,11 @@ EgtGpsPlugin::EgtGpsPlugin()
   cvDescription = QObject::tr( "Reads data from GPS files" );
   cvName = QObject::tr( "GPS Reader" );
 
-  //cvDialog = new QDialog( cvApplicationInterface );
+  
   cvDataTable = new EgtGpsDataTableWidget();  
 
-  cvDialog.setWindowTitle( cvName );
-  cvDialog.setMinimumSize( 250,150 );
+  cvMainWidget.setWindowTitle( cvName );
+  cvMainWidget.setMinimumSize( 250,150 );
 
   QWidget* lvPanel = new QWidget();
   QWidget* lvPanelButtons = new QWidget();
@@ -56,8 +57,8 @@ EgtGpsPlugin::EgtGpsPlugin()
   connect( &cvTagButton, SIGNAL( clicked() ), this, SLOT( cvTagButton_clicked() ) );
   connect( &cvOpenFileButton, SIGNAL( clicked() ), this, SLOT( cvOpenFile_clicked() ) );
 
-  cvDialog.setLayout( new QVBoxLayout() );
-  cvDialog.layout()->addWidget( lvPanel );
+  cvMainWidget.setLayout( new QVBoxLayout() );
+  cvMainWidget.layout()->addWidget( lvPanel );
   connect(&cvReaderFactory, SIGNAL(fileReaderCreated( EgtFileReader* )),this, SLOT( fileReader_set( EgtFileReader* ) ));
 }
 
@@ -88,7 +89,7 @@ void EgtGpsPlugin::initPlugin()
   //Hook listeners into the application interface
   if( 0 != cvApplicationInterface )
   {
-    cvDialog.setVisible( false );
+    cvMainWidget.setVisible( false );
 
     //connect to application interface
     connect( this, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
@@ -107,7 +108,7 @@ void EgtGpsPlugin::cvOpenFile_clicked()
 
 void EgtGpsPlugin::cvTagButton_clicked() 
 {
-  if( cvDataTable->areAllTheColumnsSet() )
+  if( cvDataTable->isThereAnyColumnSet() )
   {
     QMap<QString,QString>* lvMap = cvDataTable->getRowItems();
 
@@ -120,7 +121,7 @@ void EgtGpsPlugin::cvTagButton_clicked()
   }
   else
   {
-    QMessageBox::critical( cvDataTable, tr("Error"),tr("All headers must be set"),QMessageBox::Ok );
+    QMessageBox::critical( cvDataTable, tr("Error"),tr("At least one header must be set"),QMessageBox::Ok );
   }
 
 }
@@ -136,14 +137,16 @@ void EgtGpsPlugin::run()
   EgtDebug( "entered" );
   
   //Build or reshow the plugins GUI component
-  if( cvDialog.isVisible() )
+  if( cvMainWidget.isVisible() )
   {
     EgtDebug( "dock is already open and visible" );
     return;
   }
-
+/*QWidget* lvActiveWindow = QApplication::activeWindow ();
+  QPoint lvPosition = lvActiveWindow->pos();
+  cvMainWidget.move( lvPosition.x(), lvPosition.y() );*/
   EgtDebug( "dock is already open but not visible" );
-  cvDialog.show();
+  cvMainWidget.show();
   EgtDebug( "done" );
 }
 
