@@ -20,18 +20,14 @@
 
 #include "qgsexifprovider.h"
 
-#include <image.hpp>
-#include <exif.hpp>
-#include <cassert>
-
-#include <QDir>
-#include <QSettings>
-
 #include "qgsrectangle.h"
 #include "qgslogger.h"
 #include "qgsapplication.h"
 #include "qgsdataprovider.h"
 #include "qgscoordinatereferencesystem.h"
+
+#include <QDir>
+#include <QSettings>
 
 static const QString TEXT_PROVIDER_KEY = "exif";
 static const QString TEXT_PROVIDER_DESCRIPTION = "EXIF data provider";
@@ -71,13 +67,16 @@ QgsExifProvider::QgsExifProvider( QString theDir )
   for( int iterator = 0; iterator < myFileList.size(); iterator++ )
   {
     QgsDebugMsg( "Parsing file: " + myFileList[iterator] );
-    
-    if( extractCoordinates( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + myFileList[iterator], &myLongitude, &myLatitude ) )
+    mExifEngine.setFile( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + myFileList[iterator] );
+    if( mExifEngine.isValidImage() && mExifEngine.hasExpectedExif() )
     {
+      myLongitude = mExifEngine.longitude();
+      myLatitude = mExifEngine.latitude();
       mValidImageList << myFileList[iterator];
     }
     else
     {
+      QgsDebugMsg( "Error caught: "+  mExifEngine.lastError() );
       continue;
     }
     
@@ -89,11 +88,20 @@ QgsExifProvider::QgsExifProvider( QString theDir )
     { 
       // Extent for the first point is just the first point
       mExtent.set( myLongitude, myLatitude, myLongitude, myLatitude );
-      
-      // TODO: Maybe make this a map and try to load from all images
-      // Load the keys from this image -- may not match all other images
-      loadGpsExifKeys( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + myFileList[iterator] );
       firstPoint = false;
+      QgsDebugMsg( "Loading keys...");
+
+      //Hard coded field
+      mAttributeFields[0] = QgsField( "Filename" ,QVariant::String, "Text"  );
+
+      QList< EgtExifEngine::KeyMap > myKeys = mExifEngine.keys();
+      int myKeyListLength = myKeys.size();
+      for( int myKeyRunner = 0; myKeyRunner < myKeyListLength; myKeyRunner++ )
+      {
+        //TODO: would like to display the common name not the key in the attribute table
+        //TODO: add the fields based on their type rather than just as text
+        mAttributeFields[ myKeyRunner + 1 ] = QgsField( myKeys[ myKeyRunner ].key , QVariant::String, "Text" );
+      }
     }
   }
   
@@ -108,154 +116,6 @@ QgsExifProvider::QgsExifProvider( QString theDir )
 QgsExifProvider::~QgsExifProvider()
 {
 
-}
-
-bool QgsExifProvider::extractCoordinates(const QString& theFile, double* theLongitude, double* theLatitude)
-{
-  int myNorthing = 1;
-  int myEasting = 1;
-  try 
-    {
-      Exiv2::Image::AutoPtr myImage = Exiv2::ImageFactory::open( qPrintable( theFile ) );
-      assert( myImage.get() != 0 );
-      myImage->readMetadata();
-      
-      /*
-       * Get the Longitude
-       */
-      Exiv2::ExifKey myKey( "Exif.GPSInfo.GPSLongitudeRef" );
-      Exiv2::ExifData::iterator it = myImage->exifData().findKey( myKey );
-      if( it == myImage->exifData().end() )
-      {  
-        QgsDebugMsg( "Unable to locate the Exif.GPSInfo.GPSLongitudeRef key" );
-        return false;
-      }
-      
-      myEasting = 1;
-      QString myIteratorValue( it->value().toString().c_str() );
-      if( myIteratorValue.compare( "W", Qt::CaseSensitive ) == 0 )
-      {
-        myEasting = -1;
-      }
-      
-      myKey = Exiv2::ExifKey("Exif.GPSInfo.GPSLongitude");
-      it = myImage->exifData().findKey(myKey);
-      if( it == myImage->exifData().end() )
-      {
-        QgsDebugMsg( "Unable to locate the Exif.GPSInfo.GPSLongitude key" );
-        return false;
-      }
-      
-      *theLongitude = 0.0;
-      for( int runner = it->value().count() - 1; runner >= 0; runner-- )
-      {
-        *theLongitude = ( double ) *theLongitude + it->value().toFloat( runner );
-        if( runner != 0 )
-        {
-          *theLongitude = *theLongitude / 60.0;
-        }
-      }
-      *theLongitude = *theLongitude * myEasting;
-      
-      /*
-       * Get the Latitude
-       */
-      myKey = Exiv2::ExifKey( "Exif.GPSInfo.GPSLatitudeRef" );
-      it = myImage->exifData().findKey( myKey );
-      if( it == myImage->exifData().end() )
-      {  
-        QgsDebugMsg( "Unable to locate the Exif.GPSInfo.GPSLatitudeRef key" );
-        return false;
-      }
-      
-      myNorthing = 1;
-      myIteratorValue = it->value().toString().c_str();
-      if( myIteratorValue.compare( "S", Qt::CaseSensitive ) == 0 )
-      {
-        myNorthing = -1;
-      }
-      
-      myKey = Exiv2::ExifKey("Exif.GPSInfo.GPSLatitude");
-      it = myImage->exifData().findKey(myKey);
-      if( it == myImage->exifData().end() )
-      {
-        QgsDebugMsg( "Unable to locate the Exif.GPSInfo.GPSLatitude key" );
-        return false;
-      }
-      
-      *theLatitude = 0.0;
-      for( int runner = it->value().count() - 1; runner >= 0; runner-- )
-      {
-        *theLatitude = ( double ) *theLatitude + it->value().toFloat( runner );
-        if( runner != 0 )
-        {
-          *theLatitude = *theLatitude / 60.0;
-        }
-      }
-      *theLatitude = *theLatitude * myNorthing;
-      
-      
-    }
-    catch (Exiv2::AnyError& e)
-    {
-      QgsDebugMsg( "Error caught ["+ QString( e.what() ) +"]" );
-      return false;
-    }
-   
-   return true;
-}
-
-QString QgsExifProvider::getValueAsString( QString theImageFileName, QString theKey )
-{
-  QgsDebugMsg( "Retrieving value for key: " + theKey);
-  
-  if( 0 == theKey.compare("Filename") )
-  {
-    return theImageFileName;
-  }
-  
-  Exiv2::Image::AutoPtr myImage = Exiv2::ImageFactory::open( qPrintable( theImageFileName ) );
-  assert( myImage.get() != 0 );
-  myImage->readMetadata();
-  Exiv2::ExifData myData = myImage->exifData();
-   
-  Exiv2::ExifKey myKey( qPrintable( theKey ) );
-  Exiv2::ExifData::iterator it = myImage->exifData().findKey( myKey );
-  if( it == myImage->exifData().end() )
-  {
-    QgsDebugMsg( "Unable to locate the " + theKey + " key" );
-    return QString( "" );
-  }
-  QgsDebugMsg( "Retrieved: "+ QString( it->value().toString().c_str() ) );
-  
-  return QString( it->value().toString().c_str() );
-}
-
-void QgsExifProvider::loadGpsExifKeys(QString theImageFileName)
-{
-  QgsDebugMsg( "Loading keys...");
-  //Hard coded field
-  mAttributeFields[0] = QgsField( "Filename" ,QVariant::String, "Text"  );
-  
-  
-  Exiv2::Image::AutoPtr myImage = Exiv2::ImageFactory::open( qPrintable( theImageFileName ) );
-  assert( myImage.get() != 0 );
-  myImage->readMetadata();
-  Exiv2::ExifData myData = myImage->exifData();
-   
-  Exiv2::ExifData::iterator it = myData.findIfdIdIdx(Exiv2::gpsIfdId, 1);
-  if(it != myData.end())
-  {
-    int myKeyCount = 1;
-    while(it != myData.end() && it->ifdId() == Exiv2::gpsIfdId)
-    {
-      mAttributeFields[myKeyCount] = QgsField( QString( it->key().c_str() ),QVariant::String, "Text"  );
-      QgsDebugMsg( "Found key: "+ QString( it->key().c_str() ));
-      myKeyCount++;
-      it++;
-    }
-  }
-  QgsDebugMsg( "Done.");
 }
 
 QString QgsExifProvider::storageType() const
@@ -276,12 +136,16 @@ bool QgsExifProvider::nextFeature( QgsFeature& feature )
     double yCoordinate = 0.0;
 
     //This is unlikely to be false, but concurency issues could exists - i.e., edit exif after layer created
-    if( !extractCoordinates( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + mValidImageList[mCurrentFeatureIndex], &xCoordinate, &yCoordinate ) )
+    mExifEngine.setFile( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + mValidImageList[mCurrentFeatureIndex] );
+    if( !mExifEngine.isValidImage() || !mExifEngine.hasExpectedExif() )
     {
       mCurrentFeatureIndex++;
       continue;
     }
-      
+
+    xCoordinate = mExifEngine.longitude();
+    yCoordinate = mExifEngine.latitude();
+
     // skip the feature if it's out of current bounds
     if ( ! boundsCheck( xCoordinate, yCoordinate ) )
     {
@@ -327,13 +191,20 @@ bool QgsExifProvider::nextFeature( QgsFeature& feature )
 
     feature.setGeometryAndOwnership( geometry, sizeof( wkbPoint ) );
     //End of section to clean up
-    
+    mExifEngine.setFile( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + mValidImageList[mCurrentFeatureIndex] );
     for ( QgsAttributeList::const_iterator it = mAttributesToFetch.begin();
           it != mAttributesToFetch.end();
           ++it )
     {
-      QVariant val(getValueAsString( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + mValidImageList[mCurrentFeatureIndex], mAttributeFields[*it].name() ));
-      feature.addAttribute( *it, val );
+      if ( it != mAttributesToFetch.begin() )
+      {
+        feature.addAttribute( *it, mExifEngine.read( mAttributeFields[*it].name() ) );
+      }
+      else
+      {
+        feature.addAttribute( *it, QVariant( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + mValidImageList[mCurrentFeatureIndex]) );
+      }
+
     }
 
     mCurrentFeatureIndex++;

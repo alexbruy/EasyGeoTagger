@@ -63,7 +63,7 @@ void EgtItemDelegate::paint(QPainter* thePainter, const QStyleOptionViewItem& th
   //TODO: See if it is posisble to cache this data, tried but found the const to be problematic
   if(cvDisplayGpsExifAvailability && theIndex.column() == 0)
   {
-    EgtGPSExifEngine lvExifEngine( theIndex );
+    EgtGpsExifEngine lvExifEngine( theIndex );
     if( lvExifEngine.isValidImage() )
     {
       if( lvExifEngine.hasExpectedExif() )

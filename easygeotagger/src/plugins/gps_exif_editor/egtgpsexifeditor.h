@@ -73,7 +73,7 @@ class EgtGpsExifEditor: public EgtPluginInterface
     QDockWidget cvDock;
     
     /*! \brief An instance of the EXIF reader writer */
-    EgtGPSExifEngine cvExifEngine;
+    EgtGpsExifEngine cvExifEngine;
     
     /*! \brief Last file that sucessfully had GPS exif data extraced */
     QString cvLastFile;

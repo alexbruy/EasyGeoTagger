@@ -1,3 +1,5 @@
+#MODIFIED from QGIS - PJE
+
 ## Once run this will define: 
 ## 
 ## GDAL_FOUND       = system has GDAL lib
@@ -13,15 +15,12 @@ IF(WIN32)
 
   IF (MINGW)
     FIND_PATH(GDAL_INCLUDE_DIR gdal.h /usr/local/include /usr/include c:/msys/local/include)
-    FIND_LIBRARY(GDAL_LIBRARY NAMES gdal PATHS /usr/local/lib /usr/lib c:/msys/local/lib)
   ENDIF (MINGW)
 
   IF (MSVC)
-    FIND_PATH(GDAL_INCLUDE_DIR gdal.h 
+    FIND_PATH(GDAL_INCLUDE_DIR gdal.h
+       "c:/OSGeo4W/include/"
        "$ENV{LIB_DIR}/include/gdal"
-       )
-    FIND_LIBRARY(GDAL_LIBRARY NAMES gdal PATHS 
-       "$ENV{LIB_DIR}/lib/"
        )
 
     # NOTE: under msvc you should add the following to your target link libraries
@@ -62,46 +61,6 @@ ELSE(WIN32)
         /usr/include 
         )
 
-      ## extract link dirs for rpath  
-      EXEC_PROGRAM(${GDAL_CONFIG}
-        ARGS --libs
-        OUTPUT_VARIABLE GDAL_CONFIG_LIBS )
-
-      ## split off the link dirs (for rpath)
-      ## use regular expression to match wildcard equivalent "-L*<endchar>"
-      ## with <endchar> is a space or a semicolon
-      STRING(REGEX MATCHALL "[-][L]([^ ;])+" 
-        GDAL_LINK_DIRECTORIES_WITH_PREFIX 
-        "${GDAL_CONFIG_LIBS}" )
-        #      MESSAGE("DBG  GDAL_LINK_DIRECTORIES_WITH_PREFIX=${GDAL_LINK_DIRECTORIES_WITH_PREFIX}")
-
-      ## remove prefix -L because we need the pure directory for LINK_DIRECTORIES
-      
-      IF (GDAL_LINK_DIRECTORIES_WITH_PREFIX)
-        STRING(REGEX REPLACE "[-][L]" "" GDAL_LINK_DIRECTORIES ${GDAL_LINK_DIRECTORIES_WITH_PREFIX} )
-      ENDIF (GDAL_LINK_DIRECTORIES_WITH_PREFIX)
-
-      ## split off the name
-      ## use regular expression to match wildcard equivalent "-l*<endchar>"
-      ## with <endchar> is a space or a semicolon
-      STRING(REGEX MATCHALL "[-][l]([^ ;])+" 
-        GDAL_LIB_NAME_WITH_PREFIX 
-        "${GDAL_CONFIG_LIBS}" )
-        #      MESSAGE("DBG  GDAL_LIB_NAME_WITH_PREFIX=${GDAL_LIB_NAME_WITH_PREFIX}")
-
-
-      ## remove prefix -l because we need the pure name
-      
-      IF (GDAL_LIB_NAME_WITH_PREFIX)
-        STRING(REGEX REPLACE "[-][l]" "" GDAL_LIB_NAME ${GDAL_LIB_NAME_WITH_PREFIX} )
-      ENDIF (GDAL_LIB_NAME_WITH_PREFIX)
-
-      IF (APPLE)
-        SET(GDAL_LIBRARY ${GDAL_LINK_DIRECTORIES}/lib${GDAL_LIB_NAME}.dylib CACHE STRING INTERNAL)
-      ELSE (APPLE)
-       SET(GDAL_LIBRARY ${GDAL_LINK_DIRECTORIES}/lib${GDAL_LIB_NAME}.so CACHE STRING INTERNAL)
-      ENDIF (APPLE)
-      
     ELSE(GDAL_CONFIG)
       MESSAGE("FindGDAL.cmake: gdal-config not found. Please set it manually. GDAL_CONFIG=${GDAL_CONFIG}")
     ENDIF(GDAL_CONFIG)
@@ -110,20 +69,18 @@ ELSE(WIN32)
 ENDIF(WIN32)
 
 
-IF (GDAL_INCLUDE_DIR AND GDAL_LIBRARY)
+IF (GDAL_INCLUDE_DIR)
    SET(GDAL_FOUND TRUE)
-ENDIF (GDAL_INCLUDE_DIR AND GDAL_LIBRARY)
+ENDIF (GDAL_INCLUDE_DIR)
 
 IF (GDAL_FOUND)
 
    IF (NOT GDAL_FIND_QUIETLY)
-      MESSAGE(STATUS "Found GDAL: ${GDAL_LIBRARY}")
+      MESSAGE(STATUS "Found GDAL: ${GDAL_INCLUDE_DIR}")
    ENDIF (NOT GDAL_FIND_QUIETLY)
 
 ELSE (GDAL_FOUND)
 
-   MESSAGE(GDAL_INCLUDE_DIR=${GDAL_INCLUDE_DIR})
-   MESSAGE(GDAL_LIBRARY=${GDAL_LIBRARY})
    MESSAGE(FATAL_ERROR "Could not find GDAL")
 
 ENDIF (GDAL_FOUND)

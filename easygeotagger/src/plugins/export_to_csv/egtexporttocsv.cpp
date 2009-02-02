@@ -95,7 +95,7 @@ void EgtExportToCsv::run()
     QFile lvOutputFile( QDir::toNativeSeparators( lvCurrentFile + "/" + cvCurrentIndex.data().toString() + "_Export_" + lvTimestamp.toString( "yyyyMMdd_hhmmss" ) + ".csv" ) );
     if( lvOutputFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
-      EgtGPSExifEngine lvExifEngine;
+      EgtGpsExifEngine lvExifEngine;
       QList< EgtExifEngine::KeyMap > lvKeyMap = lvExifEngine.keys();
       QTextStream lvOutputWriter( &lvOutputFile );
       lvOutputWriter.setRealNumberPrecision( 7 );

@@ -30,18 +30,18 @@
  *
  * This class is largely a wrapper for Exiv2 to provide simple access to GPS EXIF header data
  */
-class MS_DLL_SPEC EgtGPSExifEngine : public EgtExifEngine
+class MS_DLL_SPEC EgtGpsExifEngine : public EgtExifEngine
 {
 
 public:
   /*! \brief Constructor */
-  EgtGPSExifEngine();
+  EgtGpsExifEngine();
   
   /*! \brief Constructor */
-  EgtGPSExifEngine( QString );
+  EgtGpsExifEngine( QString );
   
   /*! \brief Constructor */
-  EgtGPSExifEngine( const QModelIndex& );
+  EgtGpsExifEngine( const QModelIndex& );
 
   /*! \brief Returns the altitude */
   double altitude( bool * isValid = 0 );

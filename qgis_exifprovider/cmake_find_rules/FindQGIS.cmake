@@ -1,3 +1,5 @@
+# Contributed by Tim Sutton for eVis, Modified by PJE
+
 ## Once run this will define: 
 ## 
 ## QGIS_FOUND       = system has QGIS lib
@@ -29,15 +31,19 @@ IF(WIN32)
 
   IF (MSVC)
   FIND_PATH(QGIS_PLUGIN_DIR libnortharrowplugin.dll 
+    "C:/OSGeo4W/app/qgis/plugins"
 	  "C:/Program Files/Quantum GIS/lib/qgis" 
 	  )
   FIND_PATH(QGIS_INCLUDE_DIR qgsapplication.h 
+    "C:/OSGeo4W/include"
 	  "$ENV{LIB_DIR}/include/qgis" 
 	  )
   FIND_LIBRARY(QGIS_CORE_LIBRARY NAMES qgis_core PATHS 
+    "C:/OSGeo4W/lib"
 	  "$ENV{LIB_DIR}/lib/" 
 	  )
   FIND_LIBRARY(QGIS_GUI_LIBRARY NAMES qgis_gui PATHS 
+    "C:/OSGeo4W/lib"
 	  "$ENV{LIB_DIR}/lib/" 
 	  )
   ENDIF (MSVC)
@@ -48,7 +54,7 @@ ELSE(WIN32)
     # try to use bundle on mac
     IF (APPLE)
       #MESSAGE("Searching for QGIS in /Applications/QGIS.app/Contents/MacOS")
-      SET (QGIS_MAC_PATH /Applications/QGIS0.11.0.app/Contents/MacOS)
+      SET (QGIS_MAC_PATH /Applications/qgis1.0.0.app/Contents/MacOS)
       SET (QGIS_LIB_DIR ${QGIS_MAC_PATH}/lib)
       SET (QGIS_PLUGIN_DIR ${QGIS_MAC_PATH}/lib/qgis CACHE STRING INTERNAL)
       # set INCLUDE_DIR to prefix+include

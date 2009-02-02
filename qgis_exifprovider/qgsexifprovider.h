@@ -17,10 +17,11 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 #include "qgsvectordataprovider.h"
 #include "qgsfield.h"
 #include "qgsfeature.h"
+
+#include "egtgpsexifengine.h"
 
 #include <QDir>
 #include <QStringList>
@@ -167,6 +168,8 @@ class QgsExifProvider : public QgsVectorDataProvider
 
   private:
 
+    EgtGpsExifEngine mExifEngine;
+
     //! Fields
     QgsFieldMap mAttributeFields;
 
@@ -198,9 +201,5 @@ class QgsExifProvider : public QgsVectorDataProvider
       double y;
     };
     wkbPoint mWKBpt;
-
-    bool extractCoordinates(const QString& theFile, double* theLongitude, double* theLatitude);
-    QString getValueAsString( QString theImageFileName, QString theKey );
-    void loadGpsExifKeys(QString);
 
 };
