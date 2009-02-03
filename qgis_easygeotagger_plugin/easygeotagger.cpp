@@ -74,7 +74,7 @@ void EasyGeoTagger::initGui()
   cvEasyGeoTaggerApplication =  0;
   
   // Create the action for tool
-  mQActionPointer = new QAction( QIcon( ":/easygeotagger/easygeotagger.jpg" ), tr( "EasyGeoTagger" ), this );
+  mQActionPointer = new QAction( QIcon( ":/easygeotagger/EasyGT.svg" ), tr( "EasyGeoTagger" ), this );
   // Set the what's this text
   mQActionPointer->setWhatsThis( tr( "Launches the EasyGeoTagger application and connects it to QGIS" ) );
   // Connect the action to the run

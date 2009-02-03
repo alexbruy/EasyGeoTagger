@@ -2,6 +2,7 @@
     <qresource prefix="/" >
         <file>icons/discard.png</file>
         <file>icons/group.png</file>
+        <file>icons/EasyGT.svg</file>
     </qresource>
     <qresource prefix="/22" >
         <file>icons/22/preferences-system.png</file>
