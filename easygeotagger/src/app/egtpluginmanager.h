@@ -49,12 +49,15 @@ class MS_DLL_SPEC EgtPluginManager : public QObject
     /*! \brief Update plugin display dock widget in the main window */
     void updateGui();
 
-  public slots:
-    /*! \brief Load a single plugin */
-    bool loadPlugin( QString );
-
     /*! \brief Load all plugins in a directory */
-    void loadPlugins( QString theDirectory = "");
+    void loadAllPlugins( QString );
+
+    /*! \brief Load a single plugin */
+    bool loadSinglePlugin( QString );
+
+  public slots:
+    /*! \brief Load a plugin or all plugins in a directory */
+    void loadPlugins( QString );
 
   signals:
     /*! \brief Signal to indicate which plugin was just loaded */

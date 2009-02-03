@@ -36,7 +36,13 @@ EgtPluginManager::EgtPluginManager( EgtApplicationInterface* theApplicationInter
 {
   cvApplicationInterface = theApplicationInterface;
   cvGui = theMainWindow;
+
+  //Just a guess will not work on Mac with frameworks
+#ifdef WIN32
   cvDefaultPluginPath = QCoreApplication::instance ()->applicationDirPath() + "/plugins/";
+#else
+  cvDefaultPluginPath = QCoreApplication::instance ()->applicationDirPath() + "../lib/easygt/";
+#endif
 }
 
 /*
@@ -46,10 +52,78 @@ EgtPluginManager::EgtPluginManager( EgtApplicationInterface* theApplicationInter
  */
 
 /*!
+ * \param theDirectory the fully qualified name of the directory containing plugins to load
+ */
+void EgtPluginManager::loadAllPlugins( QString theDirectory )
+{
+  EgtDebug( "entered" );
+
+  //Check to make sure we have a valid application interface
+  if( 0 == cvApplicationInterface || 0 == cvGui )
+  {
+    EgtDebug( "Application interface or main window was null...bailing" )
+    return;
+  }
+
+  //Use the default directory if none is provided or if the string does not actually represent a directory.
+  QFileInfo lvFileInfo( theDirectory );
+  QString lvPluginDirectory = theDirectory;
+  if( theDirectory == "" || !lvFileInfo.isDir() )
+  {
+    lvPluginDirectory = cvDefaultPluginPath;
+  }
+
+  //Get a list of all of the libs in the plugin directory;
+  QDir pluginDirectory( lvPluginDirectory );
+  if( !pluginDirectory.exists() )
+  {
+    EgtDebug( "["+ theDirectory +"] was not a valid directory" )
+    return;
+  }
+  QStringList lvFilenames = pluginDirectory.entryList( QStringList() << "lib*" );
+
+  //Loop throught the files in the plugin directory and see if we have any valid plugins
+  QStringList::const_iterator lvIterator;
+  for( lvIterator = lvFilenames.constBegin(); lvIterator != lvFilenames.constEnd(); ++lvIterator )
+  {
+    loadSinglePlugin( pluginDirectory.absoluteFilePath( *lvIterator ) );
+  }
+}
+
+void EgtPluginManager::loadPlugins( QString thePath )
+{
+  EgtDebug( "entered" );
+
+  //Check to make sure we have a valid application interface
+  if( 0 == cvApplicationInterface || 0 == cvGui )
+  {
+    EgtDebug( "Application interface or main window was null...bailing" )
+    return;
+  }
+
+  //If the path is blank bail
+  if( thePath == "" )
+  {
+    return;
+  }
+
+  QFileInfo lvFileInfo( thePath );
+  if( lvFileInfo.isDir() )
+  {
+    loadAllPlugins( thePath );
+  }
+  else
+  {
+    loadSinglePlugin( thePath );
+  }
+  updateGui();
+}
+
+/*!
  * \param theLibrary the fully qualified filename for the plugin library to load
  * \returns true of the plugin is successfully loaded, otherwise returns false
  */
-bool EgtPluginManager::loadPlugin( QString theLibrary )
+bool EgtPluginManager::loadSinglePlugin( QString theLibrary )
 {
   EgtDebug( "entered" );
   
@@ -79,7 +153,6 @@ bool EgtPluginManager::loadPlugin( QString theLibrary )
       {
         lvKey = lvInterface->categories().at( lvIterator );
         //Check the collection map to see if the category exists, if not create it
-        //TODO break out into spearate function, add sort
         if( !cvPluginDisplayCollection.contains( lvKey ) )
         {
           EgtDebug( "Creating new collection for plugin category: "+ lvKey );
@@ -87,7 +160,6 @@ bool EgtPluginManager::loadPlugin( QString theLibrary )
           cvPluginDisplayCollection.insert( lvKey, lvPluginDisplayWidgets );
         }
         
-        //TODO break out into spearate function, add sort
         //Check the collection map to see if there is already a display object, if not create one.
         if( !cvPluginDisplayCollection[ lvKey ]->contains( lvInterface->name() ) )
         {
@@ -97,6 +169,9 @@ bool EgtPluginManager::loadPlugin( QString theLibrary )
         }
         else
         {
+          //TODO: Look at this a little more, this seems like it is a memory leak,
+          // what happens to the original instance of the plugin?
+
           //If a display object already exists, update it
           cvPluginDisplayCollection[ lvKey ]->value( lvInterface->name() )->update( lvInterface );
         }
@@ -118,45 +193,6 @@ bool EgtPluginManager::loadPlugin( QString theLibrary )
   }
 
   return true;
-}
-
-/*!
- * \param theDirectory the fully qualified name of the directory containing plugins to load
- */
-void EgtPluginManager::loadPlugins( QString theDirectory )
-{
-  EgtDebug( "entered" );
-  
-  //Check to make sure we have a valid application interface
-  if( 0 == cvApplicationInterface || 0 == cvGui )
-  {
-    EgtDebug( "Application interface or main window was null...bailing" )
-    return;
-  }
-  
-  //Use the default directory if none is provided or if the string does not actually represent a directory.
-  QFileInfo lvFileInfo( theDirectory );
-  QString lvPluginDirectory = theDirectory;
-  if( theDirectory == "" || !lvFileInfo.isDir() )
-  {
-    lvPluginDirectory = cvDefaultPluginPath;
-  }
-  
-  //Get a list of all of the libs in the plugin directory;
-  QDir pluginDirectory( lvPluginDirectory );
-  if( !pluginDirectory.exists() )
-  {
-    EgtDebug( "["+ theDirectory +"] was not a valid directory" )
-    return;
-  }
-  QStringList lvFilenames = pluginDirectory.entryList( QStringList() << "lib*" );
-
-  //Loop throught the files in the plugin directory and see if we have any valid plugins
-  QStringList::const_iterator lvIterator;
-  for( lvIterator = lvFilenames.constBegin(); lvIterator != lvFilenames.constEnd(); ++lvIterator )
-  {
-    loadPlugin( pluginDirectory.absoluteFilePath( *lvIterator ) );
-  }
 }
 
 /*!

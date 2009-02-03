@@ -51,6 +51,12 @@ void EgtApplicationInterface::acceptKeyValuePair( QString theKey, QString theDat
   emit keyValuePair( theKey, theData );
 }
 
+void EgtApplicationInterface::loadPlugins( QString thePath )
+{
+  EgtDebug( "Received load plugin request: "+ thePath );
+  emit loadPluginRequest( thePath );
+}
+
 void EgtApplicationInterface::refreshFileBrowser()
 {
   EgtDebug( "Received file browser refresh request" );

@@ -55,18 +55,24 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     /*! \brief Slot to accept item selections */
     void acceptModelIndexSelections( const QModelIndex& theIndex);
 
+    /*! \brief Slot to accept requests to load a single plugin for a directory of plugins */
+    void loadPlugins( QString );
+
     /*! \brief Slot to accept requests to fresh the file browser */
     void refreshFileBrowser();
 
   signals:
-    /*! \brief Rebroadcasts key and tag data pair */
-    void keyValuePair( QString, QString );
-
-    /* \brief Signal to broad cast a mouse click event in the file browser */
+    /* \brief Signal to broadcast a mouse click event in the file browser */
     void indexSelected( const QModelIndex& );
 
     /* \brief Signal to relay requests to refresh the file browser */
     void fileBrowserRefreshRequest();
+
+    /*! \brief Rebroadcasts key and tag data pair */
+    void keyValuePair( QString, QString );
+
+    /*! \brief Broadcast a load plugin request intended for the plugin manager */
+    void loadPluginRequest( QString );
 
    private:
      QMainWindow* cvGui;

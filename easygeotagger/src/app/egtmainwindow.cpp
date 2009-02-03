@@ -37,6 +37,9 @@
 #include <QDateTime>
 #include <QTextStream>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QSettings>
+#include <QCoreApplication>
 
 EgtMainWindow::EgtMainWindow()
 {
@@ -109,19 +112,6 @@ void EgtMainWindow::clicked( const QModelIndex& theIndex )
 }
 
 /*!
- * \param theMinimum the minumum value for the progress bar
- * \param theMaxumum the maximum value for the progress bar
- * \param theProgress the current progress
- */
-void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgress )
-{
-  //TODO: consider if it is better to set these individually
-  pbarProgressBar->setMinimum( theMinimum );
-  pbarProgressBar->setMaximum( theMaximum );
-  pbarProgressBar->setValue( theProgress );
-}
-
-/*!
  * \param isValid Did the requested image load correctly
  */
 void EgtMainWindow::loadPreview( bool isValid )
@@ -134,8 +124,55 @@ void EgtMainWindow::loadPreview( bool isValid )
   }
 }
 
+
+void EgtMainWindow::on_actionExit_activated()
+{
+  QCoreApplication::exit();
+}
+
+void EgtMainWindow::on_actionLoadAll_activated()
+{
+  QSettings lvQSettings;
+  QString lvLastPath = lvQSettings.value( "lastPluginDirectory", "" ).toString();
+  QString lvDirectory = QFileDialog::getExistingDirectory( this, tr( "Select a directory of plugins" ), lvLastPath, QFileDialog::ShowDirsOnly);
+
+  if( lvDirectory != "" )
+  {
+    lvQSettings.setValue( "lastPluginDirectory", lvDirectory );
+
+    emit loadPlugins( lvDirectory );
+  }
+}
+
+void EgtMainWindow::on_actionLoadSingle_activated()
+{
+  QSettings lvQSettings;
+  QString lvLastPath = lvQSettings.value( "lastPluginDirectory", "" ).toString();
+  QString lvFile = QFileDialog::getOpenFileName( this, tr( "Select a plugin" ), lvLastPath, tr( "Shared libraries (*.so *.dll *.dylib)" ) );
+
+  if( lvFile != "" )
+  {
+    QFileInfo lvFileInfo( lvFile );
+    lvQSettings.setValue( "lastPluginDirectory", lvFileInfo.absoluteDir().absolutePath() );
+
+    emit loadPlugins( lvFile );
+  }
+}
+
 void EgtMainWindow::refreshFileBrowser()
 {
   ( (QDirModel*)tvFileBrowser->model() )->refresh();
 }
 
+/*!
+ * \param theMinimum the minumum value for the progress bar
+ * \param theMaxumum the maximum value for the progress bar
+ * \param theProgress the current progress
+ */
+void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgress )
+{
+  //TODO: consider if it is better to set these individually
+  pbarProgressBar->setMinimum( theMinimum );
+  pbarProgressBar->setMaximum( theMaximum );
+  pbarProgressBar->setValue( theProgress );
+}

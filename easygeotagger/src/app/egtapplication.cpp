@@ -59,8 +59,10 @@ void EgtApplication::init( QString thePluginDirectory )
   
   //Create a new plugin manager and load plugins from the main plugin archive
   cvPluginManager = new EgtPluginManager( cvApplicationInterface, cvGui );
+
+  connect( cvGui, SIGNAL( loadPlugins( QString ) ), cvPluginManager, SLOT( loadPlugins( QString ) ) );
+  connect( cvApplicationInterface, SIGNAL( loadPluginRequest( QString ) ), cvPluginManager, SLOT( loadPlugins( QString ) ) );
   cvPluginManager->loadPlugins( thePluginDirectory );
-  cvPluginManager->updateGui();
   
   //Display the main window
   cvGui->show();

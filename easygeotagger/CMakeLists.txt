@@ -65,7 +65,7 @@ IF ( WIN32 )
   SET ( CMAKE_INSTALL_PREFIX   ./install )
   SET ( EASYGT_BIN_SUBDIR     . )
   SET ( EASYGT_LIB_SUBDIR     . )
-  SET ( EASYGT_PLUGIN_SUBDIR  ./easygt )
+  SET ( EASYGT_PLUGIN_SUBDIR  ./plugins )
   SET ( EASYGT_INCLUDE_SUBDIR ./include/easygt )
   SET ( PYTHON_PACKAGE_SUBDIR . )
   

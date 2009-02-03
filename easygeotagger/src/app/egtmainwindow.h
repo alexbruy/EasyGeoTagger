@@ -61,13 +61,21 @@ private slots:
   /*! \brief Slot to show the preview */
   void loadPreview( bool );  
 
+  void on_actionExit_activated();
+
+  void on_actionLoadAll_activated();
+
+  void on_actionLoadSingle_activated();
+
   /*! \brief Slot to interact with the progress bar */
   void updateProgress( int, int, int );
 
-  signals:
-    /* \brief Signal to broad cast a mouse click event in the file browser */
-    void fileBrowserItemSelected( const QModelIndex& );
+signals:
+  /*! \brief Signal to broadcast a mouse click event in the file browser */
+  void fileBrowserItemSelected( const QModelIndex& );
 
+  /*! \brief Sugnal to broadcast a load plugin request */
+  void loadPlugins( QString );
 
   
 private:
