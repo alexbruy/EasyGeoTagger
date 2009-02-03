@@ -26,6 +26,7 @@
 #include "egtlogger.h"
 
 #include <QDialogButtonBox>
+#include <QApplication>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QSettings>
@@ -156,6 +157,22 @@ void EgtExifEditor::loadExifData( bool hasTagData )
       lvIterator.value()->setValue( cvExifEngine->read( lvIterator.value()->key() ) );
       lvIterator.value()->setValueAssociatedData( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
       lvIterator++;
+    }
+  }
+
+}
+
+void EgtExifEditor::showConfigurationDialog()
+{
+  //Find the first non hidden widget and open the config dialog
+  QWidgetList lvWidgetList = QApplication::topLevelWidgets();
+  for( int lvIterator = 0; lvIterator < lvWidgetList.size(); lvIterator++ )
+  {
+    if( !lvWidgetList[ lvIterator ]->isHidden() )
+    {
+      cvConfigurationDialog.move( lvWidgetList[ lvIterator ]->pos() );
+      cvConfigurationDialog.show();
+      return;
     }
   }
 

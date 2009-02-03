@@ -56,7 +56,7 @@ class EgtExifEditor : public QObject
     void loadExifData( bool );
 
     /*! \brief Show the configuration dialog */
-    void showConfigurationDialog() { cvConfigurationDialog.show(); }
+    void showConfigurationDialog();
 
   public slots:
     void setTagData( QString theKey, QString theValue, bool setCachedValue = true );

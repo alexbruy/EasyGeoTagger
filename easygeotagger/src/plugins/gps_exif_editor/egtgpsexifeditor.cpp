@@ -122,24 +122,6 @@ void EgtGpsExifEditor::acceptKeyValuePair( QString theKey, QString theData )
   }
 }
 
-void EgtGpsExifEditor::run()
-{
-  EgtDebug( "entered" );
-  
-  //Build or reshow the plugins GUI component
-  if( cvDock.isVisible() )
-  {
-    EgtDebug( "dock is already open and visible" );
-    return;
-  }
-
-  EgtDebug( "dock is already open but not visible" );
-  cvDock.showMaximized();
-  loadExifData( cvLastFile );
-
-  EgtDebug( "done" );
-}
-
 /*!
  * \param theIndex the QModelIndex representing the file from which to extract exif data
  */
@@ -161,6 +143,24 @@ void EgtGpsExifEditor::loadExifData( const QModelIndex& theIndex )
     loadExifData( "" );
   }
 } 
+
+void EgtGpsExifEditor::run()
+{
+  EgtDebug( "entered" );
+  
+  //Build or reshow the plugins GUI component
+  if( cvDock.isVisible() )
+  {
+    EgtDebug( "dock is already open and visible" );
+    return;
+  }
+
+  EgtDebug( "dock is already open but not visible" );
+  cvDock.showMaximized();
+  loadExifData( cvLastFile );
+
+  EgtDebug( "done" );
+}
 
 /*
  *
