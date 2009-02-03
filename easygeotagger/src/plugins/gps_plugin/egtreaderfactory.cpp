@@ -29,6 +29,9 @@
 
 EgtReaderFactory::EgtReaderFactory( )
 {
+  cvFileReader = 0;
+
+//qRegisterMetaType<EgtFileReader>("EgtFileReader");
   cvUiFileType.setupUi(&cvFileTypeDialog);
 
   connect( cvUiFileType.buttonBox, SIGNAL( accepted() ), this, SLOT( accept() ) );
@@ -62,10 +65,14 @@ void EgtReaderFactory::accept()
   
   cvFileTypeDialog.setVisible(false);
   if( cvUiFileType.rbDelimitedText ->isChecked() )
-  {
+  {//memory leak delete if is not null
+    /*if( 0 != cvFileReader)
+    {
+      delete cvFileReader;
+    }*/
     cvFileReader = new EgtGraphicalDelimitedTextFileReader();
     connect( cvFileReader, SIGNAL( initializationComplete() ), this, SLOT( fileReaderInitialized() ) );
-    cvFileReader->show();
+    cvFileReader->init();//can we move it to the button???
   }
   else if( cvUiFileType.rbGPSFile ->isChecked() )
   {
@@ -82,7 +89,11 @@ void EgtReaderFactory::accept()
 
 void EgtReaderFactory::fileReaderInitialized()
 {
-  emit(fileReaderCreated( cvFileReader ));
+  emit(fileReaderCreated( *cvFileReader ));
+  if(0 != cvFileReader)
+  {
+    delete cvFileReader;
+  }
 }
 
 void EgtReaderFactory::on_rbDelimitedText_toggled( bool theChange )

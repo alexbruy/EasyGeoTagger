@@ -55,10 +55,12 @@ void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
   QWidget* lvParent = 0;
 
   for( int i =0; i < lvActiveWindows.size(); i++ )
+  {
     if( tr("GPS Reader") == lvActiveWindows[i]->windowTitle() )
     {
       lvParent = lvActiveWindows[i];
     }
+  }
 
   QPoint lvPosition = lvParent->pos();
   //center the window over the parent
@@ -66,16 +68,18 @@ void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
   cvSelectDelimiterDialog.show();
 }
 
-void EgtGraphicalDelimitedTextFileReader::show()
+void EgtGraphicalDelimitedTextFileReader::init() //init function
 {
   QWidgetList lvActiveWindows = QApplication::topLevelWidgets();
   QWidget* lvParent = 0;
 
   for( int i =0; i < lvActiveWindows.size(); i++ )
+  {
     if( tr("Select a file type") == lvActiveWindows[i]->windowTitle() )
     {
       lvParent = lvActiveWindows[i];
     }
+  }
 
   QString lvFileName = QFileDialog::getOpenFileName( lvParent, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
   if ( "" != lvFileName )

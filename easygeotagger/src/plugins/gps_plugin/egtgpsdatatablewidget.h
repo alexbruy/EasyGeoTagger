@@ -49,7 +49,7 @@ class EgtGpsDataTableWidget : public QTableWidget
   public slots:
 
     /*! \brief Slot used to set the specific file reader */
-    void setFileReader( EgtFileReader* );
+    void setFileReader( EgtFileReader& );
 
   private slots:
 

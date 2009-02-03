@@ -35,14 +35,17 @@ class EgtFileReader: public QObject
     EgtFileReader(){};
 
     /*! \brief Function that returns the column headers*/
-    virtual QStringList columnHeaders() = 0;
+    virtual QStringList columnHeaders() {};
 
     /*! \brief Returns whether the file has column headers or not */
-    virtual bool hasColumnHeaders() = 0;
+    virtual bool hasColumnHeaders() {};
+
+    virtual void init() {};
 
     /*! \brief Function used to read a gps file */
-    virtual QList<QStringList> read( bool* = 0 ) = 0;
- 
+    virtual QList<QStringList> read( bool* = 0 ) {};
+   
+   
 };
 #endif
 

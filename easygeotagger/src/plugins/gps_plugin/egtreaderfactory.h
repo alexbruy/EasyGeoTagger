@@ -59,7 +59,7 @@ class EgtReaderFactory: public QObject
   private:
 
     /*! \brief Instance of the concrete file reader to be used */
-    EgtGraphicalDelimitedTextFileReader* cvFileReader;
+    EgtFileReader* cvFileReader;
 
     /*! \brief QDialog to let the user select the type of file to be read */
     QDialog cvFileTypeDialog;
@@ -69,6 +69,6 @@ class EgtReaderFactory: public QObject
 
   signals:
     /*! \brief Signal to notify that the file reader has been created */
-    void fileReaderCreated( EgtFileReader* );
+    void fileReaderCreated( EgtFileReader& );
 };
 #endif

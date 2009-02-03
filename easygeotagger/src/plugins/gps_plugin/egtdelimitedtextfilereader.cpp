@@ -29,6 +29,8 @@
 EgtDelimitedTextFileReader::EgtDelimitedTextFileReader():EgtFileReader()
 {
   cvDelimiter = ",";
+  cvFileName = ""; 
+  cvLastError = "";
   cvHasColumnHeaders = false;
 }
 

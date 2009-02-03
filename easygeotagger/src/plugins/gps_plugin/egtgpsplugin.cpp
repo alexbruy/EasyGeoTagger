@@ -59,7 +59,7 @@ EgtGpsPlugin::EgtGpsPlugin()
 
   cvMainWidget.setLayout( new QVBoxLayout() );
   cvMainWidget.layout()->addWidget( lvPanel );
-  connect(&cvReaderFactory, SIGNAL(fileReaderCreated( EgtFileReader* )),this, SLOT( fileReader_set( EgtFileReader* ) ));
+  connect(&cvReaderFactory, SIGNAL(fileReaderCreated( EgtFileReader& )),this, SLOT( fileReader_set( EgtFileReader& ) ));
 }
 
 /*
@@ -127,7 +127,7 @@ void EgtGpsPlugin::cvTagButton_clicked()
 }
 
 
-void EgtGpsPlugin::fileReader_set( EgtFileReader* theFileReader )
+void EgtGpsPlugin::fileReader_set( EgtFileReader &theFileReader )
 {
   cvDataTable->setFileReader( theFileReader );
 }
@@ -142,9 +142,7 @@ void EgtGpsPlugin::run()
     EgtDebug( "dock is already open and visible" );
     return;
   }
-/*QWidget* lvActiveWindow = QApplication::activeWindow ();
-  QPoint lvPosition = lvActiveWindow->pos();
-  cvMainWidget.move( lvPosition.x(), lvPosition.y() );*/
+
   EgtDebug( "dock is already open but not visible" );
   cvMainWidget.show();
   EgtDebug( "done" );

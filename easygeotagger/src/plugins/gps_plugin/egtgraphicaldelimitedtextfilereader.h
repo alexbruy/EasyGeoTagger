@@ -39,7 +39,7 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
     void selectDelimiter();
 
     /*! \brief Shows the file selection dialog. It also perfoms all the associated tasks*/
-    void show();
+    void init();
 
   public slots:
     
