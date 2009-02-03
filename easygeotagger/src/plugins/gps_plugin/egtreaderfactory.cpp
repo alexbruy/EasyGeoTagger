@@ -31,8 +31,8 @@ EgtReaderFactory::EgtReaderFactory( )
 {
   cvUiFileType.setupUi(&cvFileTypeDialog);
 
-  connect( cvUiFileType.pbtnOk, SIGNAL( clicked() ), this, SLOT( on_pbtnOk_clicked() ) ); 
-  connect( cvUiFileType.pbtnCancel, SIGNAL( clicked() ), this, SLOT( on_pbtnCancel_clicked() ) );
+  connect( cvUiFileType.buttonBox, SIGNAL( accepted() ), this, SLOT( accept() ) );
+  connect( cvUiFileType.buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) );
   connect( cvUiFileType.rbDelimitedText, SIGNAL( toggled( bool ) ), this, SLOT( on_rbDelimitedText_toggled( bool ) ) );
   connect( cvUiFileType.rbGPSFile, SIGNAL( toggled( bool ) ), this, SLOT( on_rbGPSFile_toggled( bool ) ) );
 }
@@ -57,36 +57,32 @@ void EgtReaderFactory::show()
  * SIGNAL and SLOTS
  *
  */
-
-void EgtReaderFactory::on_pbtnCancel_clicked()
-{
-  cvFileTypeDialog.setVisible( false );
-}
-
-void EgtReaderFactory::on_pbtnOk_clicked()
+void EgtReaderFactory::accept()
 {
   
+  cvFileTypeDialog.setVisible(false);
   if( cvUiFileType.rbDelimitedText ->isChecked() )
   {
+    cvFileReader = new EgtGraphicalDelimitedTextFileReader();
+    connect( cvFileReader, SIGNAL( initializationComplete() ), this, SLOT( fileReaderInitialized() ) );
+    cvFileReader->show();
+  }
+  else if( cvUiFileType.rbGPSFile ->isChecked() )
+  {
+    //Nothing so far
     cvFileReader = new EgtGraphicalDelimitedTextFileReader();
   }
   else
   {
-    if( cvUiFileType.rbGPSFile ->isChecked() )
-    {
-      //Nothing so far
-      cvFileReader = new EgtGraphicalDelimitedTextFileReader();
-    }
-    else
-    {
-      QMessageBox::warning( &cvFileTypeDialog, tr("Error"),tr("You must select a file type"),QMessageBox::Ok );
-    }
+    QMessageBox::warning( &cvFileTypeDialog, tr("Error"),tr("You must select a file type"),QMessageBox::Ok );
+    cvFileTypeDialog.setVisible(true);
+    return;
   }
+}
 
-  connect( cvFileReader, SIGNAL( delimiterSelected() ), this, SLOT( reEmitDelimiterSelected() ) );
-
-  cvFileTypeDialog.setVisible(false);
-  cvFileReader->show();
+void EgtReaderFactory::fileReaderInitialized()
+{
+  emit(fileReaderCreated( cvFileReader ));
 }
 
 void EgtReaderFactory::on_rbDelimitedText_toggled( bool theChange )
@@ -101,7 +97,8 @@ void EgtReaderFactory::on_rbGPSFile_toggled( bool theChange )
 qDebug("gps activated");*/
 }
 
-void EgtReaderFactory::reEmitDelimiterSelected()
+
+void EgtReaderFactory::reject()
 {
-  emit(fileReaderCreated( cvFileReader ));
+  cvFileTypeDialog.setVisible( false );
 }

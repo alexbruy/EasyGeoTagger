@@ -41,8 +41,6 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):Egt
   connect( cvUiTextDelimiter.rbtnCustom, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnCustom_toggled( bool ) ) ); 
   connect( cvUiTextDelimiter.leCustom, SIGNAL( textEdited( QString ) ), this, SLOT( on_leCustom_changed() ) ); 
   connect( cvUiTextDelimiter.cbHeader, SIGNAL( stateChanged( int ) ), this, SLOT( on_cbHeader_changed() ) );
-
-  connect( this, SIGNAL( delimiterChanged() ), this, SLOT( on_delimiter_changed() ) ); 
 }
 
 /*
@@ -74,7 +72,7 @@ void EgtGraphicalDelimitedTextFileReader::show()
   QWidget* lvParent = 0;
 
   for( int i =0; i < lvActiveWindows.size(); i++ )
-    if( tr("Select file type") == lvActiveWindows[i]->windowTitle() )
+    if( tr("Select a file type") == lvActiveWindows[i]->windowTitle() )
     {
       lvParent = lvActiveWindows[i];
     }
@@ -100,31 +98,6 @@ void EgtGraphicalDelimitedTextFileReader::on_cbHeader_changed()
   emit delimiterChanged();
 }
 
-void EgtGraphicalDelimitedTextFileReader::on_delimiter_changed()
-{
-  cvFileData = read();
-
-  cvUiTextDelimiter.lbStatus->setText( cvLastError );
-
-
-  QString lvHTML = "<table border=\"1\">";
-
-  int lvNumRows = (cvFileData.size() > 3)? 3: cvFileData.size(); // We just show up to 3 rows
-
-  for( int i = 0; i < lvNumRows; i++ )
-  { 
-    lvHTML +="<tr>";
-    for( int j = 0; j < cvFileData[0].size(); j++ )
-    {
-      lvHTML = lvHTML+"<td>"+cvFileData.at(i).at(j)+"</td>";
-    }
-    lvHTML +="</tr>";
-  }
-  lvHTML +="</table>";
-
-  cvUiTextDelimiter.tePreview->setHtml( lvHTML );
-}
-
 void EgtGraphicalDelimitedTextFileReader::on_leCustom_changed()
 {
   if( cvUiTextDelimiter.rbtnCustom->isChecked() )
@@ -148,7 +121,7 @@ void EgtGraphicalDelimitedTextFileReader::on_pbtnOk_clicked()
   else
   {
     cvSelectDelimiterDialog.close();
-    emit delimiterSelected();
+    emit initializationComplete();
   }
 }
 
@@ -157,7 +130,7 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnBlank_toggled( bool theValue )
   if( theValue )
   {
     setDelimiter( " " );
-    emit delimiterChanged();
+    delimiterChanged();
   }
 }
 
@@ -166,7 +139,7 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnComma_toggled( bool theValue )
   if( theValue )
   {
     setDelimiter( "," );
-    emit delimiterChanged();
+    delimiterChanged();
   }
 }
 
@@ -175,7 +148,7 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnCustom_toggled( bool theValue )
   if( theValue )
   {
     setDelimiter( cvUiTextDelimiter.leCustom->text() );
-    emit delimiterChanged();
+    delimiterChanged();
   }
 }
 
@@ -184,6 +157,37 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnPipe_toggled( bool theValue )
   if( theValue )
   {
     setDelimiter( "|" );
-    emit delimiterChanged();
+    delimiterChanged();
   }
+}
+
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
+
+void EgtGraphicalDelimitedTextFileReader::delimiterChanged()
+{
+  cvFileData = read();
+
+  cvUiTextDelimiter.lbStatus->setText( cvLastError );
+
+
+  QString lvHTML = "<table border=\"1\">";
+
+  int lvNumRows = (cvFileData.size() > 3)? 3: cvFileData.size(); // We just show up to 3 rows
+
+  for( int i = 0; i < lvNumRows; i++ )
+  {
+    lvHTML +="<tr>";
+    for( int j = 0; j < cvFileData[0].size(); j++ )
+    {
+      lvHTML = lvHTML+"<td>"+cvFileData.at(i).at(j)+"</td>";
+    }
+    lvHTML +="</tr>";
+  }
+  lvHTML +="</table>";
+
+  cvUiTextDelimiter.tePreview->setHtml( lvHTML );
 }

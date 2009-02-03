@@ -76,12 +76,11 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
     /*! \brief QDesigner object*/
     Ui::TextDelimiterDialog cvUiTextDelimiter;
 
-  signals:
-
     /*! \brief Signal emited when the user changes the delimiter (not when she/he selects it)*/
     void delimiterChanged();
 
+  signals:
     /*! \brief Signal emited when the user selects a delimiter*/
-    void delimiterSelected();
+    void initializationComplete();
 };
 #endif

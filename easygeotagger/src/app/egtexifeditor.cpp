@@ -25,12 +25,12 @@
 #include "egtexifeditor.h"
 #include "egtlogger.h"
 
+#include <QDialogButtonBox>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QSettings>
 
 /*!
- * TODO: This should relaly be moved into a GUI lib so that you could build editor plugins on the fly
  *
  * \param theEngine Pointer to the Exif engine that will be used to build the editor
  */
@@ -100,14 +100,9 @@ EgtExifEditor::EgtExifEditor( QString theId, EgtExifEngine* theEngine )
   ((QVBoxLayout*)cvEditorWidget.layout())->insertStretch(-1, 1);
 
   //Add a close button to the configuration dialog -- probably should be a button box.
-  QPushButton* lvCloseButton = new QPushButton( tr( "Close" ) );
-  lvPanel = new QWidget();
-  lvPanel->setLayout( new QHBoxLayout() );
-  lvPanel->layout()->setContentsMargins( 1, 1, 1, 1 );
-  ((QHBoxLayout*)lvPanel->layout())->insertStretch(-1, 1);
-  lvPanel->layout()->addWidget( lvCloseButton );
-  connect( lvCloseButton, SIGNAL( clicked() ), &cvConfigurationDialog, SLOT( accept() ) );
-  cvConfigurationDialog.layout()->addWidget( lvPanel );
+  QDialogButtonBox* lvButtonBox = new QDialogButtonBox( QDialogButtonBox::Ok );
+  connect( lvButtonBox, SIGNAL( accepted() ), &cvConfigurationDialog, SLOT( accept() ) );
+  cvConfigurationDialog.layout()->addWidget( lvButtonBox );
 
   //Loop through the controls and restore setting from last session
   QSettings lvSettings;
