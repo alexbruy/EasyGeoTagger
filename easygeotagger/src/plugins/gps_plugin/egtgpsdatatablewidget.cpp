@@ -31,8 +31,8 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
   cvColumnMeaningDialog = new QDialog(this);
   cvUiColumnMeaning.setupUi( cvColumnMeaningDialog );
+
   cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"(clear)";
-  cvUiColumnMeaning.cbFields->insertItems(0,cvAvailableFields);
 
   cvFileReader = 0;
   cvColumnSelected = 0;
@@ -90,8 +90,12 @@ void EgtGpsDataTableWidget::populateTable()
   setRowCount( lvDataFile.size() );
   setColumnCount( lvDataFile[0].size() );
 
-  /*cvUiColumnMeaning.cbFields->insertItems(0,cvAvailableFields);
-  cvHeadersThatAreSet.clear();*/
+  /*Set up the combo box*/
+  cvUiColumnMeaning.cbFields->clear();
+  cvUiColumnMeaning.cbFields->insertItems( 0,cvAvailableFields );
+
+  /*Reset the Qlist that contains which headers are set*/
+  cvHeadersThatAreSet.clear();
 
   if( cvFileReader->hasColumnHeaders() ) 
   {
@@ -196,7 +200,13 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked()
     lvSelectedItem = QString::number( cvColumnSelected +1 );
     cvHeadersThatAreSet.removeAll( cvColumnSelected );
   }
-
+  //Deleting the previous header
+  QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( cvColumnSelected );
+  if(0 != lvCurrentHeader)
+  {
+    delete lvCurrentHeader;
+  }
+  
   setHorizontalHeaderItem(cvColumnSelected, new QTableWidgetItem( lvSelectedItem ));
   
   cvColumnMeaningDialog->close();
@@ -204,10 +214,6 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked()
 
 void EgtGpsDataTableWidget::setFileReader(EgtFileReader &theFileReader)
 {
-  /*if(0 != cvFileReader)
-  {
-    delete cvFileReader;
-  }*/
   cvFileReader= &theFileReader;
   cvHeadersAreSet = cvFileReader->hasColumnHeaders();
   populateTable();

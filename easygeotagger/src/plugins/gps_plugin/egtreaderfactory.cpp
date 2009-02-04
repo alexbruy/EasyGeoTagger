@@ -65,14 +65,8 @@ void EgtReaderFactory::accept()
   
   cvFileTypeDialog.setVisible(false);
   if( cvUiFileType.rbDelimitedText ->isChecked() )
-  {//memory leak delete if is not null
-    /*if( 0 != cvFileReader)
-    {
-      delete cvFileReader;
-    }*/
+  {
     cvFileReader = new EgtGraphicalDelimitedTextFileReader();
-    connect( cvFileReader, SIGNAL( initializationComplete() ), this, SLOT( fileReaderInitialized() ) );
-    cvFileReader->init();//can we move it to the button???
   }
   else if( cvUiFileType.rbGPSFile ->isChecked() )
   {
@@ -85,13 +79,16 @@ void EgtReaderFactory::accept()
     cvFileTypeDialog.setVisible(true);
     return;
   }
+  
+  connect( cvFileReader, SIGNAL( initializationComplete() ), this, SLOT( fileReaderInitialized() ) );
+  cvFileReader->init();//can we move it to the button???
 }
 
 void EgtReaderFactory::fileReaderInitialized()
 {
   emit(fileReaderCreated( *cvFileReader ));
   if(0 != cvFileReader)
-  {
+  { //We created the file reader,we emited it, we don't need it anymore
     delete cvFileReader;
   }
 }
