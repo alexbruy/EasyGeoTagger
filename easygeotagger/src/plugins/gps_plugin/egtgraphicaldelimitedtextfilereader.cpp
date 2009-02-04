@@ -33,8 +33,8 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):Egt
 {
   cvUiTextDelimiter.setupUi(&cvSelectDelimiterDialog);
 
-  connect( cvUiTextDelimiter.pbtnOk, SIGNAL( clicked() ), this, SLOT( on_pbtnOk_clicked() ) ); 
-  connect( cvUiTextDelimiter.pbtnCancel, SIGNAL( clicked() ), this, SLOT( on_pbtnCancel_clicked() ) ); 
+  connect( cvUiTextDelimiter.buttonBox, SIGNAL( accepted() ), this, SLOT( accept() ) );
+  connect( cvUiTextDelimiter.buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) ); 
   connect( cvUiTextDelimiter.rbtnComma, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnComma_toggled( bool ) ) ); 
   connect( cvUiTextDelimiter.rbtnPipe, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnPipe_toggled( bool ) ) ); 
   connect( cvUiTextDelimiter.rbtnBlank, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnBlank_toggled( bool ) ) ); 
@@ -111,12 +111,12 @@ void EgtGraphicalDelimitedTextFileReader::on_leCustom_changed()
   }
 }
 
-void EgtGraphicalDelimitedTextFileReader::on_pbtnCancel_clicked()
+void EgtGraphicalDelimitedTextFileReader::reject()
 {
   cvSelectDelimiterDialog.close();
 }
 
-void EgtGraphicalDelimitedTextFileReader::on_pbtnOk_clicked()
+void EgtGraphicalDelimitedTextFileReader::accept()
 {
   if( 0 == cvFileData.size() )
   {

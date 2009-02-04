@@ -53,6 +53,7 @@ class EgtDelimitedTextFileReader: public EgtFileReader
     /*! \brief Function to set the text delimiter */
     void setDelimiter( QString );
 
+
   protected:
     
     /*! \brief Contains the headers from the file */

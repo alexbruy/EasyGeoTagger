@@ -25,6 +25,9 @@
 #define EGTGPSDATATABLEWIDGET_H
 
 #include "egtfilereader.h"
+
+#include "egtdelimitedtextfilereader.h"
+#include "egtgraphicaldelimitedtextfilereader.h"
 #include "ui_columnmeaningdialog.h"
 
 
@@ -49,7 +52,7 @@ class EgtGpsDataTableWidget : public QTableWidget
   public slots:
 
     /*! \brief Slot used to set the specific file reader */
-    void setFileReader( EgtFileReader& );
+    void setFileReader( EgtFileReader* );
 
   private slots:
 

@@ -5,177 +5,194 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>327</height>
+    <width>290</width>
+    <height>367</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Select Text Delimiter</string>
+   <string>Dialog</string>
   </property>
-  <widget class="QGroupBox" name="groupBox" >
-   <property name="geometry" >
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>261</width>
-     <height>281</height>
-    </rect>
-   </property>
-   <property name="title" >
-    <string/>
-   </property>
-   <widget class="QLineEdit" name="leCustom" >
-    <property name="geometry" >
-     <rect>
-      <x>100</x>
-      <y>80</y>
-      <width>51</width>
-      <height>24</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rbtnComma" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>92</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Comma ( , )</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rbtnPipe" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>92</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Pipe ( | )</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rbtnCustom" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>92</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Custom</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rbtnBlank" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>92</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Blank spaces</string>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_2" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>120</y>
-      <width>241</width>
-      <height>151</height>
-     </rect>
-    </property>
-    <property name="title" >
-     <string>Preview</string>
-    </property>
-    <widget class="QTextEdit" name="tePreview" >
-     <property name="geometry" >
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>221</width>
-       <height>101</height>
-      </rect>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" colspan="2" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string/>
+     </property>
+     <widget class="QLineEdit" name="leCustom" >
+      <property name="geometry" >
+       <rect>
+        <x>100</x>
+        <y>80</y>
+        <width>51</width>
+        <height>24</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="rbtnComma" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>92</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Comma ( , )</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="rbtnPipe" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>92</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Pipe ( | )</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="rbtnCustom" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>92</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Custom</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="rbtnBlank" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>92</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Blank spaces</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_2" >
+      <property name="geometry" >
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>241</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="title" >
+       <string>Preview</string>
+      </property>
+      <widget class="QTextEdit" name="tePreview" >
+       <property name="geometry" >
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>221</width>
+         <height>101</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="cbHeader" >
+       <property name="geometry" >
+        <rect>
+         <x>20</x>
+         <y>120</y>
+         <width>138</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text" >
+        <string>The file has a header</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>121</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
      </property>
     </widget>
-    <widget class="QCheckBox" name="cbHeader" >
-     <property name="geometry" >
-      <rect>
-       <x>20</x>
-       <y>120</y>
-       <width>138</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text" >
-      <string>The file has a header</string>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="Line" name="line" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
-   </widget>
-  </widget>
-  <widget class="QPushButton" name="pbtnOk" >
-   <property name="geometry" >
-    <rect>
-     <x>300</x>
-     <y>100</y>
-     <width>75</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>OK</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pbtnCancel" >
-   <property name="geometry" >
-    <rect>
-     <x>300</x>
-     <y>160</y>
-     <width>75</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Cancel</string>
-   </property>
-  </widget>
-  <widget class="Line" name="line" >
-   <property name="geometry" >
-    <rect>
-     <x>-3</x>
-     <y>290</y>
-     <width>411</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="orientation" >
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbStatus" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>300</y>
-     <width>391</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string/>
-   </property>
-  </widget>
+   </item>
+   <item row="3" column="0" colspan="2" >
+    <widget class="QLabel" name="lbStatus" >
+     <property name="maximumSize" >
+      <size>
+       <width>10000</width>
+       <height>15</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>TextDelimiterDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>TextDelimiterDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

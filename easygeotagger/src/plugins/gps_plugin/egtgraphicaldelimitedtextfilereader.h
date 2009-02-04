@@ -40,7 +40,7 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
 
     /*! \brief Shows the file selection dialog. It also perfoms all the associated tasks*/
     void init();
-
+   
   public slots:
     
     void on_cbHeader_changed();
@@ -50,9 +50,9 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
 
     void on_leCustom_changed();
 
-    void on_pbtnCancel_clicked();
+    void reject();
 
-    void on_pbtnOk_clicked();
+    void accept();
 
     void on_rbtnBlank_toggled( bool );
 

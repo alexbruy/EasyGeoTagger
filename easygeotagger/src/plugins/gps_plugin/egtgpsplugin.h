@@ -69,7 +69,7 @@ class EgtGpsPlugin: public EgtPluginInterface
     void cvTagButton_clicked();
     
     /*! \brief Slot called to set the file reader object to be used */
-    void fileReader_set( EgtFileReader& );
+    void fileReader_set( EgtFileReader* );
   signals:
     /*! \brief Slot called to tag a picture */
     void keyValuePair( QString, QString );

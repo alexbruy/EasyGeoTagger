@@ -25,8 +25,6 @@
 
 #include <QMessageBox>
 
-#define COLUMN "Ignorame"
-
 EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
   cvColumnMeaningDialog = new QDialog(this);
@@ -34,7 +32,7 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 
   cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"(clear)";
 
-  cvFileReader = 0;
+  cvFileReader=0;
   cvColumnSelected = 0;
   cvHeadersAreSet = false;
 
@@ -70,7 +68,7 @@ QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems()
 
 bool EgtGpsDataTableWidget::isThereAnyColumnSet()
 {
-  if( cvHeadersAreSet ) return true;
+  if( cvHeadersAreSet ){ return true; }
 
   bool lvReturn = false;
   for( int i = 0; i < columnCount(); i++ )
@@ -84,16 +82,13 @@ bool EgtGpsDataTableWidget::isThereAnyColumnSet()
 void EgtGpsDataTableWidget::populateTable()
 {
   cvHeadersThatAreSet.clear();
-
   QList<QStringList> lvDataFile =cvFileReader->read();
 
   setRowCount( lvDataFile.size() );
   setColumnCount( lvDataFile[0].size() );
-
   /*Set up the combo box*/
   cvUiColumnMeaning.cbFields->clear();
   cvUiColumnMeaning.cbFields->insertItems( 0,cvAvailableFields );
-
   /*Reset the Qlist that contains which headers are set*/
   cvHeadersThatAreSet.clear();
 
@@ -151,7 +146,7 @@ void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
   bool ok;
   lvText.toInt( &ok ); 
 
-  if( !ok )
+  if( !ok ) //It's not a number, therefore, it is a valid field
   {
     cvUiColumnMeaning.cbFields->addItem( lvText );
   }
@@ -202,19 +197,20 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked()
   }
   //Deleting the previous header
   QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( cvColumnSelected );
-  if(0 != lvCurrentHeader)
+  if( 0 != lvCurrentHeader )
   {
     delete lvCurrentHeader;
   }
   
-  setHorizontalHeaderItem(cvColumnSelected, new QTableWidgetItem( lvSelectedItem ));
+  setHorizontalHeaderItem( cvColumnSelected, new QTableWidgetItem( lvSelectedItem ) );
   
   cvColumnMeaningDialog->close();
 }
 
-void EgtGpsDataTableWidget::setFileReader(EgtFileReader &theFileReader)
+void EgtGpsDataTableWidget::setFileReader( EgtFileReader* theFileReader )
 {
-  cvFileReader= &theFileReader;
+  cvFileReader= theFileReader;
   cvHeadersAreSet = cvFileReader->hasColumnHeaders();
+
   populateTable();
 }

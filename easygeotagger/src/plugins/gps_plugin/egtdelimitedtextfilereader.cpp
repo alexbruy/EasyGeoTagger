@@ -75,8 +75,7 @@ QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok )
 
   if (!lvFile.open(QFile::ReadOnly | QFile::Text)) 
   {
-    if (ok)
-      *ok = false;
+    if (ok){ *ok = false; }
     cvLastError = QObject::tr( "Can't read the file") + ": " + cvFileName;
     return lvList;
   }
@@ -134,3 +133,4 @@ void EgtDelimitedTextFileReader::setDelimiter( QString theDelimiter )
 {
   cvDelimiter = theDelimiter;
 }
+

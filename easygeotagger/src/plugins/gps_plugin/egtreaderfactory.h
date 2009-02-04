@@ -69,6 +69,6 @@ class EgtReaderFactory: public QObject
 
   signals:
     /*! \brief Signal to notify that the file reader has been created */
-    void fileReaderCreated( EgtFileReader& );
+    void fileReaderCreated( EgtFileReader* );
 };
 #endif

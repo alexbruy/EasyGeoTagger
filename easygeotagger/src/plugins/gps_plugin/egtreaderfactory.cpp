@@ -31,7 +31,6 @@ EgtReaderFactory::EgtReaderFactory( )
 {
   cvFileReader = 0;
 
-//qRegisterMetaType<EgtFileReader>("EgtFileReader");
   cvUiFileType.setupUi(&cvFileTypeDialog);
 
   connect( cvUiFileType.buttonBox, SIGNAL( accepted() ), this, SLOT( accept() ) );
@@ -61,7 +60,11 @@ void EgtReaderFactory::show()
  *
  */
 void EgtReaderFactory::accept()
-{
+{ 
+  if(0 != cvFileReader)
+  { 
+    delete cvFileReader;
+  }
   
   cvFileTypeDialog.setVisible(false);
   if( cvUiFileType.rbDelimitedText ->isChecked() )
@@ -81,16 +84,12 @@ void EgtReaderFactory::accept()
   }
   
   connect( cvFileReader, SIGNAL( initializationComplete() ), this, SLOT( fileReaderInitialized() ) );
-  cvFileReader->init();//can we move it to the button???
+  cvFileReader->init();
 }
 
 void EgtReaderFactory::fileReaderInitialized()
 {
-  emit(fileReaderCreated( *cvFileReader ));
-  if(0 != cvFileReader)
-  { //We created the file reader,we emited it, we don't need it anymore
-    delete cvFileReader;
-  }
+  emit(fileReaderCreated( cvFileReader ));
 }
 
 void EgtReaderFactory::on_rbDelimitedText_toggled( bool theChange )
