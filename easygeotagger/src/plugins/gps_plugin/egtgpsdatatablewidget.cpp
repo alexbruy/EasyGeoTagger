@@ -114,7 +114,7 @@ void EgtGpsDataTableWidget::populateTable()
   {
     for(int j = 0; j < lvDataFile[0].size(); j++ )
     {
-      QTableWidgetItem *lvNewItem = new QTableWidgetItem(lvDataFile.at(i).at(j));
+      QTableWidgetItem *lvNewItem = new QTableWidgetItem( lvDataFile.at(i).at(j) );
        setItem( i, j, lvNewItem );
     }
   }

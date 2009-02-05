@@ -178,9 +178,21 @@ void EgtGraphicalDelimitedTextFileReader::delimiterChanged()
   cvUiTextDelimiter.lbStatus->setText( cvLastError );
 
 
-  QString lvHTML = "<table border=\"1\">";
+  QString lvHTML = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"";
+  lvHTML +="width=\"100%\">";
 
   int lvNumRows = (cvFileData.size() > 3)? 3: cvFileData.size(); // We just show up to 3 rows
+   
+  if( hasColumnHeaders() )
+  {
+    QStringList lvHeader = columnHeaders(); 
+    lvHTML +="<tr bgcolor = \"#4AB02A\">";
+    for( int i = 0; i < lvHeader.size(); i++ )
+    {
+      lvHTML = lvHTML+"<td>"+lvHeader.at(i)+"</td>";
+    }
+    lvHTML +="</tr>";
+  }
 
   for( int i = 0; i < lvNumRows; i++ )
   {
