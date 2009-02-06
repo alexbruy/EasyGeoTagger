@@ -3,7 +3,7 @@
 ** Author(s): Roberto Garcia-Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-09-22
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
@@ -60,6 +60,10 @@ EgtExifEngine::EgtExifEngine( const QModelIndex& theIndex )
  *
  */
 
+/*!
+ * \param thePartialKey the EXIF key to search for, can be a full key are a left oriented partial key
+ * \returns true if the partial key is found
+ */
 bool EgtExifEngine::hasKey( QString thePartialKey )
 {
   if( cvIsValidImage )
@@ -101,8 +105,8 @@ bool EgtExifEngine::isValidImage()
 }
 
 /*!
- * \param theKey the key to be searched within the exif data
- * \returns the Value that has been readen from the exif data 
+ * \param theKey the EXIF key to be searched within the exif data
+ * \returns the Exiv2 Value that has been read from the exif data
  */
 const Exiv2::Value& EgtExifEngine::readTag(QString theKey)
 {
@@ -141,8 +145,8 @@ const Exiv2::Value& EgtExifEngine::readTag(QString theKey)
 }
 
 /*!
- * \param theKey the key to be searched within the exif data
- * \returns A QString that represents the readen value 
+ * \param theKey the EXIF key to be searched within the exif data
+ * \returns A QString that represents the value read
  */
 QString EgtExifEngine::readKeyValueAsString(QString theKey)
 {
@@ -178,9 +182,8 @@ QString EgtExifEngine::readKeyValueAsString(QString theKey)
   return "";
 }
 
-
 /*!
- * \param theImageFilename Absolute path to the image file that is going to be read/written
+ * \param theImageFileName Absolute path to the image file that is going to be read/written
  */
 void EgtExifEngine::setFile( QString theFileName )
 {
@@ -188,10 +191,8 @@ void EgtExifEngine::setFile( QString theFileName )
   cvHasExpectedExif = true; //set true in base class because we can access any all/tag
 }
 
-
-
 /*!
- * \param theKey the key to be searched within the exif data
+ * \param theKey the EXIF key to be written to
  * \param theString String containing the data to be written
  * \param theDefaultType The data type of what it is going to be written
  * \returns Whether the operation was succesful or not 
@@ -304,6 +305,11 @@ bool EgtExifEngine::writeTag( QString theKey, QString theString, QString theDefa
  *
  */
 
+/*!
+ * \param theKey the Egt key name
+ * \param theCommonName the name that should be used to display to the user
+ * \param theAssociatedUnits flag indicating if the field has units (e.g., meeters feet )
+ */
 void EgtExifEngine::addKey( QString theKey, QString theCommonName, bool theAssociatedUnits )
 {
   KeyMap lvMap;
@@ -313,14 +319,20 @@ void EgtExifEngine::addKey( QString theKey, QString theCommonName, bool theAssoc
   cvKeys.append( lvMap );
 }
 
+/*!
+ * \param theFileName the absolute path and file name of the image to open
+ */
 void EgtExifEngine::openFile( QString theFileName )
 {
   cvImageFileName = theFileName;
+
+  //Reset the flags
   cvIsValidImage = false;
   cvHasExpectedExif = false;
 
   //If the file is a directory just bail no need to try an open it as an image
   QFileInfo lvFileToTest( theFileName );
+
   if( lvFileToTest.isDir() ) { return; }
 
   try
@@ -329,7 +341,7 @@ void EgtExifEngine::openFile( QString theFileName )
     cvImage = Exiv2::ImageFactory::open( theFileName.toStdString() );
     assert( cvImage.get() != 0 );
 
-    //Assert passed so we have an image
+    //Assert passed so we have a valid image
     cvIsValidImage = true;
   }
   catch ( Exiv2::AnyError& e )
@@ -338,4 +350,3 @@ void EgtExifEngine::openFile( QString theFileName )
     EgtDebug( QString( "Error caught ["+ QString( e.what() ) +"]" ) );
   }
 }
-

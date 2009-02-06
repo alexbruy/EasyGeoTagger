@@ -1,9 +1,9 @@
 /*
 ** File: egtpythonconsolebase.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author(s): Peter J. Ersts (ersts at amnh.org), Roberto Garcia-Yunta
 ** Creation Date: 2008-11-18
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
@@ -89,6 +89,10 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
   }
 }
 
+/*!
+ * \param theCommand the python code to execute
+ * \returns success or failure or the code execution
+ */
 bool  EgtPythonConsoleBase::runCommand( QString theCommand )
 {
   if( !cvPythonFound ) { return false; }
@@ -115,13 +119,14 @@ void EgtPythonConsoleBase::on_pbtnRun_clicked()
   teInput->setText( "" );
 }
 
+/*!
+ * This method was taken from the QGIS project (www.qgis.org), the original source code can be found at
+ * https://svn.osgeo.org/qgis/trunk/qgis/src/python/qgspythonutilsimpl.cpp
+ */
 bool EgtPythonConsoleBase::getError( QString& errorClassName, QString& errorText )
 {
   if( !cvPythonFound ) { return false; }
 
-  /*This method was taken from the QGIS project (www.qgis.org), the original source code can be found at
-   *https://svn.osgeo.org/qgis/trunk/qgis/src/python/qgspythonutilsimpl.cpp
-   */
   if ( !PyErr_Occurred() )
     return false;
 
@@ -154,14 +159,14 @@ bool EgtPythonConsoleBase::getError( QString& errorClassName, QString& errorText
   return true;
 }
 
-
+/*!
+ * This method was taken from the QGIS project (www.qgis.org), the original source code can be found at
+ * https://svn.osgeo.org/qgis/trunk/qgis/src/python/qgspythonutilsimpl.cpp
+ */
 QString EgtPythonConsoleBase::getTypeAsString( PyObject* obj )
 {
   if( !cvPythonFound ) { return false; }
 
-  /*This method was taken from the QGIS project (www.qgis.org), the original source code can be found at
-   *https://svn.osgeo.org/qgis/trunk/qgis/src/python/qgspythonutilsimpl.cpp
-   */
   if ( obj == NULL )
     return NULL;
 

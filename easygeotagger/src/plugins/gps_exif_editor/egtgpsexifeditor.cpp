@@ -3,7 +3,7 @@
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-12-09
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
@@ -33,7 +33,9 @@
 #include <QtPlugin>
 #include <QMap>
 
+/*! \brief Unique ID for storing setting the QSettings file */
 static const QString editorId = "EgtGpsExifEditor_0ook8ujn";
+
 EgtGpsExifEditor::EgtGpsExifEditor()
 {
   cvCategories = QObject::tr( "EXIF Editors" );
@@ -42,6 +44,7 @@ EgtGpsExifEditor::EgtGpsExifEditor()
   cvLastFile = "";
 
   cvEditor = new EgtExifEditor( editorId, &cvExifEngine );
+
   //Create custom tag groups
   EgtExifTagGroup* lvTagGroup = new EgtExifTagGroup( tr( "Clear all" ) );
   cvEditor->addTagGroup( lvTagGroup );
@@ -66,6 +69,7 @@ EgtGpsExifEditor::EgtGpsExifEditor()
   lvTagGroup->addKey( "Egt.GPS.ImageDirection" );
   cvEditor->addTagGroup( lvTagGroup );
 
+  //Set up the editor dock
   cvDock.setWindowTitle( cvName );
   cvDock.setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
   cvDock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);

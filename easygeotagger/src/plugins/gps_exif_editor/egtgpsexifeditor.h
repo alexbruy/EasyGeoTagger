@@ -3,7 +3,7 @@
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-12-09
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
@@ -71,7 +71,10 @@ class EgtGpsExifEditor: public EgtPluginInterface
   private:
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
     QDockWidget cvDock;
-    
+
+    /*! \brief An generic editor instance */
+    EgtExifEditor* cvEditor;
+
     /*! \brief An instance of the EXIF reader writer */
     EgtGpsExifEngine cvExifEngine;
     
@@ -80,8 +83,6 @@ class EgtGpsExifEditor: public EgtPluginInterface
 
     /*! \brief Update the editor fields with exif data from an image file */
     void loadExifData( QString );
-
-    EgtExifEditor* cvEditor;
 
 };
 #endif

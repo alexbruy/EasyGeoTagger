@@ -1,9 +1,9 @@
 /*
 ** File: "egtpythonconsolebase.h
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author(s): Peter J. Ersts (ersts at amnh.org), Roberto Garcia-Yunta
 ** Creation Date: 2008-11-18
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
@@ -34,24 +34,30 @@ class MS_DLL_SPEC EgtPythonConsoleBase : public QWidget, Ui::EgtPythonConsoleDia
 {
     Q_OBJECT
 
-public:
+  public:
+    /*! \brief Constructor */
     EgtPythonConsoleBase( EgtApplicationInterface* );
+
+    /*! \brief Execute set of python commands */
     bool runCommand( QString theCommand );
 
+    /*! \brief Get last error - Borrowed from QGIS http://qgis.org */
     bool getError( QString&, QString&);
+
+    /*! \brief Get last error - Borrowed from QGIS http://qgis.org */
     QString getTypeAsString( PyObject* );
 
+    /*! \brief Were the required python libraries found */
     bool pythonFound() { return cvPythonFound; }
 
-public slots:
+  public slots:
+    /*! \brief Slot called to execute code from the console */
     void on_pbtnRun_clicked();
 
-private:
+  private:
     PyObject* cvMainModule;
     PyObject* cvDictionary;
-
     bool cvPythonFound;
 
 };
-
 #endif // EGTPYTHONCONSOLEBASE_H

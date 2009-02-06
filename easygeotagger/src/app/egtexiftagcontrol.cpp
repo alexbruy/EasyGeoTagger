@@ -34,8 +34,9 @@
  *
  * \param theKey The key for this control
  * \param theDisplayName The common name for the key, used for labels
+ * \param hasAssociatedData Flag indicating if this contol has associated data (e.g., units )
  */
-EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, bool theAssociatedData )
+EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, bool hasAssociatedData )
 {
     cvDisplayName = theDisplayName;
     cvCachedValue = "";
@@ -52,8 +53,8 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, bo
     cvKeyValue.setMinimumWidth( 100 );
     cvEditorControls.layout()->addWidget( &cvKeyValue );
 
-    cvHasAssociatedData = theAssociatedData;
-    if( theAssociatedData )
+    cvHasAssociatedData = hasAssociatedData;
+    if( hasAssociatedData )
     {
       cvAssociatedData.setMinimumWidth(40);
       cvEditorControls.layout()->addWidget( &cvAssociatedData );
@@ -81,11 +82,33 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, bo
 
 }
 
+/*!
+ * \param theValue as pipe delimited list of options
+ */
+void EgtExifTagControl::setAssociatedData( QString const &theValue )
+{
+  QStringList lvDataList = theValue.split( "|" );
+  cvAssociatedData.clear();
+  cvAssociatedData.addItems( lvDataList );
+
+}
+
+/*!
+ * \param theValue as pipe delimited list of options
+ */
+void EgtExifTagControl::setAssociatedData( QVariant const &theValue )
+{
+  setAssociatedData( theValue.toString() );
+}
+
 bool EgtExifTagControl::isEnabled()
 {
   return cvEnabled.isChecked();
 }
 
+/*!
+ * \param enabled Flag indicating if the control is enabled, associated with the config panel
+ */
 void EgtExifTagControl::setEnabled( bool enabled )
 {
   cvEnabled.setChecked( enabled );
@@ -127,19 +150,6 @@ void EgtExifTagControl::setValue( QVariant const &theValue, bool setCachedValue 
 
 }
 
-
-void EgtExifTagControl::setValueAssociatedData( QString const &theValue )
-{
-  QStringList lvDataList = theValue.split( "|" );
-  cvAssociatedData.clear();
-  cvAssociatedData.addItems( lvDataList );
-  
-}
-
-void EgtExifTagControl::setValueAssociatedData( QVariant const &theValue )
-{
-  setValueAssociatedData( theValue.toString() );
-}
 /*!
  *
  * \param show Flag to indcate if the this editor control should be visible, i.e., enabled

@@ -3,7 +3,7 @@
 ** Author(s): Roberto Garcia-Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-09-22
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
@@ -36,6 +36,8 @@
 
 EgtGpsExifEngine::EgtGpsExifEngine() : EgtExifEngine()
 {
+    //Add all of the Egt keys that this engine can read/write
+    //Place in the order that they will typically be displayed to the user
     addKey("Egt.GPS.DateStamp", QObject::tr( "Date stamp" ),false );
     addKey("Egt.GPS.TimeStamp", QObject::tr( "Time stamp" ),false );
     addKey("Egt.GPS.Longitude", QObject::tr( "Longitude" ),false );
@@ -58,6 +60,7 @@ EgtGpsExifEngine::EgtGpsExifEngine() : EgtExifEngine()
     addKey("Egt.GPS.AreaInformation", QObject::tr( "Area information" ),false );
     addKey("Egt.GPS.Differential", QObject::tr( "GPS differential" ),false );
 
+    //Add the dependencies
     cvDependencies["Egt.GPS.Longitude"] = "Egt.GPS.Latitude";
     cvDependencies["Egt.GPS.Latitude"] = "Egt.GPS.Longitude";
     cvDependencies["Egt.GPS.DestLatitude"] = "Egt.GPS.DestLongitude";
@@ -407,6 +410,7 @@ QString EgtGpsExifEngine::destDistanceRef( bool * isValid )
   }
   return lvRefferencesList;
 }
+
 /*!
  * \param isValid if the access to the picture was successful
  * \returns the latitude of the destination point
@@ -970,7 +974,7 @@ QString EgtGpsExifEngine::status( bool * isValid )
 
 /*!
  *\param isValid if the access to the picture was successful
- *\returns the timStamp
+ *\returns the timeStamp
  */
 QString EgtGpsExifEngine::timeStamp( bool * isValid )
 {

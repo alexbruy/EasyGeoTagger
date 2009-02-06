@@ -46,6 +46,11 @@ EgtPhotoExifEngine::EgtPhotoExifEngine( const QModelIndex& theIndex ) : EgtExifE
  * PUBLIC FUNCTIONS
  *
  */
+
+/*!
+ * \param isValid optional flag that indicates if the return value is valid
+ * \returns the data assoicated with the Exif.Photo.DateTimeOriginal tag
+ */
 QString EgtPhotoExifEngine::dateTimeOriginal( bool* isValid )
 {
   EgtDebug( "entered dateTimeOriginal(bool)" );
@@ -64,6 +69,11 @@ QString EgtPhotoExifEngine::dateTimeOriginal( bool* isValid )
   return QString( lvValue.toString( 0 ).c_str() );
 }
 
+/*!
+ * \param theTag the Egt key to read
+ * \param isValid optional flag that indicates if the return value is valid
+ * \returns the data assoicated with the Egt key
+ */
 QVariant EgtPhotoExifEngine::read( QString theTag, bool* isValid )
 {
   EgtDebug( "entered" );
@@ -90,6 +100,11 @@ void EgtPhotoExifEngine::setFile( QString theFileName )
   cvHasExpectedExif = hasKey( "Exif.Photo" );
 }
 
+/*!
+ * \param theTag the Egt key representing the tag to write to
+ * \param theValue the value to be written
+ * \returns the write success
+ */
 bool EgtPhotoExifEngine::write( QString theTag, QString theValue )
 {
   EgtDebug( "entered" );
@@ -104,6 +119,10 @@ bool EgtPhotoExifEngine::write( QString theTag, QString theValue )
   return false;
 }
 
+/*!
+ * \param theValue the value to be written to the EXIF tag Exif.Photo.DateTimeOriginal
+ * \returns the write success
+ */
 bool EgtPhotoExifEngine::writeDateTimeOriginal( QString theValue )
 {
   EgtDebug( "entered" );

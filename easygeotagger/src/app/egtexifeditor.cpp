@@ -3,7 +3,7 @@
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-12-11
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
@@ -122,6 +122,9 @@ EgtExifEditor::EgtExifEditor( QString theId, EgtExifEngine* theEngine )
  *
  */
 
+/*!
+ * \param theTagGroup A pointer to a tag group to add to the configuration widget
+ */
 void EgtExifEditor::addTagGroup( EgtExifTagGroup* theTagGroup )
 {
   cvTagGroups.setVisible( true );
@@ -130,8 +133,7 @@ void EgtExifEditor::addTagGroup( EgtExifTagGroup* theTagGroup )
 }
 
 /*!
- *
- * \param hasTagData A flag to indicate that the current selected file has appropriate exif data
+  * \param hasTagData A flag to indicate that the current selected file has appropriate exif data
  */
 void EgtExifEditor::loadExifData( bool hasTagData )
 {
@@ -146,7 +148,7 @@ void EgtExifEditor::loadExifData( bool hasTagData )
     while( lvIterator != cvTagControls.end() )
     {
       lvIterator.value()->setValue( lvBlank );
-      lvIterator.value()->setValueAssociatedData( lvBlank );
+      lvIterator.value()->setAssociatedData( lvBlank );
       lvIterator++;
     }
   }
@@ -155,7 +157,7 @@ void EgtExifEditor::loadExifData( bool hasTagData )
     while( lvIterator != cvTagControls.end() )
     {
       lvIterator.value()->setValue( cvExifEngine->read( lvIterator.value()->key() ) );
-      lvIterator.value()->setValueAssociatedData( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
+      lvIterator.value()->setAssociatedData( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
       lvIterator++;
     }
   }
@@ -234,13 +236,16 @@ void EgtExifEditor::cvSaveButton_clicked()
       cvExifEngine->write( lvIterator.value()->key(),  lvIterator.value()->value() );
       (*lvIterator)->setValue( cvExifEngine->read( lvIterator.value()->key() ) );
 
-      cvExifEngine->write( lvIterator.value()->key()+"Ref",  lvIterator.value()->AssociatedDataValue() );
-      (*lvIterator)->setValueAssociatedData( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
+      cvExifEngine->write( lvIterator.value()->key()+"Ref",  lvIterator.value()->associatedDataValue() );
+      (*lvIterator)->setAssociatedData( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
     }
     lvIterator++;
   }
 }
 
+/*!
+ * \param theKeys the Egt keys in the tag group which was just activated
+ */
 void EgtExifEditor::tagGroupActivated( QStringList theKeys )
 {
   QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
@@ -257,6 +262,11 @@ void EgtExifEditor::tagGroupActivated( QStringList theKeys )
   }
 }
 
+/*!
+ * \param theKey Egt key to receive the incoming data
+ * \param theValue the data for the Egt key
+ * \param setCachedValue Flag to indicate if the new data should be considered the fall back data if the user should change the value in the editor
+ */
 void EgtExifEditor::setTagData( QString theKey, QString theValue, bool setCachedValue )
 {
   if( cvTagControls.contains( theKey ) )
@@ -265,6 +275,11 @@ void EgtExifEditor::setTagData( QString theKey, QString theValue, bool setCached
   }
 }
 
+/*!
+ * \param theKey Egt key to receive the incoming data
+ * \param theValue the data for the Egt key
+ * \param setCachedValue Flag to indicate if the new data should be considered the fall back data if the user should change the value in the editor
+ */
 void EgtExifEditor::setTagData( QString theKey, QVariant theValue, bool setCachedValue )
 {
   if( cvTagControls.contains( theKey ) )

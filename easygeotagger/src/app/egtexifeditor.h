@@ -3,7 +3,7 @@
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-12-11
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
@@ -59,7 +59,10 @@ class EgtExifEditor : public QObject
     void showConfigurationDialog();
 
   public slots:
+    /*! \brief Slot to receive key value pairs from the application interface */
     void setTagData( QString theKey, QString theValue, bool setCachedValue = true );
+
+    /*! \brief Slot to receive key value pairs from the application interface */
     void setTagData( QString theKey, QVariant theValue, bool setCachedValue = true );
 
   private slots:
@@ -71,15 +74,10 @@ class EgtExifEditor : public QObject
   private:
     QDialog cvConfigurationDialog;
     QWidget cvEditorWidget;
-
+    EgtExifEngine* cvExifEngine;
+    QString cvId;
     QMap< QString, EgtExifTagControl* > cvTagControls;
     QPushButton cvSaveButton;
-
-    EgtExifEngine* cvExifEngine;
-
-    QString cvId;
-
     QGroupBox cvTagGroups;
-
   };
 #endif

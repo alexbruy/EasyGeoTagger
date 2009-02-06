@@ -3,7 +3,7 @@
 ** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-10-28
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
@@ -63,10 +63,7 @@ class MS_DLL_SPEC EgtRawImageReader : public QThread
   private:
     /*! \brief Performs previous operation on the raw file before reading it */
     bool processRaw( QString );
-    
-    
-    
-    
+
 
     /*! \brief A flag used to break out of the main loops and terminate the thread */
     bool cvAbort;
@@ -85,9 +82,6 @@ class MS_DLL_SPEC EgtRawImageReader : public QThread
     
     /*! \brief LibRaw object to handle the raw data */
     LibRaw cvRawProcessor;
-
-
-
 
     
   signals:

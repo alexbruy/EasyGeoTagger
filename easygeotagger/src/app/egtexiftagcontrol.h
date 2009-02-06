@@ -3,7 +3,7 @@
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-12-09
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
@@ -30,9 +30,8 @@
 #include <QVariant>
 #include <QLineEdit>
 #include <QCheckBox>
-#include <QPushButton>
-
 #include <QComboBox>
+#include <QPushButton>
 
 /*! \brief Editor and configuration controls for a exif tag
  *
@@ -46,7 +45,8 @@ class EgtExifTagControl : public QObject
     /*! \brief Constructor */
     EgtExifTagControl( QString, QString, bool );
 
-    QString AssociatedDataValue(){ return cvAssociatedData.itemText( cvAssociatedData.currentIndex() ); }
+    /*! \brief Get the current associated data selection */
+    QString associatedDataValue(){ return cvAssociatedData.itemText( cvAssociatedData.currentIndex() ); }
 
     /*! \brief Returns a pointer the configuration control */
     QWidget* configurationControls() { return &cvConfigurationControls; }
@@ -63,15 +63,17 @@ class EgtExifTagControl : public QObject
     /*! \brief Returns the key identifying this control */
     QString key() { return QString( cvKey ); }
 
+    /*! \brief Sets the associated data values */
+    void setAssociatedData( QString const &theValue );
+
+    /*! \brief Sets the associated data values */
+    void setAssociatedData( QVariant const &theValue );
+
     /*! \brief Sets the value in the editor's line edit */
     void setValue( QString const &theValue, bool setCachedValue = true );
 
     /*! \brief Sets the value in the editor's line edit */
     void setValue( QVariant const &theValue, bool setCachedValue = true );
-
-    void setValueAssociatedData( QString const &theValue );
-
-    void setValueAssociatedData( QVariant const &theValue );
 
     /*! \brief Sets the visibility of the editor controls */
     void setVisible( bool );
@@ -79,7 +81,6 @@ class EgtExifTagControl : public QObject
     /*! \brief Return the current value in the editors line edit */
     QString value() { return cvKeyValue.text(); }
 
-    
 
   signals:
     /*! \brief Signal to indicate that a particular control as been enabled, the controls key is passed as an argument */
@@ -94,20 +95,16 @@ class EgtExifTagControl : public QObject
     void cvKeyValue_textEdited( QString );
 
   private:
-    bool cvHasAssociatedData;   
-
-    QString cvCachedValue;
-    QString cvDisplayName;
-    QString cvKey;
-
-    QPushButton cvDiscardButton;
-    QWidget cvEditorControls;
-    QLineEdit cvKeyValue;
-
     QComboBox cvAssociatedData;
-
+    QString cvCachedValue;
     QWidget cvConfigurationControls;
+    QPushButton cvDiscardButton;
+    QString cvDisplayName;
+    QWidget cvEditorControls;
     QCheckBox cvEnabled;
+    bool cvHasAssociatedData;
+    QString cvKey;
+    QLineEdit cvKeyValue;
 
 };
 #endif

@@ -3,7 +3,7 @@
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-09-22
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
@@ -52,6 +52,7 @@ public:
   void setPluginToolBox( QToolBox* );
 
 public slots:
+  /*! \brief Accept refresh requests for the file browser from the application interface */
   void refreshFileBrowser();
 
 private slots:
@@ -61,10 +62,13 @@ private slots:
   /*! \brief Slot to show the preview */
   void loadPreview( bool );  
 
+  /*! \brief Slot for menu exit action */
   void on_actionExit_activated();
 
+  /*! \brief Slot for menu load plugin action */
   void on_actionLoadAll_activated();
 
+  /*! \brief Slot for menu load plugin action */
   void on_actionLoadSingle_activated();
 
   /*! \brief Slot to interact with the progress bar */

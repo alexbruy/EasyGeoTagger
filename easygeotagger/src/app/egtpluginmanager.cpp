@@ -3,7 +3,7 @@
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-09-30
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
@@ -90,6 +90,9 @@ void EgtPluginManager::loadAllPlugins( QString theDirectory )
   }
 }
 
+/*!
+ * \param thePath the fully qualified name of the shared library or directory of plugins to load
+ */
 void EgtPluginManager::loadPlugins( QString thePath )
 {
   EgtDebug( "entered" );
@@ -203,6 +206,8 @@ void EgtPluginManager::updateGui()
   EgtDebug( "entered" )
 
   //TODO: See if there is a way to just update the existing display widgets rather than totally rebuilding
+  //TODO: Evaluate the memory loss here
+
   //Create a new tool box to hold the plugins
   QToolBox* lvPluginToolBox = new QToolBox( cvGui );
   QList< QString > lvCollectionKeys = cvPluginDisplayCollection.keys();
