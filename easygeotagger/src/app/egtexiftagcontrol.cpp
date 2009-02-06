@@ -36,7 +36,7 @@
  * \param theDisplayName The common name for the key, used for labels
  * \param hasAssociatedData Flag indicating if this contol has associated data (e.g., units )
  */
-EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, bool hasAssociatedData )
+EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, QStringList theUnits )
 {
     cvDisplayName = theDisplayName;
     cvCachedValue = "";
@@ -51,16 +51,18 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, bo
     cvEditorControls.layout()->addWidget( lvLabel );
 
     cvKeyValue.setMinimumWidth( 100 );
+    cvKeyValue.setMaximumHeight( 22 );
     cvEditorControls.layout()->addWidget( &cvKeyValue );
 
-    cvHasAssociatedData = hasAssociatedData;
-    if( hasAssociatedData )
+    if( theUnits.size() > 0 )
     {
-      cvAssociatedData.setMinimumWidth(40);
-      cvEditorControls.layout()->addWidget( &cvAssociatedData );
+      cvUnits.setMinimumWidth(40);
+      cvUnits.setMaximumHeight( 22 );
+      cvEditorControls.layout()->addWidget( &cvUnits );
+      cvUnits.addItems( theUnits );
     }
 
-    cvDiscardButton.setMaximumSize( 24,24 );
+    cvDiscardButton.setMaximumSize( 22,22 );
     cvDiscardButton.setEnabled( false );
     cvDiscardButton.setIcon( QIcon( ":/icons/discard.png" ) );
     cvDiscardButton.setToolTip( tr( "Discard changes" ) );
@@ -85,20 +87,25 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, bo
 /*!
  * \param theValue as pipe delimited list of options
  */
-void EgtExifTagControl::setAssociatedData( QString const &theValue )
+void EgtExifTagControl::setUnits( QString const &theValue )
 {
-  QStringList lvDataList = theValue.split( "|" );
-  cvAssociatedData.clear();
-  cvAssociatedData.addItems( lvDataList );
-
+  int lvIndex = cvUnits.findText( theValue );
+  if( -1 != lvIndex )
+  {
+    cvUnits.setCurrentIndex( lvIndex );
+  }
+  else
+  {
+    cvUnits.setCurrentIndex( 0 );
+  }
 }
 
 /*!
- * \param theValue as pipe delimited list of options
+ * \param theValue
  */
-void EgtExifTagControl::setAssociatedData( QVariant const &theValue )
+void EgtExifTagControl::setUnits( QVariant const &theValue )
 {
-  setAssociatedData( theValue.toString() );
+  setUnits( theValue.toString() );
 }
 
 bool EgtExifTagControl::isEnabled()

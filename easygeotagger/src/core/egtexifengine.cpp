@@ -308,14 +308,21 @@ bool EgtExifEngine::writeTag( QString theKey, QString theString, QString theDefa
 /*!
  * \param theKey the Egt key name
  * \param theCommonName the name that should be used to display to the user
- * \param theAssociatedUnits flag indicating if the field has units (e.g., meeters feet )
+ * \param theUnitString a pipe delimited string of units (e.g., meeters feet ) assoicated with the key
  */
-void EgtExifEngine::addKey( QString theKey, QString theCommonName, bool theAssociatedUnits )
+void EgtExifEngine::addKey( QString theKey, QString theCommonName, QString theUnitString )
 {
   KeyMap lvMap;
   lvMap.key = theKey;
   lvMap.commonName = theCommonName;
-  lvMap.hasUnits = theAssociatedUnits;
+  if( "" == theUnitString )
+  {
+    lvMap.units = QStringList();
+  }
+  else
+  {
+    lvMap.units = theUnitString.split("|");
+  }
   cvKeys.append( lvMap );
 }
 

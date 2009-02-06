@@ -28,7 +28,7 @@
 
 EgtPhotoExifEngine::EgtPhotoExifEngine() : EgtExifEngine()
 {
-    addKey("Egt.Photo.DateTimeOriginal", QObject::tr( "Dates Time" ),false );
+    addKey("Egt.Photo.DateTimeOriginal", QObject::tr( "Dates Time" ) );
 }
 
 EgtPhotoExifEngine::EgtPhotoExifEngine( QString theImageFilename ) : EgtExifEngine( theImageFilename )

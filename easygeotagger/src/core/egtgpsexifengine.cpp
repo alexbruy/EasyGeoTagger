@@ -38,27 +38,27 @@ EgtGpsExifEngine::EgtGpsExifEngine() : EgtExifEngine()
 {
     //Add all of the Egt keys that this engine can read/write
     //Place in the order that they will typically be displayed to the user
-    addKey("Egt.GPS.DateStamp", QObject::tr( "Date stamp" ),false );
-    addKey("Egt.GPS.TimeStamp", QObject::tr( "Time stamp" ),false );
-    addKey("Egt.GPS.Longitude", QObject::tr( "Longitude" ),false );
-    addKey("Egt.GPS.Latitude", QObject::tr( "Latitude" ),false );
-    addKey("Egt.GPS.Altitude", QObject::tr( "Altitude" ),false );
-    addKey("Egt.GPS.ImageDirection", QObject::tr( "Image direction" ),true );
-    addKey("Egt.GPS.MapDatum", QObject::tr( "Map datum" ),false );
-    addKey("Egt.GPS.Speed", QObject::tr( "Speed" ),true );
-    addKey("Egt.GPS.Track", QObject::tr( "Track" ),true );
-    addKey("Egt.GPS.DestLatitude", QObject::tr( "Destination latitude" ),false );
-    addKey("Egt.GPS.DestLongitude", QObject::tr( "Destination longitude" ),false );
-    addKey("Egt.GPS.DestBearing", QObject::tr( "Destination bearing" ),true );
-    addKey("Egt.GPS.DestDistance", QObject::tr( "Destination distance" ),true );
-    addKey("Egt.GPS.VersionID", QObject::tr( "Version id" ),false );
-    addKey("Egt.GPS.Satellites", QObject::tr( "Satellites" ),false );
-    addKey("Egt.GPS.Status", QObject::tr( "Status" ),false );
-    addKey("Egt.GPS.MeasureMode", QObject::tr( "Measure mode" ),false );
-    addKey("Egt.GPS.DOP", QObject::tr( "GPS DOP" ),false );
-    addKey("Egt.GPS.ProcessingMethod", QObject::tr( "Processing method" ),false );
-    addKey("Egt.GPS.AreaInformation", QObject::tr( "Area information" ),false );
-    addKey("Egt.GPS.Differential", QObject::tr( "GPS differential" ),false );
+    addKey("Egt.GPS.DateStamp", QObject::tr( "Date stamp" ) );
+    addKey("Egt.GPS.TimeStamp", QObject::tr( "Time stamp" ) );
+    addKey("Egt.GPS.Longitude", QObject::tr( "Longitude" ) );
+    addKey("Egt.GPS.Latitude", QObject::tr( "Latitude" ) );
+    addKey("Egt.GPS.Altitude", QObject::tr( "Altitude" ) );
+    addKey("Egt.GPS.ImageDirection", QObject::tr( "Image direction" ), "|M|T" );
+    addKey("Egt.GPS.MapDatum", QObject::tr( "Map datum" ) );
+    addKey("Egt.GPS.Speed", QObject::tr( "Speed" ), "|K|M|N" );
+    addKey("Egt.GPS.Track", QObject::tr( "Track" ), "|M|T" );
+    addKey("Egt.GPS.DestLatitude", QObject::tr( "Destination latitude" ) );
+    addKey("Egt.GPS.DestLongitude", QObject::tr( "Destination longitude" ) );
+    addKey("Egt.GPS.DestBearing", QObject::tr( "Destination bearing" ), "|M|T" );
+    addKey("Egt.GPS.DestDistance", QObject::tr( "Destination distance" ), "|K|M|N" );
+    addKey("Egt.GPS.VersionID", QObject::tr( "Version id" ) );
+    addKey("Egt.GPS.Satellites", QObject::tr( "Satellites" ) );
+    addKey("Egt.GPS.Status", QObject::tr( "Status" ) );
+    addKey("Egt.GPS.MeasureMode", QObject::tr( "Measure mode" ) );
+    addKey("Egt.GPS.DOP", QObject::tr( "GPS DOP" ) );
+    addKey("Egt.GPS.ProcessingMethod", QObject::tr( "Processing method" ) );
+    addKey("Egt.GPS.AreaInformation", QObject::tr( "Area information" ) );
+    addKey("Egt.GPS.Differential", QObject::tr( "GPS differential" ) );
 
     //Add the dependencies
     cvDependencies["Egt.GPS.Longitude"] = "Egt.GPS.Latitude";
@@ -223,10 +223,10 @@ QString EgtGpsExifEngine::destBearingRef( bool * isValid )
 {
   EgtDebug( "entered destBearingRef(bool)" );
 
-  if( 0 != isValid ) { *isValid =false; }
-  if( !isValidImageWithExpectedExif() ) { return QString("")+"|"+"T"+"|"+"M"; }
+  QString lvBearingReference = "";
 
-  QString lvRefferencesList;
+  if( 0 != isValid ) { *isValid =false; }
+  if( !isValidImageWithExpectedExif() ) { return lvBearingReference; }
 
   const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSDestBearingRef" );
    
@@ -234,21 +234,14 @@ QString EgtGpsExifEngine::destBearingRef( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    return QString("")+"|"+"T"+"|"+"M";  
+    return lvBearingReference;
   }  
 
   if( isValid ){ *isValid =true; }
   
-  QString lvRefference = QString(lvValue.toString().c_str());
-  if(QString::compare( lvRefference, "M" ) == 0)
-  {
-    lvRefferencesList = QString("M")+"|"+"T"+"|"+"";
-  }
-  else
-  {
-    lvRefferencesList = QString("T")+"|"+"M"+"|"+"";
-  }
-  return lvRefferencesList;
+  lvBearingReference = QString(lvValue.toString().c_str());
+
+  return lvBearingReference;
 }
  
 
@@ -315,10 +308,10 @@ QString EgtGpsExifEngine::directionRef( bool * isValid )
 {
   EgtDebug( "entered directionRef(bool)" );
 
-  if( 0 != isValid ) { *isValid =false; }
-  if( !isValidImageWithExpectedExif() ) { return QString("")+"|"+"T"+"|"+"M"; }
+  QString lvDirectionReference = "";
 
-  QString lvRefferencesList;
+  if( 0 != isValid ) { *isValid =false; }
+  if( !isValidImageWithExpectedExif() ) { return lvDirectionReference; }
 
   const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSImgDirectionRef" );
    
@@ -326,22 +319,14 @@ QString EgtGpsExifEngine::directionRef( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    return QString("")+"|"+"T"+"|"+"M";  
+    return lvDirectionReference;
   }  
 
   if( isValid ){ *isValid =true; }
   
-  QString lvRefference = QString(lvValue.toString().c_str());
-  if(QString::compare( lvRefference, "M" ) == 0)
-  {
-    lvRefferencesList = QString("M")+"|"+"T"+"|"+"";
-  }
-  else
-  {
-    lvRefferencesList = QString("T")+"|"+"M"+"|"+"";
-  }
+  lvDirectionReference = QString(lvValue.toString().c_str());
 
-  return lvRefferencesList;
+  return lvDirectionReference;
 }
 
 /*!
@@ -376,10 +361,10 @@ QString EgtGpsExifEngine::destDistanceRef( bool * isValid )
 {
   EgtDebug( "entered destDistanceRef(bool)" );
 
-  if( 0 != isValid ) { *isValid =false; }
-  if( !isValidImageWithExpectedExif() ) { return QString("")+"|"+"K"+"|"+"M"+"|"+"N"; }
+  QString lvDistanceReference = "";
 
-  QString lvRefferencesList;
+  if( 0 != isValid ) { *isValid =false; }
+  if( !isValidImageWithExpectedExif() ) { return lvDistanceReference; }
 
   const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSDestDistanceRef" );
    
@@ -387,28 +372,14 @@ QString EgtGpsExifEngine::destDistanceRef( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    return QString("")+"|"+"K"+"|"+"M"+"|"+"N";  
+    return lvDistanceReference;
   }  
 
   if( isValid ){ *isValid =true; }
   
-  QString lvRefference = QString(lvValue.toString().c_str());
-  if(QString::compare( lvRefference, "N" ) == 0)
-  {
-    lvRefferencesList = QString("N")+"|"+"K"+"|"+"M"+"|"+"";
-  }
-  else
-  {
-    if(QString::compare( lvRefference, "M" ) == 0)
-    {
-      lvRefferencesList = QString("M")+"|"+"K"+"|"+"N"+"|"+"";
-    }
-    else
-    {
-      lvRefferencesList = QString("K")+"|"+"M"+"|"+"N"+"|"+"";
-    }
-  }
-  return lvRefferencesList;
+  lvDistanceReference = QString(lvValue.toString().c_str());
+
+  return lvDistanceReference;
 }
 
 /*!
@@ -913,7 +884,7 @@ QString EgtGpsExifEngine::speedRef( bool * isValid )
   if( 0 != isValid ) { *isValid =false; }
   if( !isValidImageWithExpectedExif() ) { return QString("")+"|"+"K"+"|"+"M"+"|"+"N"; }
 
-  QString lvRefferencesList;
+  QString lvSpeedReference = "";
 
   const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSSpeedRef" );
    
@@ -921,29 +892,14 @@ QString EgtGpsExifEngine::speedRef( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    return QString("")+"|"+"K"+"|"+"M"+"|"+"N";  
+    return lvSpeedReference;
   }  
 
   if( isValid ){ *isValid =true; }
       
-  QString lvRefference = QString(lvValue.toString().c_str());
-  if(QString::compare( lvRefference, "N" ) == 0)
-  {
-    lvRefferencesList = QString("N")+"|"+"K"+"|"+"M"+"|"+"";
-  }
-  else
-  {
-    if(QString::compare( lvRefference, "M" ) == 0)
-    {
-      lvRefferencesList = QString("M")+"|"+"K"+"|"+"N"+"|"+"";
-    }
-    else
-    {
-      lvRefferencesList = QString("K")+"|"+"M"+"|"+"N"+"|"+"";
-    }
-  }
+  lvSpeedReference = QString(lvValue.toString().c_str());
 
-  return lvRefferencesList;
+  return lvSpeedReference;
 }
 
 /*!
@@ -1032,10 +988,10 @@ QString EgtGpsExifEngine::trackRef( bool * isValid )
 {
   EgtDebug( "entered trackRef(bool)" );
 
-  if( 0 != isValid ) { *isValid =false; }
-  if( !isValidImageWithExpectedExif() ) { return QString("")+"|"+"T"+"|"+"M"; }
+  QString lvTrackReference = "";
 
-  QString lvRefferencesList;
+  if( 0 != isValid ) { *isValid =false; }
+  if( !isValidImageWithExpectedExif() ) { return lvTrackReference; }
 
   const Exiv2::Value & lvValue = readTag( "Exif.GPSInfo.GPSTrackRef" );
    
@@ -1043,23 +999,15 @@ QString EgtGpsExifEngine::trackRef( bool * isValid )
   if(lvTypeId == Exiv2::invalidTypeId)
   {
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
-    return QString("")+"|"+"T"+"|"+"M";  
+    return lvTrackReference;
   }  
 
   if( isValid ){ *isValid =true; }
       
   
-  QString lvRefference = QString(lvValue.toString().c_str());
-  if(QString::compare( lvRefference, "M" ) == 0)
-  {
-    lvRefferencesList = QString("M")+"|"+"T"+"|"+"";
-  }
-  else
-  {
-    lvRefferencesList = QString("T")+"|"+"M"+"|"+"";
-  }
+  lvTrackReference = QString(lvValue.toString().c_str());
   
-  return lvRefferencesList;
+  return lvTrackReference;
 }
 /*!
  *\param isValid if the access to the picture was successful

@@ -25,6 +25,7 @@
 #define EGTEXIFENGINE_H
 
 #include <QModelIndex>
+#include <QStringList>
 #include <QVariant>
 #include <QList>
 #include <QMap>
@@ -48,7 +49,7 @@ public:
   {
       QString key;
       QString commonName;
-      bool hasUnits;
+      QStringList units;
   };
 
   /*! \brief Constructor */
@@ -130,7 +131,7 @@ protected:
 
 
   /*! \brief Adds key maps to the egt keys list */
-  void addKey( QString, QString, bool );
+  void addKey( QString, QString, QString theUnits="" );
 
   /*! \brief Method call from setFile that actually trys to open a file and also check to see if it is a valid image */
   void openFile( QString theFileName );

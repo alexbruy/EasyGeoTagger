@@ -75,7 +75,7 @@ EgtExifEditor::EgtExifEditor( QString theId, EgtExifEngine* theEngine )
   EgtExifTagControl* lvTagControls;
   while( lvIterator != lvKeys.end() ) //Loop through the keys and create the control objects
   {
-    lvTagControls = new EgtExifTagControl( lvIterator->key, lvIterator->commonName, lvIterator->hasUnits );
+    lvTagControls = new EgtExifTagControl( lvIterator->key, lvIterator->commonName, lvIterator->units );
     cvTagControls[ lvIterator->key ] = lvTagControls;
     cvEditorWidget.layout()->addWidget( lvTagControls->editorControls() );
     lvGroupBox->layout()->addWidget( lvTagControls->configurationControls() );
@@ -148,7 +148,7 @@ void EgtExifEditor::loadExifData( bool hasTagData )
     while( lvIterator != cvTagControls.end() )
     {
       lvIterator.value()->setValue( lvBlank );
-      lvIterator.value()->setAssociatedData( lvBlank );
+      lvIterator.value()->setUnits( lvBlank );
       lvIterator++;
     }
   }
@@ -157,7 +157,7 @@ void EgtExifEditor::loadExifData( bool hasTagData )
     while( lvIterator != cvTagControls.end() )
     {
       lvIterator.value()->setValue( cvExifEngine->read( lvIterator.value()->key() ) );
-      lvIterator.value()->setAssociatedData( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
+      lvIterator.value()->setUnits( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
       lvIterator++;
     }
   }
@@ -236,8 +236,8 @@ void EgtExifEditor::cvSaveButton_clicked()
       cvExifEngine->write( lvIterator.value()->key(),  lvIterator.value()->value() );
       (*lvIterator)->setValue( cvExifEngine->read( lvIterator.value()->key() ) );
 
-      cvExifEngine->write( lvIterator.value()->key()+"Ref",  lvIterator.value()->associatedDataValue() );
-      (*lvIterator)->setAssociatedData( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
+      cvExifEngine->write( lvIterator.value()->key()+"Ref",  lvIterator.value()->units() );
+      (*lvIterator)->setUnits( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
     }
     lvIterator++;
   }

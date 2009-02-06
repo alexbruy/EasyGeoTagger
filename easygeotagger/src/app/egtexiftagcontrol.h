@@ -32,6 +32,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QPushButton>
+#include <QStringList>
 
 /*! \brief Editor and configuration controls for a exif tag
  *
@@ -43,10 +44,7 @@ class EgtExifTagControl : public QObject
 
   public:
     /*! \brief Constructor */
-    EgtExifTagControl( QString, QString, bool );
-
-    /*! \brief Get the current associated data selection */
-    QString associatedDataValue(){ return cvAssociatedData.itemText( cvAssociatedData.currentIndex() ); }
+    EgtExifTagControl( QString, QString, QStringList );
 
     /*! \brief Returns a pointer the configuration control */
     QWidget* configurationControls() { return &cvConfigurationControls; }
@@ -63,11 +61,11 @@ class EgtExifTagControl : public QObject
     /*! \brief Returns the key identifying this control */
     QString key() { return QString( cvKey ); }
 
-    /*! \brief Sets the associated data values */
-    void setAssociatedData( QString const &theValue );
+    /*! \brief Sets the units */
+    void setUnits( QString const &theValue );
 
-    /*! \brief Sets the associated data values */
-    void setAssociatedData( QVariant const &theValue );
+    /*! \brief Sets the units */
+    void setUnits( QVariant const &theValue );
 
     /*! \brief Sets the value in the editor's line edit */
     void setValue( QString const &theValue, bool setCachedValue = true );
@@ -77,6 +75,9 @@ class EgtExifTagControl : public QObject
 
     /*! \brief Sets the visibility of the editor controls */
     void setVisible( bool );
+
+    /*! \brief Get the current associated data selection */
+    QString units(){ return cvUnits.itemText( cvUnits.currentIndex() ).trimmed(); }
 
     /*! \brief Return the current value in the editors line edit */
     QString value() { return cvKeyValue.text(); }
@@ -95,16 +96,15 @@ class EgtExifTagControl : public QObject
     void cvKeyValue_textEdited( QString );
 
   private:
-    QComboBox cvAssociatedData;
     QString cvCachedValue;
     QWidget cvConfigurationControls;
     QPushButton cvDiscardButton;
     QString cvDisplayName;
     QWidget cvEditorControls;
     QCheckBox cvEnabled;
-    bool cvHasAssociatedData;
     QString cvKey;
     QLineEdit cvKeyValue;
+    QComboBox cvUnits;
 
 };
 #endif
