@@ -223,7 +223,7 @@ bool EgtExifEngine::writeTag( QString theKey, QString theString, QString theDefa
       exifData.erase(pos);
     }
 
-    if( theString != "" )
+    if( !theString.isEmpty() )
     {
       if( QString::compare( lvTypeName, "Ascii" ,Qt::CaseInsensitive ) == 0 )
       {
