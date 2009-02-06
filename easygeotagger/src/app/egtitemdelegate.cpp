@@ -42,6 +42,7 @@ EgtItemDelegate::EgtItemDelegate()
 
 /*!
  * \param theState should the entries be colored, true yes, false no
+ */
 void EgtItemDelegate::displayGpsExifAvailability(int theState)
 {
   if(theState == 0)
