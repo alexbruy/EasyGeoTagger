@@ -25,6 +25,8 @@
 
 #include <QFile>
 #include <QTextStream>
+#include <QApplication>
+#include <QMessageBox>
 
 EgtDelimitedTextFileReader::EgtDelimitedTextFileReader():EgtFileReader()
 {

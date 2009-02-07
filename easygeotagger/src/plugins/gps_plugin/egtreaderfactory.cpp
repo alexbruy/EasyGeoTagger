@@ -61,11 +61,6 @@ void EgtReaderFactory::show()
  */
 void EgtReaderFactory::accept()
 { 
-  if(0 != cvFileReader)
-  { 
-    delete cvFileReader;
-  }
-  
   cvFileTypeDialog.setVisible(false);
   if( cvUiFileType.rbDelimitedText ->isChecked() )
   {

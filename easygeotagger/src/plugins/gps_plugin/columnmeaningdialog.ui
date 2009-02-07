@@ -5,49 +5,66 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>193</width>
-    <height>142</height>
+    <width>171</width>
+    <height>116</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Available fields</string>
   </property>
-  <widget class="QGroupBox" name="groupBox" >
-   <property name="geometry" >
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>171</width>
-     <height>103</height>
-    </rect>
-   </property>
-   <property name="title" >
-    <string>Available Fields</string>
-   </property>
-   <widget class="QComboBox" name="cbFields" >
-    <property name="geometry" >
-     <rect>
-      <x>20</x>
-      <y>40</y>
-      <width>131</width>
-      <height>23</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pbtnOk" >
-    <property name="geometry" >
-     <rect>
-      <x>40</x>
-      <y>70</y>
-      <width>75</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Ok</string>
-    </property>
-   </widget>
-  </widget>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Available Fields</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" colspan="3" >
+       <widget class="QComboBox" name="cbFields" />
+      </item>
+      <item row="1" column="0" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>21</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QPushButton" name="pbtnOk" >
+        <property name="maximumSize" >
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Ok</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>21</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

@@ -32,7 +32,7 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 
   cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"(clear)";
 
-  cvFileReader=0;
+  cvFileReader = 0;
   cvColumnSelected = 0;
   cvHeadersAreSet = false;
 
@@ -209,6 +209,8 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked()
 
 void EgtGpsDataTableWidget::setFileReader( EgtFileReader* theFileReader )
 {
+  if( 0 != cvFileReader ){ delete cvFileReader; }
+
   cvFileReader= theFileReader;
   cvHeadersAreSet = cvFileReader->hasColumnHeaders();
 

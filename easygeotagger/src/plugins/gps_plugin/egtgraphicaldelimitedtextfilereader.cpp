@@ -175,10 +175,13 @@ void EgtGraphicalDelimitedTextFileReader::delimiterChanged()
 {
   cvFileData = read();
 
-  cvUiTextDelimiter.lbStatus->setText( cvLastError );
+  if( !cvLastError.isEmpty() )
+  {
+    QWidget* lvActiveWindow = QApplication::activeWindow ();
+    QMessageBox::warning( lvActiveWindow, tr("Error"),cvLastError ,QMessageBox::Ok );
+  }
 
-
-  QString lvHTML = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\"";
+  QString lvHTML = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" ";
   lvHTML +="width=\"100%\">";
 
   int lvNumRows = (cvFileData.size() > 3)? 3: cvFileData.size(); // We just show up to 3 rows
@@ -207,3 +210,4 @@ void EgtGraphicalDelimitedTextFileReader::delimiterChanged()
 
   cvUiTextDelimiter.tePreview->setHtml( lvHTML );
 }
+
