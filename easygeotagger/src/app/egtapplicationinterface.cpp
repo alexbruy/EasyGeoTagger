@@ -24,6 +24,9 @@
 #include "egtapplicationinterface.h"
 #include "egtlogger.h"
 
+#include <QWidgetList>
+#include <QApplication>
+
 EgtApplicationInterface::EgtApplicationInterface( QMainWindow* theMainWindow )
 {
     cvGui = theMainWindow;
@@ -32,6 +35,43 @@ EgtApplicationInterface::EgtApplicationInterface( QMainWindow* theMainWindow )
       connect( cvGui, SIGNAL( fileBrowserItemSelected( const QModelIndex& ) ), this, SLOT( acceptModelIndexSelections( const QModelIndex& ) ) );
       connect( this, SIGNAL( fileBrowserRefreshRequest( ) ), cvGui, SLOT( refreshFileBrowser( ) ) );
     }
+}
+
+/*
+ *
+ * PUBLIC FUNCTIONS
+ *
+ */
+QPoint EgtApplicationInterface::positionOfFirstVisibleWidget()
+{
+  //Find the first non hidden widget and open the config dialog
+  QWidgetList lvWidgetList = QApplication::topLevelWidgets();
+  for( int lvIterator = 0; lvIterator < lvWidgetList.size(); lvIterator++ )
+  {
+    if( !lvWidgetList[ lvIterator ]->isHidden() )
+    {
+      return lvWidgetList[ lvIterator ]->pos();
+    }
+  }
+  return QPoint( 0, 0 );
+}
+
+/*!
+ * \param theWidgetTitle the title of the widget you want to look for. *NOTE: this should already be the translated version of the string
+ */
+QPoint EgtApplicationInterface::positionOfWidget( QString theWidgetTitle )
+{
+  QWidgetList lvActiveWindows = QApplication::topLevelWidgets();
+
+  for( int i =0; i < lvActiveWindows.size(); i++ )
+  {
+    if( theWidgetTitle == lvActiveWindows[i]->windowTitle() )
+    {
+      return lvActiveWindows[i]->pos();
+    }
+  }
+
+  return QPoint( 0, 0 );
 }
 
 /*

@@ -166,6 +166,14 @@ void EgtGpsExifEditor::run()
   EgtDebug( "done" );
 }
 
+void EgtGpsExifEditor::showConfigurationPanel()
+{
+  if( 0 != cvApplicationInterface )
+  {
+    cvEditor->showConfigurationDialog( cvApplicationInterface->positionOfFirstVisibleWidget() );
+  }
+}
+
 /*
  *
  * PRIVATE FUNCTIONS

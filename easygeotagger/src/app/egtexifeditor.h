@@ -56,7 +56,7 @@ class EgtExifEditor : public QObject
     void loadExifData( bool );
 
     /*! \brief Show the configuration dialog */
-    void showConfigurationDialog();
+    void showConfigurationDialog( QPoint );
 
   public slots:
     /*! \brief Slot to receive key value pairs from the application interface */

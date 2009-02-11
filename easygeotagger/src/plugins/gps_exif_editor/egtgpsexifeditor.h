@@ -66,7 +66,7 @@ class EgtGpsExifEditor: public EgtPluginInterface
     void run();
 
     /*! \brief Slot to display the condifuration panel */
-    void showConfigurationPanel() { cvEditor->showConfigurationDialog(); }
+    void showConfigurationPanel();
   
   private:
     /*! \brief The main dock window that forms the base for the visual component of this plugin */

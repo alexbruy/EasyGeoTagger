@@ -25,6 +25,7 @@
 #define EGTAPPLICATIONINTERFACE_H
 
 #include <QMap>
+#include <QPoint>
 #include <QString>
 #include <QObject>
 #include <QModelIndex>
@@ -47,6 +48,12 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     EgtApplicationInterface( QMainWindow* );
 
     QMainWindow* gui() { return cvGui; }
+
+    /*! \brief get the position of the first visible widget */
+    QPoint positionOfFirstVisibleWidget();
+
+    /*! \brief Find a particular widget */
+    QPoint positionOfWidget( QString );
 
   public slots:
     /*! \brief Accepts a key and data data pair for re broadcasting */
