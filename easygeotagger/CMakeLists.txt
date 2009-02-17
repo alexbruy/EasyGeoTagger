@@ -23,6 +23,14 @@ ENDIF (WIN32)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_find_rules ${CMAKE_MODULE_PATH})
 
 SET (PYTHON_BINDINGS FALSE CACHE BOOL "Flag to indicate if pyghon bindings should be built")
+SET (EGT_DEBUG_MESSAGES TRUE CACHE BOOL "Flag to indicate of debug messages should be displayed")
+SET (OSGEO4W_BUILD FALSE CACHE BOOL "Flag to set build specific fields for distirbution with OSGeo4W build")
+
+IF( WIN32 )
+  IF( MSVC )
+	SET (QT_USE_QTMAIN TRUE)
+  ENDIF ( MSVC )
+ENDIF( WIN32)
 
 SET (QT_USE_QT3SUPPORT FALSE)
 SET (QT_USE_QTGUI TRUE)
@@ -53,15 +61,15 @@ ENDIF (PYTHON_BINDINGS)
 #MinGW seems to build the exe in Release mode but plugins in Debug mode as default
 ADD_DEFINITIONS(-DQT_NO_DEBUG)
 
-IF (CMAKE_BUILD_TYPE MATCHES Debug)
+IF (EGT_DEBUG_MESSAGES)
   ADD_DEFINITIONS(-DEGTDEBUG=1)
-ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
+ENDIF (EGT_DEBUG_MESSAGES)
 
 # set up the install locations
 IF ( WIN32 )
   #Make this a find routine -- just for the lib
-  FIND_LIBRARY( EXPAT_LIBRARY NAMES expat PATHS C:/devel/bin/msys/1.0/home/pete/local/bin/ )
-  FIND_LIBRARY( ZLIB_LIBRARY NAMES z PATHS C:/devel/bin/msys/1.0/home/pete/local/lib/ )
+  FIND_LIBRARY( EXPAT_LIBRARY NAMES expat PATHS C:/OSGeo4W/lib )
+  FIND_LIBRARY( ZLIB_LIBRARY NAMES zlib PATHS C:/OSGeo4W/lib )
 
   SET ( CMAKE_INSTALL_PREFIX   ./install )
   SET ( EASYGT_BIN_SUBDIR     . )
@@ -70,9 +78,15 @@ IF ( WIN32 )
   SET ( EASYGT_INCLUDE_SUBDIR ./include/easygt )
   SET ( PYTHON_PACKAGE_SUBDIR . )
   
-  ADD_DEFINITIONS( -DPLUGINPATH=\\\"${EASYGT_PLUGIN_SUBDIR}\\\" )
+  IF( OSGEO4W_BUILD )
+    ADD_DEFINITIONS( -DOSGEO4W=1 )
+	ADD_DEFINITIONS( -DPLUGINPATH=\\\"../apps/easygt/plugins\\\" )
+  ELSE ( OSGEO4W_BUILD )
+	ADD_DEFINITIONS( -DPLUGINPATH=\\\"${EASYGT_PLUGIN_SUBDIR}\\\" )
+  ENDIF ( OSGEO4W_BUILD )
+  
 ELSE ( WIN32 )
-  SET( CMAKE_INSTALL_PREFIX   /usr/local )
+  SET ( CMAKE_INSTALL_PREFIX   /usr/local )
   SET ( EASYGT_BIN_SUBDIR     bin )
   SET ( EASYGT_LIB_SUBDIR     lib )
   SET ( EASYGT_PLUGIN_SUBDIR  lib/easygt )
@@ -110,3 +124,27 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
 # the RPATH to be used when installing
 SET(CMAKE_INSTALL_RPATH ".:lib:./lib:./lib/easygt")
+
+SET( EasyGT_APP_SRCS
+     src/main.cpp
+   )
+
+IF( WIN32 )
+  IF ( EGT_DEBUG_MESSAGES )
+	ADD_EXECUTABLE( easygeotagger ${EasyGT_APP_SRCS})
+  ELSE ( EGT_DEBUG_MESSAGES )
+    ADD_EXECUTABLE( easygeotagger WIN32 ${EasyGT_APP_SRCS})
+  ENDIF ( EGT_DEBUG_MESSAGES )
+
+ELSE( WIN32 )
+  ADD_EXECUTABLE( easygeotagger ${EasyGT_APP_SRCS} )
+ENDIF( WIN32 )
+
+SET_TARGET_PROPERTIES( easygeotagger PROPERTIES
+  INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/${EASYGT_LIB_SUBDIR}
+  INSTALL_RPATH_USE_LINK_PATH true
+  )
+
+TARGET_LINK_LIBRARIES( easygeotagger easygt ${QT_LIBRARIES} )
+
+INSTALL( TARGETS easygeotagger DESTINATION ${EASYGT_BIN_SUBDIR} )

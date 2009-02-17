@@ -39,9 +39,13 @@ EgtPluginManager::EgtPluginManager( EgtApplicationInterface* theApplicationInter
 
   //Just a guess will not work on Mac with frameworks
 #ifdef WIN32
-  cvDefaultPluginPath = QCoreApplication::instance ()->applicationDirPath() + "/plugins/";
+#  ifdef OSGEO4W
+     cvDefaultPluginPath = QCoreApplication::instance()->applicationDirPath() + "/../apps/easygt/plugins/";
+#  else
+	 cvDefaultPluginPath = QCoreApplication::instance()->applicationDirPath() + "/plugins/";
+#  endif
 #else
-  cvDefaultPluginPath = QCoreApplication::instance ()->applicationDirPath() + "../lib/easygt/";
+  cvDefaultPluginPath = QCoreApplication::instance()->applicationDirPath() + "/../lib/easygt/";
 #endif
 }
 
@@ -72,6 +76,8 @@ void EgtPluginManager::loadAllPlugins( QString theDirectory )
   {
     lvPluginDirectory = cvDefaultPluginPath;
   }
+  
+  EgtDebug( "Plugin directory: " + lvPluginDirectory ); 
 
   //Get a list of all of the libs in the plugin directory;
   QDir pluginDirectory( lvPluginDirectory );
@@ -80,7 +86,11 @@ void EgtPluginManager::loadAllPlugins( QString theDirectory )
     EgtDebug( "["+ theDirectory +"] was not a valid directory" )
     return;
   }
-  QStringList lvFilenames = pluginDirectory.entryList( QStringList() << "lib*" );
+  #ifdef WIN32
+	QStringList lvFilenames = pluginDirectory.entryList( QStringList() << "*.dll" );
+  #else
+	QStringList lvFilenames = pluginDirectory.entryList( QStringList() << "lib*" );
+  #endif
 
   //Loop throught the files in the plugin directory and see if we have any valid plugins
   QStringList::const_iterator lvIterator;
@@ -96,6 +106,7 @@ void EgtPluginManager::loadAllPlugins( QString theDirectory )
 void EgtPluginManager::loadPlugins( QString thePath )
 {
   EgtDebug( "entered" );
+  EgtDebug( "Received: " + thePath );
 
   //Check to make sure we have a valid application interface
   if( 0 == cvApplicationInterface || 0 == cvGui )
@@ -111,7 +122,7 @@ void EgtPluginManager::loadPlugins( QString thePath )
   }
 
   QFileInfo lvFileInfo( thePath );
-  if( lvFileInfo.isDir() )
+  if( lvFileInfo.isDir() || !lvFileInfo.exists() )
   {
     loadAllPlugins( thePath );
   }
