@@ -32,7 +32,13 @@ int main(int argc, char* argv[])
 {
 
   QApplication app(argc, argv);
-  QCoreApplication::addLibraryPath( QApplication::applicationDirPath() + QDir::toNativeSeparators("/") + "plugins" );
+  #ifdef WIN32
+  #  ifdef OSGEO4W
+      QCoreApplication::addLibraryPath( QApplication::applicationDirPath() + QDir::toNativeSeparators("/") + "../apps/Qt4/plugins" );
+  #  else
+      QCoreApplication::addLibraryPath( QApplication::applicationDirPath() + QDir::toNativeSeparators("/") + "plugins" );
+  #  endif
+  #endif
   QCoreApplication::setOrganizationName("biodiversityinformatics");
   QCoreApplication::setOrganizationDomain("biodiversityinformatics.amnh.org");
   QCoreApplication::setApplicationName("EasyGeoTagger");
