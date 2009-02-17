@@ -29,7 +29,7 @@ class EgtPluginManager;
 
 #include "egtapplicationinterface.h"
 
-
+#include <QString>
 #include <QObject>
 
 /*! \brief Main EasyGeoTagger application

@@ -31,9 +31,6 @@
 #include <QModelIndex>
 #include <QMainWindow>
 
-#include "egtplugininterface.h"
-
-
 /*! \brief EasyGeoTagger application interface
  *
  * The application interface provides a container for resources available to all plugins. Currently

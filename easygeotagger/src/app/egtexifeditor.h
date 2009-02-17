@@ -38,7 +38,7 @@
  *
  * This class will build an basic editor for any exif engine.
  */
-class EgtExifEditor : public QObject
+class MS_DLL_SPEC EgtExifEditor : public QObject
 {
   Q_OBJECT
 

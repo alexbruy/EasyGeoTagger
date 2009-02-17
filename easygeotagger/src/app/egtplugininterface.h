@@ -24,12 +24,12 @@
 #ifndef EGTPLUGININTERFACE_H
 #define EGTPLUGININTERFACE_H
 
+#include "egtapplicationinterface.h"
+
 #include <QString>
 #include <QObject>
 #include <QStringList>
 #include <QPushButton>
-
-class EgtApplicationInterface;
 
 /*! \brief EasyGeoTagger plugin interface
  *

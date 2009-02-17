@@ -37,7 +37,7 @@
 /*! \brief Editor and configuration controls for a exif tag
  *
  */
-class EgtExifTagControl : public QObject
+class MS_DLL_SPEC EgtExifTagControl : public QObject
 {
 
   Q_OBJECT

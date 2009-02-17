@@ -34,7 +34,7 @@
  * This class can be used to define collections of tags to help simplify
  * configuring the editor
  */
-class EgtExifTagGroup : public QWidget
+class MS_DLL_SPEC EgtExifTagGroup : public QWidget
 {
   Q_OBJECT
 
