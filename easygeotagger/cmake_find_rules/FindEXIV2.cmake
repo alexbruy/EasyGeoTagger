@@ -11,6 +11,7 @@ FIND_PATH(EXIV2_INCLUDE_DIR exiv2/exif.hpp
   /usr/local/include/
   /usr/include/
   #MSVC
+  "c:/OSGeo4W/include"
   "$ENV{LIB_DIR}/include/exiv2"
   #mingw
   c:/msys/local/include/exiv2
@@ -20,6 +21,7 @@ FIND_LIBRARY(EXIV2_LIBRARY NAMES exiv2 PATHS
   /usr/local/lib 
   /usr/lib 
   #MSVC
+  "c:/OSGeo4W/lib"
   "$ENV{LIB_DIR}/lib"
   #mingw
   c:/msys/local/lib
