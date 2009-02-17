@@ -41,27 +41,28 @@
 #include <QSettings>
 #include <QCoreApplication>
 
-EgtMainWindow::EgtMainWindow()
+EgtMainWindow::EgtMainWindow( QWidget* theParent )
+    : QMainWindow( theParent ), cvUi( new Ui::EgtMainWindowGui )
 {
   EgtDebug( "entered" );
   
-  setupUi(this);
-  connect( tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( clicked(const QModelIndex& ) ) );  
+  cvUi->setupUi( this );
+  connect( cvUi->tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( clicked(const QModelIndex& ) ) );
 
   
   //Set up the file browser window
   QDirModel* lvModel = new QDirModel( QStringList(), QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot, QDir::DirsFirst );
-  tvFileBrowser->setModel( lvModel );
-  tvFileBrowser->setColumnWidth( 0, 400) ;
-  tvFileBrowser->setCurrentIndex( lvModel->index( QDir::currentPath() ) );
-  tvFileBrowser->scrollTo( lvModel->index( QDir::currentPath() ) );
+  cvUi->tvFileBrowser->setModel( lvModel );
+  cvUi->tvFileBrowser->setColumnWidth( 0, 400) ;
+  cvUi->tvFileBrowser->setCurrentIndex( lvModel->index( QDir::currentPath() ) );
+  cvUi->tvFileBrowser->scrollTo( lvModel->index( QDir::currentPath() ) );
   
   //Add an item delegate to colorize the entries in the file browser
   //TODO: See if this is possible in Qt4.4.0 to accomplish with styles
   EgtItemDelegate* lvItemDelegate =  new EgtItemDelegate();
-  connect( chkbColorCodeFilenames, SIGNAL( stateChanged( int) ), lvItemDelegate, SLOT( displayGpsExifAvailability( int) ) );
-  tvFileBrowser->setItemDelegate( lvItemDelegate );
-  tvFileBrowser->setStyleSheet( "QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }" );
+  connect( cvUi->chkbColorCodeFilenames, SIGNAL( stateChanged( int) ), lvItemDelegate, SLOT( displayGpsExifAvailability( int) ) );
+  cvUi->tvFileBrowser->setItemDelegate( lvItemDelegate );
+  cvUi->tvFileBrowser->setStyleSheet( "QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }" );
   
   //Create a new plugin dock
   cvPluginDock = new QDockWidget( "Plugins", this );
@@ -71,9 +72,9 @@ EgtMainWindow::EgtMainWindow()
   addDockWidget( Qt::LeftDockWidgetArea, cvPluginDock );
   
   //Set up the progress bar
-  pbarProgressBar->setMinimum( 0 );
-  pbarProgressBar->setMaximum( 1 );
-  pbarProgressBar->setValue( 0 );
+  cvUi->pbarProgressBar->setMinimum( 0 );
+  cvUi->pbarProgressBar->setMaximum( 1 );
+  cvUi->pbarProgressBar->setValue( 0 );
   
   connect(&cvImageEngine, SIGNAL( progress( int, int, int ) ), this, SLOT( updateProgress( int, int, int ) ) );
   connect(&cvImageEngine, SIGNAL( imageLoaded( bool ) ), this, SLOT( loadPreview( bool ) ) );
@@ -104,7 +105,7 @@ void EgtMainWindow::clicked( const QModelIndex& theIndex )
   QString lvFileName = cvPathBuilder.buildPath( theIndex );
 
   cvPhotoExifEngine.setFile( lvFileName );
-  labelDateTimeOriginal->setText( cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString() );
+  cvUi->labelDateTimeOriginal->setText( cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString() );
 
   cvImageEngine.setFile( lvFileName );
 
@@ -120,7 +121,7 @@ void EgtMainWindow::loadPreview( bool isValid )
   
   if( isValid )
   {
-    labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( labelPreview->width(), labelPreview->height() ) ) );
+    cvUi->labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( cvUi->labelPreview->width(), cvUi->labelPreview->height() ) ) );
   }
 }
 
@@ -161,7 +162,7 @@ void EgtMainWindow::on_actionLoadSingle_activated()
 
 void EgtMainWindow::refreshFileBrowser()
 {
-  ( (QDirModel*)tvFileBrowser->model() )->refresh();
+  ( (QDirModel*)cvUi->tvFileBrowser->model() )->refresh();
 }
 
 /*!
@@ -172,7 +173,7 @@ void EgtMainWindow::refreshFileBrowser()
 void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgress )
 {
   //TODO: consider if it is better to set these individually
-  pbarProgressBar->setMinimum( theMinimum );
-  pbarProgressBar->setMaximum( theMaximum );
-  pbarProgressBar->setValue( theProgress );
+  cvUi->pbarProgressBar->setMinimum( theMinimum );
+  cvUi->pbarProgressBar->setMaximum( theMaximum );
+  cvUi->pbarProgressBar->setValue( theProgress );
 }

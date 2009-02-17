@@ -36,17 +36,23 @@
 #include <QModelIndex>
 #include <QDockWidget>
 
+
+namespace Ui
+{
+    class EgtMainWindowGui;
+}
+
 /*! \brief Main EasyGeoTagger window
  *
  */
-class MS_DLL_SPEC EgtMainWindow : public QMainWindow, protected Ui::EgtMainWindowGui
+class MS_DLL_SPEC EgtMainWindow : public QMainWindow
 {
 
   Q_OBJECT
   
 public:
   /*! \brief Constructor */
-  EgtMainWindow();
+  EgtMainWindow( QWidget* theParent=0 );
   
   /*! \brief Set the plugin dock's tool box */
   void setPluginToolBox( QToolBox* );
@@ -88,5 +94,6 @@ private:
   EgtPathBuilder cvPathBuilder;
   EgtPhotoExifEngine cvPhotoExifEngine;
   QDockWidget* cvPluginDock;
+  Ui::EgtMainWindowGui* cvUi;
 };
 #endif

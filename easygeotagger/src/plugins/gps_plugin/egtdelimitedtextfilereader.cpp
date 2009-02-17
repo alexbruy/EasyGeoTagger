@@ -59,7 +59,7 @@ bool EgtDelimitedTextFileReader::hasColumnHeaders()
 
 bool EgtDelimitedTextFileReader::preprocessFile( QString )
 {
-
+  return false;
 }
 
 /*!
