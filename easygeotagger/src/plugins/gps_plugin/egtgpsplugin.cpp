@@ -38,7 +38,6 @@ EgtGpsPlugin::EgtGpsPlugin()
 
   
   cvDataTable = new EgtGpsDataTableWidget();  
-
   cvMainWidget.setWindowTitle( cvName );
   cvMainWidget.setMinimumSize( 250,150 );
 
@@ -144,6 +143,8 @@ void EgtGpsPlugin::run()
   }
 
   EgtDebug( "dock is already open but not visible" );
+
+  cvMainWidget.move( cvApplicationInterface->positionOfFirstVisibleWidget() );
   cvMainWidget.show();
   EgtDebug( "done" );
 }
