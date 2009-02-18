@@ -19,18 +19,24 @@ ELSE (WIN32)
   ADD_DEFINITIONS(-DMS_DLL_SPEC=)
 ENDIF (WIN32)
 
+#MinGW seems to build the exe in Release mode but plugins in Debug mode as default
+ADD_DEFINITIONS(-DQT_NO_DEBUG)
+
 # set path to additional CMake modules
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_find_rules ${CMAKE_MODULE_PATH})
 
 SET (PYTHON_BINDINGS FALSE CACHE BOOL "Flag to indicate if pyghon bindings should be built")
 SET (EGT_DEBUG_MESSAGES FALSE CACHE BOOL "Flag to indicate of debug messages should be displayed")
-SET (OSGEO4W_BUILD TRUE CACHE BOOL "Flag to set build specific fields for distirbution with OSGeo4W build")
+IF (EGT_DEBUG_MESSAGES)
+  ADD_DEFINITIONS(-DEGTDEBUG=1)
+ENDIF (EGT_DEBUG_MESSAGES)
 
-IF( WIN32 )
-  IF( MSVC )
-	SET (QT_USE_QTMAIN TRUE)
-  ENDIF ( MSVC )
-ENDIF( WIN32)
+IF( MSVC )
+  SET (OSGEO4W_BUILD TRUE CACHE BOOL "Flag to set build specific fields for distirbution with OSGeo4W build")
+  SET (QT_USE_QTMAIN TRUE)
+ESLE ( MSVC )
+  SET (OSGEO4W_BUILD FALSE CACHE BOOL "Flag to set build specific fields for distirbution with OSGeo4W build")
+ENDIF ( MSVC )
 
 SET (QT_USE_QT3SUPPORT FALSE)
 SET (QT_USE_QTGUI TRUE)
@@ -57,13 +63,6 @@ IF (PYTHON_BINDINGS)
     MESSAGE (SEND_ERROR "PYTHON dependency was not found!")
   ENDIF (NOT PYTHON_FOUND)
 ENDIF (PYTHON_BINDINGS)
-
-#MinGW seems to build the exe in Release mode but plugins in Debug mode as default
-ADD_DEFINITIONS(-DQT_NO_DEBUG)
-
-IF (EGT_DEBUG_MESSAGES)
-  ADD_DEFINITIONS(-DEGTDEBUG=1)
-ENDIF (EGT_DEBUG_MESSAGES)
 
 # set up the install locations
 IF ( WIN32 )

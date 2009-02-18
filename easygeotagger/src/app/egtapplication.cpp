@@ -27,14 +27,17 @@
 #include "egtmainwindow.h"
 #include "egtpluginmanager.h"
 
-EgtApplication::EgtApplication()
+#include <QApplication>
+#include <QDesktopWidget>
+
+EgtApplication::EgtApplication( bool displaySplash )
 {
-  init();
+  init( "", displaySplash );
 }
 
-EgtApplication::EgtApplication( QString thePluginDirectory )
+EgtApplication::EgtApplication( QString thePluginDirectory, bool displaySplash )
 {
-  init( thePluginDirectory );
+  init( thePluginDirectory, displaySplash );
 }
 
 /*
@@ -45,11 +48,18 @@ EgtApplication::EgtApplication( QString thePluginDirectory )
 /*!
  * \param thePluginDirectory a fully qualified path to the directory with EasyGeoTagger plugins
  */
-void EgtApplication::init( QString thePluginDirectory )
+void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
 {
   EgtDebug( "entered" );
-  
-  //TODO: Add slash screen showing progress, i.e. showing plugin
+  cvSplashScreen = 0;
+
+  //Show splash screen
+  if( displaySplash )
+  {  
+    cvSplashScreen = new QSplashScreen( QPixmap( ":/splash/EasyGT-Logo.png" )  );
+    cvSplashScreen->show();
+    cvSplashScreen->showMessage( tr( "Loading plugins..." ), Qt::AlignHCenter | Qt::AlignBottom );
+  }
 
   //Create a new main window
   cvGui = new EgtMainWindow();
@@ -59,10 +69,28 @@ void EgtApplication::init( QString thePluginDirectory )
   
   //Create a new plugin manager and load plugins from the main plugin archive
   cvPluginManager = new EgtPluginManager( cvApplicationInterface, cvGui );
+  if( displaySplash )
+  {
+    connect( cvPluginManager, SIGNAL( pluginLoaded( QString ) ), this, SLOT( showSplashScreenMessage( QString ) ) );
+  }
 
   connect( cvGui, SIGNAL( loadPlugins( QString ) ), cvPluginManager, SLOT( loadPlugins( QString ) ) );
   connect( cvApplicationInterface, SIGNAL( loadPluginRequest( QString ) ), cvPluginManager, SLOT( loadPlugins( QString ) ) );
+
   cvPluginManager->loadPlugins( thePluginDirectory );
+  
+  if( displaySplash )
+  {
+    cvSplashScreen->close();
+    cvSplashScreen->finish( cvGui );
+  }
+
+  QDesktopWidget* lvDesktop = QApplication::desktop();
+  if( 0 != lvDesktop )
+  {
+    QRect lvScreen = lvDesktop->screenGeometry();
+    cvGui->move( lvScreen.center().x() - (int)( cvGui->width() / 2 ), lvScreen.center().y() - (int)( cvGui->height() / 2 ) );
+  }
   
   //Display the main window
   cvGui->show();
@@ -71,4 +99,12 @@ void EgtApplication::init( QString thePluginDirectory )
 void EgtApplication::show()
 {
   cvGui->show();
+}
+
+void EgtApplication::showSplashScreenMessage( QString theMessage )
+{
+  if( 0 != cvSplashScreen )
+  {
+    cvSplashScreen->showMessage( theMessage, Qt::AlignHCenter | Qt::AlignBottom );
+  }
 }

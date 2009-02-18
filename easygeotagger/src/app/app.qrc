@@ -3,6 +3,7 @@
         <file>icons/discard.png</file>
         <file>icons/group.png</file>
         <file>icons/EasyGT.svg</file>
+        <file>splash/EasyGT-Logo.png</file>
     </qresource>
     <qresource prefix="/22" >
         <file>icons/22/preferences-system.png</file>

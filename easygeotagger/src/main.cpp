@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
   QCoreApplication::setApplicationName("EasyGeoTagger");
   
   //PLUGINPATH is set from cmake
-  EgtApplication* EasyGT = new EgtApplication( PLUGINPATH );
+  EgtApplication* EasyGT = new EgtApplication( PLUGINPATH, true);
 
   return app.exec();
 }

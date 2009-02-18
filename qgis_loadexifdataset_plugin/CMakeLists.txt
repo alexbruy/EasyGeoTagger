@@ -40,9 +40,11 @@ ELSE (WIN32)
   ADD_DEFINITIONS(-DCORE_EXPORT=)
 ENDIF (WIN32)
 
-#IF (CMAKE_BUILD_TYPE MATCHES Debug)
-#  ADD_DEFINITIONS(-DEVISDEBUG=1)
-#ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
+SET (EGT_DEBUG_MESSAGES FALSE CACHE BOOL "Flag to indicate of debug messages should be displayed")
+
+IF (EGT_DEBUG_MESSAGES)
+  ADD_DEFINITIONS(-DEGTDEBUG=1)
+ENDIF (EGT_DEBUG_MESSAGES)
 ########################################################
 # Files
 

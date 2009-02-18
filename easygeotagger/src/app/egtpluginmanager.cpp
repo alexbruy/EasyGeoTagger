@@ -65,7 +65,7 @@ void EgtPluginManager::loadAllPlugins( QString theDirectory )
   //Check to make sure we have a valid application interface
   if( 0 == cvApplicationInterface || 0 == cvGui )
   {
-    EgtDebug( "Application interface or main window was null...bailing" )
+    EgtDebug( "Application interface or main window was null...bailing" );
     return;
   }
 
@@ -83,7 +83,7 @@ void EgtPluginManager::loadAllPlugins( QString theDirectory )
   QDir pluginDirectory( lvPluginDirectory );
   if( !pluginDirectory.exists() )
   {
-    EgtDebug( "["+ theDirectory +"] was not a valid directory" )
+    EgtDebug( "["+ theDirectory +"] was not a valid directory" );
     return;
   }
   #ifdef WIN32
@@ -111,7 +111,7 @@ void EgtPluginManager::loadPlugins( QString thePath )
   //Check to make sure we have a valid application interface
   if( 0 == cvApplicationInterface || 0 == cvGui )
   {
-    EgtDebug( "Application interface or main window was null...bailing" )
+    EgtDebug( "Application interface or main window was null...bailing" );
     return;
   }
 
@@ -144,7 +144,7 @@ bool EgtPluginManager::loadSinglePlugin( QString theLibrary )
   //Check to make sure we have a valid application interface
   if( 0 == cvApplicationInterface || 0 == cvGui )
   {
-    EgtDebug( "Application interface or main window was null...bailing" )
+    EgtDebug( "Application interface or main window was null...bailing" );
     return false;
   }
   
@@ -214,7 +214,7 @@ bool EgtPluginManager::loadSinglePlugin( QString theLibrary )
  */
 void EgtPluginManager::updateGui()
 {
-  EgtDebug( "entered" )
+  EgtDebug( "entered" );
 
   //TODO: See if there is a way to just update the existing display widgets rather than totally rebuilding
   //TODO: Evaluate the memory loss here

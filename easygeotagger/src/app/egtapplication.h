@@ -31,6 +31,7 @@ class EgtPluginManager;
 
 #include <QString>
 #include <QObject>
+#include <QSplashScreen>
 
 /*! \brief Main EasyGeoTagger application
  *
@@ -42,10 +43,10 @@ class MS_DLL_SPEC EgtApplication : public QObject
   
   public:
     /*! \brief Constructor */
-    EgtApplication();
+    EgtApplication( bool displayFlash=true  );
     
     /*! \brief Constructor */
-    EgtApplication( QString );
+    EgtApplication( QString, bool displayFlash=true );
     
     /*! \brief Return a pointer to the application interface */
     EgtApplicationInterface* applicationInterface() { return cvApplicationInterface; }
@@ -54,10 +55,12 @@ class MS_DLL_SPEC EgtApplication : public QObject
     void show();
   
     
-  
+  private slots:
+    void showSplashScreenMessage( QString );
+
   private:
     /*! \brief Extended constructor */
-    void init( QString thePluginDirectory = "" );
+    void init( QString thePluginDirectory, bool displaySplash );
   
     /*! \brief Pointer to the application interface */
     EgtApplicationInterface* cvApplicationInterface;
@@ -67,6 +70,8 @@ class MS_DLL_SPEC EgtApplication : public QObject
     
     /*! \brief Pointer to the application's plugin manager */
     EgtPluginManager* cvPluginManager;
-    
+
+    QSplashScreen* cvSplashScreen;
+
 };
 #endif
