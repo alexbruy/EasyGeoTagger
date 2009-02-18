@@ -31,7 +31,7 @@ IF(WIN32)
 
   IF (MSVC)
   FIND_PATH(QGIS_PLUGIN_DIR libnortharrowplugin.dll 
-    "C:/OSGeo4W/app/qgis/plugins"
+    "C:/OSGeo4W/apps/qgis/plugins"
 	  "C:/Program Files/Quantum GIS/lib/qgis" 
 	  )
   FIND_PATH(QGIS_INCLUDE_DIR qgsapplication.h 

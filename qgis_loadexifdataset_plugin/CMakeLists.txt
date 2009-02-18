@@ -1,3 +1,9 @@
+cmake_minimum_required(VERSION 2.4)
+IF(COMMAND cmake_policy)
+  cmake_policy(SET CMP0003 OLD)
+  cmake_policy(SET CMP0005 OLD)
+ENDIF(COMMAND cmake_policy)
+
 SET(CMAKE_COLOR_MAKEFILE ON)
 # set path to additional CMake modules
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_find_rules ${CMAKE_MODULE_PATH})
@@ -94,8 +100,6 @@ TARGET_LINK_LIBRARIES(loadexifdataset
   ${QT_LIBRARIES}
   ${QGIS_CORE_LIBRARY} 
   ${QGIS_GUI_LIBRARY}
-  ${GEOS_LIBRARY}
-  ${GDAL_LIBRARY}
 )
 
 

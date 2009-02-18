@@ -23,8 +23,8 @@ ENDIF (WIN32)
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_find_rules ${CMAKE_MODULE_PATH})
 
 SET (PYTHON_BINDINGS FALSE CACHE BOOL "Flag to indicate if pyghon bindings should be built")
-SET (EGT_DEBUG_MESSAGES TRUE CACHE BOOL "Flag to indicate of debug messages should be displayed")
-SET (OSGEO4W_BUILD FALSE CACHE BOOL "Flag to set build specific fields for distirbution with OSGeo4W build")
+SET (EGT_DEBUG_MESSAGES FALSE CACHE BOOL "Flag to indicate of debug messages should be displayed")
+SET (OSGEO4W_BUILD TRUE CACHE BOOL "Flag to set build specific fields for distirbution with OSGeo4W build")
 
 IF( WIN32 )
   IF( MSVC )
@@ -68,8 +68,8 @@ ENDIF (EGT_DEBUG_MESSAGES)
 # set up the install locations
 IF ( WIN32 )
   #Make this a find routine -- just for the lib
-  FIND_LIBRARY( EXPAT_LIBRARY NAMES expat PATHS C:/OSGeo4W/lib )
-  FIND_LIBRARY( ZLIB_LIBRARY NAMES zlib PATHS C:/OSGeo4W/lib )
+  #FIND_LIBRARY( EXPAT_LIBRARY NAMES expat PATHS C:/OSGeo4W/lib )
+  #FIND_LIBRARY( ZLIB_LIBRARY NAMES zlib PATHS C:/OSGeo4W/lib )
 
   SET ( CMAKE_INSTALL_PREFIX   ./install )
   SET ( EASYGT_BIN_SUBDIR     . )

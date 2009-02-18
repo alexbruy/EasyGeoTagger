@@ -12,6 +12,7 @@ FIND_PATH(LIBRAW_INCLUDE_DIR libraw/libraw.h
   /usr/local/include/
   /usr/include/
   #MSVC
+  "c:/OSGeo4W/include/"
   "$ENV{LIB_DIR}/include/libraw"
   #mingw
   c:/msys/local/include/libraw
@@ -21,6 +22,7 @@ FIND_LIBRARY(LIBRAW_LIBRARY NAMES raw PATHS
   /usr/local/lib 
   /usr/lib 
   #MSVC
+  "c:/OSGeo4W/lib/"
   "$ENV{LIB_DIR}/lib"
   #mingw
   c:/msys/local/lib

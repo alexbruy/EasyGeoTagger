@@ -1,39 +1,34 @@
+# MODIFIED from QGIS - PJE
 
 # CMake module to search for GEOS library
 #
 # If it's found it sets GEOS_FOUND to TRUE
 # and following variables are set:
 #    GEOS_INCLUDE_DIR
-#    GEOS_LIBRARY
 
 
-FIND_PATH(GEOS_INCLUDE_DIR geos.h 
+FIND_PATH(GEOS_INCLUDE_DIR geos_c.h 
+  #apple
+  /Library/Frameworks/GOES.framework/include
+  #*nix
   /usr/local/include 
   /usr/include 
   #MSVC
+  "c:/OSGeo4W/include/"
   "$ENV{LIB_DIR}/include"
-  #mingw
+   #mingw
   c:/msys/local/include
   )
 
-FIND_LIBRARY(GEOS_LIBRARY NAMES geos PATHS 
-  /usr/local/lib 
-  /usr/lib 
-  #MSVC
-  "$ENV{LIB_DIR}/lib"
-  #mingw
-  c:/msys/local/lib
-  )
-
-IF (GEOS_INCLUDE_DIR AND GEOS_LIBRARY)
+IF (GEOS_INCLUDE_DIR )
    SET(GEOS_FOUND TRUE)
-ENDIF (GEOS_INCLUDE_DIR AND GEOS_LIBRARY)
+ENDIF (GEOS_INCLUDE_DIR)
 
 
 IF (GEOS_FOUND)
 
    IF (NOT GEOS_FIND_QUIETLY)
-      MESSAGE(STATUS "Found GEOS: ${GEOS_LIBRARY}")
+      MESSAGE(STATUS "Found GEOS: ${GEOS_INCLUDE_DIR}")
    ENDIF (NOT GEOS_FIND_QUIETLY)
 
 ELSE (GEOS_FOUND)

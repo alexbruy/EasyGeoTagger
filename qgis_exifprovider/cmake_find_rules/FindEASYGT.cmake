@@ -27,7 +27,7 @@ IF (WIN32)
       "c:/OSGeo4W/include/easygt"
       "$ENV{LIB_DIR}/include/easygt"
     )
-    SET(EASYGT_PLUGIN_DIR "./plugins")
+    SET(EASYGT_PLUGIN_DIR "c:/OSGeo4W/apps/easygt/plugins")
   ELSE (MSVC)
     FIND_LIBRARY(EASYGT_LIBRARY NAMES easygt PATHS
       c:/msys/local/
