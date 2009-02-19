@@ -8,10 +8,10 @@ class EgtApplication : QObject
 
   public:
     /*! \brief Constructor */
-    EgtApplication();
+    EgtApplication( bool displayFlash=true  );
 
     /*! \brief Constructor */
-    EgtApplication( QString );
+    EgtApplication( QString, bool displayFlash=true );
 
     /*! \brief Return a pointer to the application interface */
     EgtApplicationInterface* applicationInterface();

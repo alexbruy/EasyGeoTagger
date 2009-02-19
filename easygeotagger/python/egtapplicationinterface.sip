@@ -12,6 +12,12 @@ class EgtApplicationInterface : QObject
 
     QMainWindow* gui();
 
+    /*! \brief get the position of the first visible widget */
+    QPoint positionOfFirstVisibleWidget();
+
+    /*! \brief Find a particular widget */
+    QPoint positionOfWidget( QString );
+
   public slots:
     /*! \brief Accepts a key and data data pair for re broadcasting */
     void acceptKeyValuePair( QString, QString );
@@ -37,5 +43,4 @@ class EgtApplicationInterface : QObject
 
     /*! \brief Broadcast a load plugin request intended for the plugin manager */
     void loadPluginRequest( QString );
-
 };

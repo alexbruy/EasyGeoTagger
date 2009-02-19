@@ -71,6 +71,7 @@ void EgtPythonConsole::run()
     cvConsole = new EgtPythonConsoleBase( cvApplicationInterface );
     if( cvConsole->pythonFound() )
     {
+      cvConsole->move(  cvApplicationInterface->positionOfFirstVisibleWidget() );
       cvConsole->show();
     }
   }
