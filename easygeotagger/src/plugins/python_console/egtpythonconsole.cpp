@@ -66,7 +66,11 @@ void EgtPythonConsole::run()
   if( 0 == cvApplicationInterface ) { return; }
 
   //check to make sure we python has been compiled in the main library
+#ifdef WIN32
+  if( QLibrary::resolve( "easygt.dll", "pythonConsoleIncluded" ) )
+#else
   if( QLibrary::resolve( "easygt", "pythonConsoleIncluded" ) )
+#endif
   {
     cvConsole = new EgtPythonConsoleBase( cvApplicationInterface );
     if( cvConsole->pythonFound() )

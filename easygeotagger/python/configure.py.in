@@ -3,6 +3,7 @@ import sipconfig
 #import pyqtconfig
 import PyQt4.pyqtconfig
 
+dll_import = '@DLL_IMPORT@'
 easygt_lib = '@EASYGT_LIB@'
 src_path = '@CMAKE_SOURCE_DIR@'
 python_path = src_path + '/python'
@@ -53,7 +54,8 @@ makefile = PyQt4.pyqtconfig.QtGuiModuleMakefile(
 makefile.extra_libs = ["easygt"]
 makefile.extra_lib_dirs = [build_path+"/src"]
 makefile.extra_include_dirs = [src_path + "/src/app", src_path + "/src/core"]
-makefile.extra_cxxflags = ["-DMS_DLL_SPEC="]
+makefile.extra_cxxflags = [dll_import]
+#makefile.extra_cxxflags = ["-DMS_DLL_SPEC=__declspec(dllimport)"]
 makefile.LFLAGS.append("-Wl,-rpath,.")
 makefile.LFLAGS.append("-Wl,-rpath," + rpath)
 

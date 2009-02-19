@@ -31,10 +31,11 @@
  * This function is used by way of QLibrary::resolve to see if python support
  * has been compiled into the easygt lib
  */
-extern "C"
-{
-  bool pythonConsoleIncluded() { return true; }
-}
+#ifdef WIN32
+extern "C" __declspec( dllexport ) bool pythonConsoleIncluded() { return true; }
+#else
+extern "C" bool pythonConsoleIncluded() { return true; }
+#endif
 
 EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterface )
 {
@@ -43,8 +44,13 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
   setupUi(this);
 
   //Check for the python libs to prevent segfaults if python is not available on the user's system
+#ifdef WIN32
+  QLibrary lvPythonLibrary2_4( "python25.dll" );
+  QLibrary lvPythonLibrary2_5( "python24.dll" );
+#else
   QLibrary lvPythonLibrary2_4( "python2.5" );
   QLibrary lvPythonLibrary2_5( "python2.4" );
+#endif
   cvPythonFound = false;
   if( lvPythonLibrary2_5.load() )
   {
@@ -68,8 +74,8 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
     runCommand( "import __main__" );
     runCommand( "from PyEasyGT import *" );
     runCommand( "from sip import wrapinstance" );
-    runCommand( "from PyQt4.QtCore import *" );
-    runCommand( "from PyQt4.QtGui import *" );
+    runCommand( "import PyQt4.QtCore" );
+    runCommand( "import PyQt4.QtGui" );
     runCommand( "class redirect:\n"
                 "  def __init__( self, textbrowser ):\n"
                 "    self.console = textbrowser\n"
@@ -78,10 +84,13 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
                 "        self.console.append( message )\n"
                 "\n"
               );
-    runCommand( "outputConsole = wrapinstance(" + QString::number(( unsigned long ) tbOutput ) + ", QTextBrowser)" );
+    runCommand( "QtGui = PyQt4.QtGui" );
+	runCommand( "QtCore = PyQt4.QtCore" );
+    runCommand( "outputConsole = wrapinstance(" + QString::number(( unsigned long ) tbOutput ) + ", QtGui.QTextBrowser)" );
     runCommand( "logger = redirect( outputConsole ) " );
     runCommand( "sys.stdout = logger" );
     runCommand( "EgtInterface = wrapinstance(" + QString::number(( unsigned long ) theInterface ) + ", EgtApplicationInterface)" );
+	runCommand( "print('**Use EgtInterface to interact with the application')" );
   }
   else if( 0 != theInterface )
   {

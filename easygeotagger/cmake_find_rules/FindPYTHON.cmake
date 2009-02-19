@@ -17,6 +17,7 @@ FIND_PATH(PYTHON_INCLUDE_DIR Python.h
   /usr/local/include/python2.5/
   /usr/include/python2.5/
   #MSVC
+  "c:/Python25/include"
   "$ENV{LIB_DIR}/include/PYTHON"
   #mingw
   c:/msys/local/include/PYTHON
@@ -26,6 +27,7 @@ FIND_LIBRARY(PYTHON_LIBRARY NAMES python2.5 PATHS
   /usr/local/lib 
   /usr/lib 
   #MSVC
+  "c:/Python25/lib"
   "$ENV{LIB_DIR}/lib"
   #mingw
   c:/msys/local/lib

@@ -1,9 +1,30 @@
 SET(BINDINGS_MAKEFILE ${CMAKE_CURRENT_BINARY_DIR}/Makefile)
 
+IF (WIN32)
+  # expect that classes are being imported
+  # Note: MSVC doesn't like when the macros are quotes
+  # and MSYS doesn't like them unqouted (bacause of braces)
+  IF (MSVC)
+    ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllimport)")
+	SET(DLL_IMPORT "-DMS_DLL_SPEC=__declspec(dllimport)")
+  ELSE (MSVC)
+    ADD_DEFINITIONS("-UMS_DLL_SPEC \"-DMS_DLL_SPEC=__declspec(dllimport)\"")
+	SET(DLL_IMPORT "-UMS_DLL_SPEC \"-DMS_DLL_SPEC=__declspec(dllimport)\"")
+  ENDIF (MSVC)
+ELSE (WIN32)
+  ADD_DEFINITIONS(-DMS_DLL_SPEC=)
+  SET(DLL_IMPORT "-DMS_DLL_SPEC=")
+ENDIF (WIN32)
+
 #If statements needed for platform specific libs
 IF(WIN32)
-  SET(EASYGT_LIB ${CMAKE_BINARY_DIR}/src/libeasygt.dll)
-  SET(BINDINGS_LIB ${CMAKE_CURRENT_BINARY_DIR}/PyEasyGT.pyd)
+  IF(MSVC)
+    SET(EASYGT_LIB ${CMAKE_BINARY_DIR}/src/easygt.lib)
+    SET(BINDINGS_LIB ${CMAKE_CURRENT_BINARY_DIR}/PyEasyGT.pyd)
+  ELSE(MSVC)
+    SET(EASYGT_LIB ${CMAKE_BINARY_DIR}/src/libeasygt.dll)
+    SET(BINDINGS_LIB ${CMAKE_CURRENT_BINARY_DIR}/PyEasyGT.pyd)
+  ENDIF(MSVC)
 ELSE(WIN32)
   SET(EASYGT_LIB ${CMAKE_BINARY_DIR}/src/libeasygt.so)
   SET(BINDINGS_LIB ${CMAKE_CURRENT_BINARY_DIR}/PyEasyGT.so)
