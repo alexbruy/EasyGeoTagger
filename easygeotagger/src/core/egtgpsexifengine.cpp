@@ -36,44 +36,17 @@
 
 EgtGpsExifEngine::EgtGpsExifEngine() : EgtExifEngine()
 {
-    //Add all of the Egt keys that this engine can read/write
-    //Place in the order that they will typically be displayed to the user
-    addKey("Egt.GPS.DateStamp", QObject::tr( "Date stamp" ) );
-    addKey("Egt.GPS.TimeStamp", QObject::tr( "Time stamp" ) );
-    addKey("Egt.GPS.Longitude", QObject::tr( "Longitude" ) );
-    addKey("Egt.GPS.Latitude", QObject::tr( "Latitude" ) );
-    addKey("Egt.GPS.Altitude", QObject::tr( "Altitude" ) );
-    addKey("Egt.GPS.ImageDirection", QObject::tr( "Image direction" ), "|M|T" );
-    addKey("Egt.GPS.MapDatum", QObject::tr( "Map datum" ) );
-    addKey("Egt.GPS.Speed", QObject::tr( "Speed" ), "|K|M|N" );
-    addKey("Egt.GPS.Track", QObject::tr( "Track" ), "|M|T" );
-    addKey("Egt.GPS.DestLatitude", QObject::tr( "Destination latitude" ) );
-    addKey("Egt.GPS.DestLongitude", QObject::tr( "Destination longitude" ) );
-    addKey("Egt.GPS.DestBearing", QObject::tr( "Destination bearing" ), "|M|T" );
-    addKey("Egt.GPS.DestDistance", QObject::tr( "Destination distance" ), "|K|M|N" );
-    addKey("Egt.GPS.VersionID", QObject::tr( "Version id" ) );
-    addKey("Egt.GPS.Satellites", QObject::tr( "Satellites" ) );
-    addKey("Egt.GPS.Status", QObject::tr( "Status" ) );
-    addKey("Egt.GPS.MeasureMode", QObject::tr( "Measure mode" ) );
-    addKey("Egt.GPS.DOP", QObject::tr( "GPS DOP" ) );
-    addKey("Egt.GPS.ProcessingMethod", QObject::tr( "Processing method" ) );
-    addKey("Egt.GPS.AreaInformation", QObject::tr( "Area information" ) );
-    addKey("Egt.GPS.Differential", QObject::tr( "GPS differential" ) );
-
-    //Add the dependencies
-    cvDependencies["Egt.GPS.Longitude"] = "Egt.GPS.Latitude";
-    cvDependencies["Egt.GPS.Latitude"] = "Egt.GPS.Longitude";
-    cvDependencies["Egt.GPS.DestLatitude"] = "Egt.GPS.DestLongitude";
+    init();
 }
 
 EgtGpsExifEngine::EgtGpsExifEngine( QString theImageFilename ) : EgtExifEngine( theImageFilename )
 {
-    EgtGpsExifEngine();
+    init();
 }
 
 EgtGpsExifEngine::EgtGpsExifEngine( const QModelIndex& theIndex ) : EgtExifEngine( theIndex )
 {
-    EgtGpsExifEngine();
+    init();
 }
 
 /*
@@ -1899,3 +1872,36 @@ QString EgtGpsExifEngine::convertToRational(QString theDegrees)
   return QString(lvTextDegrees + "/1" + " " +lvTextMinutes+ "/1"+ " " +lvTextSeconds+ "/99999");
 }
 
+void EgtGpsExifEngine::init()
+{
+  //Add all of the Egt keys that this engine can read/write
+    //Place in the order that they will typically be displayed to the user
+    addKey("Egt.GPS.DateStamp", QObject::tr( "Date stamp" ) );
+    addKey("Egt.GPS.TimeStamp", QObject::tr( "Time stamp" ) );
+    addKey("Egt.GPS.Longitude", QObject::tr( "Longitude" ) );
+    addKey("Egt.GPS.Latitude", QObject::tr( "Latitude" ) );
+    addKey("Egt.GPS.Altitude", QObject::tr( "Altitude" ) );
+    addKey("Egt.GPS.ImageDirection", QObject::tr( "Image direction" ), "|M|T" );
+    addKey("Egt.GPS.MapDatum", QObject::tr( "Map datum" ) );
+    addKey("Egt.GPS.Speed", QObject::tr( "Speed" ), "|K|M|N" );
+    addKey("Egt.GPS.Track", QObject::tr( "Track" ), "|M|T" );
+    addKey("Egt.GPS.DestLatitude", QObject::tr( "Destination latitude" ) );
+    addKey("Egt.GPS.DestLongitude", QObject::tr( "Destination longitude" ) );
+    addKey("Egt.GPS.DestBearing", QObject::tr( "Destination bearing" ), "|M|T" );
+    addKey("Egt.GPS.DestDistance", QObject::tr( "Destination distance" ), "|K|M|N" );
+    addKey("Egt.GPS.VersionID", QObject::tr( "Version id" ) );
+    addKey("Egt.GPS.Satellites", QObject::tr( "Satellites" ) );
+    addKey("Egt.GPS.Status", QObject::tr( "Status" ) );
+    addKey("Egt.GPS.MeasureMode", QObject::tr( "Measure mode" ) );
+    addKey("Egt.GPS.DOP", QObject::tr( "GPS DOP" ) );
+    addKey("Egt.GPS.ProcessingMethod", QObject::tr( "Processing method" ) );
+    addKey("Egt.GPS.AreaInformation", QObject::tr( "Area information" ) );
+    addKey("Egt.GPS.Differential", QObject::tr( "GPS differential" ) );
+
+    //Add the dependencies
+    cvDependencies["Egt.GPS.Longitude"] = "Egt.GPS.Latitude";
+    cvDependencies["Egt.GPS.Latitude"] = "Egt.GPS.Longitude";
+    cvDependencies["Egt.GPS.DestLatitude"] = "Egt.GPS.DestLongitude";
+
+    cvHasExpectedExif = hasKey( "Exif.GPSInfo" );
+}

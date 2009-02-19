@@ -58,5 +58,9 @@ public:
   /*! \brief Writes data to the Exif.Photo.DateTimeOriginal tag */
   bool writeDateTimeOriginal( QString );
 
+private:
+  /*! \brief Initialize class specific variables */
+  void init();
+
 };
 #endif

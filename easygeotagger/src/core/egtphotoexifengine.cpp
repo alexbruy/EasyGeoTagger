@@ -28,17 +28,17 @@
 
 EgtPhotoExifEngine::EgtPhotoExifEngine() : EgtExifEngine()
 {
-    addKey("Egt.Photo.DateTimeOriginal", QObject::tr( "Dates Time" ) );
+    init();
 }
 
 EgtPhotoExifEngine::EgtPhotoExifEngine( QString theImageFilename ) : EgtExifEngine( theImageFilename )
 {
-    EgtPhotoExifEngine();
+    init();
 }
 
 EgtPhotoExifEngine::EgtPhotoExifEngine( const QModelIndex& theIndex ) : EgtExifEngine( theIndex )
 {
-    EgtPhotoExifEngine();
+    init();
 }
 
 /*
@@ -163,4 +163,16 @@ bool EgtPhotoExifEngine::writeDateTimeOriginal( QString theValue )
   //Write passed so set the has expected exif flag and return true
   cvHasExpectedExif = true;
   return true;
+}
+
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
+void EgtPhotoExifEngine::init()
+{
+  addKey("Egt.Photo.DateTimeOriginal", QObject::tr( "Dates Time" ) );
+
+  cvHasExpectedExif = hasKey( "Exif.Photo" );
 }

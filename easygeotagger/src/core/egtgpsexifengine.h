@@ -235,6 +235,9 @@ private:
   /*! \brief Converts from decimal degrees to Rational notation */
   QString convertToRational(QString);
 
+  /*! \brief Initialize class specific variables */
+  void init();
+
 };
 #endif
 
