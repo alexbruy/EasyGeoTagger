@@ -61,9 +61,6 @@ class EgtGpsDataTableWidget : public QTableWidget
 
     /*! \brief Slot used when the horizontal header is clicked */
     void cvHorizontalHeader_clicked(int);
-
-    /*! \brief Slot used when the tag button is clicked*/
-    void cvTagButton_clicked();
  
     /*! \brief Slot used when the vertical header is clicked */
     void cvVerticalHeader_clicked(int);

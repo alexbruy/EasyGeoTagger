@@ -45,9 +45,6 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
     
     void on_cbHeader_changed();
 
-    /*! \brief Slot used to perform the needed actions when the user selects a delimiter */
-    void on_delimiter_changed();
-
     void on_leCustom_changed();
 
     void reject();

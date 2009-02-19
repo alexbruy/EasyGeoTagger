@@ -6,7 +6,6 @@ IF (WIN32)
   ENDIF (MSVC)
 ENDIF (WIN32)
 
-
 INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE_DIRECTORIES(
@@ -40,26 +39,20 @@ SET( GPS_PLUGIN_UIS
 
 QT4_WRAP_UI( GPS_PLUGIN_UIS_H ${GPS_PLUGIN_UIS} )
 
-QT4_ADD_RESOURCES( GPS_PLUGIN_RCCS_SRCS ${GPS_PLUGIN_RCCS} )
-
 QT4_AUTOMOC( ${GPS_PLUGIN_SRCS} )
-
 QT4_WRAP_CPP( GPS_PLUGIN_MOC_SRCS ${GPS_PLUGIN_MOC_HDRS} )
 
 ADD_DEFINITIONS( -DQT_PLUGIN )
 
 ADD_library( gpsplugin MODULE 
-             ${GPS_PLUGIN_HDRS}
              ${GPS_PLUGIN_SRCS}
              ${GPS_PLUGIN_MOC_SRCS}
-             ${GPS_PLUGIN_RCCS_SRCS}
              ${GPS_PLUGIN_UIS_H} 
            )
-
 TARGET_LINK_LIBRARIES( gpsplugin
-  ${QT_LIBRARIES}
-  ${EXIV2_LIBRARY}
-  easygt
-  )
-
+                       ${QT_LIBRARIES}
+                       easygt
+                     )
+		   
+		   
 INSTALL( TARGETS gpsplugin DESTINATION ${EASYGT_PLUGIN_SUBDIR} )
