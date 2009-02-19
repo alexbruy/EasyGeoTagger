@@ -34,7 +34,7 @@ ENDIF (EGT_DEBUG_MESSAGES)
 IF( MSVC )
   SET (OSGEO4W_BUILD TRUE CACHE BOOL "Flag to set build specific fields for distirbution with OSGeo4W build")
   SET (QT_USE_QTMAIN TRUE)
-ESLE ( MSVC )
+ELSE ( MSVC )
   SET (OSGEO4W_BUILD FALSE CACHE BOOL "Flag to set build specific fields for distirbution with OSGeo4W build")
 ENDIF ( MSVC )
 
