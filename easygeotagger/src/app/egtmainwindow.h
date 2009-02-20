@@ -26,7 +26,7 @@
 
 #include "ui_egtmainwindowgui.h"
 
-#include "egtimageengine.h"
+#include "egtimagefactory.h"
 #include "egtpathbuilder.h"
 #include "egtphotoexifengine.h"
 
@@ -90,7 +90,7 @@ signals:
   
 private:
   QFileInfo cvFileInfo;
-  EgtImageEngine cvImageEngine;
+  EgtImageFactory cvImageFactory;
   EgtPathBuilder cvPathBuilder;
   EgtPhotoExifEngine cvPhotoExifEngine;
   QDockWidget* cvPluginDock;

@@ -76,8 +76,8 @@ EgtMainWindow::EgtMainWindow( QWidget* theParent )
   cvUi->pbarProgressBar->setMaximum( 1 );
   cvUi->pbarProgressBar->setValue( 0 );
   
-  connect(&cvImageEngine, SIGNAL( progress( int, int, int ) ), this, SLOT( updateProgress( int, int, int ) ) );
-  connect(&cvImageEngine, SIGNAL( imageLoaded( bool ) ), this, SLOT( loadPreview( bool ) ) );
+  connect(&cvImageFactory, SIGNAL( progress( int, int, int ) ), this, SLOT( updateProgress( int, int, int ) ) );
+  connect(&cvImageFactory, SIGNAL( imageLoaded( bool ) ), this, SLOT( loadPreview( bool ) ) );
 }
 
 /*
@@ -107,7 +107,7 @@ void EgtMainWindow::clicked( const QModelIndex& theIndex )
   cvPhotoExifEngine.setFile( lvFileName );
   cvUi->labelDateTimeOriginal->setText( cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString() );
 
-  cvImageEngine.setFile( lvFileName );
+  cvImageFactory.setFile( lvFileName );
 
   emit( fileBrowserItemSelected( theIndex ) );
 }
@@ -121,7 +121,7 @@ void EgtMainWindow::loadPreview( bool isValid )
   
   if( isValid )
   {
-    cvUi->labelPreview->setPixmap( QPixmap::fromImage( cvImageEngine.scaleImage( cvUi->labelPreview->width(), cvUi->labelPreview->height() ) ) );
+    cvUi->labelPreview->setPixmap( QPixmap::fromImage( cvImageFactory.scaleImage( cvUi->labelPreview->width(), cvUi->labelPreview->height() ) ) );
   }
 }
 

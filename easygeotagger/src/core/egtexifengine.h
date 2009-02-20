@@ -81,7 +81,7 @@ public:
   bool isValidImageWithExpectedExif() { return cvIsValidImage && cvHasExpectedExif; }
 
   /*! \brief Returns a constant reference to the key map list for this engine */
-  const QList< KeyMap > &keys() { return cvKeys; }
+  const QList< EgtExifEngine::KeyMap > &keys() { return cvKeys; }
 
   /*! \brief Returns the last error */
   const QString &lastError() { return cvLastError; }

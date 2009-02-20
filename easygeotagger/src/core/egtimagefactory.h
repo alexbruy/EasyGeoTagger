@@ -1,5 +1,5 @@
 /*
-** File: egtimageengine.h
+** File: egtimagefactory.h
 ** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-10-07
 **
@@ -21,8 +21,8 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTIMAGEENGINE_H
-#define EGTIMAGEENGINE_H
+#ifndef EGTIMAGEFACTORY_H
+#define EGTIMAGEFACTORY_H
 
 #include "egtrawimagereader.h"
 
@@ -32,19 +32,19 @@
 /*! \brief Image reader
  *
  */
-class MS_DLL_SPEC EgtImageEngine : public QObject
+class MS_DLL_SPEC EgtImageFactory : public QObject
 { 
   Q_OBJECT 
   
   public:
     /*! \brief Constructor */
-    EgtImageEngine( );
+    EgtImageFactory( );
     
     /*! \brief Constructor */
-    EgtImageEngine( QString );
+    EgtImageFactory( QString );
     
     /*! \brief Destructor */
-    ~EgtImageEngine();
+    ~EgtImageFactory();
     
     /*! \brief Returns the a copy of the current resize image */
     QImage scaledImage( bool* isValid=0 ) const;

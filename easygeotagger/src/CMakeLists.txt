@@ -19,7 +19,7 @@ SET( EGT_INSTALL_HDRS
 
      core/egtexifengine.h
      core/egtgpsexifengine.h
-     core/egtimageengine.h
+     core/egtimagefactory.h
      core/egtlogger.h
      core/egtpathbuilder.h
      core/egtphotoexifengine.h
@@ -30,14 +30,14 @@ SET( EGT_INSTALL_HDRS
 SET( EGT_CORE_SRCS
      core/egtexifengine.cpp
      core/egtgpsexifengine.cpp
-     core/egtimageengine.cpp
+     core/egtimagefactory.cpp
      core/egtpathbuilder.cpp
      core/egtphotoexifengine.cpp
      core/egtrawimagereader.cpp
    )
 
 SET( EGT_CORE_MOC_HDRS
-     core/egtimageengine.h
+     core/egtimagefactory.h
      core/egtrawimagereader.h
    )
 

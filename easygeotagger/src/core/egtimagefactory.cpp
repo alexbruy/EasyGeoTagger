@@ -1,5 +1,5 @@
 /*
-** File: egtimageengine.cpp
+** File: egtimagefactory.cpp
 ** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-10-07
 **
@@ -22,28 +22,28 @@
 **
 **/
 
-#include "egtimageengine.h"
+#include "egtimagefactory.h"
 #include "egtlogger.h"
 
 #include <QFileInfo>
 #include <QDir>
 
-EgtImageEngine::EgtImageEngine( )
+EgtImageFactory::EgtImageFactory( )
 {
   init();
 }
 
-EgtImageEngine::EgtImageEngine( QString theFile )
+EgtImageFactory::EgtImageFactory( QString theFile )
 {
   init();
   setFile( theFile );
 }
 
-EgtImageEngine::~EgtImageEngine()
+EgtImageFactory::~EgtImageFactory()
 {
 }
 
-void EgtImageEngine::init()
+void EgtImageFactory::init()
 {
   cvOriginalImage = QImage();
   cvHasBeenResized = false;
@@ -64,7 +64,7 @@ void EgtImageEngine::init()
  * \param isValid optional parameter to return if the scaled image is valid
  * \returns A copy of the resized image or an invalid image if the original image has not been resize yet
  */
-QImage EgtImageEngine::scaledImage( bool* isValid ) const
+QImage EgtImageFactory::scaledImage( bool* isValid ) const
 {
   EgtDebug( "entered" );
   if( !cvIsValidImage || !cvHasBeenResized )
@@ -84,7 +84,7 @@ QImage EgtImageEngine::scaledImage( bool* isValid ) const
  * \param isValid optional parameter to return if the scaled image is valid
  * \returns A new image resized to the specific dimensions or a blank image if a valid image as not been opened
  */
-QImage EgtImageEngine::scaleImage(int theWidth, int theHeight, bool* isValid )
+QImage EgtImageFactory::scaleImage(int theWidth, int theHeight, bool* isValid )
 {
   EgtDebug( "entered" );
   
@@ -107,7 +107,7 @@ QImage EgtImageEngine::scaleImage(int theWidth, int theHeight, bool* isValid )
  * \param theOutputFile absolute path and filename in which to save the resized image
  * \returns true on success, false on failure
  */
-bool EgtImageEngine::saveAsJpeg( QString theOutputFile )
+bool EgtImageFactory::saveAsJpeg( QString theOutputFile )
 {
   if( !cvIsValidImage || !cvHasBeenResized )
   {
@@ -121,7 +121,7 @@ bool EgtImageEngine::saveAsJpeg( QString theOutputFile )
 /*!
  * \param theImageFileName absolute path and file name of the image to open
  */
-void EgtImageEngine::setFile( QString theImageFileName )
+void EgtImageFactory::setFile( QString theImageFileName )
 {
   EgtDebug( "entered" );
   
@@ -174,7 +174,7 @@ void EgtImageEngine::setFile( QString theImageFileName )
 /*!
  * \param theImageFileName absolute path and filename of the image to open
  */
-void EgtImageEngine::readJpeg( QString theImageFileName )
+void EgtImageFactory::readJpeg( QString theImageFileName )
 {
   EgtDebug( "entered" );
   cvIsValidImage = false;
@@ -194,7 +194,7 @@ void EgtImageEngine::readJpeg( QString theImageFileName )
 /*!
  * \param theImageFileName absolute path and filename of the image to open
  */
-void EgtImageEngine::readRaw( QString theImageFileName )
+void EgtImageFactory::readRaw( QString theImageFileName )
 {
   EgtDebug( "entered" );
   cvIsValidImage = false;
@@ -210,7 +210,7 @@ void EgtImageEngine::readRaw( QString theImageFileName )
 /*!
  * \param theImageFileName absolute path and filename of the image to open
  */
-void EgtImageEngine::readTiff( QString theImageFileName )
+void EgtImageFactory::readTiff( QString theImageFileName )
 {
   EgtDebug( "entered" );
   cvIsValidImage = false;
@@ -231,7 +231,7 @@ void EgtImageEngine::readTiff( QString theImageFileName )
  * \param theMaxumum the maximum value for the progress bar
  * \param theProgress the current progress
  */
-void EgtImageEngine::reEmitProgress(int theMinimum, int theMaximum, int theProgress )
+void EgtImageFactory::reEmitProgress(int theMinimum, int theMaximum, int theProgress )
 {
   emit( progress( theMinimum, theMaximum, theProgress) );
 }
@@ -239,7 +239,7 @@ void EgtImageEngine::reEmitProgress(int theMinimum, int theMaximum, int theProgr
 /*!
  * \param isValid Has the thread finished correctly
  */
-void EgtImageEngine::rawImageLoaded( bool isValid )
+void EgtImageFactory::rawImageLoaded( bool isValid )
 {
   cvIsProcessing = false;
   cvIsValidImage = isValid;
