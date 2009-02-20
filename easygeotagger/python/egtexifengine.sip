@@ -55,7 +55,7 @@ public:
   virtual QVariant read( QString theKey, bool* isValid = 0 );
 
   /*! \brief Base read method that returns the raw Exiv value for the provided EXIF key as a QString */
-  QString readKeyValueAsString(QString);
+  QString readKeyValueAsString( QString );
 
   /*! \brief Base read method that returns the raw Exiv value for the provided EXIF key */
   //const Exiv2::Value& readTag( QString );
@@ -67,6 +67,16 @@ public:
   virtual bool write( QString theKey, QString theValue );
 
   /*! \brief Base write method that actually writes data base to the image header */
-  bool writeTag(QString, QString, QString);
+  bool writeTag( QString, QString, QString );
 
+protected:
+  /*! \brief Adds key maps to the egt keys list */
+  void addKey( QString, QString, QString theUnits="" );
+
+  /*! \brief Method call from setFile that actually trys to open a file and also check to see if it is a valid image */
+  void openFile( QString theFileName );
+
+
+  private:
+    EgtExifEngine( const EgtExifEngine& );
 };

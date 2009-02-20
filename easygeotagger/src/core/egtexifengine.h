@@ -27,6 +27,7 @@
 #include <QModelIndex>
 #include <QStringList>
 #include <QVariant>
+#include <QString>
 #include <QList>
 #include <QMap>
 
