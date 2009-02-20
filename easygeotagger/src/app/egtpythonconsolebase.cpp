@@ -42,6 +42,7 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
   EgtDebug( "entered" );
 
   setupUi(this);
+  this->setWindowIcon( QIcon( ":/icons/text-x-python.svg" ) );
 
   //Check for the python libs to prevent segfaults if python is not available on the user's system
 #ifdef WIN32

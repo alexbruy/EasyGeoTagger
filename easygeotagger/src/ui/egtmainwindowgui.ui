@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>EasyGeoTagger - Alpha Version - Do Not Distribute - Biodiversity Informatics Facility - AMNH</string>
+   <string/>
   </property>
   <property name="windowIcon">
    <iconset resource="../app/app.qrc">

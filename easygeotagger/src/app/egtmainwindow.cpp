@@ -24,6 +24,7 @@
 #include "egtmainwindow.h"
 
 #include "egtlogger.h"
+#include "egtversion.h"
 #include "egtitemdelegate.h"
 
 #include <exiv2/image.hpp>
@@ -48,6 +49,7 @@ EgtMainWindow::EgtMainWindow( QWidget* theParent )
   
   cvUi->setupUi( this );
   connect( cvUi->tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( clicked(const QModelIndex& ) ) );
+  setWindowTitle( tr( "EasyGeoTagger" ) +" v."+ EGT_VERSION_MAJOR +"."+ EGT_VERSION_MINOR +"."+ EGT_VERSION_PATCH  );
 
   
   //Set up the file browser window

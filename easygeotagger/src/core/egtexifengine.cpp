@@ -105,6 +105,21 @@ bool EgtExifEngine::isValidImage()
 }
 
 /*!
+ * \param theKey the EXIF key or tag name
+ * \param isValid flag indicating the return data is valid
+ * \returns the data associated with the key
+ */
+QVariant EgtExifEngine::read( QString theKey, bool* isValid )
+{
+  EgtDebug( theKey ); //SIP muffler
+
+  if ( 0 != isValid ) { *isValid = false; }
+
+  return QVariant();
+}
+
+
+/*!
  * \param theKey the EXIF key to be searched within the exif data
  * \returns the Exiv2 Value that has been read from the exif data
  */

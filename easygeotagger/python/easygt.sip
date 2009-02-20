@@ -5,7 +5,11 @@
 
 %Include egtapplication.sip
 %Include egtapplicationinterface.sip
+%Include egtexifeditor.sip
 %Include egtexifengine.sip
+%Include egtexiftaggroup.sip
+%Include egtgpsexifengine.sip
 %Include egtpathbuilder.sip
 %Include egtplugininterface.sip
+%Include egtphotoexifengine.sip
 %Include egtrawimagereader.sip

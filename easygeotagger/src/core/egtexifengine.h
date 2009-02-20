@@ -88,7 +88,7 @@ public:
   const QString &lastError() { return cvLastError; }
 
   /*! \brief Generic read statement to be implemented by child classes */
-  virtual QVariant read( QString theKey, bool* isValid = 0 ) { if ( 0 != isValid ) { *isValid = false; } return QVariant(); }
+  virtual QVariant read( QString theKey, bool* isValid = 0 );
 
   /*! \brief Base read method that returns the raw Exiv value for the provided EXIF key as a QString */
   QString readKeyValueAsString(QString);
@@ -100,7 +100,7 @@ public:
   void setFile( QString theFileName );
 
   /*! \brief Generic write statement to be implemented by child classes */
-  virtual bool write( QString theKey, QString theValue ) { return false; }
+  virtual bool write( QString theKey, QString theValue ) { theKey==theValue; return false; } //theKey==theValue is a SIP muffler
 
   /*! \brief Base write method that actually writes data base to the image header */
   bool writeTag(QString, QString, QString);

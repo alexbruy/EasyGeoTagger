@@ -16,6 +16,7 @@ SET( EGT_INSTALL_HDRS
      app/egtexiftaggroup.h
      app/egtplugininterface.h
      app/egtpythonconsolebase.h
+     app/egtversion.h
 
      core/egtexifengine.h
      core/egtgpsexifengine.h

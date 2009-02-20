@@ -81,7 +81,6 @@ void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
   
   if( displaySplash )
   {
-    cvSplashScreen->close();
     cvSplashScreen->finish( cvGui );
   }
 
@@ -94,6 +93,12 @@ void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
   
   //Display the main window
   cvGui->show();
+
+  if( displaySplash )
+  {
+    delete cvSplashScreen;
+    cvSplashScreen = 0;
+  }
 }
 
 void EgtApplication::show()

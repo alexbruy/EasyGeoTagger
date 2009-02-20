@@ -4,6 +4,7 @@
         <file>icons/group.png</file>
         <file>icons/EasyGT.svg</file>
         <file>splash/EasyGT-Logo.png</file>
+        <file>icons/text-x-python.svg</file>
     </qresource>
     <qresource prefix="/22" >
         <file>icons/22/preferences-system.png</file>

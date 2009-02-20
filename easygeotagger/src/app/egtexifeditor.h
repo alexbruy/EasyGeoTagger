@@ -56,6 +56,9 @@ class MS_DLL_SPEC EgtExifEditor : public QObject
     void loadExifData( bool );
 
     /*! \brief Show the configuration dialog */
+    void showConfigurationDialog( ) { cvConfigurationDialog.show(); }
+
+    /*! \brief Show the configuration dialog */
     void showConfigurationDialog( QPoint );
 
   public slots:
