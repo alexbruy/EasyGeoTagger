@@ -166,7 +166,6 @@ QString EgtGpsExifEngine::dateStamp( bool * isValid )
 
 /*!
  * \param isValid if the access to the picture was successful
- * \param theRefference a char pointer containing the units of the measure (Kilometers, miles or knots)
  * \returns The bearing to the destination point. The range of values is from 0.00 to 359.99.
  */
 double EgtGpsExifEngine::destBearing( bool * isValid )
@@ -494,7 +493,7 @@ QString EgtGpsExifEngine::lastError()
 }
 
 /*!
- *\param a boolean that indicates whether the operation was successful or not.
+ * \param isValid a boolean that indicates whether the operation was successful or not.
  * \returns the latitude of the current image
  */
 double EgtGpsExifEngine::latitude( bool * isValid )
@@ -813,7 +812,7 @@ QString EgtGpsExifEngine::satellites( bool * isValid )
 }
 
 /*!
- * \param theImageFilename Absolute path to the image file that is going to be read/written
+ * \param theFileName Absolute path to the image file that is going to be read/written
  */
 void EgtGpsExifEngine::setFile( QString theFileName )
 {
@@ -823,10 +822,7 @@ void EgtGpsExifEngine::setFile( QString theFileName )
 
 /*!
  *\param isValid if the access to the picture was successful
- *\param theUnit A char pointer that indicates the unit of the measurement(Kilometers, Miles or Knots)
- *\returns the GPS satellites used for measurements. This tag can be used to describe the number of satellites, their ID number,
- * angle of elevation, azimuth, SNR and other information in ASCII notation. The format is not specified. If the GPS receiver is
- * incapable of taking measurements, value of the tag is set to NULL.
+ *\returns the speed
  */
 double EgtGpsExifEngine::speed( bool * isValid )
 {
@@ -984,8 +980,8 @@ QString EgtGpsExifEngine::trackRef( bool * isValid )
 }
 /*!
  *\param isValid if the access to the picture was successful
- *\returns Indicates the version of <GPSInfoIFD>. The version is given as 2.0.0.0. This tag is mandatory when <GPSInfo> tag is
- * present. (Note: The <GPSVersionID> tag is given in bytes, unlike the <ExifVersion> tag. When the version is 2.0.0.0, the tag
+ *\returns Indicates the version of GPSInfoIFD. The version is given as 2.0.0.0. This tag is mandatory when GPSInfo tag is
+ * present. (Note: The GPSVersionID tag is given in bytes, unlike the ExifVersion tag. When the version is 2.0.0.0, the tag
  * value is 02000000.H).
  */
 int EgtGpsExifEngine::versionID( bool * isValid )
@@ -1273,7 +1269,6 @@ bool EgtGpsExifEngine::writeDifferential( QString theValue )
 
 /*!
  *\param theValue a float containing the direction of the gps receiver to be written to the exif metadata
- *\param theRefference a char that indicates the refference(geographic north pole(T) or magnetic noth pole(M))
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
 bool EgtGpsExifEngine::writeDirection( float theValue )
@@ -1319,7 +1314,6 @@ bool EgtGpsExifEngine::writeDirectionRef( QString theValue )
 
 /*!
  *\param theValue a double containing the distance to the destination point to be written to the exif metadata
- *\param theUnit a char that indicates the unit used(Kilometers, Miles or Knots)
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
 bool EgtGpsExifEngine::writeDestDistance( double theValue )
@@ -1362,7 +1356,6 @@ bool EgtGpsExifEngine::writeDestDistanceRef( QString theValue )
 
 /*!
  *\param theValue a double containing the latitude of the destination point to be written to the exif metadata
- *\param theRefference a char that indicates the refference(geographic north pole(T) or magnetic noth pole(M))
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
 bool EgtGpsExifEngine::writeDestLatitude( double theValue )
@@ -1415,7 +1408,6 @@ bool EgtGpsExifEngine::writeDestLatitude( QString theValue )
 
 /*!
  *\param theValue a double containing the longitude of the destination point to be written to the exif metadata
- *\param theRefference a char that indicates the refference(geographic north pole(T) or magnetic noth pole(M))
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
 bool EgtGpsExifEngine::writeDestLongitude( double theValue )
@@ -1661,7 +1653,6 @@ bool EgtGpsExifEngine::writeSatellites( QString theValue )
 
 /*!
  *\param theValue a QString containing the speed of the gps receiver to be written to the exif metadata
-  *\param theUnit a char that indicates the units of the measurement(Kilometers, Miles or Knots)
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
 bool EgtGpsExifEngine::writeSpeed( double theValue )
@@ -1718,7 +1709,7 @@ bool EgtGpsExifEngine::writeStatus( QString theValue )
 }
 
 /*!
- *\param theValue a QString containing the time stamp to be written to the exif metadata. the format is ""hh:mm:ss"
+ *\param theString a QString containing the time stamp to be written to the exif metadata. the format is ""hh:mm:ss"
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
 bool EgtGpsExifEngine::writeTimeStamp( QString theString )

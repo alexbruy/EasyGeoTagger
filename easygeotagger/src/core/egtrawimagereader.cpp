@@ -99,7 +99,6 @@ void EgtRawImageReader::run()
 }
 
 /*!
- * \param theImage pointer back to the EgtImageEngine's QImage to be filled with data
  * \param theFileName absolute path and filename of the image to open
  */
 void EgtRawImageReader::setFile( QString theFileName )

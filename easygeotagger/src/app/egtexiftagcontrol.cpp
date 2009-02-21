@@ -34,7 +34,7 @@
  *
  * \param theKey The key for this control
  * \param theDisplayName The common name for the key, used for labels
- * \param hasAssociatedData Flag indicating if this contol has associated data (e.g., units )
+ * \param theUnits A | delimited list of units if the tag has associated units
  */
 EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, QStringList theUnits )
 {
@@ -64,7 +64,7 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, QS
 
     cvDiscardButton.setMaximumSize( 22,22 );
     cvDiscardButton.setEnabled( false );
-    cvDiscardButton.setIcon( QIcon( ":/icons/discard.png" ) );
+    cvDiscardButton.setIcon( QIcon( ":/16/icons/16/process-stop.png" ) );
     cvDiscardButton.setToolTip( tr( "Discard changes" ) );
     cvEditorControls.layout()->addWidget( &cvDiscardButton );
     connect( &cvDiscardButton, SIGNAL( clicked() ), this, SLOT( cvDiscardButton_clicked() ) );
@@ -142,7 +142,7 @@ void EgtExifTagControl::setValue( QString const &theValue, bool setCache )
 /*!
  *
  * \param theValue The value to display in the line edit
- * \param setCache A flag to indicate if the cached value should be replaced
+ * \param setCachedValue A flag to indicate if the cached value should be replaced
  */
 void EgtExifTagControl::setValue( QVariant const &theValue, bool setCachedValue )
 {

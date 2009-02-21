@@ -14,13 +14,13 @@
 # Line numbers are approximate. Note the the "INPUT" tag must be taylored to
 # your file system.
 #   Line 28 - PROJECT_NAME = EasyGeoTagger
-#   Line 34 - PROJECT_NUMBER  = 0.1.0
-#   Line 41 – OUTPUT_DIRECTORY = api_doc
+#   Line 34 - PROJECT_NUMBER  = 0.3.0
+#   Line 41 – OUTPUT_DIRECTORY = /web/www/biodiversityinformatics.amnh.org/open_source/easygeotagger/api_doc/trunk
 #   Line 289 - EXTRACT_ALL = YES
 #   Line 299 - EXTRACT_STATIC  = YES
 #   Line 294 - EXTRACT_PRIVATE  =  YES
 #   Line 299 - EXTRACT_STATIC  = YES
-#   Line 555 - INPUT = /home/nedhorning/dev/easygeotagger/trunk/easygeotagger/src
+#   Line 555 - INPUT = /home/pete/devel/easygeotagger/trunk/easygeotagger/src
 #   Line 578 - RECURSIVE  = YES
 #   Line 744 - GENERATE_HTML = YES
 #   Line 835 - GENERATE_TREEVIEW      = NONE
@@ -48,14 +48,14 @@ PROJECT_NAME           = EasyGeoTagger
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = 0.1.0
+PROJECT_NUMBER         = 0.3.0
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) 
 # base path where the generated documentation will be put. 
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = api_doc
+OUTPUT_DIRECTORY       = /web/biodiversityinformatics.amnh.org/open_source/easygeotagger/api_doc/trunk
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 4096 sub-directories (in 2 levels) under the output directory of each output 
@@ -569,7 +569,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = /home/nedhorning/dev/easygeotagger/trunk/easygeotagger/src
+INPUT                  = /home/pete/devel/easygeotagger/trunk/easygeotagger/src
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 
@@ -612,7 +612,7 @@ EXCLUDE_SYMLINKS       = NO
 # against the file with absolute path, so to exclude all test directories 
 # for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = 
+EXCLUDE_PATTERNS       = */plugins/*
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names 
 # (namespaces, classes, functions, etc.) that should be excluded from the 

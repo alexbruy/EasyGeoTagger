@@ -1,0 +1,5 @@
+FILE( WRITE "${CMAKE_CURRENT_BINARY_DIR}/egtversion.h" 
+      "#define EGT_VERSION_MAJOR \"0\"\n" 
+      "#define EGT_VERSION_MINOR \"3\"\n" 
+      "#define EGT_VERSION_PATCH \"0\"\n" 
+    )

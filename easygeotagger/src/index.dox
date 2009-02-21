@@ -1,0 +1,28 @@
+/*! \mainpage EasyGeoTagger
+
+\section index_intro Introduction
+\htmlonly<a href="http://biodiversityinformatics.amnh.org/open_source/easygeotagger">EasyGeoTagger</a>\endhtmlonly
+( EasyGT )
+
+\section index_python Python Bindings
+EastGT has a built in python console that allows for real-time scripting and interaction with the application. Currently
+the following EasyGT classes have bindings
+<ul>
+<li>EgtApplication</li>
+<li>EgtApplicationInterface</li>
+<li>EgtExifEditor</li>
+<li>EgtExifEngine</li>
+<li>EgtExifTagGroup</li>
+<li>EgtGpsExifEngine</li>
+<li>EgtPathBuilder</li>
+<li>EgtPluginInterface</li>
+<li>EgtPhotoExifEngine</li>
+<li>EgtRawImageReader</li>
+</ul>
+\section index_trac Bug Reporting and Enhancement Requests
+If you think you have found a bug or have an idea for an enhancement, please file a ticket on our <a
+href="https://trac.biodiversiyinformatics.amnh.org/projects/easygeotagger">EasyGT Trac site</a>. When submitting bugs or
+enhancement requests, please be as detailed as possible and be sure to include your contact information in case we
+need clarification or help with replicating your problem.
+
+*/

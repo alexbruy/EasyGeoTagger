@@ -208,8 +208,15 @@ p, li { white-space: pre-wrap; }
     </widget>
     <addaction name="menuLoad"/>
    </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuPlugins"/>
+   <addaction name="menuAbout"/>
   </widget>
   <action name="actionExit">
    <property name="icon">
@@ -243,6 +250,15 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="../app/app.qrc">
+     <normaloff>:/icons/help-browser.svg</normaloff>:/icons/help-browser.svg</iconset>
+   </property>
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

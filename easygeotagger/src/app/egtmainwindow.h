@@ -30,12 +30,12 @@
 #include "egtpathbuilder.h"
 #include "egtphotoexifengine.h"
 
+#include <QWebView>
 #include <QToolBox>
 #include <QFileInfo>
 #include <QMainWindow>
 #include <QModelIndex>
 #include <QDockWidget>
-
 
 namespace Ui
 {
@@ -68,6 +68,9 @@ private slots:
   /*! \brief Slot to show the preview */
   void loadPreview( bool );  
 
+  /*! \brief Slot for menu about action */
+  void on_actionAbout_activated();
+
   /*! \brief Slot for menu exit action */
   void on_actionExit_activated();
 
@@ -95,5 +98,6 @@ private:
   EgtPhotoExifEngine cvPhotoExifEngine;
   QDockWidget* cvPluginDock;
   Ui::EgtMainWindowGui* cvUi;
+  QWebView cvWebBrowser;
 };
 #endif

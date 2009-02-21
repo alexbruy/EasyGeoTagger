@@ -16,7 +16,6 @@ SET( EGT_INSTALL_HDRS
      app/egtexiftaggroup.h
      app/egtplugininterface.h
      app/egtpythonconsolebase.h
-     app/egtversion.h
 
      core/egtexifengine.h
      core/egtgpsexifengine.h
@@ -83,9 +82,16 @@ QT4_WRAP_CPP( EGT_PYTHON_MOC_SRCS ${EGT_PYTHON_MOC_HDRS} )
 
 QT4_ADD_RESOURCES( EGT_APP_RCCS_SRCS ${EGT_APP_RCCS} )
 
-ADD_LIBRARY ( easygt SHARED ${EGT_CORE_SRCS} ${EGT_CORE_MOC_SRCS} ${EGT_APP_SRCS} ${EGT_APP_MOC_SRCS} ${EGT_APP_RCCS_SRCS} ${EGT_PYTHON_SRCS} ${EGT_PYTHON_MOC_SRCS})
+#A little hack to get the main lib to alway relink, stop a infinit loop with the python build
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.in_cmake
+               ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
+               @ONLY)
+ADD_CUSTOM_TARGET( egt_force_relink COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/version.cmake )
+#end hack
 
-ADD_DEPENDENCIES( easygt  easygt_ui )
+ADD_LIBRARY ( easygt SHARED ${EGT_CORE_SRCS} ${EGT_CORE_MOC_SRCS} ${EGT_APP_SRCS} ${EGT_APP_MOC_SRCS} ${EGT_APP_RCCS_SRCS} ${EGT_PYTHON_SRCS} ${EGT_PYTHON_MOC_SRCS} )
+
+ADD_DEPENDENCIES( easygt easygt_ui egt_force_relink )
 
 TARGET_LINK_LIBRARIES( easygt
   ${QT_LIBRARIES}

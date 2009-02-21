@@ -228,7 +228,7 @@ void EgtImageFactory::readTiff( QString theImageFileName )
 
 /*!
  * \param theMinimum the minumum value for the progress bar
- * \param theMaxumum the maximum value for the progress bar
+ * \param theMaximum the maximum value for the progress bar
  * \param theProgress the current progress
  */
 void EgtImageFactory::reEmitProgress(int theMinimum, int theMaximum, int theProgress )

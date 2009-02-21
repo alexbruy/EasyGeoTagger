@@ -32,6 +32,7 @@
 
 /*!
  *
+ * \param theId A unique string to that identifies this editor or storing preferences between sessions
  * \param theEngine Pointer to the Exif engine that will be used to build the editor
  */
 EgtExifEditor::EgtExifEditor( QString theId, EgtExifEngine* theEngine )

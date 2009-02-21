@@ -127,6 +127,25 @@ void EgtMainWindow::loadPreview( bool isValid )
   }
 }
 
+void EgtMainWindow::on_actionAbout_activated()
+{
+  QString lvBody = tr( "<html>"\
+                       "<body>"\
+                       "<center><h1>EasyGeoTagger</h1></center><br>"\
+                       "Questions and Comments<br>"\
+                       "<a href=\"http://biodiversityinformatics.amnh.org/open_source/easygeotagger/comments.php\">"\
+                       "http://biodiversityinformatics.amnh.org/open_source/easygeotagger/comments.php</a><br><br>"\
+                       "Bugs!<br>"\
+                       "<a href=\"https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger/newticket\">"\
+                       "https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger/newticket</a>"\
+                       "</body>"\
+                       "</html>"
+                      );
+  cvWebBrowser.setHtml( lvBody );
+  cvWebBrowser.setWindowIcon( QIcon( ":/icons/internet-web-browser.svg" ) );
+  cvWebBrowser.setWindowTitle( tr( "About - EasyGeoTagger" ) );
+  cvWebBrowser.show();
+}
 
 void EgtMainWindow::on_actionExit_activated()
 {
@@ -169,7 +188,7 @@ void EgtMainWindow::refreshFileBrowser()
 
 /*!
  * \param theMinimum the minumum value for the progress bar
- * \param theMaxumum the maximum value for the progress bar
+ * \param theMaximum the maximum value for the progress bar
  * \param theProgress the current progress
  */
 void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgress )

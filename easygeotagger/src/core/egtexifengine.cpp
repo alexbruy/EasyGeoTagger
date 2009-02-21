@@ -198,7 +198,7 @@ QString EgtExifEngine::readKeyValueAsString(QString theKey)
 }
 
 /*!
- * \param theImageFileName Absolute path to the image file that is going to be read/written
+ * \param theFileName Absolute path to the image file that is going to be read/written
  */
 void EgtExifEngine::setFile( QString theFileName )
 {

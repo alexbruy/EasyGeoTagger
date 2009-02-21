@@ -47,6 +47,7 @@ EgtApplication::EgtApplication( QString thePluginDirectory, bool displaySplash )
  */
 /*!
  * \param thePluginDirectory a fully qualified path to the directory with EasyGeoTagger plugins
+ * \param displaySplash a flag to indicate if the splash images should be displayed on startup
  */
 void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
 {

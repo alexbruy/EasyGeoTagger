@@ -30,6 +30,11 @@
 #include "ui_egtpythonconsoledialog.h"
 #include "egtapplicationinterface.h"
 
+/*! \brief Graphical Python console
+ *
+ * A graphical console that can be built into the core library with will allow real-time interaction
+ * with the main application and the ability to expand the application
+ */
 class MS_DLL_SPEC EgtPythonConsoleBase : public QWidget, Ui::EgtPythonConsoleDialog
 {
     Q_OBJECT

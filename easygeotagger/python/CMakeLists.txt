@@ -32,6 +32,8 @@ ENDIF(WIN32)
 
 ADD_CUSTOM_TARGET (python ALL DEPENDS ${EASYGT_LIB} ${BINDINGS_LIB} )
 
+ADD_DEPENDENCIES (python easygt)
+
 FILE(GLOB SIP_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.sip")
 
 # Step 1: during configuration

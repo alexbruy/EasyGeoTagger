@@ -1,10 +1,12 @@
 <RCC>
     <qresource prefix="/" >
-        <file>icons/discard.png</file>
         <file>icons/group.png</file>
         <file>icons/EasyGT.svg</file>
         <file>splash/EasyGT-Logo.png</file>
         <file>icons/text-x-python.svg</file>
+        <file>icons/internet-web-browser.svg</file>
+        <file>icons/help-browser.svg</file>
+        <file>icons/process-stop.svg</file>
     </qresource>
     <qresource prefix="/22" >
         <file>icons/22/preferences-system.png</file>
@@ -12,5 +14,6 @@
     <qresource prefix="/16" >
         <file>icons/16/list-add.png</file>
         <file>icons/16/system-log-out.png</file>
+        <file>icons/16/process-stop.png</file>
     </qresource>
 </RCC>
