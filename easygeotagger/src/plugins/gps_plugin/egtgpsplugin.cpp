@@ -40,6 +40,7 @@ EgtGpsPlugin::EgtGpsPlugin()
   cvDataTable = new EgtGpsDataTableWidget();  
   cvMainWidget.setWindowTitle( cvName );
   cvMainWidget.setMinimumSize( 250,150 );
+  cvMainWidget.setWindowIcon( QIcon( ":/icons/internet-web-browser.svg" ) );
 
   QWidget* lvPanel = new QWidget();
   QWidget* lvPanelButtons = new QWidget();

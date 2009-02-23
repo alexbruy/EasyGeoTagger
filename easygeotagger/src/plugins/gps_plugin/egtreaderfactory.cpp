@@ -32,6 +32,7 @@ EgtReaderFactory::EgtReaderFactory( )
   cvFileReader = 0;
 
   cvUiFileType.setupUi(&cvFileTypeDialog);
+  cvFileTypeDialog.setWindowIcon( QIcon( ":/icons/document-open.svg" ) );
 
   connect( cvUiFileType.buttonBox, SIGNAL( accepted() ), this, SLOT( accept() ) );
   connect( cvUiFileType.buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) );

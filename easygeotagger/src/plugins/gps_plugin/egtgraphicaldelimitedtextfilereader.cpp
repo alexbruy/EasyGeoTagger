@@ -32,6 +32,7 @@
 EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):EgtDelimitedTextFileReader()
 {
   cvUiTextDelimiter.setupUi(&cvSelectDelimiterDialog);
+  cvSelectDelimiterDialog.setWindowIcon( QIcon( ":/icons/EasyGT.svg" ) );
 
   connect( cvUiTextDelimiter.buttonBox, SIGNAL( accepted() ), this, SLOT( accept() ) );
   connect( cvUiTextDelimiter.buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) ); 
