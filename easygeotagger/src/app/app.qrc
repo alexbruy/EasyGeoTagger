@@ -16,4 +16,7 @@
         <file>icons/16/system-log-out.png</file>
         <file>icons/16/process-stop.png</file>
     </qresource>
+    <qresource prefix="/24" >
+        <file>icons/24/google.png</file>
+    </qresource>
 </RCC>

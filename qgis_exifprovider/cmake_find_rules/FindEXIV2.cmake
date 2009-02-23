@@ -17,7 +17,8 @@ FIND_PATH(EXIV2_INCLUDE_DIR exiv2/exif.hpp
   c:/msys/local/include/exiv2
   )
 
-FIND_LIBRARY(EXIV2_LIBRARY NAMES exiv2 PATHS 
+FIND_LIBRARY(EXIV2_LIBRARY NAMES exiv2 PATHS
+  /usr/lib64
   /usr/local/lib 
   /usr/lib 
   #MSVC

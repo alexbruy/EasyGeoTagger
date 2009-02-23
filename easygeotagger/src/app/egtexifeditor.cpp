@@ -49,7 +49,7 @@ EgtExifEditor::EgtExifEditor( QString theId, EgtExifEngine* theEngine )
 
   //Setup the Configure Dialog
   cvConfigurationDialog.setWindowTitle( tr( "Configure" ) );
-  cvConfigurationDialog.setWindowIcon( QIcon( ":/ExifEditor/wrench.png" ) );
+  cvConfigurationDialog.setWindowIcon( QIcon( ":/22/icons/22/preferences-system.png" ) );
   cvConfigurationDialog.setModal( true );
   cvConfigurationDialog.setLayout( new QVBoxLayout() );
   cvConfigurationDialog.layout()->setSpacing( 5 );

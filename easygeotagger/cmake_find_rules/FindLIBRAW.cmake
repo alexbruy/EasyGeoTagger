@@ -18,8 +18,9 @@ FIND_PATH(LIBRAW_INCLUDE_DIR libraw/libraw.h
   )
 
 FIND_LIBRARY(LIBRAW_LIBRARY NAMES raw PATHS 
+  /usr/lib64
   /usr/local/lib 
-  /usr/lib 
+  /usr/lib
   #MSVC
   "$ENV{LIB_DIR}/lib"
   #mingw

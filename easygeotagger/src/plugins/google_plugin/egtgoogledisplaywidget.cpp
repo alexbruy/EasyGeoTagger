@@ -33,7 +33,8 @@ EgtGoogleDisplayWidget::EgtGoogleDisplayWidget( QWidget* theParent )
     : QWidget( theParent ), ui( new Ui::EgtGoogleDisplayWidgetBase )
 {
   ui->setupUi( this );
-  ui->wvBrowser->load( QUrl( "http://cetacean.amnh.org/googlemap/" ) );
+  setWindowIcon( QIcon( ":/24/icons/24/google.png" ) );
+  ui->wvBrowser->load( QUrl( "http://biodiversityinformatics.amnh.org/open_source/easygeotagger/googlemap/" ) );
   connect ( ui->pbtnSaveCoordinates, SIGNAL( clicked() ), this, SLOT( saveCoordinates() ) );
 }
 

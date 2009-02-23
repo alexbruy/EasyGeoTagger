@@ -65,6 +65,7 @@ ELSE(WIN32)
     ELSE (APPLE)
       #MESSAGE("Searching for QGIS in /usr/bin; /usr/local/bin")
       FIND_PATH(QGIS_PLUGIN_DIR libnortharrowplugin.so
+        /usr/lib64/qgis
 	      /usr/lib/qgis
         /usr/local/lib/qgis
 	      )
@@ -73,10 +74,12 @@ ELSE(WIN32)
        /usr/local/include/qgis
        )
       FIND_LIBRARY(QGIS_CORE_LIBRARY NAMES qgis_core PATHS 
+       /usr/lib64
        /usr/lib
        /usr/local/lib
        )
-       FIND_LIBRARY(QGIS_GUI_LIBRARY NAMES qgis_gui PATHS 
+      FIND_LIBRARY(QGIS_GUI_LIBRARY NAMES qgis_gui PATHS
+       /usr/lib64
        /usr/lib
        /usr/local/lib
        )

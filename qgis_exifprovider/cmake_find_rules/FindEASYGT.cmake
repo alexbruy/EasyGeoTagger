@@ -56,6 +56,7 @@ ELSE (WIN32)
     )
   ELSE (APPLE)
     FIND_LIBRARY(EASYGT_LIBRARY NAMES easygt PATHS
+      /usr/lib64
       /usr/lib
       /usr/local/lib
     )
@@ -64,6 +65,7 @@ ELSE (WIN32)
       /usr/local/include/easygt
     )
     FIND_PATH(EASYGT_PLUGIN_DIR libgpsexifeditor.so
+      /usr/lib64/easygt
       /usr/lib/easygt
       /usr/local/lib/easygt
     )
