@@ -15,7 +15,7 @@
 # your file system.
 #   Line 28 - PROJECT_NAME = EasyGeoTagger
 #   Line 34 - PROJECT_NUMBER  = 0.3.0
-#   Line 41 – OUTPUT_DIRECTORY = /web/www/biodiversityinformatics.amnh.org/open_source/easygeotagger/api_doc/trunk
+#   Line 41 – OUTPUT_DIRECTORY = /web/www/biodiversityinformatics.amnh.org/open_source/easygeotagger/api_doc/
 #   Line 289 - EXTRACT_ALL = YES
 #   Line 299 - EXTRACT_STATIC  = YES
 #   Line 294 - EXTRACT_PRIVATE  =  YES
@@ -55,7 +55,7 @@ PROJECT_NUMBER         = 0.3.0
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = /web/www/biodiversityinformatics.amnh.org/open_source/easygeotagger/api_doc/trunk
+OUTPUT_DIRECTORY       = /web/www/biodiversityinformatics.amnh.org/open_source/easygeotagger/api_doc/
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 4096 sub-directories (in 2 levels) under the output directory of each output 
@@ -764,7 +764,7 @@ GENERATE_HTML          = YES
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
 # put in front of it. If left blank `html' will be used as the default path.
 
-HTML_OUTPUT            = html
+HTML_OUTPUT            = trunk
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for 
 # each generated HTML page (for example: .htm,.php,.asp). If it is left blank 
