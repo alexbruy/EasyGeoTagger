@@ -94,7 +94,29 @@ void EgtSaveAsJpg::imageLoaded( bool theSuccess )
     //TODO: Make plugin configurable and allow the user to over write the destination path
     if( lvFileInfo.isWritable() )
     {
-      QString lvNewFileName = cvImageFactory.fileName() + ".to.jpg";
+      QString lvNewFileName = cvImageFactory.fileName();
+      int lvIndex = cvImageFactory.fileName().lastIndexOf( ".");
+      if( lvIndex != -1 )
+      {
+        lvNewFileName.chop( cvImageFactory.fileName().size() - lvIndex );
+      }
+
+      lvFileInfo.setFile( lvNewFileName + ".jpg" );
+      if( lvFileInfo.exists() )
+      {
+        lvIndex = 2;
+        lvFileInfo.setFile( lvNewFileName + "(" + QString::number( lvIndex ) + ").jpg" );
+        while( lvFileInfo.exists() )
+        {
+          lvIndex++;
+          lvFileInfo.setFile( lvNewFileName + "(" + QString::number( lvIndex ) + ").jpg" );
+        }
+        lvNewFileName = lvNewFileName + "(" + QString::number( lvIndex ) + ").jpg";
+      }
+      else
+      {
+        lvNewFileName = lvNewFileName + ".jpg";
+      }
 
       cvOutputConsole.append( tr( "Saving image..." ) );
       if( cvImageFactory.saveOriginalImageAsJpeg( lvNewFileName ) )
