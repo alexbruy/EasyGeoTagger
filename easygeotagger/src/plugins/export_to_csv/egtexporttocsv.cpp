@@ -41,7 +41,7 @@
 EgtExportToCsv::EgtExportToCsv()
 {
   cvCategories = QObject::tr( "Utilities" );
-  cvDescription = QObject::tr( "Export a directory of images to a csv file. Exports all GPS tags from images with GPS EXIF data." );
+  cvDescription = QObject::tr( "Export the currently selected directory of images to a csv file. Exports all GPS tags from images with GPS EXIF data." );
   cvName = QObject::tr( "EXIF to CSV" );
 }
 

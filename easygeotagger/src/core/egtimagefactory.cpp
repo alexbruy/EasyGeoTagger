@@ -39,8 +39,24 @@ EgtImageFactory::EgtImageFactory( QString theFile )
   setFile( theFile );
 }
 
+EgtImageFactory::EgtImageFactory( QModelIndex theIndex )
+{
+  init();
+  setFile( theIndex );
+}
+
 EgtImageFactory::~EgtImageFactory()
 {
+  if( cvRawImageReader.isRunning() )
+  {
+    EgtDebug( "RawImageReader is currently running, wating for thread to abort" );
+    cvRawImageReader.abort();
+    while( cvRawImageReader.isRunning() )
+    {
+      cvRawImageReader.wait( 500 );
+    }
+    EgtDebug( "thread aborted" );
+  }
 }
 
 void EgtImageFactory::init()
@@ -103,11 +119,27 @@ QImage EgtImageFactory::scaleImage(int theWidth, int theHeight, bool* isValid )
   return cvResizedImage;
 }
 
+
 /*!
  * \param theOutputFile absolute path and filename in which to save the resized image
  * \returns true on success, false on failure
  */
-bool EgtImageFactory::saveAsJpeg( QString theOutputFile )
+bool EgtImageFactory::saveOriginalImageAsJpeg( QString theOutputFile )
+{
+  if( !cvIsValidImage )
+  {
+    EgtDebug( "A valid image has not been loaded yet" );
+    return false;
+  }
+
+  return cvOriginalImage.save( theOutputFile, "JPG", 100 );
+}
+
+/*!
+ * \param theOutputFile absolute path and filename in which to save the resized image
+ * \returns true on success, false on failure
+ */
+bool EgtImageFactory::saveScaledImageAsJpeg( QString theOutputFile )
 {
   if( !cvIsValidImage || !cvHasBeenResized )
   {
@@ -124,19 +156,9 @@ bool EgtImageFactory::saveAsJpeg( QString theOutputFile )
 void EgtImageFactory::setFile( QString theImageFileName )
 {
   EgtDebug( "entered" );
-  
-  //Reset resized flag
-  cvHasBeenResized = false;
-  
-  //If we were given a dir just bail
-  QFileInfo lvFileInfo( theImageFileName );
-  if( lvFileInfo.isDir() )
-  {
-    EgtDebug( "received directory not image...bailing" );
-    return;
-  }
-  
-  
+
+  cvFileName = theImageFileName;
+
   if( cvRawImageReader.isRunning() )
   {
     EgtDebug( "RawImageReader is currently running, wating for thread to abort" );
@@ -146,6 +168,19 @@ void EgtImageFactory::setFile( QString theImageFileName )
       cvRawImageReader.wait( 500 );
     }
     EgtDebug( "thread aborted" );
+  }
+  
+  //Reset flags
+  cvIsValidImage = false;
+  cvHasBeenResized = false;
+  
+  //If we were given a dir just bail
+  QFileInfo lvFileInfo( theImageFileName );
+  if( lvFileInfo.isDir() )
+  {
+    EgtDebug( "received directory not image...bailing" );
+    emit( imageLoaded( cvIsValidImage ) );
+    return;
   }
   
   //TODO: Eventually there will have to be a switch here to figure out which read() to call
@@ -164,6 +199,16 @@ void EgtImageFactory::setFile( QString theImageFileName )
   }
   
 }
+
+/*!
+ * \param theImageFileName absolute path and file name of the image to open
+ */
+void EgtImageFactory::setFile( QModelIndex theIndex )
+{
+  EgtPathBuilder lvBuilder;
+  setFile( lvBuilder.buildPath( theIndex ) );
+}
+
 
 /*
  *

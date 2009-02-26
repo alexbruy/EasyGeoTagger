@@ -8,6 +8,7 @@
         <file>icons/help-browser.svg</file>
         <file>icons/process-stop.svg</file>
         <file>icons/document-open.svg</file>
+        <file>icons/document-save.svg</file>
     </qresource>
     <qresource prefix="/22" >
         <file>icons/22/preferences-system.png</file>

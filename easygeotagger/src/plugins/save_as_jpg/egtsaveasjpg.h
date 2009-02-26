@@ -1,9 +1,9 @@
 /*
-** File: egttestplugin.h
+** File: egtsaveasjpg.h
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
-** Creation Date: 2008-09-30
+** Creation Date: 2009-02-26
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright (c) 2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
@@ -21,22 +21,28 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTTESTPLUGIN_H
-#define EGTTESTPLUGIN_H
+#ifndef EGTSAVEASJPGPLUGIN_H
+#define EGTSAVEASJPGPLUGIN_H
 
 #include "egtplugininterface.h"
+#include "egtimagefactory.h"
 
-/*! \brief Test plugin
+#include <QWidget>
+#include <QModelIndex>
+#include <QProgressBar>
+#include <QTextBrowser>
+
+/*! \brief Save as JPG plugin
  *
- * This EasyGT plugin does not do anything. It is basically just a plugin template
+ * This EasyGT plugin will convert an image from any format to JPG and copy over all of the exif data
  */
-class EgtTestPlugin : public EgtPluginInterface
+class EgtSaveAsJpg : public EgtPluginInterface
 {
   Q_OBJECT
   Q_INTERFACES(EgtPluginInterface)
   
   public:
-    EgtTestPlugin();
+    EgtSaveAsJpg();
     /*! \brief Connects the provided button to the showConfigurationPanel function */
     void connectConfigurationButton( QPushButton* );
     
@@ -45,12 +51,28 @@ class EgtTestPlugin : public EgtPluginInterface
     
     /*! \brief Returns the ability of this plugin to be configured */
     bool isConfigurable() { return false; }
+
+    /*! \brief Initialization plugin*/
+    void initPlugin();
     
   public slots:
     /*! \brief Slot called to activate or launch the plugin */
     void run();
-    
+
     /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel() { }
+
+  private slots:
+    void imageLoaded( bool );
+    void setIndex( QModelIndex );
+    void updateProgress( int, int, int );
+
+  private:
+    QModelIndex cvCurrentIndex;
+    EgtImageFactory cvImageFactory;
+    QProgressBar cvProgressBar;
+    QWidget cvProgressDialog;
+    QTextBrowser cvOutputConsole;
+
 };
 #endif

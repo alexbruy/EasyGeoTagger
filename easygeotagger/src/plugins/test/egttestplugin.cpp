@@ -1,5 +1,5 @@
 /*
-** File: egtplugininterface.h
+** File: egttestplugin.cpp
 ** Author(s): Peter J. Ersts (ersts at amnh.org)
 ** Creation Date: 2008-09-30
 **

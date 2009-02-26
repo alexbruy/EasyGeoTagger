@@ -1,0 +1,32 @@
+IF (WIN32)
+  IF (MSVC)
+    ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllimport)")
+  ELSE (MSVC)
+    ADD_DEFINITIONS("-UMS_DLL_SPEC \"-DMS_DLL_SPEC=__declspec(dllimport)\"")
+  ENDIF (MSVC)
+ENDIF (WIN32)
+
+INCLUDE( ${QT_USE_FILE} )
+
+INCLUDE_DIRECTORIES(
+  ${CMAKE_BINARY_DIR}
+  .
+)
+
+SET( JPG_SRCS
+    egtsaveasjpg.cpp
+   )
+
+SET( JPG_MOC_HDRS
+    egtsaveasjpg.h
+   )
+
+QT4_AUTOMOC( ${JPG_SRCS} )
+QT4_WRAP_CPP( JPG_MOC_SRCS ${JPG_MOC_HDRS} )
+
+ADD_DEFINITIONS( -DQT_PLUGIN )
+
+ADD_library( saveasjpg MODULE ${JPG_SRCS} ${JPG_MOC_SRCS} )
+TARGET_LINK_LIBRARIES( saveasjpg ${QT_LIBRARIES} easygt )
+
+INSTALL( TARGETS saveasjpg DESTINATION ${EASYGT_PLUGIN_SUBDIR} )

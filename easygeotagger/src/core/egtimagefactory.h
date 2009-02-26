@@ -25,6 +25,7 @@
 #define EGTIMAGEFACTORY_H
 
 #include "egtrawimagereader.h"
+#include "egtpathbuilder.h"
 
 #include <QImage>
 #include <QModelIndex>
@@ -42,21 +43,48 @@ class MS_DLL_SPEC EgtImageFactory : public QObject
     
     /*! \brief Constructor */
     EgtImageFactory( QString );
+
+    /*! \brief Constructor */
+    EgtImageFactory( QModelIndex );
     
     /*! \brief Destructor */
     ~EgtImageFactory();
     
+    /*! \brief Is the image factory currently working with a valid image */
+    bool isValid() { return cvIsValidImage; }
+
+    /*! \brief Accessor for the name of the current image file, may or may not be a valid image */
+    QString fileName() { return cvFileName; }
+
     /*! \brief Returns the a copy of the current resize image */
     QImage scaledImage( bool* isValid=0 ) const;
     
     /*! \brief Returns a copy of the image resized to the specified dimensions */
     QImage scaleImage( int, int, bool* isValid=0 );
   
-    /*! \brief Set the image filename */
+    /*! \brief Set the image file name */
     void setFile( QString );
+
+    /*! \brief Set the image file name */
+    void setFile( QModelIndex );
+
+    /*! \brief Save the original image as a jpeg */
+    bool saveOriginalImageAsJpeg( QString );
     
     /*! \brief Save the current resized image as a jpeg */
-    bool saveAsJpeg( QString );
+    bool saveScaledImageAsJpeg( QString );
+
+  signals:
+    void progress( int, int, int );
+    void imageLoaded( bool );
+
+  private slots:
+    /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
+    void reEmitProgress( int, int, int );
+
+    /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
+    void rawImageLoaded( bool );
+
   
   private:
     /*! \brief Initialization steps */
@@ -71,6 +99,9 @@ class MS_DLL_SPEC EgtImageFactory : public QObject
     /*! \brief Read/open the base image as a tiff */
     void readTiff( QString );
     
+    /*! \brief The name of the current image file, may or may not be a valid image */
+    QString cvFileName;
+
     /*! \brief Has the base image been resized */
     bool cvHasBeenResized;
     
@@ -83,9 +114,6 @@ class MS_DLL_SPEC EgtImageFactory : public QObject
     /*! \brief Was the last image opened sucessfully */
     bool cvIsValidImage;    
 
-
-
-
     /*! \brief Thread to load the raw image */
     EgtRawImageReader cvRawImageReader;    
 
@@ -97,18 +125,6 @@ class MS_DLL_SPEC EgtImageFactory : public QObject
     
     /*! \brief QImage containing embeded thumbnail for raw images */
     QImage cvThumbnailImage;
-
-    
-  signals:
-    void progress( int, int, int );
-    void imageLoaded(bool);
-
-  private slots:
-    /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
-    void reEmitProgress( int, int, int );
-  
-    /*! \brief Slot to re-emit the progress to the main window which has the progress bar */
-    void rawImageLoaded( bool );
 
 };
 #endif

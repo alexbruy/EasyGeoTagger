@@ -9,6 +9,7 @@
 %Include egtexifengine.sip
 %Include egtexiftaggroup.sip
 %Include egtgpsexifengine.sip
+%Include egtimagefactory.sip
 %Include egtpathbuilder.sip
 %Include egtplugininterface.sip
 %Include egtphotoexifengine.sip
