@@ -3,11 +3,16 @@ cmake_minimum_required(VERSION 2.6)
 PROJECT(UnitTestExif)
 
 IF (WIN32)
+  # expect that classes are being imported
+  # Note: MSVC doesn't like when the macros are quotes
+  # and MSYS doesn't like them unqouted (bacause of braces)
   IF (MSVC)
-    ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllexport)")
+    ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllimport)")
   ELSE (MSVC)
-    ADD_DEFINITIONS("-UMS_DLL_SPEC \"-DMS_DLL_SPEC=__declspec(dllexport)\"")
+    ADD_DEFINITIONS("-UMS_DLL_SPEC \"-DMS_DLL_SPEC=__declspec(dllimport)\"")
   ENDIF (MSVC)
+ELSE (WIN32)
+  ADD_DEFINITIONS(-DMS_DLL_SPEC=)
 ENDIF (WIN32)
 
 # set path to additional CMake modules
