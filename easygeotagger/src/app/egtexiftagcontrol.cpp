@@ -68,7 +68,7 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, QS
     cvDiscardButton.setToolTip( tr( "Discard changes" ) );
     cvEditorControls.layout()->addWidget( &cvDiscardButton );
     connect( &cvDiscardButton, SIGNAL( clicked() ), this, SLOT( cvDiscardButton_clicked() ) );
-    connect( &cvKeyValue, SIGNAL( textEdited( QString ) ), this, SLOT( cvKeyValue_textEdited( QString ) ) );
+    connect( &cvKeyValue, SIGNAL( textChanged( QString ) ), this, SLOT( cvKeyValue_textChanged( QString ) ) );
 
     //Build the configuration options
     cvConfigurationControls.setLayout( new QHBoxLayout() );
@@ -193,7 +193,7 @@ void EgtExifTagControl::cvEnabled_stateChanged( int theState )
   }
 }
 
-void EgtExifTagControl::cvKeyValue_textEdited( QString theValue )
+void EgtExifTagControl::cvKeyValue_textChanged( QString theValue )
 {
   cvDiscardButton.setEnabled( true );
 }

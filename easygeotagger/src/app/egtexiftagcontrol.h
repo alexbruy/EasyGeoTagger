@@ -93,7 +93,7 @@ class MS_DLL_SPEC EgtExifTagControl : public QObject
   private slots:
     void cvDiscardButton_clicked();
     void cvEnabled_stateChanged( int );
-    void cvKeyValue_textEdited( QString );
+    void cvKeyValue_textChanged( QString );
 
   private:
     QString cvCachedValue;
