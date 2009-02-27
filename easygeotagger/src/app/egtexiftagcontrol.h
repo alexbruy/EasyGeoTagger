@@ -52,6 +52,9 @@ class MS_DLL_SPEC EgtExifTagControl : public QObject
     /*! \brief Returns a pointer to the editor controls */
     QWidget* editorControls() { return &cvEditorControls; }
 
+    /*! \brief Return true of the tag has units assoicated with it, false otherwise */
+    bool hasUnits() { return cvUnits.isEnabled(); }
+
     /*! \brief Returns the current enabeled state of the control */
     bool isEnabled();
 

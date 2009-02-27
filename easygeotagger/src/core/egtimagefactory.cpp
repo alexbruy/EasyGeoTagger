@@ -201,7 +201,7 @@ void EgtImageFactory::setFile( QString theImageFileName )
 }
 
 /*!
- * \param theImageFileName absolute path and file name of the image to open
+ * \param theIndex the QModelIndex for the currently selected item in the file browser
  */
 void EgtImageFactory::setFile( QModelIndex theIndex )
 {

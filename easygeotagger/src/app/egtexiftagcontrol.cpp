@@ -41,6 +41,7 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, QS
     cvDisplayName = theDisplayName;
     cvCachedValue = "";
     cvKey = theKey;
+    cvUnits.setEnabled( false );
 
     //Build the editor controls
     cvEditorControls.setLayout( new QHBoxLayout() );
@@ -56,6 +57,7 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, QS
 
     if( theUnits.size() > 0 )
     {
+      cvUnits.setEnabled( true );
       cvUnits.setMinimumWidth(40);
       cvUnits.setMaximumHeight( 22 );
       cvEditorControls.layout()->addWidget( &cvUnits );

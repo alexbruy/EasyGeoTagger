@@ -226,8 +226,11 @@ void EgtExifEditor::cvSaveButton_clicked()
       cvExifEngine->write( lvIterator.value()->key(),  lvIterator.value()->value() );
       (*lvIterator)->setValue( cvExifEngine->read( lvIterator.value()->key() ) );
 
-      cvExifEngine->write( lvIterator.value()->key()+"Ref",  lvIterator.value()->units() );
-      (*lvIterator)->setUnits( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
+      if( lvIterator.value()->hasUnits() )
+      {
+        cvExifEngine->write( lvIterator.value()->key()+"Ref",  lvIterator.value()->units() );
+        (*lvIterator)->setUnits( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
+      }
     }
     lvIterator++;
   }
