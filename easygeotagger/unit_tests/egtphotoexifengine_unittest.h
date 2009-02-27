@@ -8,8 +8,6 @@
 
 class EgtPhotoExifEngine_UnitTest
 {
-  //Q_OBJECT
-
   public:
     EgtPhotoExifEngine_UnitTest();
     int runTest( QTextEdit* );

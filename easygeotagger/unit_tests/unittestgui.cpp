@@ -26,11 +26,9 @@ void UnitTestGui::on_pbtnStartTest_clicked()
 
   EgtPhotoExifEngine_UnitTest lvPhotoTest;
   EgtGpsExifEngine_UnitTest lvGpsTest;
-    
+ 
   lvNumFailures+= lvPhotoTest.runTest(ui->teOutput);
   lvNumFailures+= lvGpsTest.runTest(ui->teOutput);
-  
-  
 
   QMessageBox::information(this, tr("Unit Test"),
                                 tr(("Test finished with "+QString::number(lvNumFailures)+" errors").toStdString().c_str()),

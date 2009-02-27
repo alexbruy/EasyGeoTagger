@@ -1151,7 +1151,15 @@ bool EgtGpsExifEngine::writeAltitude( double theValue )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return writeTag( "Exif.GPSInfo.GPSAltitude",  QString::number( (int)fabs( lvValueInt ) ) +"/99999", "Rational" );
+
+  if( !writeTag( "Exif.GPSInfo.GPSAltitude",  QString::number( (int)fabs( lvValueInt ) ) +"/99999", "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeAltitude( QString theValue )
@@ -1185,7 +1193,14 @@ bool EgtGpsExifEngine::writeAreaInformation( QString theValue )
     return false;
   }
 
-  return writeTag( "Exif.GPSInfo.GPSAreaInformation", theValue.trimmed(), "Undefined" );
+  if( !writeTag( "Exif.GPSInfo.GPSAreaInformation", theValue.trimmed(), "Ascii" ) ) //This was of type "Undefined"
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1197,7 +1212,15 @@ bool EgtGpsExifEngine::writeDateStamp( QString theValue )
   if( theValue.isEmpty() ){ return false; }
 
   EgtDebug( "entered writeDateStamp(QString)" );
-  return writeTag( "Exif.GPSInfo.GPSDateStamp", theValue.trimmed(), "Ascii" );
+
+  if( !writeTag( "Exif.GPSInfo.GPSDateStamp", theValue.trimmed(), "Ascii" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1212,7 +1235,15 @@ bool EgtGpsExifEngine::writeDestBearing( float theValue )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return writeTag( "Exif.GPSInfo.GPSDestBearing", QString::number( (int)fabs( lvValueInt ) )+"/99999" , "Rational" );
+
+  if( !writeTag( "Exif.GPSInfo.GPSDestBearing", QString::number( (int)fabs( lvValueInt ) )+"/99999" , "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeDestBearing( QString theValue )
@@ -1240,7 +1271,14 @@ bool EgtGpsExifEngine::writeDestBearingRef( QString theValue )
 
   if( theValue.isEmpty() ){ return false; } 
 
-  return writeTag( "Exif.GPSInfo.GPSDestBearingRef", theValue.trimmed(), "Ascii" );
+  if( !writeTag( "Exif.GPSInfo.GPSDestBearingRef", theValue.trimmed(), "Ascii" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1249,7 +1287,14 @@ bool EgtGpsExifEngine::writeDestBearingRef( QString theValue )
  */
 bool EgtGpsExifEngine::writeDifferential( int theValue )
 {
-  return writeTag( "Exif.GPSInfo.GPSDifferential", QString::number( theValue ), "Short" );
+  if( !writeTag( "Exif.GPSInfo.GPSDifferential", QString::number( theValue ), "Short" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeDifferential( QString theValue )
@@ -1279,7 +1324,15 @@ bool EgtGpsExifEngine::writeDirection( float theValue )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return writeTag( "Exif.GPSInfo.GPSImgDirection", QString::number( (int)fabs( lvValueInt ) )+"/99999", "Rational" );
+
+  if( !writeTag( "Exif.GPSInfo.GPSImgDirection", QString::number( (int)fabs( lvValueInt ) )+"/99999", "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeDirection( QString theValue )
@@ -1309,7 +1362,14 @@ bool EgtGpsExifEngine::writeDirectionRef( QString theValue )
 
   if( theValue.isEmpty() ){ return false; } 
 
-  return writeTag( "Exif.GPSInfo.GPSImgDirectionRef", theValue.trimmed(), "Ascii" );
+  if( !writeTag( "Exif.GPSInfo.GPSImgDirectionRef", theValue.trimmed(), "Ascii" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1324,7 +1384,15 @@ bool EgtGpsExifEngine::writeDestDistance( double theValue )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return writeTag( "Exif.GPSInfo.GPSDestDistance", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" );
+
+  if( !writeTag( "Exif.GPSInfo.GPSDestDistance", QString( QString::number( (int)fabs( lvValueInt ) )+"/99999" ), "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeDestDistance( QString theValue )
@@ -1351,7 +1419,14 @@ bool EgtGpsExifEngine::writeDestDistanceRef( QString theValue )
 
   if( !isValidImage() ) { return false; }
 
-  return writeTag( "Exif.GPSInfo.GPSDestDistanceRef", theValue.trimmed(), "Ascii" );
+  if( !writeTag( "Exif.GPSInfo.GPSDestDistanceRef", theValue.trimmed(), "Ascii" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1385,7 +1460,14 @@ bool EgtGpsExifEngine::writeDestLatitude( double theValue )
     }
   }
   
-  return writeTag( "Exif.GPSInfo.GPSDestLatitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
+  if( !writeTag( "Exif.GPSInfo.GPSDestLatitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeDestLatitude( QString theValue )
@@ -1437,7 +1519,14 @@ bool EgtGpsExifEngine::writeDestLongitude( double theValue )
     }
   }
   
-  return writeTag( "Exif.GPSInfo.GPSDestLongitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
+  if( !writeTag( "Exif.GPSInfo.GPSDestLongitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeDestLongitude( QString theValue )
@@ -1469,7 +1558,15 @@ bool EgtGpsExifEngine::writeGpsDOP( double theValue )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return writeTag( "Exif.GPSInfo.GPSDOP",  QString::number( (int)fabs( lvValueInt ) )+"/99999", "Rational" );
+
+  if( !writeTag( "Exif.GPSInfo.GPSDOP",  QString::number( (int)fabs( lvValueInt ) )+"/99999", "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeGpsDOP( QString theValue )
@@ -1518,8 +1615,15 @@ bool EgtGpsExifEngine::writeLatitude( double theValue )
       return false;
     }
   }
-  
-  return writeTag( "Exif.GPSInfo.GPSLatitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
+
+  if( ! writeTag( "Exif.GPSInfo.GPSLatitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1573,7 +1677,14 @@ bool EgtGpsExifEngine::writeLongitude( double theValue )
     }
   }
   
-  return writeTag( "Exif.GPSInfo.GPSLongitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" );
+  if( !writeTag( "Exif.GPSInfo.GPSLongitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 
@@ -1609,7 +1720,14 @@ bool EgtGpsExifEngine::writeMapDatum( QString theValue )
   
   if( theValue.isEmpty() ){ return false; } 
 
-  return writeTag( "Exif.GPSInfo.GPSMapDatum", theValue.trimmed(), "Ascii" );
+  if( !writeTag( "Exif.GPSInfo.GPSMapDatum", theValue.trimmed(), "Ascii" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1622,7 +1740,14 @@ bool EgtGpsExifEngine::writeMeasureMode( QString theValue)
 
   if( theValue.isEmpty() ){ return false; } 
 
-  return writeTag( "Exif.GPSInfo.GPSMeasureMode", theValue.trimmed(), "Ascii" );
+  if( !writeTag( "Exif.GPSInfo.GPSMeasureMode", theValue.trimmed(), "Ascii" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1635,7 +1760,14 @@ bool EgtGpsExifEngine::writeProcessingMethod( QString theValue)
 
   if( theValue.isEmpty() ){ return false; } 
 
-  return writeTag( "Exif.GPSInfo.GPSProcessingMethod", theValue.trimmed(), "Undefined" );
+  if( !writeTag( "Exif.GPSInfo.GPSProcessingMethod", theValue.trimmed(), "Ascii" ) ) //This was of type "Undefined"
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1648,7 +1780,14 @@ bool EgtGpsExifEngine::writeSatellites( QString theValue )
 
   if( theValue.isEmpty() ){ return false; } 
 
-  return writeTag( "Exif.GPSInfo.GPSSatellites", theValue.trimmed(), "Ascii" );
+  if( !writeTag( "Exif.GPSInfo.GPSSatellites", theValue.trimmed(), "Ascii" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1663,7 +1802,15 @@ bool EgtGpsExifEngine::writeSpeed( double theValue )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return writeTag( "Exif.GPSInfo.GPSSpeed", QString::number( (int)fabs( lvValueInt ) )+"/99999", "Rational" );
+
+  if( !writeTag( "Exif.GPSInfo.GPSSpeed", QString::number( (int)fabs( lvValueInt ) )+"/99999", "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeSpeed( QString theValue )
@@ -1693,7 +1840,14 @@ bool EgtGpsExifEngine::writeSpeedRef( QString theValue )
 
   if( theValue.isEmpty() ){ return false; } 
 
-  return writeTag( "Exif.GPSInfo.GPSSpeedRef", theValue.trimmed(), "Ascii" );
+  if( !writeTag( "Exif.GPSInfo.GPSSpeedRef", theValue.trimmed(), "Ascii" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 /*!
  *\param theValue a QString containing the status of the GPS receiver to be written to the exif metadata
@@ -1705,7 +1859,14 @@ bool EgtGpsExifEngine::writeStatus( QString theValue )
 
   if( theValue.isEmpty() ){ return false; } 
 
-  return writeTag( "Exif.GPSInfo.GPSStatus", theValue.trimmed(), "Ascii" );
+  if( !writeTag( "Exif.GPSInfo.GPSStatus", theValue.trimmed(), "Ascii" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1751,7 +1912,15 @@ bool EgtGpsExifEngine::writeTimeStamp( QString theString )
   }
 
  lvValue3 =lvValue;
- return writeTag( "Exif.GPSInfo.GPSTimeStamp",QString::number( lvValue1 ) +"/1 "+ QString::number( lvValue2 ) +"/1 "+ QString::number( lvValue3 ) +"/1", "Rational" );
+
+  if( !writeTag( "Exif.GPSInfo.GPSTimeStamp",QString::number( lvValue1 ) +"/1 "+ QString::number( lvValue2 ) +"/1 "+ QString::number( lvValue3 ) +"/1", "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 /*!
@@ -1766,7 +1935,15 @@ bool EgtGpsExifEngine::writeTrack( float theValue )
 
   double lvValueInt;
   modf( theValue*99999, &lvValueInt );
-  return writeTag( "Exif.GPSInfo.GPSTrack", QString::number( (int)fabs( lvValueInt ) )+"/99999", "Rational" );
+
+  if( !writeTag( "Exif.GPSInfo.GPSTrack", QString::number( (int)fabs( lvValueInt ) )+"/99999", "Rational" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeTrack( QString theValue )
@@ -1796,7 +1973,14 @@ bool EgtGpsExifEngine::writeTrackRef( QString theValue )
 
   if( theValue.isEmpty() ){ return false; } 
 
-  return writeTag( "Exif.GPSInfo.GPSTrackRef", theValue.trimmed(), "Ascii" );
+  if( !writeTag( "Exif.GPSInfo.GPSTrackRef", theValue.trimmed(), "Ascii" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 /*!
  *\param theValue a integer containing the version of GPS to be written to the exif metadata
@@ -1805,7 +1989,15 @@ bool EgtGpsExifEngine::writeTrackRef( QString theValue )
 bool EgtGpsExifEngine::writeVersionID( int theValue )
 {
   EgtDebug( "entered writeVersionID(QString)" );
-  return writeTag( "Exif.GPSInfo.GPSVersionID", QString::number( theValue ), "Byte" );
+
+  if( !writeTag( "Exif.GPSInfo.GPSVersionID", QString::number( theValue ), "Byte" ) )
+  {
+    return false;
+  }
+
+  //Write passed so set the has expected exif flag and return true
+  cvHasExpectedExif = true;
+  return true;
 }
 
 bool EgtGpsExifEngine::writeVersionID( QString theValue )

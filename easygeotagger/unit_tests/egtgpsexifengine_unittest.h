@@ -8,8 +8,6 @@
 
 class EgtGpsExifEngine_UnitTest
 {
-  //Q_OBJECT
-
   public:
     EgtGpsExifEngine_UnitTest();
     int runTest( QTextEdit* );

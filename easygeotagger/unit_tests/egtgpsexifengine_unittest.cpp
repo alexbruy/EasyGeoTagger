@@ -35,7 +35,7 @@ int EgtGpsExifEngine_UnitTest::runTest(QTextEdit* theOutputWindow)
     theOutputWindow->append("class: [EgtGpsExifEngine]. Function: altitude()--> FAIL");
   } 
   
-  lvOk = cvGpsExifEngine->writeAreaInformation("AreaInformation");
+  lvOk = cvGpsExifEngine->writeAreaInformation("AreaInformation"); //THIS ONE CRASHES!!
   if ( lvOk )
   {
     theOutputWindow->append("class: [EgtGpsExifEngine]. Function: writeAreaInformation()--> Ok");
@@ -387,7 +387,7 @@ int EgtGpsExifEngine_UnitTest::runTest(QTextEdit* theOutputWindow)
     theOutputWindow->append("class: [EgtGpsExifEngine]. Function: measureMode()--> FAIL");
   } 
 
-  lvOk = cvGpsExifEngine->writeProcessingMethod("ProcessingMethod");
+  lvOk = cvGpsExifEngine->writeProcessingMethod("ProcessingMethod"); //THIS ONE CRASHES!!
   if ( lvOk )
   {
     theOutputWindow->append("class: [EgtGpsExifEngine]. Function: writeProcessingMethod()--> Ok");
@@ -452,6 +452,7 @@ int EgtGpsExifEngine_UnitTest::runTest(QTextEdit* theOutputWindow)
     lvNumFailures++;
     theOutputWindow->append("class: [EgtGpsExifEngine]. Function: speed()--> FAIL");
   } 
+
   lvOk = cvGpsExifEngine->writeSpeedRef("K");
   if ( lvOk )
   {
