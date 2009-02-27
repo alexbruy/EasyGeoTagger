@@ -37,10 +37,14 @@ INCLUDE_DIRECTORIES(
 SET(UnitTestExif_SRCS
     main.cpp
     unittestgui.cpp
+    egtgpsexifengine_unittest.cpp
+    egtphotoexifengine_unittest.cpp
    )
 
 SET(UnitTestExif_MOC_HDRS
     unittestgui.h
+    egtgpsexifengine_unittest.h
+    egtphotoexifengine_unittest.h
    )
    
 SET(UnitTestExif_UIS

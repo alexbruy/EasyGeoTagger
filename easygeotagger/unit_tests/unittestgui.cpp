@@ -5,6 +5,8 @@
 #include "ui_unittestguibase.h"
 #include "unittestgui.h"
 
+#include "egtgpsexifengine_unittest.h"
+#include "egtphotoexifengine_unittest.h"
 
 UnitTestGui::UnitTestGui():  ui( new Ui::UnitTestGuiBase )
 {
@@ -21,29 +23,14 @@ void UnitTestGui::on_pbtnStartTest_clicked()
   QImage lvPic = QImage( 128,128,QImage::Format_RGB32 );
   lvPic.fill(125);
   lvPic.save("./test.jpg");
-  cvPhotoExifEngine->setFile("./test.jpg");
 
-  lvOk = cvPhotoExifEngine->writeDateTimeOriginal("2005:07:09 10:02:47");
-  if ( lvOk )
-  {
-    ui->teOutput->append("class: [EgtPhotoExifEngine]. Function: writeDateTimeOriginal()--> Ok");
-  }
-  else
-  {
-    lvNumFailures++;
-    ui->teOutput->append("class: [EgtPhotoExifEngine]. Function: writeDateTimeOriginal()--> Fail");
-  }
+  EgtPhotoExifEngine_UnitTest lvPhotoTest;
+  EgtGpsExifEngine_UnitTest lvGpsTest;
+    
+  lvNumFailures+= lvPhotoTest.runTest(ui->teOutput);
+  lvNumFailures+= lvGpsTest.runTest(ui->teOutput);
   
-  cvPhotoExifEngine->dateTimeOriginal(&lvOk);
-  if( lvOk )
-  {
-    ui->teOutput->append("class: [EgtPhotoExifEngine]. Function: dateTimeOriginal()--> Ok");
-  }
-  else
-  {
-    lvNumFailures++;
-    ui->teOutput->append("class: [EgtPhotoExifEngine]. Function: dateTimeOriginal()--> Fail");
-  }
+  
 
   QMessageBox::information(this, tr("Unit Test"),
                                 tr(("Test finished with "+QString::number(lvNumFailures)+" errors").toStdString().c_str()),
@@ -51,3 +38,7 @@ void UnitTestGui::on_pbtnStartTest_clicked()
                                 QMessageBox::Ok);
 }
 
+QTextEdit* UnitTestGui::outputWindow()
+{
+  return ui->teOutput;
+}

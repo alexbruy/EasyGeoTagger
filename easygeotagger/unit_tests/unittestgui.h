@@ -2,6 +2,7 @@
 #define UNITTESTGUI_H
 
 #include <QDialog>
+#include <QTextEdit>
 #include "egtphotoexifengine.h"
 
 namespace Ui
@@ -15,6 +16,7 @@ class UnitTestGui : public QDialog
 
   public:
     UnitTestGui();
+    QTextEdit* outputWindow();
 
   private slots:
     void on_pbtnStartTest_clicked();
