@@ -585,5 +585,36 @@ int EgtGpsExifEngine_UnitTest::runTest(QTextEdit* theOutputWindow)
     theOutputWindow->append("class: [EgtGpsExifEngine]. Function: versionID()--> FAIL");
   } 
 
+
+
+
+  /*
+   * TEST INVALID INPUTS
+   */
+  lvOk = cvGpsExifEngine->writeDifferential("-1");
+  if ( lvOk )
+  {
+    theOutputWindow->append("class: [EgtGpsExifEngine]. Function: writeDifferential()--> Ok");
+  }
+  else
+  {
+    lvNumFailures++;
+    theOutputWindow->append("class: [EgtGpsExifEngine]. Function: writeDifferential()--> FAIL");
+  }
+
+  cvGpsExifEngine->differential(&lvOk);
+  if( lvOk )
+  {
+    theOutputWindow->append("class: [EgtGpsExifEngine]. Function: differential()--> Ok");
+  }
+  else
+  {
+    lvNumFailures++;
+    theOutputWindow->append("class: [EgtGpsExifEngine]. Function: differential()--> FAIL");
+  }
+
+
+
+
   return lvNumFailures;
 }

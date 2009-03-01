@@ -43,8 +43,6 @@ SET(UnitTestExif_SRCS
 
 SET(UnitTestExif_MOC_HDRS
     unittestgui.h
-    egtgpsexifengine_unittest.h
-    egtphotoexifengine_unittest.h
    )
    
 SET(UnitTestExif_UIS
