@@ -141,10 +141,10 @@ void EgtExifEditor::loadExifData( bool hasTagData )
 
   if( 0 == cvExifEngine ) { return; }
 
+  QString lvBlank = "";
   QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
   if( !hasTagData ) //If the selected file does not have tag data clear the line edits
   {
-    QString lvBlank = "";
     while( lvIterator != cvTagControls.end() )
     {
       lvIterator.value()->setValue( lvBlank );
@@ -154,14 +154,45 @@ void EgtExifEditor::loadExifData( bool hasTagData )
   }
   else //If the selected file does have tag data try to load it into the line edits
   {
+    bool isValid;
+    QVariant lvResult;
+    QVariant lvInvalidResult( "" );
     while( lvIterator != cvTagControls.end() )
     {
-      lvIterator.value()->setValue( cvExifEngine->read( lvIterator.value()->key() ) );
-      lvIterator.value()->setUnits( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
+      if( lvIterator.value()->isEnabled() )
+      {
+        lvResult = cvExifEngine->read( lvIterator.value()->key(), &isValid );
+        if( isValid )
+        {
+          (*lvIterator)->setValue( lvResult );
+        }
+        else
+        {
+          (*lvIterator)->setValue( lvInvalidResult );
+        }
+
+        if( lvIterator.value()->hasUnits() )
+        {
+          lvResult = cvExifEngine->read( lvIterator.value()->key()+"Ref", &isValid );
+          if( isValid )
+          {
+            (*lvIterator)->setUnits( lvResult );
+          }
+          else
+          {
+            (*lvIterator)->setUnits( lvInvalidResult );
+          }
+        }
+      }
+      else
+      {
+        lvIterator.value()->setValue( lvBlank );
+        lvIterator.value()->setUnits( lvBlank );
+      }
+
       lvIterator++;
     }
   }
-
 }
 
 void EgtExifEditor::showConfigurationDialog( QPoint thePoint )
@@ -203,11 +234,40 @@ void EgtExifEditor::controlEnabled( QString theKey )
 {
   if( 0 == cvExifEngine ) { return; }
 
+  //Try to populate the controls data
+  bool isValid;
+  QVariant lvResult;
+  QVariant lvInvalidResult( "" );
+  lvResult = cvExifEngine->read( theKey, &isValid );
+  if( isValid )
+  {
+    cvTagControls[ theKey ]->setValue( lvResult );
+  }
+  else
+  {
+    cvTagControls[ theKey ]->setValue( lvInvalidResult );
+  }
+
+  if( cvTagControls[ theKey ]->hasUnits() )
+  {
+    lvResult = cvExifEngine->read( theKey+"Ref", &isValid );
+    if( isValid )
+    {
+      cvTagControls[ theKey ]->setUnits( lvResult );
+    }
+    else
+    {
+      cvTagControls[ theKey ]->setUnits( lvInvalidResult );
+    }
+  }
+
+  //Update persistent settings
   QSettings lvSettings;
   lvSettings.setValue( cvId + "/" + theKey, true );
 
+  //Enabled any dependency
   QString lvDependency = cvExifEngine->dependency( theKey );
-  if( !lvDependency.isNull() )
+  if( !lvDependency.isNull() && !cvTagControls[ lvDependency ]->isEnabled() )
   {
     cvTagControls[ lvDependency ]->setEnabled( true );
     lvSettings.setValue( cvId + "/" + lvDependency, true );
@@ -218,18 +278,37 @@ void EgtExifEditor::cvSaveButton_clicked()
 {
   if( 0 == cvExifEngine ) { return; }
 
+  bool isValid = false;
+  QVariant lvResult;
+  QVariant lvInvalidResult( "" );
   QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
   while( lvIterator != cvTagControls.end() )
   {
     if( lvIterator.value()->isEnabled() && lvIterator.value()->value() != "" )
     {
       cvExifEngine->write( lvIterator.value()->key(),  lvIterator.value()->value() );
-      (*lvIterator)->setValue( cvExifEngine->read( lvIterator.value()->key() ) );
+      lvResult = cvExifEngine->read( lvIterator.value()->key(), &isValid );
+      if( isValid )
+      {
+        (*lvIterator)->setValue( lvResult );
+      }
+      else
+      {
+        (*lvIterator)->setValue( lvInvalidResult );
+      }
 
       if( lvIterator.value()->hasUnits() )
       {
         cvExifEngine->write( lvIterator.value()->key()+"Ref",  lvIterator.value()->units() );
-        (*lvIterator)->setUnits( cvExifEngine->read( lvIterator.value()->key()+"Ref" ) );
+        lvResult = cvExifEngine->read( lvIterator.value()->key()+"Ref", &isValid );
+        if( isValid )
+        {
+          (*lvIterator)->setUnits( lvResult );
+        }
+        else
+        {
+          (*lvIterator)->setUnits( lvInvalidResult );
+        }
       }
     }
     lvIterator++;
