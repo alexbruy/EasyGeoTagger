@@ -112,7 +112,7 @@ double EgtGpsExifEngine::altitude( bool * isValid )
  * followed by the name of the GPS area.
  */
 QString EgtGpsExifEngine::areaInformation( bool * isValid )
-{
+{//return "AAA";
   EgtDebug( "entered areaInformation(bool)" );
 
   if( 0 != isValid ) { *isValid =false; }
@@ -128,7 +128,7 @@ QString EgtGpsExifEngine::areaInformation( bool * isValid )
   }  
   
   QString lvAreaInformation;
-  lvAreaInformation= QString(lvValue.toString(0).c_str());
+  lvAreaInformation= QString(lvValue.toString().c_str());
   
   if( isValid ){ *isValid =true; }
   
@@ -237,9 +237,10 @@ int EgtGpsExifEngine::differential( bool * isValid )
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
     return -1;  
   }  
-  
-  int lvDifferential = int(lvValue.toFloat(0));
-  
+
+  bool lvOk;
+  int lvDifferential = QString(lvValue.toString().c_str()).toInt( &lvOk );
+  if(!lvOk){ return -1; }
   if( isValid ){ *isValid =true; }
   
   return lvDifferential;
@@ -638,7 +639,7 @@ QString EgtGpsExifEngine::measureMode( bool * isValid )
   
   if( isValid ){ *isValid =true; }
       
-  return QString(lvValue.toString(0).c_str());
+  return QString(lvValue.toString().c_str());
 }
 
 /*!
@@ -664,7 +665,7 @@ QString EgtGpsExifEngine::processingMethod( bool * isValid )
   
   if( isValid ){ *isValid =true; }
   
-  return QString(lvValue.toString(0).c_str());
+  return QString(lvValue.toString().c_str());
 }
 
 
@@ -808,7 +809,7 @@ QString EgtGpsExifEngine::satellites( bool * isValid )
   
   if( isValid ){ *isValid =true; }
   
-  return QString(lvValue.toString(0).c_str());
+  return QString(lvValue.toString().c_str());
 }
 
 /*!
@@ -894,7 +895,7 @@ QString EgtGpsExifEngine::status( bool * isValid )
   
   if( isValid ){ *isValid =true; }
       
-  return QString(lvValue.toString(0).c_str());
+  return QString(lvValue.toString().c_str());
 }
 
 /*!
@@ -916,8 +917,11 @@ QString EgtGpsExifEngine::timeStamp( bool * isValid )
     cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
     return "";  
   }
-
-  QString lvTimeStamp = QString::number(int(lvValue.toFloat(0))) +":"+ QString::number(int(lvValue.toFloat(1))) +":"+ QString::number(int(lvValue.toFloat(2)));
+  //Formatting the output,so the displayed format is always HH:MM:SS
+  QString lvHours = (int(lvValue.toFloat(0)) < 10)? "0"+QString::number(int(lvValue.toFloat(0))) : QString::number(int(lvValue.toFloat(0)));
+  QString lvMinutes = (int(lvValue.toFloat(1)) < 10)? "0"+QString::number(int(lvValue.toFloat(1))) : QString::number(int(lvValue.toFloat(1)));
+  QString lvSeconds = (int(lvValue.toFloat(2)) < 10)? "0"+QString::number(int(lvValue.toFloat(2))) : QString::number(int(lvValue.toFloat(2)));;
+  QString lvTimeStamp = lvHours +":"+ lvMinutes +":"+ lvSeconds;
 
   if( isValid ){ *isValid = true; }
  
@@ -1009,7 +1013,7 @@ int EgtGpsExifEngine::versionID( bool * isValid )
 
 bool EgtGpsExifEngine::write( QString theTag, QString theValue )
 {
-  EgtDebug( "entered" ); 
+  EgtDebug( "entered" );
 
   if( !isValidImage() ) { return false; }
 
@@ -1209,9 +1213,36 @@ bool EgtGpsExifEngine::writeAreaInformation( QString theValue )
  */
 bool EgtGpsExifEngine::writeDateStamp( QString theValue )
 {
+  EgtDebug( "entered writeDateStamp(QString)" );
+
+   if( !isValidImage() ) { return false; }
+
   if( theValue.isEmpty() ){ return false; }
 
-  EgtDebug( "entered writeDateStamp(QString)" );
+    //Check format
+  if( theValue.size() != 10 )
+  {
+    cvLastError = "[ writeDateStamp ] "+ QObject::tr( "unexpected format" );
+    return false;
+  }
+  bool lvExpectedFormat = true;
+  lvExpectedFormat = lvExpectedFormat && ':' == theValue[4];
+  lvExpectedFormat = lvExpectedFormat && ':' == theValue[7];
+  if( !lvExpectedFormat )
+  {
+    cvLastError = "[ writeDateStamp ] "+ QObject::tr( "unexpected format" );
+    return false;
+  }
+  for( int lvIterator = 0; lvIterator < theValue.size(); lvIterator++ )
+  {
+    if( !theValue[ lvIterator ].isNumber() && ':' != theValue[ lvIterator ] )
+    {
+      cvLastError = "[ writeDateStamp ] "+ QObject::tr( "unexpected characters found in date stamp" );
+      return false;
+    }
+  }
+
+  //Format passed, try to write tag
 
   if( !writeTag( "Exif.GPSInfo.GPSDateStamp", theValue.trimmed(), "Ascii" ) )
   {
@@ -1254,9 +1285,14 @@ bool EgtGpsExifEngine::writeDestBearing( QString theValue )
 
   bool ok; 
   float lvDestBearing=theValue.toFloat( &ok );
+  
   if( ok )
   {
-   return writeDestBearing( lvDestBearing ); 
+   if( 360.0 > lvDestBearing && 0.0 <= lvDestBearing )
+   {
+     return writeDestBearing( lvDestBearing ); 
+   }
+   else{ return false; }
   } 
   else { return false; }
     
@@ -1307,7 +1343,11 @@ bool EgtGpsExifEngine::writeDifferential( QString theValue )
   int lvDifferential=theValue.toInt( &ok );
   if( ok )
   {
-    return writeDifferential( lvDifferential);
+    if( 0 == lvDifferential || 1 == lvDifferential )
+    {
+      return writeDifferential( lvDifferential);
+    }
+    else{ return false; }
   }
   else{ return false; }
 }
@@ -1345,7 +1385,11 @@ bool EgtGpsExifEngine::writeDirection( QString theValue )
   float lvDirection=theValue.toFloat( &ok );
   if( ok )
   {
-    return writeDirection( lvDirection );
+    if( 360.0 > lvDirection && 0.0 <= lvDirection )
+    {
+      return writeDirection( lvDirection );
+    }
+    else{ return false; }
   }
   else 
   {
@@ -1441,7 +1485,7 @@ bool EgtGpsExifEngine::writeDestLatitude( double theValue )
 
   bool ok; 
     
-  if( theValue < 0 )
+  if( 0 > theValue )
   {
     ok = writeTag( "Exif.GPSInfo.GPSDestLatitudeRef", "S", "Ascii" );
     if( !ok )
@@ -1480,7 +1524,11 @@ bool EgtGpsExifEngine::writeDestLatitude( QString theValue )
   double lvDestLatitude=theValue.toDouble( &ok );
   if( ok )
   {
-    return writeDestLatitude( lvDestLatitude );
+    if( 90.0 >= fabs( lvDestLatitude ) && 0.0 <= fabs( lvDestLatitude ) )
+    {
+      return writeDestLatitude( lvDestLatitude );
+    }
+    else{ return false; }
   }
   else 
   {
@@ -1502,7 +1550,7 @@ bool EgtGpsExifEngine::writeDestLongitude( double theValue )
     
   if( theValue < 0 )
   {
-    ok = writeTag( "Exif.GPSInfo.GPSDestLongitudeRef", "S", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSDestLongitudeRef", "W", "Ascii" );
     if( !ok )
     {
       cvLastError = QObject::tr( "Unable to write file") + ": " + cvImageFileName;
@@ -1511,7 +1559,7 @@ bool EgtGpsExifEngine::writeDestLongitude( double theValue )
   }
   else
   {
-    ok = writeTag( "Exif.GPSInfo.GPSDestLongitudeRef", "N", "Ascii" );
+    ok = writeTag( "Exif.GPSInfo.GPSDestLongitudeRef", "E", "Ascii" );
     if( !ok )
     {
       cvLastError = QObject::tr( "Unable to write file") + ": " + cvImageFileName;
@@ -1539,7 +1587,11 @@ bool EgtGpsExifEngine::writeDestLongitude( QString theValue )
   double lvDestLongitude=theValue.toDouble( &ok );
   if( ok )
   {
-    return writeDestLongitude( lvDestLongitude );
+    if( 180.0 >= fabs( lvDestLongitude ) && 0.0 <= fabs( lvDestLongitude ) )
+    {
+      return writeDestLongitude( lvDestLongitude );
+    }
+    else{ return false; }
   }
   else 
   {
@@ -1578,8 +1630,11 @@ bool EgtGpsExifEngine::writeGpsDOP( QString theValue )
   bool ok; 
   double lvGpsDOP=theValue.toDouble( &ok );
   if( ok )
-  {
-    return writeGpsDOP( lvGpsDOP );
+  { if(0 < lvGpsDOP )
+    {
+      return writeGpsDOP( lvGpsDOP );
+    }
+    else {return false; }
   }
   else 
   {
@@ -1640,7 +1695,11 @@ bool EgtGpsExifEngine::writeLatitude( QString theValue )
   double lvLatitude=theValue.toDouble( &ok );
   if( ok )
   {
-    return writeLatitude( lvLatitude );
+    if( 90.0 >= fabs( lvLatitude ) && 0.0 <= fabs( lvLatitude ) )
+    {
+      return writeLatitude( lvLatitude );
+    }
+    else { return false; }
   }
   else 
   {
@@ -1702,7 +1761,11 @@ bool EgtGpsExifEngine::writeLongitude( QString theValue )
   double lvLongitude=theValue.toDouble( &ok );
   if( ok )
   {
-    return writeLongitude( lvLongitude );
+    if( 180.0 >= fabs( lvLongitude ) && 0.0 <= fabs( lvLongitude ) )
+    {
+      return writeLongitude( lvLongitude );
+    }
+    else { return false; }
   }
   else
   { 
@@ -1740,11 +1803,16 @@ bool EgtGpsExifEngine::writeMeasureMode( QString theValue)
 
   if( theValue.isEmpty() ){ return false; } 
 
-  if( !writeTag( "Exif.GPSInfo.GPSMeasureMode", theValue.trimmed(), "Ascii" ) )
+  if (( QString::compare( theValue.trimmed(), "2" ) == 0) 
+           || ( QString::compare( theValue.trimmed(), "3" ) == 0) )
   {
-    return false;
+    if( !writeTag( "Exif.GPSInfo.GPSMeasureMode", theValue.trimmed(), "Ascii" ) )
+    {
+      return false;
+    }
   }
-
+  else { return false; }
+  
   //Write passed so set the has expected exif flag and return true
   cvHasExpectedExif = true;
   return true;
@@ -1859,10 +1927,15 @@ bool EgtGpsExifEngine::writeStatus( QString theValue )
 
   if( theValue.isEmpty() ){ return false; } 
 
-  if( !writeTag( "Exif.GPSInfo.GPSStatus", theValue.trimmed(), "Ascii" ) )
+  if (( QString::compare( theValue.trimmed(), "A" ) == 0) 
+           || ( QString::compare( theValue.trimmed(), "V" ) == 0) )
   {
-    return false;
+    if( !writeTag( "Exif.GPSInfo.GPSStatus", theValue.trimmed(), "Ascii" ) )
+    {
+      return false;
+    }
   }
+  else{ return false; }
 
   //Write passed so set the has expected exif flag and return true
   cvHasExpectedExif = true;
@@ -1880,6 +1953,31 @@ bool EgtGpsExifEngine::writeTimeStamp( QString theString )
   if( !isValidImage() ) { return false; }
 
   if( theString.isEmpty() ){ return false; } 
+
+  //Check format
+  if( theString.size() != 8 )
+  {
+    cvLastError = "[ writeTimeStamp ] "+ QObject::tr( "unexpected format" );
+    return false;
+  }
+  bool lvExpectedFormat = true;
+  lvExpectedFormat = lvExpectedFormat && ':' == theString[2];
+  lvExpectedFormat = lvExpectedFormat && ':' == theString[5];
+  if( !lvExpectedFormat )
+  {
+    cvLastError = "[ writeTimeStamp ] "+ QObject::tr( "unexpected format" );
+    return false;
+  }
+  for( int lvIterator = 0; lvIterator < theString.size(); lvIterator++ )
+  {
+    if( !theString[ lvIterator ].isNumber() && ':' != theString[ lvIterator ] && ' ' != theString[ lvIterator ] )
+    {
+      cvLastError = "[ writeTimeStamp ] "+ QObject::tr( "unexpected characters found in datetime stamp" );
+      return false;
+    }
+  }
+
+  //Format passed, try to write tag
 
   int lvValue1 = 0;
   bool lvValue1Done = false;
@@ -1940,7 +2038,8 @@ bool EgtGpsExifEngine::writeTrack( float theValue )
   {
     return false;
   }
-
+  
+  
   //Write passed so set the has expected exif flag and return true
   cvHasExpectedExif = true;
   return true;
@@ -1956,7 +2055,11 @@ bool EgtGpsExifEngine::writeTrack( QString theValue )
   float lvTrack=theValue.toFloat( &ok );
   if( ok )
   {
-    return writeTrack( lvTrack );
+    if( 360.0 > lvTrack && 0.0 <=  lvTrack )
+    {
+      return writeTrack( lvTrack );
+    }
+    else{ return false; }
   }
   else 
   {
@@ -2010,7 +2113,11 @@ bool EgtGpsExifEngine::writeVersionID( QString theValue )
   int lvVersionID=theValue.toInt( &ok );
   if( ok )
   {
-    return writeVersionID( lvVersionID );
+    if( 256 > lvVersionID ) //current version is just 2
+    {
+      return writeVersionID( lvVersionID );
+    }
+    else{ return false; }
   }
   else 
   {
