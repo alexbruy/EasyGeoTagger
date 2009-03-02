@@ -32,7 +32,7 @@
 #include <QFileInfo>
 #include <QObject>
 #include <QDir>
-
+#include <QRegExp>
 
 EgtGpsExifEngine::EgtGpsExifEngine() : EgtExifEngine()
 {
@@ -1197,7 +1197,7 @@ bool EgtGpsExifEngine::writeAreaInformation( QString theValue )
     return false;
   }
 
-  if( !writeTag( "Exif.GPSInfo.GPSAreaInformation", theValue.trimmed(), "Ascii" ) ) //This was of type "Undefined"
+  if( !writeTag( "Exif.GPSInfo.GPSAreaInformation", theValue.trimmed(), "Undefined" ) ) //This was of type "Undefined"
   {
     return false;
   }
@@ -1828,10 +1828,18 @@ bool EgtGpsExifEngine::writeProcessingMethod( QString theValue)
 
   if( theValue.isEmpty() ){ return false; } 
 
-  if( !writeTag( "Exif.GPSInfo.GPSProcessingMethod", theValue.trimmed(), "Ascii" ) ) //This was of type "Undefined"
+  //QRegExp rx("[0-9]+(\\s[0-9])*");
+  QRegExp rx("^.*[^0-9 ]");  
+QString lvDebug = rx.cap(0);
+qDebug(lvDebug.toStdString().c_str());
+if( 0 != rx.indexIn(theValue) )
+{
+  if( !writeTag( "Exif.GPSInfo.GPSProcessingMethod", theValue.trimmed(), "Undefined" ) ) //This was of type "Undefined"
   {
     return false;
   }
+}
+else {return false;}
 
   //Write passed so set the has expected exif flag and return true
   cvHasExpectedExif = true;
