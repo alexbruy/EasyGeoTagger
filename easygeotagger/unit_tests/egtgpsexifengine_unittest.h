@@ -9,7 +9,7 @@
 class EgtGpsExifEngine_UnitTest
 {
   public:
-    EgtGpsExifEngine_UnitTest();
+    EgtGpsExifEngine_UnitTest( );
     int runTest( QTextEdit* );
   
   private:

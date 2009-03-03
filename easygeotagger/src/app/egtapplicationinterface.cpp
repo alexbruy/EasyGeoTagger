@@ -1,14 +1,14 @@
 /*
 ** File: egtapplicationinterface.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-09-30
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -42,15 +42,15 @@ EgtApplicationInterface::EgtApplicationInterface( QMainWindow* theMainWindow )
  * PUBLIC FUNCTIONS
  *
  */
-QPoint EgtApplicationInterface::positionOfFirstVisibleWidget()
+QPoint EgtApplicationInterface::positionOfFirstVisibleWidget( )
 {
   //Find the first non hidden widget and open the config dialog
-  QWidgetList lvWidgetList = QApplication::topLevelWidgets();
-  for( int lvIterator = 0; lvIterator < lvWidgetList.size(); lvIterator++ )
+  QWidgetList lvWidgetList = QApplication::topLevelWidgets( );
+  for( int lvIterator = 0; lvIterator < lvWidgetList.size( ); lvIterator++ )
   {
-    if( !lvWidgetList[ lvIterator ]->isHidden() )
+    if( !lvWidgetList[ lvIterator ]->isHidden( ) )
     {
-      return lvWidgetList[ lvIterator ]->pos();
+      return lvWidgetList[ lvIterator ]->pos( );
     }
   }
   return QPoint( 0, 0 );
@@ -61,13 +61,13 @@ QPoint EgtApplicationInterface::positionOfFirstVisibleWidget()
  */
 QPoint EgtApplicationInterface::positionOfWidget( QString theWidgetTitle )
 {
-  QWidgetList lvActiveWindows = QApplication::topLevelWidgets();
+  QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
 
-  for( int i =0; i < lvActiveWindows.size(); i++ )
+  for( int i = 0; i < lvActiveWindows.size( ); i++ )
   {
-    if( theWidgetTitle == lvActiveWindows[i]->windowTitle() )
+    if( theWidgetTitle == lvActiveWindows[i]->windowTitle( ) )
     {
-      return lvActiveWindows[i]->pos();
+      return lvActiveWindows[i]->pos( );
     }
   }
 
@@ -79,7 +79,7 @@ QPoint EgtApplicationInterface::positionOfWidget( QString theWidgetTitle )
  * PUBLIC SLOTS
  *
  */
-void EgtApplicationInterface::acceptModelIndexSelections( const QModelIndex& theIndex)
+void EgtApplicationInterface::acceptModelIndexSelections( const QModelIndex& theIndex )
 {
   EgtDebug( "Received model index selection signal" );
   emit( indexSelected( theIndex ) );
@@ -97,8 +97,8 @@ void EgtApplicationInterface::loadPlugins( QString thePath )
   emit loadPluginRequest( thePath );
 }
 
-void EgtApplicationInterface::refreshFileBrowser()
+void EgtApplicationInterface::refreshFileBrowser( )
 {
   EgtDebug( "Received file browser refresh request" );
-  emit( fileBrowserRefreshRequest() );
+  emit( fileBrowserRefreshRequest( ) );
 }

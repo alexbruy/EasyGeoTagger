@@ -1,14 +1,14 @@
 /*
 ** File: egtexifengine.h
-** Author(s): Roberto Garcia-Yunta, Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Roberto Garcia-Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-09-22
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -54,7 +54,7 @@ public:
   };
 
   /*! \brief Constructor */
-  EgtExifEngine();
+  EgtExifEngine( );
   
   /*! \brief Constructor */
   EgtExifEngine( QString );
@@ -70,28 +70,28 @@ public:
   QString dependency( QString theKey ) { return cvDependencies.value( theKey ); }
 
   /*! \brief Check to see if the current file has EXIF data expected by this engine */
-  bool hasExpectedExif() { return cvHasExpectedExif; }
+  bool hasExpectedExif( ) { return cvHasExpectedExif; }
 
   /*! \brief Check if a key exists in the EXIF header */
   bool hasKey( QString );
 
   /*! \brief Is the image valid? */
-  bool isValidImage();
+  bool isValidImage( );
 
-  /*! \brief Convience method that check both hasExpectedExif() and IsValidImage() */
-  bool isValidImageWithExpectedExif() { return cvIsValidImage && cvHasExpectedExif; }
+  /*! \brief Convience method that check both hasExpectedExif( ) and IsValidImage( ) */
+  bool isValidImageWithExpectedExif( ) { return cvIsValidImage && cvHasExpectedExif; }
 
   /*! \brief Returns a constant reference to the key map list for this engine */
-  const QList< EgtExifEngine::KeyMap > &keys() { return cvKeys; }
+  const QList< EgtExifEngine::KeyMap > &keys( ) { return cvKeys; }
 
   /*! \brief Returns the last error */
-  const QString &lastError() { return cvLastError; }
+  const QString &lastError( ) { return cvLastError; }
 
   /*! \brief Generic read statement to be implemented by child classes */
   virtual QVariant read( QString theKey, bool* isValid = 0 );
 
   /*! \brief Base read method that returns the raw Exiv value for the provided EXIF key as a QString */
-  QString readKeyValueAsString(QString);
+  QString readKeyValueAsString( QString );
 
   /*! \brief Base read method that returns the raw Exiv value for the provided EXIF key */
   const Exiv2::Value& readTag( QString );
@@ -100,10 +100,10 @@ public:
   void setFile( QString theFileName );
 
   /*! \brief Generic write statement to be implemented by child classes */
-  virtual bool write( QString theKey, QString theValue ) { theKey==theValue; return false; } //theKey==theValue is a SIP muffler
+  virtual bool write( QString theKey, QString theValue ) { theKey == theValue; return false; } //theKey == theValue is a SIP muffler
 
   /*! \brief Base write method that actually writes data base to the image header */
-  bool writeTag(QString, QString, QString);
+  bool writeTag( QString, QString, QString );
 
 protected:
   /*! \brief Dependency list that maps one Egt Key to another Egt Key */
@@ -132,7 +132,7 @@ protected:
 
 
   /*! \brief Adds key maps to the egt keys list */
-  void addKey( QString, QString, QString theUnits="" );
+  void addKey( QString, QString, QString theUnits = "" );
 
   /*! \brief Method call from setFile that actually trys to open a file and also check to see if it is a valid image */
   void openFile( QString theFileName );

@@ -1,14 +1,14 @@
 /*
 ** File: egtgpsdatatablewidget.cpp
-** Author(s): Roberto Garcia Yunta
+** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 **
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,10 +27,10 @@
 
 EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
-  cvColumnMeaningDialog = new QDialog(this);
+  cvColumnMeaningDialog = new QDialog( this );
   cvUiColumnMeaning.setupUi( cvColumnMeaningDialog );
 
-  cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"(clear)";
+  cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"( clear )";
 
   cvFileReader = 0;
   cvColumnSelected = 0;
@@ -38,15 +38,15 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 
   cvMapItems = new QMap<QString,QString>;
 
-  connect( this, SIGNAL( cellClicked(int, int) ), this, SLOT( cell_selected(int, int) ) );  
+  connect( this, SIGNAL( cellClicked( int, int ) ), this, SLOT( cell_selected( int, int ) ) );  
 
-  cvHorizontalHeader = horizontalHeader();
-  connect( cvHorizontalHeader, SIGNAL( sectionClicked( int ) ), this, SLOT( cvHorizontalHeader_clicked(int) ) ); 
+  cvHorizontalHeader = horizontalHeader( );
+  connect( cvHorizontalHeader, SIGNAL( sectionClicked( int ) ), this, SLOT( cvHorizontalHeader_clicked( int ) ) ); 
 
-  cvVerticalHeader = verticalHeader();
-  connect( cvVerticalHeader, SIGNAL( sectionClicked( int ) ), this, SLOT( cvVerticalHeader_clicked(int) ) ); 
+  cvVerticalHeader = verticalHeader( );
+  connect( cvVerticalHeader, SIGNAL( sectionClicked( int ) ), this, SLOT( cvVerticalHeader_clicked( int ) ) ); 
 
-  connect( cvUiColumnMeaning.pbtnOk, SIGNAL( clicked() ), this, SLOT(on_pbtnOk_clicked() ) );
+  connect( cvUiColumnMeaning.pbtnOk, SIGNAL( clicked( ) ), this, SLOT( on_pbtnOk_clicked( ) ) );
 }
 
 /*
@@ -55,7 +55,7 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
  *
  */
 
-QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems()
+QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems( )
 {
   return cvMapItems;
 }
@@ -66,12 +66,12 @@ QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems()
  *
  */
 
-bool EgtGpsDataTableWidget::isThereAnyColumnSet()
+bool EgtGpsDataTableWidget::isThereAnyColumnSet( )
 {
-  if( cvHeadersAreSet ){ return true; }
+  if( cvHeadersAreSet ) { return true; }
 
   bool lvReturn = false;
-  for( int i = 0; i < columnCount(); i++ )
+  for( int i = 0; i < columnCount( ); i++ )
   {
     lvReturn = lvReturn || cvHeadersThatAreSet.contains( i );
   } 
@@ -79,30 +79,30 @@ bool EgtGpsDataTableWidget::isThereAnyColumnSet()
   return lvReturn;
 }
 
-void EgtGpsDataTableWidget::populateTable()
+void EgtGpsDataTableWidget::populateTable( )
 {
-  cvHeadersThatAreSet.clear();
-  QList<QStringList> lvDataFile =cvFileReader->read();
+  cvHeadersThatAreSet.clear( );
+  QList<QStringList> lvDataFile = cvFileReader->read( );
 
-  setRowCount( lvDataFile.size() );
-  setColumnCount( lvDataFile[0].size() );
+  setRowCount( lvDataFile.size( ) );
+  setColumnCount( lvDataFile[0].size( ) );
   /*Set up the combo box*/
-  cvUiColumnMeaning.cbFields->clear();
+  cvUiColumnMeaning.cbFields->clear( );
   cvUiColumnMeaning.cbFields->insertItems( 0,cvAvailableFields );
   /*Reset the Qlist that contains which headers are set*/
-  cvHeadersThatAreSet.clear();
+  cvHeadersThatAreSet.clear( );
 
-  if( cvFileReader->hasColumnHeaders() ) 
+  if( cvFileReader->hasColumnHeaders( ) ) 
   {
     QStringList lvTags;
-    lvTags = cvFileReader->columnHeaders();
+    lvTags = cvFileReader->columnHeaders( );
     setHorizontalHeaderLabels( lvTags );
   }
   else
   {
     QStringList lvDefaultHeader;
  
-    for(int i = 0; i< lvDataFile[0].size(); i++ )
+    for( int i = 0; i< lvDataFile[0].size( ); i++ )
     {
       lvDefaultHeader << QString::number( i+1 );
     }
@@ -110,11 +110,11 @@ void EgtGpsDataTableWidget::populateTable()
     setHorizontalHeaderLabels( lvDefaultHeader );
   }
 
-  for(int i = 0; i < lvDataFile.size(); i++ )
+  for( int i = 0; i < lvDataFile.size( ); i++ )
   {
-    for(int j = 0; j < lvDataFile[0].size(); j++ )
+    for( int j = 0; j < lvDataFile[0].size( ); j++ )
     {
-      QTableWidgetItem *lvNewItem = new QTableWidgetItem( lvDataFile.at(i).at(j) );
+      QTableWidgetItem *lvNewItem = new QTableWidgetItem( lvDataFile.at( i ).at( j ) );
        setItem( i, j, lvNewItem );
     }
   }
@@ -127,10 +127,10 @@ void EgtGpsDataTableWidget::populateTable()
  *
  */
 
-void EgtGpsDataTableWidget::cell_selected(int row, int column)
+void EgtGpsDataTableWidget::cell_selected( int row, int column )
 { 
-  QTableWidgetItem * lvItem =item ( row, column );
-  double x = lvItem->data(0).toDouble();
+  QTableWidgetItem * lvItem = item ( row, column );
+  double x = lvItem->data( 0 ).toDouble( );
 }
 
 void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
@@ -141,7 +141,7 @@ void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
       
   QString lvText;
   lvHeaderItem = horizontalHeaderItem ( theIndex );
-  lvText = lvHeaderItem->text();
+  lvText = lvHeaderItem->text( );
 
   bool ok;
   lvText.toInt( &ok ); 
@@ -151,7 +151,7 @@ void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
     cvUiColumnMeaning.cbFields->addItem( lvText );
   }
 
-  cvColumnMeaningDialog->show();
+  cvColumnMeaningDialog->show( );
 }
 
 void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
@@ -159,33 +159,33 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
   delete cvMapItems;
   cvMapItems = new QMap<QString,QString>;
  
-  if( isThereAnyColumnSet() )
+  if( isThereAnyColumnSet( ) )
   {
     QTableWidgetItem* lvHeaderItem;
-    for(int lvColumnCount = 0; lvColumnCount < columnCount(); lvColumnCount++)
+    for( int lvColumnCount = 0; lvColumnCount < columnCount( ); lvColumnCount++ )
     {
       QString lvText;
       lvHeaderItem = horizontalHeaderItem ( lvColumnCount );
-      lvText = lvHeaderItem->text();
+      lvText = lvHeaderItem->text( );
 
       bool ok;
       lvText.toInt( &ok ); 
 
       if( !ok )
       {
-        cvMapItems->insert( lvText, item( theIndex, lvColumnCount )->text() );
+        cvMapItems->insert( lvText, item( theIndex, lvColumnCount )->text( ) );
       }
     }
   }
 }
 
-void EgtGpsDataTableWidget::on_pbtnOk_clicked()
+void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
 {   
-  QString lvSelectedItem = cvUiColumnMeaning.cbFields->currentText();
+  QString lvSelectedItem = cvUiColumnMeaning.cbFields->currentText( );
   
-  int lvIndex = cvUiColumnMeaning.cbFields->currentIndex();
+  int lvIndex = cvUiColumnMeaning.cbFields->currentIndex( );
 
-  if( "(clear)" != lvSelectedItem )
+  if( "( clear )" != lvSelectedItem )
   {
     cvUiColumnMeaning.cbFields->removeItem( lvIndex );
     cvHeadersThatAreSet<<cvColumnSelected;
@@ -204,15 +204,15 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked()
   
   setHorizontalHeaderItem( cvColumnSelected, new QTableWidgetItem( lvSelectedItem ) );
   
-  cvColumnMeaningDialog->close();
+  cvColumnMeaningDialog->close( );
 }
 
 void EgtGpsDataTableWidget::setFileReader( EgtFileReader* theFileReader )
 {
-  if( 0 != cvFileReader ){ delete cvFileReader; }
+  if( 0 != cvFileReader ) { delete cvFileReader; }
 
-  cvFileReader= theFileReader;
-  cvHeadersAreSet = cvFileReader->hasColumnHeaders();
+  cvFileReader = theFileReader;
+  cvHeadersAreSet = cvFileReader->hasColumnHeaders( );
 
-  populateTable();
+  populateTable( );
 }

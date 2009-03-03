@@ -1,14 +1,14 @@
 /*
 ** File: egtgpsexifengine.h
-** Author(s): Roberto Garcia-Yunta, Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Roberto Garcia-Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-09-22
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -35,7 +35,7 @@ class MS_DLL_SPEC EgtGpsExifEngine : public EgtExifEngine
 
 public:
   /*! \brief Constructor */
-  EgtGpsExifEngine();
+  EgtGpsExifEngine( );
   
   /*! \brief Constructor */
   EgtGpsExifEngine( QString );
@@ -61,9 +61,9 @@ public:
   int differential( bool * isValid = 0 );
 
   /*! \brief Returns the direction of the image when it was captured */
-  float direction(  bool * isValid = 0 );
+  float direction( bool * isValid = 0 );
 
-  QString directionRef(  bool * isValid = 0 );
+  QString directionRef( bool * isValid = 0 );
 
   /*! \brief Returns the distance to the destination point */
   double destDistance( bool * isValid = 0 );
@@ -76,14 +76,14 @@ public:
   /*! \brief Returns the longitude of the destination point */
   double destLongitude( bool * isValid = 0 );
 
-  /*! \brief Returns the GPS DOP (data degree of precision)*/
+  /*! \brief Returns the GPS DOP ( data degree of precision )*/
   double gpsDOP( bool * isValid = 0 );
 
   /*! \brief is the image valid? */
-  bool isValidImage();
+  bool isValidImage( );
 
   /*! \brief Returns the last error occured */
-  QString lastError(); 
+  QString lastError( ); 
 
   /*! \brief Returns the latitude */
   double latitude( bool * isValid = 0 );
@@ -98,7 +98,7 @@ public:
   QString measureMode( bool * isValid = 0 );
 
   /*! \brief Returns the processing method */
-  QString processingMethod( bool * isValid=0 );
+  QString processingMethod( bool * isValid = 0 );
 
   QVariant read( QString, bool * isValid = 0 );
 
@@ -109,7 +109,7 @@ public:
   void setFile( QString theFileName );
   
   /*! \brief Returns the longitude */
-  double speed(  bool * isValid = 0 );
+  double speed( bool * isValid = 0 );
 
   QString speedRef( bool * isValid = 0 );
 
@@ -127,10 +127,10 @@ public:
   /*! \brief Returns the version of the GPS */
   int versionID( bool * isValid = 0 );
 
-  bool write(QString, QString);
+  bool write( QString, QString );
 
   /*! \brief writes the latitude from a double number */
-  bool writeLatitude(double);
+  bool writeLatitude( double );
   
   /*! \brief writes the latitude from a QString */
   bool writeLatitude( QString );
@@ -150,7 +150,7 @@ public:
   bool writeAreaInformation( QString );
 
   /*! \brief writes the date stamp */
-  bool writeDateStamp( QString);
+  bool writeDateStamp( QString );
 
   /*! \brief writes the bearing of the destination point */
   bool writeDestBearing( float );
@@ -208,9 +208,9 @@ public:
   /*! \brief writes the speed of the GPS receiver movement */
   bool writeSpeed( double );
 
-  bool writeSpeed( QString); 
+  bool writeSpeed( QString ); 
  
-  bool writeSpeedRef( QString); 
+  bool writeSpeedRef( QString ); 
 
   /*! \brief writes the status of the GPS receiver in the moment the picture was taken */
   bool writeStatus( QString );
@@ -233,10 +233,10 @@ public:
 private:
 
   /*! \brief Converts from decimal degrees to Rational notation */
-  QString convertToRational(QString);
+  QString convertToRational( QString );
 
   /*! \brief Initialize class specific variables */
-  void init();
+  void init( );
 
 };
 #endif

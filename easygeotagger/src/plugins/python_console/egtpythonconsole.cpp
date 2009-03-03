@@ -1,14 +1,14 @@
 /*
 ** File: "egtpythonconsole.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-11-18
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 **
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,7 +28,7 @@
 #include <QLibrary>
 #include <QMessageBox>
 
-EgtPythonConsole::EgtPythonConsole()
+EgtPythonConsole::EgtPythonConsole( )
 {
   cvConsole = 0;
   cvCategories = QObject::tr( "Utilities" );
@@ -36,32 +36,32 @@ EgtPythonConsole::EgtPythonConsole()
   cvName = QObject::tr( "Python Console" );
 }
 
-QStringList EgtPythonConsole::categories()
+QStringList EgtPythonConsole::categories( )
 {
-  return cvCategories.split("|");
+  return cvCategories.split( "|" );
 }
 
 void EgtPythonConsole::connectConfigurationButton( QPushButton* theButton )
 {
-  connect( theButton, SIGNAL( clicked() ), this, SLOT( showConfigurationPanel() ) );
+  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( showConfigurationPanel( ) ) );
 }
 
 void EgtPythonConsole::connectRunButton( QPushButton* theButton )
 {
-  connect( theButton, SIGNAL( clicked() ), this, SLOT( run() ) );
+  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( run( ) ) );
 }
 
-QString EgtPythonConsole::description()
+QString EgtPythonConsole::description( )
 {
   return cvDescription;
 }
 
-QString EgtPythonConsole::name()
+QString EgtPythonConsole::name( )
 {
   return cvName;
 }
 
-void EgtPythonConsole::run()
+void EgtPythonConsole::run( )
 {
   if( 0 == cvApplicationInterface ) { return; }
 
@@ -73,15 +73,15 @@ void EgtPythonConsole::run()
 #endif
   {
     cvConsole = new EgtPythonConsoleBase( cvApplicationInterface );
-    if( cvConsole->pythonFound() )
+    if( cvConsole->pythonFound( ) )
     {
-      cvConsole->move(  cvApplicationInterface->positionOfFirstVisibleWidget() );
-      cvConsole->show();
+      cvConsole->move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
+      cvConsole->show( );
     }
   }
   else
   {
-    QMessageBox::warning( cvApplicationInterface->gui(), tr( "Error" ), tr( "Python support was not built into this version the the EasyGT library" ) );
+    QMessageBox::warning( cvApplicationInterface->gui( ), tr( "Error" ), tr( "Python support was not built into this version the the EasyGT library" ) );
   }
 }
 

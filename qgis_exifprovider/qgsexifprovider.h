@@ -2,7 +2,7 @@
       qgsexifprovider.h  -  Data provider for imagery with GPS data stored in EXIF headers
                              -------------------
     begin                : 2008-09-17
-    copyright            : (C) 2008 by Peter J. Ersts
+    copyright            : ( C ) 2008 by Peter J. Ersts
     email                : ersts at amnh.org
     
     Heavily relied on qgsdelimitedtextprovider.h/cpp - Data provider for delimted text
@@ -14,7 +14,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *( at your option ) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 #include "qgsvectordataprovider.h"
@@ -41,21 +41,21 @@ class QgsExifProvider : public QgsVectorDataProvider
 
   public:
 
-    QgsExifProvider( QString theDir = QString() );
+    QgsExifProvider( QString theDir = QString( ) );
 
-    virtual ~QgsExifProvider();
+    virtual ~QgsExifProvider( );
 
     /* Implementation of functions from QgsVectorDataProvider */
 
     /**
      * Restart reading features from previous select operation. 
      */
-    virtual void rewind() {   mCurrentFeatureIndex = 0; }
+    virtual void rewind( ) {   mCurrentFeatureIndex = 0; }
     
     /**
      * Returns the permanent storage type for this layer as a friendly name.
      */
-    virtual QString storageType() const;
+    virtual QString storageType( ) const;
 
     /** Select features based on a bounding rectangle. Features can be retrieved with calls to getNextFeature.
      *  @param fetchAttributes list of attributes which should be fetched
@@ -64,8 +64,8 @@ class QgsExifProvider : public QgsVectorDataProvider
      *  @param useIntersect true if an accurate intersection test should be used,
      *                     false if a test based on bounding box is sufficient
      */
-    virtual void select( QgsAttributeList fetchAttributes = QgsAttributeList(),
-                         QgsRectangle rect = QgsRectangle(),
+    virtual void select( QgsAttributeList fetchAttributes = QgsAttributeList( ),
+                         QgsRectangle rect = QgsRectangle( ),
                          bool fetchGeometry = true,
                          bool useIntersect = false );
 
@@ -83,31 +83,31 @@ class QgsExifProvider : public QgsVectorDataProvider
      * Get feature type.
      * @return int representing the feature type
      */
-    virtual QGis::WkbType geometryType() const;
+    virtual QGis::WkbType geometryType( ) const;
 
     /**
      * Number of features in the layer
      * @return long containing number of features
      */
-    virtual long featureCount() const;
+    virtual long featureCount( ) const;
 
     /**
      * Number of attribute fields for a feature in the layer
      */
-    virtual uint fieldCount() const;
+    virtual uint fieldCount( ) const;
 
     /**
      * Return a map of indexes with field names for this layer
      * @return map of fields
      */
-    virtual const QgsFieldMap & fields() const;
+    virtual const QgsFieldMap & fields( ) const;
 
     /** Returns a bitmask containing the supported capabilities
         Note, some capabilities may change depending on whether
         a spatial filter is active on this provider, so it may
         be prudent to check this value per intended operation.
      */
-    virtual int capabilities() const;
+    virtual int capabilities( ) const;
 
 
     /* Implementation of functions from QgsDataProvider */
@@ -125,7 +125,7 @@ class QgsExifProvider : public QgsVectorDataProvider
         behavior and presume that none of the sub-classes are going to do
         anything strange with regards to their name or description?
      */
-    QString name() const;
+    QString name( ) const;
 
     /** return description
 
@@ -137,19 +137,19 @@ class QgsExifProvider : public QgsVectorDataProvider
         behavior and presume that none of the sub-classes are going to do
         anything strange with regards to their name or description?
      */
-    QString description() const;
+    QString description( ) const;
 
     /**
      * Return the extent for this data layer
      */
-    virtual QgsRectangle extent();
+    virtual QgsRectangle extent( );
 
     /**
      * Returns true if this is a valid delimited file
      */
-    bool isValid();
+    bool isValid( );
 
-    virtual QgsCoordinateReferenceSystem crs();
+    virtual QgsCoordinateReferenceSystem crs( );
 
     /* new functions */
 

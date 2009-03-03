@@ -1,14 +1,14 @@
 /*
 ** File: egtgpsdatatablewidget.h
-** Author(s): Roberto Garcia Yunta
+** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 **
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -44,10 +44,10 @@ class EgtGpsDataTableWidget : public QTableWidget
     EgtGpsDataTableWidget( );
 
     /*! \brief Indicates if the user has set all the columns with a valid value */
-    bool isThereAnyColumnSet();
+    bool isThereAnyColumnSet( );
 
     /*! \brief Returns a QMap that contains all the items of the selected row */
-    QMap<QString,QString>* getRowItems();
+    QMap<QString,QString>* getRowItems( );
 
   public slots:
 
@@ -57,15 +57,15 @@ class EgtGpsDataTableWidget : public QTableWidget
   private slots:
 
      /*! \brief Slot used when a cell of the table is selected */
-    void cell_selected(int, int);
+    void cell_selected( int, int );
 
     /*! \brief Slot used when the horizontal header is clicked */
-    void cvHorizontalHeader_clicked(int);
+    void cvHorizontalHeader_clicked( int );
  
     /*! \brief Slot used when the vertical header is clicked */
-    void cvVerticalHeader_clicked(int);
+    void cvVerticalHeader_clicked( int );
 
-    void on_pbtnOk_clicked();
+    void on_pbtnOk_clicked( );
 
   private:
     
@@ -100,7 +100,7 @@ class EgtGpsDataTableWidget : public QTableWidget
     QHeaderView *  cvVerticalHeader;
 
     /*! \brief Function used to populate the table */
-    void populateTable();
+    void populateTable( );
 
 };
 #endif

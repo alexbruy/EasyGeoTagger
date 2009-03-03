@@ -3,7 +3,7 @@
   Launch EasyGeoTagger and connect to QGIS
   -------------------
          begin                : 2008-10-20
-         copyright            : (C) Peter J. Ersts 2008
+         copyright            : ( C ) Peter J. Ersts 2008
          email                : ersts at amnh.org
 
  ***************************************************************************
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *( at your option ) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 /*  $Id: plugin.cpp 9327 2008-09-14 11:18:44Z jef $ */
@@ -58,7 +58,7 @@ EasyGeoTagger::EasyGeoTagger( QgisInterface * theQgisInterface ):
 {
 }
 
-EasyGeoTagger::~EasyGeoTagger()
+EasyGeoTagger::~EasyGeoTagger( )
 {
 
 }
@@ -67,90 +67,90 @@ EasyGeoTagger::~EasyGeoTagger()
  * Initialize the GUI interface for the plugin - this is only called once when the plugin is
  * added to the plugin registry in the QGIS application.
  */
-void EasyGeoTagger::initGui()
+void EasyGeoTagger::initGui( )
 {
   cvIdTool = 0;
   cvPluginGui = 0;
-  cvEasyGeoTaggerApplication =  0;
+  cvEasyGeoTaggerApplication = 0;
   
   // Create the action for tool
   mQActionPointer = new QAction( QIcon( ":/easygeotagger/EasyGT.svg" ), tr( "EasyGeoTagger" ), this );
   // Set the what's this text
   mQActionPointer->setWhatsThis( tr( "Launches the EasyGeoTagger application and connects it to QGIS" ) );
   // Connect the action to the run
-  connect( mQActionPointer, SIGNAL( triggered() ), this, SLOT( run() ) );
+  connect( mQActionPointer, SIGNAL( triggered( ) ), this, SLOT( run( ) ) );
   // Add the icon to the toolbar
   mQGisIface->addToolBarIcon( mQActionPointer );
   mQGisIface->addPluginToMenu( tr( "&EasyGeoTagger" ), mQActionPointer );
 }
 //method defined in interface
-void EasyGeoTagger::help()
+void EasyGeoTagger::help( )
 {
   //implement me!
 }
 
 // Slot called when the menu item is triggered
 // If you created more menu items / toolbar buttons in initiGui, you should
-// create a separate handler for each action - this single run() method will
+// create a separate handler for each action - this single run( ) method will
 // not be enough
-void EasyGeoTagger::run()
+void EasyGeoTagger::run( )
 {
 
   if( 0 == cvEasyGeoTaggerApplication )
   {
     //Check for the python libs to prevent segfaults if python is not available on the user's system
     QLibrary lvEasyGTLibrary( "easygt" );
-    if( lvEasyGTLibrary.load() )
+    if( lvEasyGTLibrary.load( ) )
     {
       if( 0 == cvIdTool )
       {
-        cvIdTool = new EasyGeoTaggerIdTool( mQGisIface->mapCanvas() );
-        if( 0 == cvIdTool) { return; }
+        cvIdTool = new EasyGeoTaggerIdTool( mQGisIface->mapCanvas( ) );
+        if( 0 == cvIdTool ) { return; }
       }
 
       cvEasyGeoTaggerApplication = new EgtApplication( PLUGINPATH );
-      if( 0 == cvEasyGeoTaggerApplication) { return; }
+      if( 0 == cvEasyGeoTaggerApplication ) { return; }
 
-      connect( cvIdTool, SIGNAL( keyValuePair( QString, QString ) ), cvEasyGeoTaggerApplication->applicationInterface(), SLOT( acceptKeyValuePair( QString,QString ) ) );
+      connect( cvIdTool, SIGNAL( keyValuePair( QString, QString ) ), cvEasyGeoTaggerApplication->applicationInterface( ), SLOT( acceptKeyValuePair( QString,QString ) ) );
     }
     else
     {
-      QMessageBox::warning( mQGisIface->mainWindow(), tr( "Warning" ), tr( "The EasyGeoTagger library could not be found on your system" ) );
+      QMessageBox::warning( mQGisIface->mainWindow( ), tr( "Warning" ), tr( "The EasyGeoTagger library could not be found on your system" ) );
       return;
     }
   }
   else
   {
-    cvEasyGeoTaggerApplication->show();
+    cvEasyGeoTaggerApplication->show( );
   }
   
   if( 0 == cvPluginGui )
   {
-    cvPluginGui = new EasyGeoTaggerGui( mQGisIface, cvEasyGeoTaggerApplication, mQGisIface->mainWindow(), QgisGui::ModalDialogFlags );
+    cvPluginGui = new EasyGeoTaggerGui( mQGisIface, cvEasyGeoTaggerApplication, mQGisIface->mainWindow( ), QgisGui::ModalDialogFlags );
     if( 0 == cvPluginGui ) { return; }
-    connect( cvPluginGui, SIGNAL( setMapTool() ), this, SLOT( setMapTool() ) );
+    connect( cvPluginGui, SIGNAL( setMapTool( ) ), this, SLOT( setMapTool( ) ) );
   }
   
-  cvPluginGui->show();
-  setMapTool();
+  cvPluginGui->show( );
+  setMapTool( );
 }
 
-void EasyGeoTagger::setMapTool()
+void EasyGeoTagger::setMapTool( )
 {
   if( 0 == cvIdTool ) { return; }
   
-  mQGisIface->mapCanvas()->setMapTool( cvIdTool );
+  mQGisIface->mapCanvas( )->setMapTool( cvIdTool );
 }
 
 // Unload the plugin by cleaning up the GUI
-void EasyGeoTagger::unload()
+void EasyGeoTagger::unload( )
 {
   // remove the GUI
   mQGisIface->removePluginMenu( "&EasyGeoTagger", mQActionPointer );
   mQGisIface->removeToolBarIcon( mQActionPointer );
   delete mQActionPointer;
   
-  if(0 != cvIdTool)
+  if( 0 != cvIdTool )
   {
     delete cvIdTool;
   }
@@ -180,25 +180,25 @@ QGISEXTERN QgisPlugin * classFactory( QgisInterface * theQgisInterfacePointer )
 }
 // Return the name of the plugin - note that we do not user class members as
 // the class may not yet be insantiated when this method is called.
-QGISEXTERN QString name()
+QGISEXTERN QString name( )
 {
   return sName;
 }
 
 // Return the description
-QGISEXTERN QString description()
+QGISEXTERN QString description( )
 {
   return sDescription;
 }
 
-// Return the type (either UI or MapLayer plugin)
-QGISEXTERN int type()
+// Return the type ( either UI or MapLayer plugin )
+QGISEXTERN int type( )
 {
   return sPluginType;
 }
 
 // Return the version number for the plugin
-QGISEXTERN QString version()
+QGISEXTERN QString version( )
 {
   return sPluginVersion;
 }

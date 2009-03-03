@@ -1,14 +1,14 @@
 /*
 ** File: egtimagefactory.h
-** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-10-07
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -48,19 +48,19 @@ class MS_DLL_SPEC EgtImageFactory : public QObject
     EgtImageFactory( QModelIndex );
     
     /*! \brief Destructor */
-    ~EgtImageFactory();
+    ~EgtImageFactory( );
     
     /*! \brief Is the image factory currently working with a valid image */
-    bool isValid() { return cvIsValidImage; }
+    bool isValid( ) { return cvIsValidImage; }
 
     /*! \brief Accessor for the name of the current image file, may or may not be a valid image */
-    QString fileName() { return cvFileName; }
+    QString fileName( ) { return cvFileName; }
 
     /*! \brief Returns the a copy of the current resize image */
-    QImage scaledImage( bool* isValid=0 ) const;
+    QImage scaledImage( bool* isValid = 0 ) const;
     
     /*! \brief Returns a copy of the image resized to the specified dimensions */
-    QImage scaleImage( int, int, bool* isValid=0 );
+    QImage scaleImage( int, int, bool* isValid = 0 );
   
     /*! \brief Set the image file name */
     void setFile( QString );
@@ -88,7 +88,7 @@ class MS_DLL_SPEC EgtImageFactory : public QObject
   
   private:
     /*! \brief Initialization steps */
-    void init();
+    void init( );
     
     /*! \brief Read/open the base image as a jpeg */
     void readJpeg( QString );

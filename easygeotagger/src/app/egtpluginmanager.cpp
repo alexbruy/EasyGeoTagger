@@ -1,14 +1,14 @@
 /*
 ** File: egtpluginmanager.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-09-30
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,12 +40,12 @@ EgtPluginManager::EgtPluginManager( EgtApplicationInterface* theApplicationInter
   //Just a guess will not work on Mac with frameworks
 #ifdef WIN32
 #  ifdef OSGEO4W
-     cvDefaultPluginPath = QCoreApplication::instance()->applicationDirPath() + "/../apps/easygt/plugins/";
+     cvDefaultPluginPath = QCoreApplication::instance( )->applicationDirPath( ) + "/../apps/easygt/plugins/";
 #  else
-	 cvDefaultPluginPath = QCoreApplication::instance()->applicationDirPath() + "/plugins/";
+	 cvDefaultPluginPath = QCoreApplication::instance( )->applicationDirPath( ) + "/plugins/";
 #  endif
 #else
-  cvDefaultPluginPath = QCoreApplication::instance()->applicationDirPath() + "/../lib/easygt/";
+  cvDefaultPluginPath = QCoreApplication::instance( )->applicationDirPath( ) + "/../lib/easygt/";
 #endif
 }
 
@@ -72,7 +72,7 @@ void EgtPluginManager::loadAllPlugins( QString theDirectory )
   //Use the default directory if none is provided or if the string does not actually represent a directory.
   QFileInfo lvFileInfo( theDirectory );
   QString lvPluginDirectory = theDirectory;
-  if( theDirectory == "" || !lvFileInfo.isDir() )
+  if( theDirectory == "" || !lvFileInfo.isDir( ) )
   {
     lvPluginDirectory = cvDefaultPluginPath;
   }
@@ -81,20 +81,20 @@ void EgtPluginManager::loadAllPlugins( QString theDirectory )
 
   //Get a list of all of the libs in the plugin directory;
   QDir pluginDirectory( lvPluginDirectory );
-  if( !pluginDirectory.exists() )
+  if( !pluginDirectory.exists( ) )
   {
     EgtDebug( "["+ theDirectory +"] was not a valid directory" );
     return;
   }
   #ifdef WIN32
-	QStringList lvFilenames = pluginDirectory.entryList( QStringList() << "*.dll" );
+	QStringList lvFilenames = pluginDirectory.entryList( QStringList( ) << "*.dll" );
   #else
-	QStringList lvFilenames = pluginDirectory.entryList( QStringList() << "lib*" );
+	QStringList lvFilenames = pluginDirectory.entryList( QStringList( ) << "lib*" );
   #endif
 
   //Loop throught the files in the plugin directory and see if we have any valid plugins
   QStringList::const_iterator lvIterator;
-  for( lvIterator = lvFilenames.constBegin(); lvIterator != lvFilenames.constEnd(); ++lvIterator )
+  for( lvIterator = lvFilenames.constBegin( ); lvIterator != lvFilenames.constEnd( ); ++lvIterator )
   {
     loadSinglePlugin( pluginDirectory.absoluteFilePath( *lvIterator ) );
   }
@@ -122,7 +122,7 @@ void EgtPluginManager::loadPlugins( QString thePath )
   }
 
   QFileInfo lvFileInfo( thePath );
-  if( lvFileInfo.isDir() || !lvFileInfo.exists() )
+  if( lvFileInfo.isDir( ) || !lvFileInfo.exists( ) )
   {
     loadAllPlugins( thePath );
   }
@@ -130,7 +130,7 @@ void EgtPluginManager::loadPlugins( QString thePath )
   {
     loadSinglePlugin( thePath );
   }
-  updateGui();
+  updateGui( );
 }
 
 /*!
@@ -150,7 +150,7 @@ bool EgtPluginManager::loadSinglePlugin( QString theLibrary )
   
   //Create an instance of a plugin loader the attempt to open the library
   QPluginLoader lvPluginLoader( theLibrary );
-  QObject* lvPlugin = lvPluginLoader.instance();
+  QObject* lvPlugin = lvPluginLoader.instance( );
   if ( lvPlugin )
   {
     //If the library is a plugin, see if it has an EgtPluginInterface
@@ -159,13 +159,13 @@ bool EgtPluginManager::loadSinglePlugin( QString theLibrary )
     {
       //Set the plugin's pointer to the application interface and gui
       lvInterface->setApplicationInterface( cvApplicationInterface );
-      lvInterface->initPlugin();
+      lvInterface->initPlugin( );
       
       //Loop through all of the categories and build the display components
       QString lvKey;
-      for( int lvIterator = 0; lvIterator < lvInterface->categories().size(); lvIterator++ )
+      for( int lvIterator = 0; lvIterator < lvInterface->categories( ).size( ); lvIterator++ )
       {
-        lvKey = lvInterface->categories().at( lvIterator );
+        lvKey = lvInterface->categories( ).at( lvIterator );
         //Check the collection map to see if the category exists, if not create it
         if( !cvPluginDisplayCollection.contains( lvKey ) )
         {
@@ -175,11 +175,11 @@ bool EgtPluginManager::loadSinglePlugin( QString theLibrary )
         }
         
         //Check the collection map to see if there is already a display object, if not create one.
-        if( !cvPluginDisplayCollection[ lvKey ]->contains( lvInterface->name() ) )
+        if( !cvPluginDisplayCollection[ lvKey ]->contains( lvInterface->name( ) ) )
         {
-          EgtDebug( "Creating new plugin display for plugin: "+ lvInterface->name() );
+          EgtDebug( "Creating new plugin display for plugin: "+ lvInterface->name( ) );
           EgtPluginDisplayWidget* lvPluginDisplayWidget = new EgtPluginDisplayWidget( lvInterface );
-          cvPluginDisplayCollection[ lvKey ]->insert( lvInterface->name(), lvPluginDisplayWidget );
+          cvPluginDisplayCollection[ lvKey ]->insert( lvInterface->name( ), lvPluginDisplayWidget );
         }
         else
         {
@@ -187,12 +187,12 @@ bool EgtPluginManager::loadSinglePlugin( QString theLibrary )
           // what happens to the original instance of the plugin?
 
           //If a display object already exists, update it
-          cvPluginDisplayCollection[ lvKey ]->value( lvInterface->name() )->update( lvInterface );
+          cvPluginDisplayCollection[ lvKey ]->value( lvInterface->name( ) )->update( lvInterface );
         }
       }
 
-      emit pluginLoaded( lvInterface->name() );
-      EgtDebug( "loaded plugin ["+ lvInterface->name() +"]" );
+      emit pluginLoaded( lvInterface->name( ) );
+      EgtDebug( "loaded plugin ["+ lvInterface->name( ) +"]" );
     }
     else
     {
@@ -202,7 +202,7 @@ bool EgtPluginManager::loadSinglePlugin( QString theLibrary )
   }
   else
   {
-    EgtDebug( lvPluginLoader.errorString() );
+    EgtDebug( lvPluginLoader.errorString( ) );
     return false;
   }
 
@@ -212,7 +212,7 @@ bool EgtPluginManager::loadSinglePlugin( QString theLibrary )
 /*!
  * Create a new tool box holding all of the plugin displays and update the plugin display dock widget in the main window
  */
-void EgtPluginManager::updateGui()
+void EgtPluginManager::updateGui( )
 {
   EgtDebug( "entered" );
 
@@ -221,8 +221,8 @@ void EgtPluginManager::updateGui()
 
   //Create a new tool box to hold the plugins
   QToolBox* lvPluginToolBox = new QToolBox( cvGui );
-  QList< QString > lvCollectionKeys = cvPluginDisplayCollection.keys();
-  for(int lvIterator = 0; lvIterator < lvCollectionKeys.size(); lvIterator++)
+  QList< QString > lvCollectionKeys = cvPluginDisplayCollection.keys( );
+  for( int lvIterator = 0; lvIterator < lvCollectionKeys.size( ); lvIterator++ )
   {
     EgtDebug( "Building display panel for key: "+ lvCollectionKeys.at( lvIterator ) );
 
@@ -232,16 +232,16 @@ void EgtPluginManager::updateGui()
 
     //Get the keys and loop through the display widget map
     QMap< QString, EgtPluginDisplayWidget*>* lvDisplayItems = cvPluginDisplayCollection.value( lvCollectionKeys.at( lvIterator ) );
-    QList< QString > lvDisplayItemKeys = lvDisplayItems->keys();
-    for(int lvItemToDisplay = 0; lvItemToDisplay < lvDisplayItemKeys.size(); lvItemToDisplay++)
+    QList< QString > lvDisplayItemKeys = lvDisplayItems->keys( );
+    for( int lvItemToDisplay = 0; lvItemToDisplay < lvDisplayItemKeys.size( ); lvItemToDisplay++ )
     {
       EgtDebug( "...Adding plugin "+ lvDisplayItemKeys.at( lvItemToDisplay ) +" to the display panel" );
-      lvPluginPanel->layout()->addWidget( lvDisplayItems->value( lvDisplayItemKeys.at( lvItemToDisplay ) ) );
+      lvPluginPanel->layout( )->addWidget( lvDisplayItems->value( lvDisplayItemKeys.at( lvItemToDisplay ) ) );
     }
     //Add a spacing item to get the buttons to float plugins to the top of the tab
-    ( (QVBoxLayout*) lvPluginPanel->layout() )->insertStretch(-1, 1);
+ ( ( QVBoxLayout* ) lvPluginPanel->layout( ) )->insertStretch( -1, 1 );
     //Add the panel to the tool box
-    lvPluginToolBox->addItem(lvPluginPanel, lvCollectionKeys.at( lvIterator ) );
+    lvPluginToolBox->addItem( lvPluginPanel, lvCollectionKeys.at( lvIterator ) );
   }
 
   //Set the display dock's main widget top the new toolbox

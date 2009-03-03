@@ -1,14 +1,14 @@
 /*
 ** File: egtrawimagereader.cpp
-** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-10-28
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,7 +33,7 @@ EgtRawImageReader::EgtRawImageReader( )
   cvIsInitialized = false;
 }
 
-EgtRawImageReader::~EgtRawImageReader()
+EgtRawImageReader::~EgtRawImageReader( )
 {
 }
 
@@ -43,28 +43,28 @@ EgtRawImageReader::~EgtRawImageReader()
  *
  */
  
-void EgtRawImageReader::abort()
+void EgtRawImageReader::abort( )
 { 
   EgtDebug( "entered" );
   cvAbort = true; 
 }
 
-QImage EgtRawImageReader::image() const
+QImage EgtRawImageReader::image( ) const
 {
-  if( !cvImageLoaded ) { return QImage(); }
+  if( !cvImageLoaded ) { return QImage( ); }
 
   return cvImage;
 }
 
-bool EgtRawImageReader::recycle()
+bool EgtRawImageReader::recycle( )
 {
-  if( isRunning() ) { return false; }
+  if( isRunning( ) ) { return false; }
 
-  cvImage = QImage();
+  cvImage = QImage( );
   return true;
 }
 
-void EgtRawImageReader::run()
+void EgtRawImageReader::run( )
 {
   EgtDebug( "entered" );
 
@@ -95,7 +95,7 @@ void EgtRawImageReader::run()
   EgtDebug( "cleaning up" );
   //Reset the parameters at the end of the thread's run
   cvIsInitialized = false;
-  cvRawProcessor.recycle();
+  cvRawProcessor.recycle( );
 }
 
 /*!
@@ -106,7 +106,7 @@ void EgtRawImageReader::setFile( QString theFileName )
   EgtDebug( "entered" );
 
   //Make sure we are not actually running
-  if( isRunning() )
+  if( isRunning( ) )
   {
     cvAbort = true;
   }
@@ -139,22 +139,22 @@ bool EgtRawImageReader::processRaw( QString theImageFilename )
   if( cvAbort ) { return false; }
   
   //Try to open the file
-  int lvErrorCode = cvRawProcessor.open_file( theImageFilename.toLocal8Bit() );
+  int lvErrorCode = cvRawProcessor.open_file( theImageFilename.toLocal8Bit( ) );
   if( LIBRAW_SUCCESS != lvErrorCode )
   {
       EgtDebug( "["+ theImageFilename +"] failed to open-> "+  libraw_strerror( lvErrorCode ) );
-      cvRawProcessor.recycle();
+      cvRawProcessor.recycle( );
       return false;
   }
   //Check to see if abort flag has been set
   if( cvAbort ) { return false; }
   
   //Unpack the image data
-  lvErrorCode = cvRawProcessor.unpack();
-  if( LIBRAW_SUCCESS != lvErrorCode)
+  lvErrorCode = cvRawProcessor.unpack( );
+  if( LIBRAW_SUCCESS != lvErrorCode )
   {
     EgtDebug( "["+ theImageFilename +"] failed to unpack-> "+  libraw_strerror( lvErrorCode ) );
-    cvRawProcessor.recycle(); 
+    cvRawProcessor.recycle( ); 
     return false;
   }
   //Check to see if abort flag has been set
@@ -166,11 +166,11 @@ bool EgtRawImageReader::processRaw( QString theImageFilename )
 
 
   //Process data -- not totally sure this is necessary here
-  lvErrorCode = cvRawProcessor.dcraw_process();       
-  if(LIBRAW_SUCCESS != lvErrorCode)
+  lvErrorCode = cvRawProcessor.dcraw_process( );       
+  if( LIBRAW_SUCCESS != lvErrorCode )
   {
     EgtDebug( "Unable to process image: "+  QString( libraw_strerror( lvErrorCode ) ) );
-    cvRawProcessor.recycle(); 
+    cvRawProcessor.recycle( ); 
     return false; 
   }
   //Check to see if abort flag has been set
@@ -181,7 +181,7 @@ bool EgtRawImageReader::processRaw( QString theImageFilename )
   {
 
     cvImage = QImage( lvImage->width, lvImage->height, QImage::Format_RGB32 );
-    if( cvImage.isNull() )
+    if( cvImage.isNull( ) )
     {
       EgtDebug( "Unable to allocate memory for cvOriginalImage" );
       free( lvImage );
@@ -214,8 +214,8 @@ bool EgtRawImageReader::processRaw( QString theImageFilename )
           emit( progress( 0, lvImage->height, lvY ) );
           for( int lvX = 0; lvX < lvImage->width; lvX++ )
           {
-            lvOffset = (lvY * lvImage->width * 3 ) + ( lvX * 3 );
-            cvImage.setPixel( lvX, lvY, lvImage->data[ lvOffset ] << 16 | lvImage->data[ lvOffset+1 ]<<8|lvImage->data[ lvOffset+2 ]  );
+            lvOffset = ( lvY * lvImage->width * 3 ) + ( lvX * 3 );
+            cvImage.setPixel( lvX, lvY, lvImage->data[ lvOffset ] << 16 | lvImage->data[ lvOffset+1 ]<<8|lvImage->data[ lvOffset+2 ] );
   
           }
         }

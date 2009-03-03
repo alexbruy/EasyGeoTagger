@@ -1,14 +1,14 @@
 /*
 ** File: egtfilereader.h
-** Author(s): Roberto Garcia Yunta
+** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 **
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -32,15 +32,15 @@ class EgtFileReader: public QObject
   public:
 
     /*! \brief Function that returns the column headers*/
-    virtual QStringList columnHeaders()=0;
+    virtual QStringList columnHeaders( ) = 0;
 
     /*! \brief Returns whether the file has column headers or not */
-    virtual bool hasColumnHeaders()=0;
+    virtual bool hasColumnHeaders( ) = 0;
 
-    virtual void init()=0;
+    virtual void init( ) = 0;
 
     /*! \brief Function used to read a gps file */
-    virtual QList<QStringList> read( bool* = 0 )=0;
+    virtual QList<QStringList> read( bool* isValid = 0 ) = 0;
    
    
 };

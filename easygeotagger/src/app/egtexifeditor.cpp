@@ -1,14 +1,14 @@
 /*
 ** File: egtexifeditor.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-12-11
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 **
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -43,75 +43,75 @@ EgtExifEditor::EgtExifEditor( QString theId, EgtExifEngine* theEngine )
   if( 0 == theEngine ) { return; }
 
   //Layout editor controls
-  cvEditorWidget.setLayout( new QVBoxLayout() );
-  cvEditorWidget.layout()->setSpacing( 0 );
-  cvEditorWidget.layout()->setContentsMargins( 1, 1, 1, 1 );
+  cvEditorWidget.setLayout( new QVBoxLayout( ) );
+  cvEditorWidget.layout( )->setSpacing( 0 );
+  cvEditorWidget.layout( )->setContentsMargins( 1, 1, 1, 1 );
 
   //Setup the Configure Dialog
   cvConfigurationDialog.setWindowTitle( tr( "Configure" ) );
   cvConfigurationDialog.setWindowIcon( QIcon( ":/22/icons/22/preferences-system.png" ) );
   cvConfigurationDialog.setModal( true );
-  cvConfigurationDialog.setLayout( new QVBoxLayout() );
-  cvConfigurationDialog.layout()->setSpacing( 5 );
-  cvConfigurationDialog.layout()->setContentsMargins( 1, 1, 1, 1 );
+  cvConfigurationDialog.setLayout( new QVBoxLayout( ) );
+  cvConfigurationDialog.layout( )->setSpacing( 5 );
+  cvConfigurationDialog.layout( )->setContentsMargins( 1, 1, 1, 1 );
 
   //Add group boxes to the configuration dialog
   cvTagGroups.setTitle( tr( "Tag Groups" ) );
-  cvTagGroups.setLayout( new QVBoxLayout() );
-  cvTagGroups.layout()->setSpacing( 0 );
-  cvTagGroups.layout()->setContentsMargins( 1, 1, 1, 1 );
-  cvConfigurationDialog.layout()->addWidget( &cvTagGroups );
+  cvTagGroups.setLayout( new QVBoxLayout( ) );
+  cvTagGroups.layout( )->setSpacing( 0 );
+  cvTagGroups.layout( )->setContentsMargins( 1, 1, 1, 1 );
+  cvConfigurationDialog.layout( )->addWidget( &cvTagGroups );
   cvTagGroups.setVisible( false );
 
   QGroupBox* lvGroupBox = new QGroupBox( tr( "Individual Tags" ) );
-  lvGroupBox->setLayout( new QVBoxLayout() );
-  lvGroupBox->layout()->setSpacing( 0 );
-  lvGroupBox->layout()->setContentsMargins( 1, 1, 1, 1 );
+  lvGroupBox->setLayout( new QVBoxLayout( ) );
+  lvGroupBox->layout( )->setSpacing( 0 );
+  lvGroupBox->layout( )->setContentsMargins( 1, 1, 1, 1 );
 
 
   //Build Editor and confiuration panels
-  QList< EgtExifEngine::KeyMap > lvKeys = cvExifEngine->keys();
-  QList< EgtExifEngine::KeyMap >::iterator lvIterator = lvKeys.begin();
+  QList< EgtExifEngine::KeyMap > lvKeys = cvExifEngine->keys( );
+  QList< EgtExifEngine::KeyMap >::iterator lvIterator = lvKeys.begin( );
   EgtExifTagControl* lvTagControls;
-  while( lvIterator != lvKeys.end() ) //Loop through the keys and create the control objects
+  while( lvIterator != lvKeys.end( ) ) //Loop through the keys and create the control objects
   {
     lvTagControls = new EgtExifTagControl( lvIterator->key, lvIterator->commonName, lvIterator->units );
     cvTagControls[ lvIterator->key ] = lvTagControls;
-    cvEditorWidget.layout()->addWidget( lvTagControls->editorControls() );
-    lvGroupBox->layout()->addWidget( lvTagControls->configurationControls() );
+    cvEditorWidget.layout( )->addWidget( lvTagControls->editorControls( ) );
+    lvGroupBox->layout( )->addWidget( lvTagControls->configurationControls( ) );
     connect( lvTagControls, SIGNAL( controlDisabled( QString ) ), this, SLOT( controlDisabled( QString ) ) );
     connect( lvTagControls, SIGNAL( controlEnabled( QString ) ), this, SLOT( controlEnabled( QString ) ) );
     lvIterator++;
   }
 
-  cvConfigurationDialog.layout()->addWidget( lvGroupBox );
+  cvConfigurationDialog.layout( )->addWidget( lvGroupBox );
 
   //Add the save button to editor panel
-  QWidget* lvPanel = new QWidget();
-  lvPanel->setLayout( new QHBoxLayout() );
-  lvPanel->layout()->setContentsMargins( 1, 1, 1, 1 );
-  ((QHBoxLayout*)lvPanel->layout())->insertStretch(-1, 1);
+  QWidget* lvPanel = new QWidget( );
+  lvPanel->setLayout( new QHBoxLayout( ) );
+  lvPanel->layout( )->setContentsMargins( 1, 1, 1, 1 );
+ ( ( QHBoxLayout* )lvPanel->layout( ) )->insertStretch( -1, 1 );
   cvSaveButton.setText( tr( "Save" ) );
-  lvPanel->layout()->addWidget( &cvSaveButton );
-  connect( &cvSaveButton, SIGNAL( clicked() ), this, SLOT( cvSaveButton_clicked() ) );
-  cvEditorWidget.layout()->addWidget( lvPanel );
+  lvPanel->layout( )->addWidget( &cvSaveButton );
+  connect( &cvSaveButton, SIGNAL( clicked( ) ), this, SLOT( cvSaveButton_clicked( ) ) );
+  cvEditorWidget.layout( )->addWidget( lvPanel );
 
   //Add the spacer to push all the objects to the top
-  ((QVBoxLayout*)cvConfigurationDialog.layout())->insertStretch(-1, 1);
-  ((QVBoxLayout*)cvEditorWidget.layout())->insertStretch(-1, 1);
+ ( ( QVBoxLayout* )cvConfigurationDialog.layout( ) )->insertStretch( -1, 1 );
+ ( ( QVBoxLayout* )cvEditorWidget.layout( ) )->insertStretch( -1, 1 );
 
   //Add a close button to the configuration dialog -- probably should be a button box.
   QDialogButtonBox* lvButtonBox = new QDialogButtonBox( QDialogButtonBox::Ok );
-  connect( lvButtonBox, SIGNAL( accepted() ), &cvConfigurationDialog, SLOT( accept() ) );
-  cvConfigurationDialog.layout()->addWidget( lvButtonBox );
+  connect( lvButtonBox, SIGNAL( accepted( ) ), &cvConfigurationDialog, SLOT( accept( ) ) );
+  cvConfigurationDialog.layout( )->addWidget( lvButtonBox );
 
   //Loop through the controls and restore setting from last session
   QSettings lvSettings;
 
-  QMap< QString, EgtExifTagControl* >::iterator lvTagIterator = cvTagControls.begin();
-  while( lvTagIterator != cvTagControls.end() )
+  QMap< QString, EgtExifTagControl* >::iterator lvTagIterator = cvTagControls.begin( );
+  while( lvTagIterator != cvTagControls.end( ) )
   {
-    lvTagIterator.value()->setEnabled( lvSettings.value( cvId + "/" +  lvTagIterator.value()->key(), true ).toBool() );
+    lvTagIterator.value( )->setEnabled( lvSettings.value( cvId + "/" +  lvTagIterator.value( )->key( ), true ).toBool( ) );
     lvTagIterator++;
   }
 }
@@ -128,7 +128,7 @@ EgtExifEditor::EgtExifEditor( QString theId, EgtExifEngine* theEngine )
 void EgtExifEditor::addTagGroup( EgtExifTagGroup* theTagGroup )
 {
   cvTagGroups.setVisible( true );
-  cvTagGroups.layout()->addWidget( theTagGroup );
+  cvTagGroups.layout( )->addWidget( theTagGroup );
   connect( theTagGroup, SIGNAL( tagGroupActivated( QStringList ) ), this, SLOT( tagGroupActivated( QStringList ) ) );
 }
 
@@ -142,13 +142,13 @@ void EgtExifEditor::loadExifData( bool hasTagData )
   if( 0 == cvExifEngine ) { return; }
 
   QString lvBlank = "";
-  QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
+  QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin( );
   if( !hasTagData ) //If the selected file does not have tag data clear the line edits
   {
-    while( lvIterator != cvTagControls.end() )
+    while( lvIterator != cvTagControls.end( ) )
     {
-      lvIterator.value()->setValue( lvBlank );
-      lvIterator.value()->setUnits( lvBlank );
+      lvIterator.value( )->setValue( lvBlank );
+      lvIterator.value( )->setUnits( lvBlank );
       lvIterator++;
     }
   }
@@ -157,37 +157,37 @@ void EgtExifEditor::loadExifData( bool hasTagData )
     bool isValid;
     QVariant lvResult;
     QVariant lvInvalidResult( "" );
-    while( lvIterator != cvTagControls.end() )
+    while( lvIterator != cvTagControls.end( ) )
     {
-      if( lvIterator.value()->isEnabled() )
+      if( lvIterator.value( )->isEnabled( ) )
       {
-        lvResult = cvExifEngine->read( lvIterator.value()->key(), &isValid );
+        lvResult = cvExifEngine->read( lvIterator.value( )->key( ), &isValid );
         if( isValid )
         {
-          (*lvIterator)->setValue( lvResult );
+       ( *lvIterator )->setValue( lvResult );
         }
         else
         {
-          (*lvIterator)->setValue( lvInvalidResult );
+       ( *lvIterator )->setValue( lvInvalidResult );
         }
 
-        if( lvIterator.value()->hasUnits() )
+        if( lvIterator.value( )->hasUnits( ) )
         {
-          lvResult = cvExifEngine->read( lvIterator.value()->key()+"Ref", &isValid );
+          lvResult = cvExifEngine->read( lvIterator.value( )->key( )+"Ref", &isValid );
           if( isValid )
           {
-            (*lvIterator)->setUnits( lvResult );
+         ( *lvIterator )->setUnits( lvResult );
           }
           else
           {
-            (*lvIterator)->setUnits( lvInvalidResult );
+         ( *lvIterator )->setUnits( lvInvalidResult );
           }
         }
       }
       else
       {
-        lvIterator.value()->setValue( lvBlank );
-        lvIterator.value()->setUnits( lvBlank );
+        lvIterator.value( )->setValue( lvBlank );
+        lvIterator.value( )->setUnits( lvBlank );
       }
 
       lvIterator++;
@@ -198,7 +198,7 @@ void EgtExifEditor::loadExifData( bool hasTagData )
 void EgtExifEditor::showConfigurationDialog( QPoint thePoint )
 {
    cvConfigurationDialog.move( thePoint );
-   cvConfigurationDialog.show();
+   cvConfigurationDialog.show( );
 }
 
 /*
@@ -219,7 +219,7 @@ void EgtExifEditor::controlDisabled( QString theKey )
   lvSettings.setValue( cvId + "/" + theKey, false );
 
   QString lvDependency = cvExifEngine->dependency( theKey );
-  if( !lvDependency.isNull() )
+  if( !lvDependency.isNull( ) )
   {
     cvTagControls[ lvDependency ]->setEnabled( false );
     lvSettings.setValue( cvId + "/" + lvDependency, false );
@@ -248,7 +248,7 @@ void EgtExifEditor::controlEnabled( QString theKey )
     cvTagControls[ theKey ]->setValue( lvInvalidResult );
   }
 
-  if( cvTagControls[ theKey ]->hasUnits() )
+  if( cvTagControls[ theKey ]->hasUnits( ) )
   {
     lvResult = cvExifEngine->read( theKey+"Ref", &isValid );
     if( isValid )
@@ -267,47 +267,47 @@ void EgtExifEditor::controlEnabled( QString theKey )
 
   //Enabled any dependency
   QString lvDependency = cvExifEngine->dependency( theKey );
-  if( !lvDependency.isNull() && !cvTagControls[ lvDependency ]->isEnabled() )
+  if( !lvDependency.isNull( ) && !cvTagControls[ lvDependency ]->isEnabled( ) )
   {
     cvTagControls[ lvDependency ]->setEnabled( true );
     lvSettings.setValue( cvId + "/" + lvDependency, true );
   }
 }
 
-void EgtExifEditor::cvSaveButton_clicked()
+void EgtExifEditor::cvSaveButton_clicked( )
 {
   if( 0 == cvExifEngine ) { return; }
 
   bool isValid = false;
   QVariant lvResult;
   QVariant lvInvalidResult( "" );
-  QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
-  while( lvIterator != cvTagControls.end() )
+  QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin( );
+  while( lvIterator != cvTagControls.end( ) )
   {
-    if( lvIterator.value()->isEnabled() && lvIterator.value()->value() != "" )
+    if( lvIterator.value( )->isEnabled( ) && lvIterator.value( )->value( ) != "" )
     {
-      cvExifEngine->write( lvIterator.value()->key(),  lvIterator.value()->value() );
-      lvResult = cvExifEngine->read( lvIterator.value()->key(), &isValid );
+      cvExifEngine->write( lvIterator.value( )->key( ),  lvIterator.value( )->value( ) );
+      lvResult = cvExifEngine->read( lvIterator.value( )->key( ), &isValid );
       if( isValid )
       {
-        (*lvIterator)->setValue( lvResult );
+     ( *lvIterator )->setValue( lvResult );
       }
       else
       {
-        (*lvIterator)->setValue( lvInvalidResult );
+     ( *lvIterator )->setValue( lvInvalidResult );
       }
 
-      if( lvIterator.value()->hasUnits() )
+      if( lvIterator.value( )->hasUnits( ) )
       {
-        cvExifEngine->write( lvIterator.value()->key()+"Ref",  lvIterator.value()->units() );
-        lvResult = cvExifEngine->read( lvIterator.value()->key()+"Ref", &isValid );
+        cvExifEngine->write( lvIterator.value( )->key( )+"Ref",  lvIterator.value( )->units( ) );
+        lvResult = cvExifEngine->read( lvIterator.value( )->key( )+"Ref", &isValid );
         if( isValid )
         {
-          (*lvIterator)->setUnits( lvResult );
+       ( *lvIterator )->setUnits( lvResult );
         }
         else
         {
-          (*lvIterator)->setUnits( lvInvalidResult );
+       ( *lvIterator )->setUnits( lvInvalidResult );
         }
       }
     }
@@ -320,14 +320,14 @@ void EgtExifEditor::cvSaveButton_clicked()
  */
 void EgtExifEditor::tagGroupActivated( QStringList theKeys )
 {
-  QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin();
-  while( lvIterator != cvTagControls.end() )
+  QMap< QString, EgtExifTagControl* >::iterator lvIterator = cvTagControls.begin( );
+  while( lvIterator != cvTagControls.end( ) )
   {
-    cvTagControls[ lvIterator.value()->key( ) ]->setEnabled( false );
+    cvTagControls[ lvIterator.value( )->key( ) ]->setEnabled( false );
     lvIterator++;
   }
-  QStringList::iterator lvTagRunner = theKeys.begin();
-  while( lvTagRunner != theKeys.end() )
+  QStringList::iterator lvTagRunner = theKeys.begin( );
+  while( lvTagRunner != theKeys.end( ) )
   {
     cvTagControls[ *lvTagRunner ]->setEnabled( true );
     lvTagRunner++;

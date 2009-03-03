@@ -1,14 +1,14 @@
 /*
 ** File: egtfilereaderfactory.h
-** Author(s): Roberto Garcia Yunta
+** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 **
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -36,16 +36,16 @@ class EgtReaderFactory: public QObject
     /*! \brief Constructor */
     EgtReaderFactory( );
 
-    /*! \brief Shows the windows to open a file (delimited text or gps) */
-    void show();
+    /*! \brief Shows the windows to open a file ( delimited text or gps ) */
+    void show( );
 
   private slots:
 
     /*! \brief Slot used when the user clicks on the ok button of the file type dialog */
-    void accept();
+    void accept( );
 
     /*! \brief Slot used to signal the factory that a file reader has been created */
-    void fileReaderInitialized();
+    void fileReaderInitialized( );
 
     /*! \brief Slot used when the user clicks on the delimited text radio button */
     void on_rbDelimitedText_toggled( bool );
@@ -54,7 +54,7 @@ class EgtReaderFactory: public QObject
     void on_rbGPSFile_toggled( bool );
 
     /*! \brief Slot used when the user clicks on the cancel button of the file type dialog */
-    void reject();
+    void reject( );
 
   private:
 

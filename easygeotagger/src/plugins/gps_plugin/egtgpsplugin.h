@@ -1,14 +1,14 @@
 /*
 ** File: egtgpsplugin.h
-** Author(s): Roberto Garcia Yunta
+** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -32,12 +32,12 @@
 class EgtGpsPlugin: public EgtPluginInterface
 {
   Q_OBJECT
-  Q_INTERFACES(EgtPluginInterface)
+  Q_INTERFACES( EgtPluginInterface )
   
   public:
 
     /*! \brief Constuctor */
-    EgtGpsPlugin();
+    EgtGpsPlugin( );
     
     /*! \brief Connect the provided button to the showConfigurationPanel function */
     void connectConfigurationButton( QPushButton* );
@@ -46,27 +46,27 @@ class EgtGpsPlugin: public EgtPluginInterface
     void connectRunButton( QPushButton* );
     
     /*! \brief Initialization plugin*/
-    void initPlugin();
+    void initPlugin( );
     
     /*! \brief Return the ability of this plugin to be configured */
-    bool isConfigurable() { return false; }
+    bool isConfigurable( ) { return false; }
 
   
   public slots:
     
     /*! \brief Slot called to activate or launch the plugin */
-    void run();
+    void run( );
 
     /*! \brief Slot to display the condifuration panel */
-    void showConfigurationPanel() { }
+    void showConfigurationPanel( ) { }
 
   private slots:
 
     /*! \brief Slot called to open a gps file */
-    void cvOpenFile_clicked();
+    void cvOpenFile_clicked( );
     
     /*! \brief Slot called to tag a picture */
-    void cvTagButton_clicked();
+    void cvTagButton_clicked( );
     
     /*! \brief Slot called to set the file reader object to be used */
     void fileReader_set( EgtFileReader* );

@@ -1,14 +1,14 @@
 /*
 ** File: egtgraphicaldelimitedtextfilereader.cpp
-** Author(s): Roberto Garcia Yunta
+** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,19 +29,19 @@
 #include <QMessageBox>
 #include <QApplication>
 
-EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):EgtDelimitedTextFileReader()
+EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader( ):EgtDelimitedTextFileReader( )
 {
-  cvUiTextDelimiter.setupUi(&cvSelectDelimiterDialog);
+  cvUiTextDelimiter.setupUi( &cvSelectDelimiterDialog );
   cvSelectDelimiterDialog.setWindowIcon( QIcon( ":/icons/EasyGT.svg" ) );
 
-  connect( cvUiTextDelimiter.buttonBox, SIGNAL( accepted() ), this, SLOT( accept() ) );
-  connect( cvUiTextDelimiter.buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) ); 
+  connect( cvUiTextDelimiter.buttonBox, SIGNAL( accepted( ) ), this, SLOT( accept( ) ) );
+  connect( cvUiTextDelimiter.buttonBox, SIGNAL( rejected( ) ), this, SLOT( reject( ) ) ); 
   connect( cvUiTextDelimiter.rbtnComma, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnComma_toggled( bool ) ) ); 
   connect( cvUiTextDelimiter.rbtnPipe, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnPipe_toggled( bool ) ) ); 
   connect( cvUiTextDelimiter.rbtnBlank, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnBlank_toggled( bool ) ) ); 
   connect( cvUiTextDelimiter.rbtnCustom, SIGNAL( toggled( bool ) ), this, SLOT( on_rbtnCustom_toggled( bool ) ) ); 
-  connect( cvUiTextDelimiter.leCustom, SIGNAL( textEdited( QString ) ), this, SLOT( on_leCustom_changed() ) ); 
-  connect( cvUiTextDelimiter.cbHeader, SIGNAL( stateChanged( int ) ), this, SLOT( on_cbHeader_changed() ) );
+  connect( cvUiTextDelimiter.leCustom, SIGNAL( textEdited( QString ) ), this, SLOT( on_leCustom_changed( ) ) ); 
+  connect( cvUiTextDelimiter.cbHeader, SIGNAL( stateChanged( int ) ), this, SLOT( on_cbHeader_changed( ) ) );
 }
 
 /*
@@ -50,43 +50,43 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader(  ):Egt
  *
  */
 
-void EgtGraphicalDelimitedTextFileReader::selectDelimiter()
+void EgtGraphicalDelimitedTextFileReader::selectDelimiter( )
 {
-  QWidgetList lvActiveWindows = QApplication::topLevelWidgets();
+  QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
   QWidget* lvParent = 0;
 
-  for( int i =0; i < lvActiveWindows.size(); i++ )
+  for( int i = 0; i < lvActiveWindows.size( ); i++ )
   {
-    if( tr("GPS Reader") == lvActiveWindows[i]->windowTitle() )
+    if( tr( "GPS Reader" ) == lvActiveWindows[i]->windowTitle( ) )
     {
       lvParent = lvActiveWindows[i];
     }
   }
 
-  QPoint lvPosition = lvParent->pos();
+  QPoint lvPosition = lvParent->pos( );
   //center the window over the parent
-  cvSelectDelimiterDialog.move( lvPosition.x() + lvParent->width()/2 - cvSelectDelimiterDialog.width()/2, lvPosition.y() + lvParent->height()/2 - cvSelectDelimiterDialog.height()/2 );
-  cvSelectDelimiterDialog.show();
+  cvSelectDelimiterDialog.move( lvPosition.x( ) + lvParent->width( )/2 - cvSelectDelimiterDialog.width( )/2, lvPosition.y( ) + lvParent->height( )/2 - cvSelectDelimiterDialog.height( )/2 );
+  cvSelectDelimiterDialog.show( );
 }
 
-void EgtGraphicalDelimitedTextFileReader::init() //init function
+void EgtGraphicalDelimitedTextFileReader::init( ) //init function
 {
-  QWidgetList lvActiveWindows = QApplication::topLevelWidgets();
+  QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
   QWidget* lvParent = 0;
 
-  for( int i =0; i < lvActiveWindows.size(); i++ )
+  for( int i = 0; i < lvActiveWindows.size( ); i++ )
   {
-    if( tr("Select a file type") == lvActiveWindows[i]->windowTitle() )
+    if( tr( "Select a file type" ) == lvActiveWindows[i]->windowTitle( ) )
     {
       lvParent = lvActiveWindows[i];
     }
   }
 
-  QString lvFileName = QFileDialog::getOpenFileName( lvParent, tr("Open GPS File"), "/home", tr("GPS Files (*.txt *.gps)"));
+  QString lvFileName = QFileDialog::getOpenFileName( lvParent, tr( "Open GPS File" ), "/home", tr( "GPS Files ( *.txt *.gps )" ) );
   if ( "" != lvFileName )
   {
     setFileName( lvFileName );
-    selectDelimiter();
+    selectDelimiter( );
   }
 } 
 
@@ -97,36 +97,36 @@ void EgtGraphicalDelimitedTextFileReader::init() //init function
  *
  */
 
-void EgtGraphicalDelimitedTextFileReader::on_cbHeader_changed()
+void EgtGraphicalDelimitedTextFileReader::on_cbHeader_changed( )
 {
-  cvHasColumnHeaders = cvUiTextDelimiter.cbHeader->isChecked();
-  emit delimiterChanged();
+  cvHasColumnHeaders = cvUiTextDelimiter.cbHeader->isChecked( );
+  emit delimiterChanged( );
 }
 
-void EgtGraphicalDelimitedTextFileReader::on_leCustom_changed()
+void EgtGraphicalDelimitedTextFileReader::on_leCustom_changed( )
 {
-  if( cvUiTextDelimiter.rbtnCustom->isChecked() )
+  if( cvUiTextDelimiter.rbtnCustom->isChecked( ) )
   {
-    setDelimiter( cvUiTextDelimiter.leCustom->text() );
-    emit delimiterChanged();
+    setDelimiter( cvUiTextDelimiter.leCustom->text( ) );
+    emit delimiterChanged( );
   }
 }
 
-void EgtGraphicalDelimitedTextFileReader::reject()
+void EgtGraphicalDelimitedTextFileReader::reject( )
 {
-  cvSelectDelimiterDialog.close();
+  cvSelectDelimiterDialog.close( );
 }
 
-void EgtGraphicalDelimitedTextFileReader::accept()
+void EgtGraphicalDelimitedTextFileReader::accept( )
 {
-  if( 0 == cvFileData.size() )
+  if( 0 == cvFileData.size( ) )
   {
-    QMessageBox::critical( &cvSelectDelimiterDialog, tr("Error"),tr("You must have a valid file"),QMessageBox::Ok );
+    QMessageBox::critical( &cvSelectDelimiterDialog, tr( "Error" ),tr( "You must have a valid file" ),QMessageBox::Ok );
   }
   else
   {
-    cvSelectDelimiterDialog.close();
-    emit initializationComplete();
+    cvSelectDelimiterDialog.close( );
+    emit initializationComplete( );
   }
 }
 
@@ -135,7 +135,7 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnBlank_toggled( bool theValue )
   if( theValue )
   {
     setDelimiter( " " );
-    delimiterChanged();
+    delimiterChanged( );
   }
 }
 
@@ -144,7 +144,7 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnComma_toggled( bool theValue )
   if( theValue )
   {
     setDelimiter( "," );
-    delimiterChanged();
+    delimiterChanged( );
   }
 }
 
@@ -152,8 +152,8 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnCustom_toggled( bool theValue )
 {
   if( theValue )
   {
-    setDelimiter( cvUiTextDelimiter.leCustom->text() );
-    delimiterChanged();
+    setDelimiter( cvUiTextDelimiter.leCustom->text( ) );
+    delimiterChanged( );
   }
 }
 
@@ -162,7 +162,7 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnPipe_toggled( bool theValue )
   if( theValue )
   {
     setDelimiter( "|" );
-    delimiterChanged();
+    delimiterChanged( );
   }
 }
 
@@ -172,42 +172,42 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnPipe_toggled( bool theValue )
  *
  */
 
-void EgtGraphicalDelimitedTextFileReader::delimiterChanged()
+void EgtGraphicalDelimitedTextFileReader::delimiterChanged( )
 {
-  cvFileData = read();
+  cvFileData = read( );
 
-  if( !cvLastError.isEmpty() )
+  if( !cvLastError.isEmpty( ) )
   {
-    QWidget* lvActiveWindow = QApplication::activeWindow ();
-    QMessageBox::warning( lvActiveWindow, tr("Error"),cvLastError ,QMessageBox::Ok );
+    QWidget* lvActiveWindow = QApplication::activeWindow ( );
+    QMessageBox::warning( lvActiveWindow, tr( "Error" ),cvLastError ,QMessageBox::Ok );
   }
 
-  QString lvHTML = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" ";
-  lvHTML +="width=\"100%\">";
+  QString lvHTML = "<table border = \"1\" cellspacing = \"0\" cellpadding = \"0\" ";
+  lvHTML += "width = \"100%\">";
 
-  int lvNumRows = (cvFileData.size() > 3)? 3: cvFileData.size(); // We just show up to 3 rows
+  int lvNumRows = ( cvFileData.size( ) > 3 )? 3: cvFileData.size( ); // We just show up to 3 rows
    
-  if( hasColumnHeaders() )
+  if( hasColumnHeaders( ) )
   {
-    QStringList lvHeader = columnHeaders(); 
-    lvHTML +="<tr bgcolor = \"#4AB02A\">";
-    for( int i = 0; i < lvHeader.size(); i++ )
+    QStringList lvHeader = columnHeaders( ); 
+    lvHTML += "<tr bgcolor = \"#4AB02A\">";
+    for( int i = 0; i < lvHeader.size( ); i++ )
     {
-      lvHTML = lvHTML+"<td>"+lvHeader.at(i)+"</td>";
+      lvHTML = lvHTML+"<td>"+lvHeader.at( i )+"</td>";
     }
-    lvHTML +="</tr>";
+    lvHTML += "</tr>";
   }
 
   for( int i = 0; i < lvNumRows; i++ )
   {
-    lvHTML +="<tr>";
-    for( int j = 0; j < cvFileData[0].size(); j++ )
+    lvHTML += "<tr>";
+    for( int j = 0; j < cvFileData[0].size( ); j++ )
     {
-      lvHTML = lvHTML+"<td>"+cvFileData.at(i).at(j)+"</td>";
+      lvHTML = lvHTML+"<td>"+cvFileData.at( i ).at( j )+"</td>";
     }
-    lvHTML +="</tr>";
+    lvHTML += "</tr>";
   }
-  lvHTML +="</table>";
+  lvHTML += "</table>";
 
   cvUiTextDelimiter.tePreview->setHtml( lvHTML );
 }

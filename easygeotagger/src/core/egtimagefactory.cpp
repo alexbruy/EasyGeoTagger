@@ -1,14 +1,14 @@
 /*
 ** File: egtimagefactory.cpp
-** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-10-07
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,28 +30,28 @@
 
 EgtImageFactory::EgtImageFactory( )
 {
-  init();
+  init( );
 }
 
 EgtImageFactory::EgtImageFactory( QString theFile )
 {
-  init();
+  init( );
   setFile( theFile );
 }
 
 EgtImageFactory::EgtImageFactory( QModelIndex theIndex )
 {
-  init();
+  init( );
   setFile( theIndex );
 }
 
-EgtImageFactory::~EgtImageFactory()
+EgtImageFactory::~EgtImageFactory( )
 {
-  if( cvRawImageReader.isRunning() )
+  if( cvRawImageReader.isRunning( ) )
   {
     EgtDebug( "RawImageReader is currently running, wating for thread to abort" );
-    cvRawImageReader.abort();
-    while( cvRawImageReader.isRunning() )
+    cvRawImageReader.abort( );
+    while( cvRawImageReader.isRunning( ) )
     {
       cvRawImageReader.wait( 500 );
     }
@@ -59,9 +59,9 @@ EgtImageFactory::~EgtImageFactory()
   }
 }
 
-void EgtImageFactory::init()
+void EgtImageFactory::init( )
 {
-  cvOriginalImage = QImage();
+  cvOriginalImage = QImage( );
   cvHasBeenResized = false;
   cvHasThumbnail = false;
   cvIsValidImage = false;
@@ -87,7 +87,7 @@ QImage EgtImageFactory::scaledImage( bool* isValid ) const
   {
     EgtDebug( "A valid image has not been loaded yet or the original has not been resized yet" );
     if( 0 != isValid ) { *isValid = false; }
-    return QImage();
+    return QImage( );
   }
   
   if( 0 != isValid ) { *isValid = true; }
@@ -100,7 +100,7 @@ QImage EgtImageFactory::scaledImage( bool* isValid ) const
  * \param isValid optional parameter to return if the scaled image is valid
  * \returns A new image resized to the specific dimensions or a blank image if a valid image as not been opened
  */
-QImage EgtImageFactory::scaleImage(int theWidth, int theHeight, bool* isValid )
+QImage EgtImageFactory::scaleImage( int theWidth, int theHeight, bool* isValid )
 {
   EgtDebug( "entered" );
   
@@ -109,11 +109,11 @@ QImage EgtImageFactory::scaleImage(int theWidth, int theHeight, bool* isValid )
   {
     EgtDebug( "A valid image has not been loaded yet" );
     if( 0 != isValid ) { *isValid = false; }
-    return QImage();
+    return QImage( );
   }
   
-  cvResizedImage = cvOriginalImage.scaled(theWidth, theHeight, Qt::KeepAspectRatio );
-  cvHasBeenResized = !cvResizedImage.isNull();
+  cvResizedImage = cvOriginalImage.scaled( theWidth, theHeight, Qt::KeepAspectRatio );
+  cvHasBeenResized = !cvResizedImage.isNull( );
   
   if( 0 != isValid ) { *isValid = cvHasBeenResized; }
   return cvResizedImage;
@@ -159,11 +159,11 @@ void EgtImageFactory::setFile( QString theImageFileName )
 
   cvFileName = theImageFileName;
 
-  if( cvRawImageReader.isRunning() )
+  if( cvRawImageReader.isRunning( ) )
   {
     EgtDebug( "RawImageReader is currently running, wating for thread to abort" );
-    cvRawImageReader.abort();
-    while( cvRawImageReader.isRunning() )
+    cvRawImageReader.abort( );
+    while( cvRawImageReader.isRunning( ) )
     {
       cvRawImageReader.wait( 500 );
     }
@@ -176,20 +176,20 @@ void EgtImageFactory::setFile( QString theImageFileName )
   
   //If we were given a dir just bail
   QFileInfo lvFileInfo( theImageFileName );
-  if( lvFileInfo.isDir() )
+  if( lvFileInfo.isDir( ) )
   {
     EgtDebug( "received directory not image...bailing" );
     emit( imageLoaded( cvIsValidImage ) );
     return;
   }
   
-  //TODO: Eventually there will have to be a switch here to figure out which read() to call
+  //TODO: Eventually there will have to be a switch here to figure out which read( ) to call
   //Maybe try reading the magic number?
-  if( theImageFileName.endsWith("tif", Qt::CaseInsensitive) || theImageFileName.endsWith( "tiff", Qt::CaseInsensitive ) )
+  if( theImageFileName.endsWith( "tif", Qt::CaseInsensitive ) || theImageFileName.endsWith( "tiff", Qt::CaseInsensitive ) )
   {
     readTiff( theImageFileName );
   }
-  else if( theImageFileName.endsWith("jpg", Qt::CaseInsensitive) || theImageFileName.endsWith( "jpeg", Qt::CaseInsensitive ) )
+  else if( theImageFileName.endsWith( "jpg", Qt::CaseInsensitive ) || theImageFileName.endsWith( "jpeg", Qt::CaseInsensitive ) )
   {
     readJpeg( theImageFileName );
   }
@@ -226,12 +226,12 @@ void EgtImageFactory::readJpeg( QString theImageFileName )
   cvIsProcessing = true;
 
  
-  emit( progress( 0, 1, 0) );
+  emit( progress( 0, 1, 0 ) );
   cvOriginalImage = QImage( theImageFileName, "JPG" );
-  emit( progress( 0, 1, 1) );
+  emit( progress( 0, 1, 1 ) );
 
   cvIsProcessing = false;
-  cvIsValidImage = !cvOriginalImage.isNull();
+  cvIsValidImage = !cvOriginalImage.isNull( );
  
   emit( imageLoaded( cvIsValidImage ) );
 }
@@ -245,11 +245,11 @@ void EgtImageFactory::readRaw( QString theImageFileName )
   cvIsValidImage = false;
   cvIsProcessing = true;
 
-  emit( progress( 0, 0, 0) );
-  cvOriginalImage = QImage();
+  emit( progress( 0, 0, 0 ) );
+  cvOriginalImage = QImage( );
 
   cvRawImageReader.setFile( theImageFileName );
-  cvRawImageReader.start();
+  cvRawImageReader.start( );
 }
 
 /*!
@@ -260,13 +260,13 @@ void EgtImageFactory::readTiff( QString theImageFileName )
   EgtDebug( "entered" );
   cvIsValidImage = false;
   cvIsProcessing = true;  
-  emit( progress( 0, 1, 0) );
+  emit( progress( 0, 1, 0 ) );
   cvOriginalImage = QImage( theImageFileName, "TIFF" );
-  emit( progress( 0, 1, 1) );
+  emit( progress( 0, 1, 1 ) );
  
 
   cvIsProcessing = false;
-  cvIsValidImage = !cvOriginalImage.isNull();
+  cvIsValidImage = !cvOriginalImage.isNull( );
  
   emit( imageLoaded( cvIsValidImage ) );
 }
@@ -276,9 +276,9 @@ void EgtImageFactory::readTiff( QString theImageFileName )
  * \param theMaximum the maximum value for the progress bar
  * \param theProgress the current progress
  */
-void EgtImageFactory::reEmitProgress(int theMinimum, int theMaximum, int theProgress )
+void EgtImageFactory::reEmitProgress( int theMinimum, int theMaximum, int theProgress )
 {
-  emit( progress( theMinimum, theMaximum, theProgress) );
+  emit( progress( theMinimum, theMaximum, theProgress ) );
 }
 
 /*!
@@ -288,7 +288,7 @@ void EgtImageFactory::rawImageLoaded( bool isValid )
 {
   cvIsProcessing = false;
   cvIsValidImage = isValid;
-  cvOriginalImage = cvRawImageReader.image();
-  cvRawImageReader.recycle();
+  cvOriginalImage = cvRawImageReader.image( );
+  cvRawImageReader.recycle( );
   emit( imageLoaded( isValid ) );
 }

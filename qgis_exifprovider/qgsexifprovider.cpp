@@ -2,7 +2,7 @@
       qgsexifprovider.cpp  -  Data provider for imagery with GPS data stored in EXIF headers
                              -------------------
     begin                : 2008-09-17
-    copyright            : (C) 2008 by Peter J. Ersts
+    copyright            : ( C ) 2008 by Peter J. Ersts
     email                : ersts at amnh.org
     
     Heavily relied on qgsdelimitedtextprovider.h/cpp - Data provider for delimted text
@@ -14,7 +14,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *( at your option ) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -42,13 +42,13 @@ QgsExifProvider::QgsExifProvider( QString theDir )
   mSourceDirectory.setPath( theDir );
   
   // Set the selection rectangle to null
-  mSelectionRectangle = QgsRectangle();
+  mSelectionRectangle = QgsRectangle( );
   
   // assume the layer is invalid until proven otherwise
   mValid = false;
   
   //Validate directory
-  if( !mSourceDirectory.exists() || !mSourceDirectory.isReadable() )
+  if( !mSourceDirectory.exists( ) || !mSourceDirectory.isReadable( ) )
   {
     QgsDebugMsg( "Directory does not exist or is not readable" );
     return;
@@ -56,27 +56,27 @@ QgsExifProvider::QgsExifProvider( QString theDir )
   QgsDebugMsg( "Valid and readable directory" );
   
   // set the initial extent
-  mExtent = QgsRectangle();
+  mExtent = QgsRectangle( );
   
   //Get only the files in the directory
-  QStringList myFileList = mSourceDirectory.entryList(QDir::Files);
+  QStringList myFileList = mSourceDirectory.entryList( QDir::Files );
   
   double myLongitude = 0;
   double myLatitude = 0;
   bool firstPoint = true;
-  for( int iterator = 0; iterator < myFileList.size(); iterator++ )
+  for( int iterator = 0; iterator < myFileList.size( ); iterator++ )
   {
     QgsDebugMsg( "Parsing file: " + myFileList[iterator] );
-    mExifEngine.setFile( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + myFileList[iterator] );
-    if( mExifEngine.isValidImage() && mExifEngine.hasExpectedExif() )
+    mExifEngine.setFile( mSourceDirectory.absolutePath( ) + QDir::toNativeSeparators( "/" ) + myFileList[iterator] );
+    if( mExifEngine.isValidImage( ) && mExifEngine.hasExpectedExif( ) )
     {
-      myLongitude = mExifEngine.longitude();
-      myLatitude = mExifEngine.latitude();
+      myLongitude = mExifEngine.longitude( );
+      myLatitude = mExifEngine.latitude( );
       mValidImageList << myFileList[iterator];
     }
     else
     {
-      QgsDebugMsg( "Error caught: "+  mExifEngine.lastError() );
+      QgsDebugMsg( "Error caught: "+  mExifEngine.lastError( ) );
       continue;
     }
     
@@ -89,13 +89,13 @@ QgsExifProvider::QgsExifProvider( QString theDir )
       // Extent for the first point is just the first point
       mExtent.set( myLongitude, myLatitude, myLongitude, myLatitude );
       firstPoint = false;
-      QgsDebugMsg( "Loading keys...");
+      QgsDebugMsg( "Loading keys..." );
 
       //Hard coded field
-      mAttributeFields[0] = QgsField( "Filename" ,QVariant::String, "Text"  );
+      mAttributeFields[0] = QgsField( "Filename" ,QVariant::String, "Text" );
 
-      QList< EgtExifEngine::KeyMap > myKeys = mExifEngine.keys();
-      int myKeyListLength = myKeys.size();
+      QList< EgtExifEngine::KeyMap > myKeys = mExifEngine.keys( );
+      int myKeyListLength = myKeys.size( );
       for( int myKeyRunner = 0; myKeyRunner < myKeyListLength; myKeyRunner++ )
       {
         //TODO: would like to display the common name not the key in the attribute table
@@ -105,7 +105,7 @@ QgsExifProvider::QgsExifProvider( QString theDir )
     }
   }
   
-  if( mValidImageList.size() > 0 )
+  if( mValidImageList.size( ) > 0 )
   {
     mValid = true;
   }
@@ -113,12 +113,12 @@ QgsExifProvider::QgsExifProvider( QString theDir )
   QgsDebugMsg( "Done checking validity" );
 }
 
-QgsExifProvider::~QgsExifProvider()
+QgsExifProvider::~QgsExifProvider( )
 {
 
 }
 
-QString QgsExifProvider::storageType() const
+QString QgsExifProvider::storageType( ) const
 {
   return "EXIF header";
 }
@@ -130,21 +130,21 @@ bool QgsExifProvider::nextFeature( QgsFeature& feature )
   // the feature
   feature.setValid( false );
 
-  while( mValidImageList.size() >= 1 && mCurrentFeatureIndex < mValidImageList.size() )
+  while( mValidImageList.size( ) >= 1 && mCurrentFeatureIndex < mValidImageList.size( ) )
   { 
     double xCoordinate = 0.0;
     double yCoordinate = 0.0;
 
     //This is unlikely to be false, but concurency issues could exists - i.e., edit exif after layer created
-    mExifEngine.setFile( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + mValidImageList[mCurrentFeatureIndex] );
-    if( !mExifEngine.isValidImage() || !mExifEngine.hasExpectedExif() )
+    mExifEngine.setFile( mSourceDirectory.absolutePath( ) + QDir::toNativeSeparators( "/" ) + mValidImageList[mCurrentFeatureIndex] );
+    if( !mExifEngine.isValidImage( ) || !mExifEngine.hasExpectedExif( ) )
     {
       mCurrentFeatureIndex++;
       continue;
     }
 
-    xCoordinate = mExifEngine.longitude();
-    yCoordinate = mExifEngine.latitude();
+    xCoordinate = mExifEngine.longitude( );
+    yCoordinate = mExifEngine.latitude( );
 
     // skip the feature if it's out of current bounds
     if ( ! boundsCheck( xCoordinate, yCoordinate ) )
@@ -164,7 +164,7 @@ bool QgsExifProvider::nextFeature( QgsFeature& feature )
     QByteArray  buffer;
     QDataStream s( &buffer, static_cast<QIODevice::OpenMode>( QIODevice::WriteOnly ) ); // open on buffers's data
 
-    switch ( QgsApplication::endian() )
+    switch ( QgsApplication::endian( ) )
     {
       case QgsApplication::NDR :
         // we're on a little-endian platform, so tell the data
@@ -186,23 +186,23 @@ bool QgsExifProvider::nextFeature( QgsFeature& feature )
     s << xCoordinate;
     s << yCoordinate;
 
-    unsigned char* geometry = new unsigned char[buffer.size()];
-    memcpy( geometry, buffer.data(), buffer.size() );
+    unsigned char* geometry = new unsigned char[buffer.size( )];
+    memcpy( geometry, buffer.data( ), buffer.size( ) );
 
     feature.setGeometryAndOwnership( geometry, sizeof( wkbPoint ) );
     //End of section to clean up
-    mExifEngine.setFile( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + mValidImageList[mCurrentFeatureIndex] );
-    for ( QgsAttributeList::const_iterator it = mAttributesToFetch.begin();
-          it != mAttributesToFetch.end();
+    mExifEngine.setFile( mSourceDirectory.absolutePath( ) + QDir::toNativeSeparators( "/" ) + mValidImageList[mCurrentFeatureIndex] );
+    for ( QgsAttributeList::const_iterator it = mAttributesToFetch.begin( );
+          it != mAttributesToFetch.end( );
           ++it )
     {
-      if ( it != mAttributesToFetch.begin() )
+      if ( it != mAttributesToFetch.begin( ) )
       {
-        feature.addAttribute( *it, mExifEngine.read( mAttributeFields[*it].name() ) );
+        feature.addAttribute( *it, mExifEngine.read( mAttributeFields[*it].name( ) ) );
       }
       else
       {
-        feature.addAttribute( *it, QVariant( mSourceDirectory.absolutePath() + QDir::toNativeSeparators("/") + mValidImageList[mCurrentFeatureIndex]) );
+        feature.addAttribute( *it, QVariant( mSourceDirectory.absolutePath( ) + QDir::toNativeSeparators( "/" ) + mValidImageList[mCurrentFeatureIndex] ) );
       }
 
     }
@@ -225,7 +225,7 @@ void QgsExifProvider::select( QgsAttributeList fetchAttributes,
   mSelectionRectangle = rect;
   mAttributesToFetch = fetchAttributes;
   mFetchGeom = fetchGeometry;
-  if ( rect.isEmpty() )
+  if ( rect.isEmpty( ) )
   {
     QgsDebugMsg( "rect was empty" );
     mSelectionRectangle = mExtent;
@@ -235,14 +235,14 @@ void QgsExifProvider::select( QgsAttributeList fetchAttributes,
     mSelectionRectangle = rect;
   }
   
-  rewind();
+  rewind( );
 }
 
 
 
 
 // Return the extent of the layer
-QgsRectangle QgsExifProvider::extent()
+QgsRectangle QgsExifProvider::extent( )
 {
   return mExtent;
 }
@@ -250,7 +250,7 @@ QgsRectangle QgsExifProvider::extent()
 /**
  * Return the feature type
  */
-QGis::WkbType QgsExifProvider::geometryType() const
+QGis::WkbType QgsExifProvider::geometryType( ) const
 {
   return QGis::WKBPoint;
 }
@@ -258,26 +258,26 @@ QGis::WkbType QgsExifProvider::geometryType() const
 /**
  * Return the number of features
  */
-long QgsExifProvider::featureCount() const
+long QgsExifProvider::featureCount( ) const
 {
-  return ( long ) mValidImageList.size();
+  return ( long ) mValidImageList.size( );
 }
 
 /**
  * Return the number of fields
  */
-uint QgsExifProvider::fieldCount() const
+uint QgsExifProvider::fieldCount( ) const
 {
-  return mAttributeFields.size();
+  return mAttributeFields.size( );
 }
 
 
-const QgsFieldMap & QgsExifProvider::fields() const
+const QgsFieldMap & QgsExifProvider::fields( ) const
 {
   return mAttributeFields;
 }
 
-bool QgsExifProvider::isValid()
+bool QgsExifProvider::isValid( )
 {
   return mValid;
 }
@@ -287,35 +287,35 @@ bool QgsExifProvider::isValid()
  */
 bool QgsExifProvider::boundsCheck( double x, double y )
 {
-  // no selection rectangle => always in the bounds
-  if ( mSelectionRectangle.isEmpty() )
+  // no selection rectangle = > always in the bounds
+  if ( mSelectionRectangle.isEmpty( ) )
     return true;
 
-  return ( x <= mSelectionRectangle.xMaximum() ) && ( x >= mSelectionRectangle.xMinimum() ) &&
-         ( y <= mSelectionRectangle.yMaximum() ) && ( y >= mSelectionRectangle.yMinimum() );
+  return ( x <= mSelectionRectangle.xMaximum( ) ) && ( x >= mSelectionRectangle.xMinimum( ) ) &&
+      ( y <= mSelectionRectangle.yMaximum( ) ) && ( y >= mSelectionRectangle.yMinimum( ) );
 }
 
-int QgsExifProvider::capabilities() const
+int QgsExifProvider::capabilities( ) const
 {
   return 0;
 }
 
 
-QgsCoordinateReferenceSystem QgsExifProvider::crs()
+QgsCoordinateReferenceSystem QgsExifProvider::crs( )
 {
   // TODO: make provider projection-aware
-  return QgsCoordinateReferenceSystem(); // return default CRS
+  return QgsCoordinateReferenceSystem( ); // return default CRS
 }
 
-QString  QgsExifProvider::name() const
+QString  QgsExifProvider::name( ) const
 {
   return TEXT_PROVIDER_KEY;
-} // ::name()
+} // ::name( )
 
-QString  QgsExifProvider::description() const
+QString  QgsExifProvider::description( ) const
 {
   return TEXT_PROVIDER_DESCRIPTION;
-} //  QgsExifProvider::name()
+} //  QgsExifProvider::name( )
 
 
 /**
@@ -327,9 +327,9 @@ QGISEXTERN QgsExifProvider *classFactory( const QString *theDir )
   return new QgsExifProvider( *theDir );
 }
 
-/** Required key function (used to map the plugin to a data store type)
+/** Required key function ( used to map the plugin to a data store type )
 */
-QGISEXTERN QString providerKey()
+QGISEXTERN QString providerKey( )
 {
   return TEXT_PROVIDER_KEY;
 }
@@ -337,7 +337,7 @@ QGISEXTERN QString providerKey()
 /**
  * Required description function
  */
-QGISEXTERN QString description()
+QGISEXTERN QString description( )
 {
   return TEXT_PROVIDER_DESCRIPTION;
 }
@@ -346,7 +346,7 @@ QGISEXTERN QString description()
  * Required isProvider function. Used to determine if this shared library
  * is a data provider plugin
  */
-QGISEXTERN bool isProvider()
+QGISEXTERN bool isProvider( )
 {
   return true;
 }

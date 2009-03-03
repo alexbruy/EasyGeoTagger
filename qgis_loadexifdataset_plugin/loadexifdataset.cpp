@@ -3,7 +3,7 @@
   Load EXIF Dataset
   -------------------
          begin                : 2008-09-19
-         copyright            : (C) Peter J. Ersts 2008
+         copyright            : ( C ) Peter J. Ersts 2008
          email                : ersts at amnh.org
 
  ***************************************************************************
@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *( at your option ) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 /*  $Id: plugin.cpp 9327 2008-09-14 11:18:44Z jef $ */
@@ -57,7 +57,7 @@ LoadExifDataset::LoadExifDataset( QgisInterface * theQgisInterface ):
 {
 }
 
-LoadExifDataset::~LoadExifDataset()
+LoadExifDataset::~LoadExifDataset( )
 {
 
 }
@@ -66,7 +66,7 @@ LoadExifDataset::~LoadExifDataset()
  * Initialize the GUI interface for the plugin - this is only called once when the plugin is
  * added to the plugin registry in the QGIS application.
  */
-void LoadExifDataset::initGui()
+void LoadExifDataset::initGui( )
 {
 
   // Create the action for tool
@@ -74,32 +74,32 @@ void LoadExifDataset::initGui()
   // Set the what's this text
   mQActionPointer->setWhatsThis( tr( "Create an vector point layer from a directory of geotagged images" ) );
   // Connect the action to the run
-  connect( mQActionPointer, SIGNAL( triggered() ), this, SLOT( run() ) );
+  connect( mQActionPointer, SIGNAL( triggered( ) ), this, SLOT( run( ) ) );
   // Add the icon to the toolbar
   mQGisIface->addToolBarIcon( mQActionPointer );
   mQGisIface->addPluginToMenu( tr( "&LoadExifDataset" ), mQActionPointer );
 
 }
 //method defined in interface
-void LoadExifDataset::help()
+void LoadExifDataset::help( )
 {
   //implement me!
 }
 
 // Slot called when the menu item is triggered
 // If you created more menu items / toolbar buttons in initiGui, you should
-// create a separate handler for each action - this single run() method will
+// create a separate handler for each action - this single run( ) method will
 // not be enough
-void LoadExifDataset::run()
+void LoadExifDataset::run( )
 {
-  LoadExifDatasetGui *myPluginGui = new LoadExifDatasetGui( mQGisIface->mainWindow(), QgisGui::ModalDialogFlags );
+  LoadExifDatasetGui *myPluginGui = new LoadExifDatasetGui( mQGisIface->mainWindow( ), QgisGui::ModalDialogFlags );
   myPluginGui->setAttribute( Qt::WA_DeleteOnClose );
   connect( myPluginGui, SIGNAL( draw( QString, QString ) ), this, SLOT( draw( QString, QString ) ) );
-  myPluginGui->show();
+  myPluginGui->show( );
 }
 
 // Unload the plugin by cleaning up the GUI
-void LoadExifDataset::unload()
+void LoadExifDataset::unload( )
 {
   // remove the GUI
   mQGisIface->removePluginMenu( "&LoadExifDataset", mQActionPointer );
@@ -136,25 +136,25 @@ QGISEXTERN QgisPlugin * classFactory( QgisInterface * theQgisInterfacePointer )
 }
 // Return the name of the plugin - note that we do not user class members as
 // the class may not yet be insantiated when this method is called.
-QGISEXTERN QString name()
+QGISEXTERN QString name( )
 {
   return sName;
 }
 
 // Return the description
-QGISEXTERN QString description()
+QGISEXTERN QString description( )
 {
   return sDescription;
 }
 
-// Return the type (either UI or MapLayer plugin)
-QGISEXTERN int type()
+// Return the type ( either UI or MapLayer plugin )
+QGISEXTERN int type( )
 {
   return sPluginType;
 }
 
 // Return the version number for the plugin
-QGISEXTERN QString version()
+QGISEXTERN QString version( )
 {
   return sPluginVersion;
 }

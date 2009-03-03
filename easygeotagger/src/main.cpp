@@ -1,14 +1,14 @@
 /*
 ** File: main.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-09-22
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,23 +28,23 @@
 #include <QSettings>
 #include <QApplication>
 
-int main(int argc, char* argv[])
+int main( int argc, char* argv[] )
 {
 
-  QApplication app(argc, argv);
+  QApplication app( argc, argv );
   #ifdef WIN32
   #  ifdef OSGEO4W
-      QCoreApplication::addLibraryPath( QApplication::applicationDirPath() + QDir::toNativeSeparators("/") + "../apps/Qt4/plugins" );
+      QCoreApplication::addLibraryPath( QApplication::applicationDirPath( ) + QDir::toNativeSeparators( "/" ) + "../apps/Qt4/plugins" );
   #  else
-      QCoreApplication::addLibraryPath( QApplication::applicationDirPath() + QDir::toNativeSeparators("/") + "plugins" );
+      QCoreApplication::addLibraryPath( QApplication::applicationDirPath( ) + QDir::toNativeSeparators( "/" ) + "plugins" );
   #  endif
   #endif
-  QCoreApplication::setOrganizationName("biodiversityinformatics");
-  QCoreApplication::setOrganizationDomain("biodiversityinformatics.amnh.org");
-  QCoreApplication::setApplicationName("EasyGeoTagger");
+  QCoreApplication::setOrganizationName( "biodiversityinformatics" );
+  QCoreApplication::setOrganizationDomain( "biodiversityinformatics.amnh.org" );
+  QCoreApplication::setApplicationName( "EasyGeoTagger" );
   
   //PLUGINPATH is set from cmake
-  EgtApplication* EasyGT = new EgtApplication( PLUGINPATH, true);
+  EgtApplication* EasyGT = new EgtApplication( PLUGINPATH, true );
 
-  return app.exec();
+  return app.exec( );
 }

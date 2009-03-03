@@ -1,14 +1,14 @@
 /*
 ** File: egtgoogleplugin.h
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2009-02-10
 **
-** Copyright (c) 2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,7 +27,7 @@
 
 #include <QtPlugin>
 
-EgtGooglePlugin::EgtGooglePlugin()
+EgtGooglePlugin::EgtGooglePlugin( )
 {
   cvCategories = tr( "Coordinate Extraction" );
   cvDescription = tr( "This plugin will allow you to capture coordinates from a Google map" );
@@ -36,15 +36,15 @@ EgtGooglePlugin::EgtGooglePlugin()
 
 void EgtGooglePlugin::connectConfigurationButton( QPushButton* theButton )
 {
-  connect( theButton, SIGNAL( clicked() ), this, SLOT( showConfigurationPanel() ) );
+  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( showConfigurationPanel( ) ) );
 }
 
 void EgtGooglePlugin::connectRunButton( QPushButton* theButton )
 {
-  connect( theButton, SIGNAL( clicked() ), this, SLOT( run() ) );
+  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( run( ) ) );
 }
 
-void EgtGooglePlugin::initPlugin()
+void EgtGooglePlugin::initPlugin( )
 {
   //Hook listeners into the application interface
   if( 0 != cvApplicationInterface )
@@ -53,12 +53,12 @@ void EgtGooglePlugin::initPlugin()
   }
 }
 
-void EgtGooglePlugin::run()
+void EgtGooglePlugin::run( )
 {
   if( 0 != cvApplicationInterface )
   {
-    cvDisplayWidget.move(  cvApplicationInterface->positionOfFirstVisibleWidget() );
-    cvDisplayWidget.show();
+    cvDisplayWidget.move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
+    cvDisplayWidget.show( );
   }
 
 }

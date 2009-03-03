@@ -1,14 +1,14 @@
 /*
 ** File: egtphotoexifengine.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2009-01-13
 **
-** Copyright (c) 2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2009, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 **
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,19 +26,19 @@
 
 #include <QObject>
 
-EgtPhotoExifEngine::EgtPhotoExifEngine() : EgtExifEngine()
+EgtPhotoExifEngine::EgtPhotoExifEngine( ) : EgtExifEngine( )
 {
-    init();
+    init( );
 }
 
 EgtPhotoExifEngine::EgtPhotoExifEngine( QString theImageFilename ) : EgtExifEngine( theImageFilename )
 {
-    init();
+    init( );
 }
 
 EgtPhotoExifEngine::EgtPhotoExifEngine( const QModelIndex& theIndex ) : EgtExifEngine( theIndex )
 {
-    init();
+    init( );
 }
 
 /*
@@ -53,20 +53,20 @@ EgtPhotoExifEngine::EgtPhotoExifEngine( const QModelIndex& theIndex ) : EgtExifE
  */
 QString EgtPhotoExifEngine::dateTimeOriginal( bool* isValid )
 {
-  EgtDebug( "entered dateTimeOriginal(bool)" );
+  EgtDebug( "entered dateTimeOriginal( bool )" );
 
-  if( 0 != isValid ) { *isValid =false; }
-  if( !isValidImageWithExpectedExif() ) { return ""; }
+  if( 0 != isValid ) { *isValid = false; }
+  if( !isValidImageWithExpectedExif( ) ) { return ""; }
 
   const Exiv2::Value &lvValue = readTag( "Exif.Photo.DateTimeOriginal" );
-  if( lvValue.typeId() == Exiv2::invalidTypeId )
+  if( lvValue.typeId( ) == Exiv2::invalidTypeId )
   {
-    cvLastError = QObject::tr( "Unable to read exif data from file") + ": " + cvImageFileName;
+    cvLastError = QObject::tr( "Unable to read exif data from file" ) + ": " + cvImageFileName;
     return "";
   }
 
   if( 0 != isValid ) { *isValid = true; }
-  return QString( lvValue.toString( 0 ).c_str() );
+  return QString( lvValue.toString( 0 ).c_str( ) );
 }
 
 /*!
@@ -79,9 +79,9 @@ QVariant EgtPhotoExifEngine::read( QString theTag, bool* isValid )
   EgtDebug( "entered" );
 
   if( 0 != isValid ) { *isValid = false; }
-  if( !isValidImageWithExpectedExif() ) { return QVariant( "" ); }
+  if( !isValidImageWithExpectedExif( ) ) { return QVariant( "" ); }
 
-  if( QString::compare( theTag, "Egt.Photo.DateTimeOriginal", Qt::CaseInsensitive ) == 0)
+  if( QString::compare( theTag, "Egt.Photo.DateTimeOriginal", Qt::CaseInsensitive ) == 0 )
   {
     return QVariant( dateTimeOriginal( isValid ) );
   }
@@ -109,9 +109,9 @@ bool EgtPhotoExifEngine::write( QString theTag, QString theValue )
 {
   EgtDebug( "entered" );
 
-  if( !isValidImage() ) { return false; }
+  if( !isValidImage( ) ) { return false; }
 
-  if( QString::compare( theTag, "Egt.Photo.DateTimeOriginal", Qt::CaseInsensitive ) == 0)
+  if( QString::compare( theTag, "Egt.Photo.DateTimeOriginal", Qt::CaseInsensitive ) == 0 )
   {
     return writeDateTimeOriginal( theValue );
   }
@@ -126,10 +126,10 @@ bool EgtPhotoExifEngine::write( QString theTag, QString theValue )
 bool EgtPhotoExifEngine::writeDateTimeOriginal( QString theValue )
 {
   EgtDebug( "entered" );
-  if( !isValidImage() ) { return false; }
+  if( !isValidImage( ) ) { return false; }
 
   //Check format
-  if( theValue.size() != 19 )
+  if( theValue.size( ) != 19 )
   {
     cvLastError = "[ writeDateTimeOriginal ] "+ QObject::tr( "unexpected format" );
     return false;
@@ -145,9 +145,9 @@ bool EgtPhotoExifEngine::writeDateTimeOriginal( QString theValue )
     cvLastError = "[ writeDateTimeOriginal ] "+ QObject::tr( "unexpected format" );
     return false;
   }
-  for( int lvIterator = 0; lvIterator < theValue.size(); lvIterator++ )
+  for( int lvIterator = 0; lvIterator < theValue.size( ); lvIterator++ )
   {
-    if( !theValue[ lvIterator ].isNumber() && ':' != theValue[ lvIterator ] && ' ' != theValue[ lvIterator ] )
+    if( !theValue[ lvIterator ].isNumber( ) && ':' != theValue[ lvIterator ] && ' ' != theValue[ lvIterator ] )
     {
       cvLastError = "[ writeDateTimeOriginal ] "+ QObject::tr( "unexpected characters found in datetime stamp" );
       return false;
@@ -170,9 +170,9 @@ bool EgtPhotoExifEngine::writeDateTimeOriginal( QString theValue )
  * PRIVATE FUNCTIONS
  *
  */
-void EgtPhotoExifEngine::init()
+void EgtPhotoExifEngine::init( )
 {
-  addKey("Egt.Photo.DateTimeOriginal", QObject::tr( "Dates Time" ) );
+  addKey( "Egt.Photo.DateTimeOriginal", QObject::tr( "Dates Time" ) );
 
   cvHasExpectedExif = hasKey( "Exif.Photo" );
 }

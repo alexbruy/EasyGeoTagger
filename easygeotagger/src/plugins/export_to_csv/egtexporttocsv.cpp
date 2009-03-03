@@ -1,14 +1,14 @@
 /*
 ** File: egtexporttocsv.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-10-15
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -38,7 +38,7 @@
 #include <QObject>
 #include <QDir>
 
-EgtExportToCsv::EgtExportToCsv()
+EgtExportToCsv::EgtExportToCsv( )
 {
   cvCategories = QObject::tr( "Utilities" );
   cvDescription = QObject::tr( "Export the currently selected directory of images to a csv file. Exports all GPS tags from images with GPS EXIF data." );
@@ -47,12 +47,12 @@ EgtExportToCsv::EgtExportToCsv()
 
 void EgtExportToCsv::connectConfigurationButton( QPushButton* theButton )
 {
-  connect( theButton, SIGNAL( clicked() ), this, SLOT( showConfigurationPanel() ) );
+  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( showConfigurationPanel( ) ) );
 }
 
 void EgtExportToCsv::connectRunButton( QPushButton* theButton )
 {
-  connect( theButton, SIGNAL( clicked() ), this, SLOT( run() ) );
+  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( run( ) ) );
 }
 
 void EgtExportToCsv::indexSelected( const QModelIndex& theIndex )
@@ -60,7 +60,7 @@ void EgtExportToCsv::indexSelected( const QModelIndex& theIndex )
     cvCurrentIndex = theIndex;
 }
 
-void EgtExportToCsv::initPlugin()
+void EgtExportToCsv::initPlugin( )
 {
   //Hook into the application interface and listen for mouse clicks in the file browser
   if( 0 != cvApplicationInterface )
@@ -69,7 +69,7 @@ void EgtExportToCsv::initPlugin()
   }
 }
 
-void EgtExportToCsv::run()
+void EgtExportToCsv::run( )
 {
   EgtDebug( "entered" );
   
@@ -80,28 +80,28 @@ void EgtExportToCsv::run()
   
   //If it is a file, takes is parent which will be the directory whe image is in
   lvFileInfo.setFile( lvCurrentFile );
-  if( !lvFileInfo.isDir() )
+  if( !lvFileInfo.isDir( ) )
   {
     EgtDebug( "Current index is pointing to a file, taking parent" );
-    cvCurrentIndex = cvCurrentIndex.parent();
+    cvCurrentIndex = cvCurrentIndex.parent( );
   }
   
   //If the directory is writeable, open a file ane export the EXIF data
   lvCurrentFile = lvPathBuilder.buildPath( cvCurrentIndex );
   lvFileInfo.setFile( lvCurrentFile );
-  if( lvFileInfo.isWritable() )
+  if( lvFileInfo.isWritable( ) )
   {
-    QDateTime lvTimestamp = QDateTime::currentDateTime();
-    QFile lvOutputFile( QDir::toNativeSeparators( lvCurrentFile + "/" + cvCurrentIndex.data().toString() + "_Export_" + lvTimestamp.toString( "yyyyMMdd_hhmmss" ) + ".csv" ) );
+    QDateTime lvTimestamp = QDateTime::currentDateTime( );
+    QFile lvOutputFile( QDir::toNativeSeparators( lvCurrentFile + "/" + cvCurrentIndex.data( ).toString( ) + "_Export_" + lvTimestamp.toString( "yyyyMMdd_hhmmss" ) + ".csv" ) );
     if( lvOutputFile.open( QIODevice::WriteOnly | QIODevice::Text ) )
     {
       EgtGpsExifEngine lvExifEngine;
-      QList< EgtExifEngine::KeyMap > lvKeyMap = lvExifEngine.keys();
+      QList< EgtExifEngine::KeyMap > lvKeyMap = lvExifEngine.keys( );
       QTextStream lvOutputWriter( &lvOutputFile );
       lvOutputWriter.setRealNumberPrecision( 7 );
 
       lvOutputWriter << "File";
-      for( int lvIterator = 0; lvIterator < lvKeyMap.size(); lvIterator++ )
+      for( int lvIterator = 0; lvIterator < lvKeyMap.size( ); lvIterator++ )
       {
         lvOutputWriter << "," + lvKeyMap[ lvIterator ].commonName;
       }
@@ -111,18 +111,18 @@ void EgtExportToCsv::run()
       int lvChildCount = 0;
       QString lvImageFile;
       //Loop through the directory and examine each file
-      while( cvCurrentIndex.child( lvChildCount, 0 ).isValid() )
+      while( cvCurrentIndex.child( lvChildCount, 0 ).isValid( ) )
       {
         lvImageFile = lvPathBuilder.buildPath( cvCurrentIndex.child( lvChildCount, 0 ) );
         
         //If the file has exif data,then export it, otherwise skip it
         lvExifEngine.setFile( lvImageFile );
-        if( lvExifEngine.hasExpectedExif() )
+        if( lvExifEngine.hasExpectedExif( ) )
         {
           lvOutputWriter << lvImageFile;
-          for( int lvIterator = 0; lvIterator < lvKeyMap.size(); lvIterator++ )
+          for( int lvIterator = 0; lvIterator < lvKeyMap.size( ); lvIterator++ )
           {
-            lvOutputWriter << "," + lvExifEngine.read( lvKeyMap[ lvIterator ].key ).toString();
+            lvOutputWriter << "," + lvExifEngine.read( lvKeyMap[ lvIterator ].key ).toString( );
           }
           lvOutputWriter  << "\n";
           lvExportedImages++;
@@ -130,22 +130,22 @@ void EgtExportToCsv::run()
         lvChildCount++;
       }
     
-      lvOutputFile.close();
-      QMessageBox::warning( cvApplicationInterface->gui(), tr( "Export Complete" ), tr( "%n images exported.", "", lvExportedImages ) );
+      lvOutputFile.close( );
+      QMessageBox::warning( cvApplicationInterface->gui( ), tr( "Export Complete" ), tr( "%n images exported.", "", lvExportedImages ) );
 
     }
     else
     {
-      QMessageBox::critical( cvApplicationInterface->gui(), tr( "Write Error" ), tr( "Could create a new file for output" ) );
+      QMessageBox::critical( cvApplicationInterface->gui( ), tr( "Write Error" ), tr( "Could create a new file for output" ) );
     }
   }
   else
   {
-    QMessageBox::critical( cvApplicationInterface->gui(), tr( "Write Error" ), tr( "The current directory is not writeable" ) );
+    QMessageBox::critical( cvApplicationInterface->gui( ), tr( "Write Error" ), tr( "The current directory is not writeable" ) );
   }
 
   //Refresh the file browser once the process is complete
-  cvApplicationInterface->refreshFileBrowser();
+  cvApplicationInterface->refreshFileBrowser( );
 }
 
  Q_EXPORT_PLUGIN2( exporttocsv, EgtExportToCsv );

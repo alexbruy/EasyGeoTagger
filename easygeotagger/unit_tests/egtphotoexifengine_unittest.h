@@ -9,7 +9,7 @@
 class EgtPhotoExifEngine_UnitTest
 {
   public:
-    EgtPhotoExifEngine_UnitTest();
+    EgtPhotoExifEngine_UnitTest( );
     int runTest( QTextEdit* );
   
   private:

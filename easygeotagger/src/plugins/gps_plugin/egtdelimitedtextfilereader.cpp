@@ -1,14 +1,14 @@
 /*
 ** File: egtdelimitedtextfilereader.cpp
-** Author(s): Roberto Garcia Yunta
+** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-EgtDelimitedTextFileReader::EgtDelimitedTextFileReader():EgtFileReader()
+EgtDelimitedTextFileReader::EgtDelimitedTextFileReader( ):EgtFileReader( )
 {
   cvDelimiter = ",";
   cvFileName = ""; 
@@ -44,7 +44,7 @@ EgtDelimitedTextFileReader::EgtDelimitedTextFileReader():EgtFileReader()
 /*!
  * \return a QString that contains the column headers
  */
-QStringList EgtDelimitedTextFileReader::columnHeaders()
+QStringList EgtDelimitedTextFileReader::columnHeaders( )
 {
   return cvColumnHeaders;
 }
@@ -52,7 +52,7 @@ QStringList EgtDelimitedTextFileReader::columnHeaders()
 /*!
  * \return a boolean that indicates whether the file has column headers or not
  */
-bool EgtDelimitedTextFileReader::hasColumnHeaders()
+bool EgtDelimitedTextFileReader::hasColumnHeaders( )
 {
   return cvHasColumnHeaders; 
 }
@@ -75,41 +75,41 @@ QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok )
 
   int lvNumFields;
 
-  if (!lvFile.open(QFile::ReadOnly | QFile::Text)) 
+  if ( !lvFile.open( QFile::ReadOnly | QFile::Text ) ) 
   {
-    if (ok){ *ok = false; }
-    cvLastError = QObject::tr( "Can't read the file") + ": " + cvFileName;
+    if ( ok ) { *ok = false; }
+    cvLastError = QObject::tr( "Can't read the file" ) + ": " + cvFileName;
     return lvList;
   }
 
   QTextStream stream( &lvFile );
   QString lvLine;
   
-  if( hasColumnHeaders() )
+  if( hasColumnHeaders( ) )
   {
-    lvLine = stream.readLine(); 
+    lvLine = stream.readLine( ); 
     cvColumnHeaders = lvLine.split( cvDelimiter );
-    lvNumFields = lvLine.split( cvDelimiter ).size();
+    lvNumFields = lvLine.split( cvDelimiter ).size( );
   }
   else
   {
-    lvLine = stream.readLine();
+    lvLine = stream.readLine( );
     lvList << lvLine.split( cvDelimiter );
-    lvNumFields = lvLine.split( cvDelimiter ).size();
+    lvNumFields = lvLine.split( cvDelimiter ).size( );
   }
 
-  while( ! stream.atEnd() )
+  while( ! stream.atEnd( ) )
   {
-    lvLine = stream.readLine();
+    lvLine = stream.readLine( );
    
-    if( lvLine.split( cvDelimiter ).size() == lvNumFields ) 
+    if( lvLine.split( cvDelimiter ).size( ) == lvNumFields ) 
     {
       lvList << lvLine.split( cvDelimiter );
     }
     else
     {
       lvError = true;
-      cvLastError = QObject::tr( "One or more rows have been discarded") + ": " + cvFileName;
+      cvLastError = QObject::tr( "One or more rows have been discarded" ) + ": " + cvFileName;
     }
   }
 

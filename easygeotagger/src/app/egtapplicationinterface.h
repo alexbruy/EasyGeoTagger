@@ -1,14 +1,14 @@
 /*
 ** File: egtapplicationinterface.h
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-09-30
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -44,10 +44,10 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     /*! \brief Constructor */
     EgtApplicationInterface( QMainWindow* );
 
-    QMainWindow* gui() { return cvGui; }
+    QMainWindow* gui( ) { return cvGui; }
 
     /*! \brief get the position of the first visible widget */
-    QPoint positionOfFirstVisibleWidget();
+    QPoint positionOfFirstVisibleWidget( );
 
     /*! \brief Find a particular widget */
     QPoint positionOfWidget( QString );
@@ -57,20 +57,20 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     void acceptKeyValuePair( QString, QString );
 
     /*! \brief Slot to accept item selections */
-    void acceptModelIndexSelections( const QModelIndex& theIndex);
+    void acceptModelIndexSelections( const QModelIndex& theIndex );
 
     /*! \brief Slot to accept requests to load a single plugin for a directory of plugins */
     void loadPlugins( QString );
 
     /*! \brief Slot to accept requests to fresh the file browser */
-    void refreshFileBrowser();
+    void refreshFileBrowser( );
 
   signals:
     /* \brief Signal to broadcast a mouse click event in the file browser */
     void indexSelected( const QModelIndex& );
 
     /* \brief Signal to relay requests to refresh the file browser */
-    void fileBrowserRefreshRequest();
+    void fileBrowserRefreshRequest( );
 
     /*! \brief Rebroadcasts key and tag data pair */
     void keyValuePair( QString, QString );

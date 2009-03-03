@@ -1,14 +1,14 @@
 /*
 ** File: egtrawimagereader.h
-** Author(s): Roberto Garcia Yunta, Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-10-28
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,22 +40,22 @@ class MS_DLL_SPEC EgtRawImageReader : public QThread
 
   public:
     /*! \brief Constructor */
-    EgtRawImageReader();
+    EgtRawImageReader( );
     
     /*! \brief Destructor */
-    ~EgtRawImageReader();
+    ~EgtRawImageReader( );
     
     /*! \brief Set the abort flag to true and terminate the thread */
-    void abort();
+    void abort( );
 
     /*! \brief Return the raw image */
-    QImage image() const;
+    QImage image( ) const;
 
      /*! \brief Releases the memory used for the raw image */
-    bool recycle();
+    bool recycle( );
 
     /*! \brief Required thread function */
-    void run();
+    void run( );
 
     /*! \brief Set the absolute path and filename of the raw image to open */
     void setFile( QString );

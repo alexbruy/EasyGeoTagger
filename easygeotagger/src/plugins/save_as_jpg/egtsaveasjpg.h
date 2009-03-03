@@ -1,14 +1,14 @@
 /*
 ** File: egtsaveasjpg.h
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2009-02-26
 **
-** Copyright (c) 2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -39,10 +39,10 @@
 class EgtSaveAsJpg : public EgtPluginInterface
 {
   Q_OBJECT
-  Q_INTERFACES(EgtPluginInterface)
+  Q_INTERFACES( EgtPluginInterface )
   
   public:
-    EgtSaveAsJpg();
+    EgtSaveAsJpg( );
     /*! \brief Connects the provided button to the showConfigurationPanel function */
     void connectConfigurationButton( QPushButton* );
     
@@ -50,17 +50,17 @@ class EgtSaveAsJpg : public EgtPluginInterface
     void connectRunButton( QPushButton* );
     
     /*! \brief Returns the ability of this plugin to be configured */
-    bool isConfigurable() { return false; }
+    bool isConfigurable( ) { return false; }
 
     /*! \brief Initialization plugin*/
-    void initPlugin();
+    void initPlugin( );
     
   public slots:
     /*! \brief Slot called to activate or launch the plugin */
-    void run();
+    void run( );
 
     /*! \brief Slot to display the condifuration panel */
-    void showConfigurationPanel() { }
+    void showConfigurationPanel( ) { }
 
   private slots:
     void imageLoaded( bool );

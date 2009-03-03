@@ -1,14 +1,14 @@
 /*
 ** File: egtphotoexifengine.h
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2009-01-13
 **
-** Copyright (c) 2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2009, American Museum of Natural History. All rights reserved.
 **
 ** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 **
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -35,7 +35,7 @@ class MS_DLL_SPEC EgtPhotoExifEngine : public EgtExifEngine
 
 public:
   /*! \brief Constructor */
-  EgtPhotoExifEngine();
+  EgtPhotoExifEngine( );
 
   /*! \brief Constructor */
   EgtPhotoExifEngine( QString );
@@ -47,7 +47,7 @@ public:
   QString dateTimeOriginal( bool* isValid );
 
   /*! \brief Generic read statement */
-  QVariant read( QString theTag, bool* isValid=0 );
+  QVariant read( QString theTag, bool* isValid = 0 );
 
   /*! \brief Set and open a new file */
   void setFile( QString theFileName );
@@ -60,7 +60,7 @@ public:
 
 private:
   /*! \brief Initialize class specific variables */
-  void init();
+  void init( );
 
 };
 #endif

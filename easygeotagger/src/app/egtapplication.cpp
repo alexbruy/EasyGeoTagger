@@ -1,14 +1,14 @@
 /*
 ** File: egtapplication.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-09-30
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -57,13 +57,13 @@ void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
   //Show splash screen
   if( displaySplash )
   {  
-    cvSplashScreen = new QSplashScreen( QPixmap( ":/splash/EasyGT-Logo.png" )  );
-    cvSplashScreen->show();
+    cvSplashScreen = new QSplashScreen( QPixmap( ":/splash/EasyGT-Logo.png" ) );
+    cvSplashScreen->show( );
     cvSplashScreen->showMessage( tr( "Loading plugins..." ), Qt::AlignHCenter | Qt::AlignBottom );
   }
 
   //Create a new main window
-  cvGui = new EgtMainWindow();
+  cvGui = new EgtMainWindow( );
   
   //Create a new application interface and gui
   cvApplicationInterface = new EgtApplicationInterface( cvGui );
@@ -85,15 +85,15 @@ void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
     cvSplashScreen->finish( cvGui );
   }
 
-  QDesktopWidget* lvDesktop = QApplication::desktop();
+  QDesktopWidget* lvDesktop = QApplication::desktop( );
   if( 0 != lvDesktop )
   {
-    QRect lvScreen = lvDesktop->screenGeometry();
-    cvGui->move( lvScreen.center().x() - (int)( cvGui->width() / 2 ), lvScreen.center().y() - (int)( cvGui->height() / 2 ) );
+    QRect lvScreen = lvDesktop->screenGeometry( );
+    cvGui->move( lvScreen.center( ).x( ) - ( int )( cvGui->width( ) / 2 ), lvScreen.center( ).y( ) - ( int )( cvGui->height( ) / 2 ) );
   }
   
   //Display the main window
-  cvGui->show();
+  cvGui->show( );
 
   if( displaySplash )
   {
@@ -102,9 +102,9 @@ void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
   }
 }
 
-void EgtApplication::show()
+void EgtApplication::show( )
 {
-  cvGui->show();
+  cvGui->show( );
 }
 
 void EgtApplication::showSplashScreenMessage( QString theMessage )

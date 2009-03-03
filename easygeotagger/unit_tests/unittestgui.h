@@ -15,11 +15,11 @@ class UnitTestGui : public QDialog
   Q_OBJECT
 
   public:
-    UnitTestGui();
-    QTextEdit* outputWindow();
+    UnitTestGui( );
+    QTextEdit* outputWindow( );
 
   private slots:
-    void on_pbtnStartTest_clicked();
+    void on_pbtnStartTest_clicked( );
 
   private:
     Ui::UnitTestGuiBase *ui;

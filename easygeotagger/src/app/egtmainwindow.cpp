@@ -1,14 +1,14 @@
 /*
 ** File: egtmainwindow.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-09-22
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -48,28 +48,28 @@ EgtMainWindow::EgtMainWindow( QWidget* theParent )
   EgtDebug( "entered" );
   
   cvUi->setupUi( this );
-  connect( cvUi->tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( clicked(const QModelIndex& ) ) );
-  setWindowTitle( tr( "EasyGeoTagger" ) +" v."+ EGT_VERSION_MAJOR +"."+ EGT_VERSION_MINOR +"."+ EGT_VERSION_PATCH  );
+  connect( cvUi->tvFileBrowser, SIGNAL( clicked( const QModelIndex& ) ), this, SLOT( clicked( const QModelIndex& ) ) );
+  setWindowTitle( tr( "EasyGeoTagger" ) +" v."+ EGT_VERSION_MAJOR +"."+ EGT_VERSION_MINOR +"."+ EGT_VERSION_PATCH );
 
   
   //Set up the file browser window
-  QDirModel* lvModel = new QDirModel( QStringList(), QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot, QDir::DirsFirst );
+  QDirModel* lvModel = new QDirModel( QStringList( ), QDir::AllDirs|QDir::Files|QDir::NoDotAndDotDot, QDir::DirsFirst );
   cvUi->tvFileBrowser->setModel( lvModel );
-  cvUi->tvFileBrowser->setColumnWidth( 0, 400) ;
-  cvUi->tvFileBrowser->setCurrentIndex( lvModel->index( QDir::currentPath() ) );
-  cvUi->tvFileBrowser->scrollTo( lvModel->index( QDir::currentPath() ) );
+  cvUi->tvFileBrowser->setColumnWidth( 0, 400 ) ;
+  cvUi->tvFileBrowser->setCurrentIndex( lvModel->index( QDir::currentPath( ) ) );
+  cvUi->tvFileBrowser->scrollTo( lvModel->index( QDir::currentPath( ) ) );
   
   //Add an item delegate to colorize the entries in the file browser
   //TODO: See if this is possible in Qt4.4.0 to accomplish with styles
-  EgtItemDelegate* lvItemDelegate =  new EgtItemDelegate();
-  connect( cvUi->chkbColorCodeFilenames, SIGNAL( stateChanged( int) ), lvItemDelegate, SLOT( displayGpsExifAvailability( int) ) );
+  EgtItemDelegate* lvItemDelegate = new EgtItemDelegate( );
+  connect( cvUi->chkbColorCodeFilenames, SIGNAL( stateChanged( int ) ), lvItemDelegate, SLOT( displayGpsExifAvailability( int ) ) );
   cvUi->tvFileBrowser->setItemDelegate( lvItemDelegate );
-  cvUi->tvFileBrowser->setStyleSheet( "QTreeView { selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1); }" );
+  cvUi->tvFileBrowser->setStyleSheet( "QTreeView { selection-background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1 ); }" );
   
   //Create a new plugin dock
   cvPluginDock = new QDockWidget( "Plugins", this );
   cvPluginDock->setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable );
-  cvPluginDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+  cvPluginDock->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
   cvPluginDock->setMinimumSize( 150,150 );
   addDockWidget( Qt::LeftDockWidgetArea, cvPluginDock );
   
@@ -78,8 +78,8 @@ EgtMainWindow::EgtMainWindow( QWidget* theParent )
   cvUi->pbarProgressBar->setMaximum( 1 );
   cvUi->pbarProgressBar->setValue( 0 );
   
-  connect(&cvImageFactory, SIGNAL( progress( int, int, int ) ), this, SLOT( updateProgress( int, int, int ) ) );
-  connect(&cvImageFactory, SIGNAL( imageLoaded( bool ) ), this, SLOT( loadPreview( bool ) ) );
+  connect( &cvImageFactory, SIGNAL( progress( int, int, int ) ), this, SLOT( updateProgress( int, int, int ) ) );
+  connect( &cvImageFactory, SIGNAL( imageLoaded( bool ) ), this, SLOT( loadPreview( bool ) ) );
 }
 
 /*
@@ -87,7 +87,7 @@ EgtMainWindow::EgtMainWindow( QWidget* theParent )
  * PUBLIC FUNCTIONS
  *
  */
-void EgtMainWindow::setPluginToolBox( QToolBox* theToolBox)
+void EgtMainWindow::setPluginToolBox( QToolBox* theToolBox )
 {
   //TODO: Need to free all of the panels and the tool box if it exists?
   
@@ -107,7 +107,7 @@ void EgtMainWindow::clicked( const QModelIndex& theIndex )
   QString lvFileName = cvPathBuilder.buildPath( theIndex );
 
   cvPhotoExifEngine.setFile( lvFileName );
-  cvUi->labelDateTimeOriginal->setText( cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString() );
+  cvUi->labelDateTimeOriginal->setText( cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString( ) );
 
   cvImageFactory.setFile( lvFileName );
 
@@ -123,40 +123,40 @@ void EgtMainWindow::loadPreview( bool isValid )
   
   if( isValid )
   {
-    cvUi->labelPreview->setPixmap( QPixmap::fromImage( cvImageFactory.scaleImage( cvUi->labelPreview->width(), cvUi->labelPreview->height() ) ) );
+    cvUi->labelPreview->setPixmap( QPixmap::fromImage( cvImageFactory.scaleImage( cvUi->labelPreview->width( ), cvUi->labelPreview->height( ) ) ) );
   }
 }
 
-void EgtMainWindow::on_actionAbout_activated()
+void EgtMainWindow::on_actionAbout_activated( )
 {
   QString lvBody = tr( "<html>"\
                        "<body>"\
                        "<center><h1>EasyGeoTagger</h1></center><br>"\
                        "Questions and Comments<br>"\
-                       "<a href=\"http://biodiversityinformatics.amnh.org/open_source/easygeotagger/comments.php\">"\
+                       "<a href = \"http://biodiversityinformatics.amnh.org/open_source/easygeotagger/comments.php\">"\
                        "http://biodiversityinformatics.amnh.org/open_source/easygeotagger/comments.php</a><br><br>"\
                        "Bugs!<br>"\
-                       "<a href=\"https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger/newticket\">"\
+                       "<a href = \"https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger/newticket\">"\
                        "https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger/newticket</a>"\
                        "</body>"\
                        "</html>"
-                      );
+                     );
   cvWebBrowser.setHtml( lvBody );
   cvWebBrowser.setWindowIcon( QIcon( ":/icons/internet-web-browser.svg" ) );
   cvWebBrowser.setWindowTitle( tr( "About - EasyGeoTagger" ) );
-  cvWebBrowser.show();
+  cvWebBrowser.show( );
 }
 
-void EgtMainWindow::on_actionExit_activated()
+void EgtMainWindow::on_actionExit_activated( )
 {
-  QCoreApplication::exit();
+  QCoreApplication::exit( );
 }
 
-void EgtMainWindow::on_actionLoadAll_activated()
+void EgtMainWindow::on_actionLoadAll_activated( )
 {
   QSettings lvQSettings;
-  QString lvLastPath = lvQSettings.value( "lastPluginDirectory", "" ).toString();
-  QString lvDirectory = QFileDialog::getExistingDirectory( this, tr( "Select a directory of plugins" ), lvLastPath, QFileDialog::ShowDirsOnly);
+  QString lvLastPath = lvQSettings.value( "lastPluginDirectory", "" ).toString( );
+  QString lvDirectory = QFileDialog::getExistingDirectory( this, tr( "Select a directory of plugins" ), lvLastPath, QFileDialog::ShowDirsOnly );
 
   if( lvDirectory != "" )
   {
@@ -166,24 +166,24 @@ void EgtMainWindow::on_actionLoadAll_activated()
   }
 }
 
-void EgtMainWindow::on_actionLoadSingle_activated()
+void EgtMainWindow::on_actionLoadSingle_activated( )
 {
   QSettings lvQSettings;
-  QString lvLastPath = lvQSettings.value( "lastPluginDirectory", "" ).toString();
-  QString lvFile = QFileDialog::getOpenFileName( this, tr( "Select a plugin" ), lvLastPath, tr( "Shared libraries (*.so *.dll *.dylib)" ) );
+  QString lvLastPath = lvQSettings.value( "lastPluginDirectory", "" ).toString( );
+  QString lvFile = QFileDialog::getOpenFileName( this, tr( "Select a plugin" ), lvLastPath, tr( "Shared libraries ( *.so *.dll *.dylib )" ) );
 
   if( lvFile != "" )
   {
     QFileInfo lvFileInfo( lvFile );
-    lvQSettings.setValue( "lastPluginDirectory", lvFileInfo.absoluteDir().absolutePath() );
+    lvQSettings.setValue( "lastPluginDirectory", lvFileInfo.absoluteDir( ).absolutePath( ) );
 
     emit loadPlugins( lvFile );
   }
 }
 
-void EgtMainWindow::refreshFileBrowser()
+void EgtMainWindow::refreshFileBrowser( )
 {
-  ( (QDirModel*)cvUi->tvFileBrowser->model() )->refresh();
+ ( ( QDirModel* )cvUi->tvFileBrowser->model( ) )->refresh( );
 }
 
 /*!
@@ -191,7 +191,7 @@ void EgtMainWindow::refreshFileBrowser()
  * \param theMaximum the maximum value for the progress bar
  * \param theProgress the current progress
  */
-void EgtMainWindow::updateProgress(int theMinimum, int theMaximum, int theProgress )
+void EgtMainWindow::updateProgress( int theMinimum, int theMaximum, int theProgress )
 {
   //TODO: consider if it is better to set these individually
   cvUi->pbarProgressBar->setMinimum( theMinimum );

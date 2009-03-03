@@ -1,14 +1,14 @@
 /*
 ** File: easygeotaggeridtool.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-10-20
 **
-** Copyright (c) 2008, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -49,7 +49,7 @@ EasyGeoTaggerIdTool::EasyGeoTaggerIdTool( QgsMapCanvas* theCanvas )
   
   //set the default CRS
   cvDestinationCRS = new QgsCoordinateReferenceSystem( );
-  cvDestinationCRS->createFromProj4( "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" );
+  cvDestinationCRS->createFromProj4( "+proj = longlat +ellps = WGS84 +datum = WGS84 +no_defs" );
 }
 
 /*!
@@ -59,28 +59,28 @@ EasyGeoTaggerIdTool::EasyGeoTaggerIdTool( QgsMapCanvas* theCanvas )
 void EasyGeoTaggerIdTool::canvasReleaseEvent( QMouseEvent* mouseEvent )
 {
   //Check to see if there is a layer selected
-  if( mCanvas->currentLayer() && cvDestinationCRS )
+  if( mCanvas->currentLayer( ) && cvDestinationCRS )
   {
     QgsCoordinateTransform lvTransformer;
     lvTransformer.setDestCRS( *cvDestinationCRS );
     
-    if( mCanvas->hasCrsTransformEnabled() )
+    if( mCanvas->hasCrsTransformEnabled( ) )
     {
-      lvTransformer.setSourceCrs( mCanvas->mapRenderer()->destinationSrs() );
+      lvTransformer.setSourceCrs( mCanvas->mapRenderer( )->destinationSrs( ) );
     }
     else
     {
-      lvTransformer.setSourceCrs( mCanvas->currentLayer()->srs() );
+      lvTransformer.setSourceCrs( mCanvas->currentLayer( )->srs( ) );
     }
     
-    QgsPoint lvTransformedLocation = lvTransformer.transform( mCanvas->getCoordinateTransform()->toMapCoordinates( mouseEvent->x(), mouseEvent->y() ) );
+    QgsPoint lvTransformedLocation = lvTransformer.transform( mCanvas->getCoordinateTransform( )->toMapCoordinates( mouseEvent->x( ), mouseEvent->y( ) ) );
     
     //TODO: If not WGS84 reproject point
-    emit keyValuePair( "Egt.GPS.Longitude", QString::number( lvTransformedLocation.x() ) );
-    emit keyValuePair( "Egt.GPS.Latitude", QString::number( lvTransformedLocation.y() ) );
+    emit keyValuePair( "Egt.GPS.Longitude", QString::number( lvTransformedLocation.x( ) ) );
+    emit keyValuePair( "Egt.GPS.Latitude", QString::number( lvTransformedLocation.y( ) ) );
   }
   else
   {
-    QMessageBox::warning( mCanvas, tr("Warning"), tr("No active layers found") );
+    QMessageBox::warning( mCanvas, tr( "Warning" ), tr( "No active layers found" ) );
   }
 }

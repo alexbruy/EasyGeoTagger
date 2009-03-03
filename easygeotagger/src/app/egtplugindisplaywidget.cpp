@@ -1,14 +1,14 @@
 /*
 ** File: egtplugindisplaywidget.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-10-06
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,7 +27,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-EgtPluginDisplayWidget::EgtPluginDisplayWidget( EgtPluginInterface* thePlugin, QWidget* theParent, Qt::WindowFlags theFlags) : QFrame( theParent, theFlags )
+EgtPluginDisplayWidget::EgtPluginDisplayWidget( EgtPluginInterface* thePlugin, QWidget* theParent, Qt::WindowFlags theFlags ) : QFrame( theParent, theFlags )
 {
   //Set some styles for the frame
   setStyleSheet( "QFrame { background-color: white; }" );
@@ -36,18 +36,18 @@ EgtPluginDisplayWidget::EgtPluginDisplayWidget( EgtPluginInterface* thePlugin, Q
   setLayout( new QVBoxLayout( this ) );
   
   //Add the launch button
-  layout()->addWidget( &cvRunButton );
+  layout( )->addWidget( &cvRunButton );
   
   //Add the description
-  layout()->addWidget( &cvDescription );
+  layout( )->addWidget( &cvDescription );
   
    //Add configuration button if necessary.
-  if( thePlugin->isConfigurable() )
+  if( thePlugin->isConfigurable( ) )
   {
     cvConfigureButton.setMaximumSize( 26, 26 );
     cvConfigureButton.setToolTip( tr( "Configure plugin" ) );
     cvConfigureButton.setIcon ( QIcon( ":/22/icons/22/preferences-system.png" ) );
-    layout()->addWidget( &cvConfigureButton );
+    layout( )->addWidget( &cvConfigureButton );
   }
   
   update( thePlugin );
@@ -65,16 +65,16 @@ void EgtPluginDisplayWidget::update( EgtPluginInterface* thePlugin )
 {
   if( 0 == thePlugin ) { return; }
   
-  cvRunButton.setText( thePlugin->name() );
+  cvRunButton.setText( thePlugin->name( ) );
   thePlugin->connectRunButton( &cvRunButton );
   
-  cvDescription.setText( thePlugin->description() );
+  cvDescription.setText( thePlugin->description( ) );
   cvDescription.setWordWrap( true );
   cvDescription.setTextFormat( Qt::RichText );
   cvDescription.setStyleSheet( "QLabel { background-color: white; font-size: 10px; }" );
   
   //Add configuration button if necessary.
-  if( thePlugin->isConfigurable() )
+  if( thePlugin->isConfigurable( ) )
   {
     thePlugin->connectConfigurationButton( &cvConfigureButton );
   }

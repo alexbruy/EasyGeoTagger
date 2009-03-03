@@ -1,14 +1,14 @@
 /*
 ** File: egtgpsexifeditor.cpp
-** Author(s): Peter J. Ersts (ersts at amnh.org)
+** Author( s ): Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-12-09
 **
-** Copyright (c) 2008-2009, American Museum of Natural History. All rights reserved.
+** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
 ** 
 ** This library/program is free software; you can redistribute it 
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
-** version 2 of the License, or (at your option) any later version.
+** version 2 of the License, or ( at your option ) any later version.
 ** 
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -36,7 +36,7 @@
 /*! \brief Unique ID for storing setting the QSettings file */
 static const QString editorId = "EgtGpsExifEditor_0ook8ujn";
 
-EgtGpsExifEditor::EgtGpsExifEditor()
+EgtGpsExifEditor::EgtGpsExifEditor( )
 {
   cvCategories = QObject::tr( "EXIF Editors" );
   cvDescription = QObject::tr( "Edit/add GPS EXIF entries" );
@@ -72,9 +72,9 @@ EgtGpsExifEditor::EgtGpsExifEditor()
   //Set up the editor dock
   cvDock.setWindowTitle( cvName );
   cvDock.setFeatures( QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetClosable );
-  cvDock.setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+  cvDock.setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
   cvDock.setMinimumSize( 250,150 );
-  cvDock.setWidget( cvEditor->editorWidget() );
+  cvDock.setWidget( cvEditor->editorWidget( ) );
 }
 
 /*
@@ -88,7 +88,7 @@ EgtGpsExifEditor::EgtGpsExifEditor()
  */
 void EgtGpsExifEditor::connectConfigurationButton( QPushButton* theButton )
 {
-  connect( theButton, SIGNAL( clicked() ), this, SLOT( showConfigurationPanel() ) );
+  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( showConfigurationPanel( ) ) );
 }
 
 /*!
@@ -96,16 +96,16 @@ void EgtGpsExifEditor::connectConfigurationButton( QPushButton* theButton )
  */
 void EgtGpsExifEditor::connectRunButton( QPushButton* theButton )
 {
-  connect( theButton, SIGNAL( clicked() ), this, SLOT( run() ) );
+  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( run( ) ) );
 }
 
-void EgtGpsExifEditor::initPlugin()
+void EgtGpsExifEditor::initPlugin( )
 {
   //Hook listeners into the application interface
   if( 0 != cvApplicationInterface )
   {
     //Add the dock but keep it hidden until the user askes for it
-    cvApplicationInterface->gui()->addDockWidget( Qt::RightDockWidgetArea, &cvDock );
+    cvApplicationInterface->gui( )->addDockWidget( Qt::RightDockWidgetArea, &cvDock );
     cvDock.setVisible( false );
 
     connect( cvApplicationInterface, SIGNAL( keyValuePair( QString, QString ) ), this, SLOT( acceptKeyValuePair( QString, QString ) ) );
@@ -120,7 +120,7 @@ void EgtGpsExifEditor::initPlugin()
  */
 void EgtGpsExifEditor::acceptKeyValuePair( QString theKey, QString theData )
 {
-  if( cvExifEngine.isValidImage() )
+  if( cvExifEngine.isValidImage( ) )
   {
     cvEditor->setTagData( theKey, theData, false );
   }
@@ -138,7 +138,7 @@ void EgtGpsExifEditor::loadExifData( const QModelIndex& theIndex )
   QFileInfo lvFileInfo( lvFilename );
   
   //If the index points a file, try to extract the exif data
-  if( !lvFileInfo.isDir() )
+  if( !lvFileInfo.isDir( ) )
   {
     loadExifData( lvFilename );
   }
@@ -148,29 +148,29 @@ void EgtGpsExifEditor::loadExifData( const QModelIndex& theIndex )
   }
 } 
 
-void EgtGpsExifEditor::run()
+void EgtGpsExifEditor::run( )
 {
   EgtDebug( "entered" );
   
   //Build or reshow the plugins GUI component
-  if( cvDock.isVisible() )
+  if( cvDock.isVisible( ) )
   {
     EgtDebug( "dock is already open and visible" );
     return;
   }
 
   EgtDebug( "dock is already open but not visible" );
-  cvDock.showMaximized();
+  cvDock.showMaximized( );
   loadExifData( cvLastFile );
 
   EgtDebug( "done" );
 }
 
-void EgtGpsExifEditor::showConfigurationPanel()
+void EgtGpsExifEditor::showConfigurationPanel( )
 {
   if( 0 != cvApplicationInterface )
   {
-    cvEditor->showConfigurationDialog( cvApplicationInterface->positionOfFirstVisibleWidget() );
+    cvEditor->showConfigurationDialog( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
   }
 }
 
@@ -186,12 +186,12 @@ void EgtGpsExifEditor::loadExifData( QString theFilename )
 {
   EgtDebug( "entered" );
 
-  if( 0 == cvEditor) { return; }
+  if( 0 == cvEditor ) { return; }
 
   cvExifEngine.setFile( theFilename );
   cvLastFile = theFilename;
 
-  cvEditor->loadExifData( cvExifEngine.hasExpectedExif() );
+  cvEditor->loadExifData( cvExifEngine.hasExpectedExif( ) );
   
 }
 
