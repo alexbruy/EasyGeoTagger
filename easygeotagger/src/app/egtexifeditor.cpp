@@ -164,11 +164,11 @@ void EgtExifEditor::loadExifData( bool hasTagData )
         lvResult = cvExifEngine->read( lvIterator.value( )->key( ), &isValid );
         if( isValid )
         {
-       ( *lvIterator )->setValue( lvResult );
+          ( *lvIterator )->setValue( lvResult );
         }
         else
         {
-       ( *lvIterator )->setValue( lvInvalidResult );
+          ( *lvIterator )->setValue( lvInvalidResult );
         }
 
         if( lvIterator.value( )->hasUnits( ) )
@@ -176,11 +176,11 @@ void EgtExifEditor::loadExifData( bool hasTagData )
           lvResult = cvExifEngine->read( lvIterator.value( )->key( )+"Ref", &isValid );
           if( isValid )
           {
-         ( *lvIterator )->setUnits( lvResult );
+            ( *lvIterator )->setUnits( lvResult );
           }
           else
           {
-         ( *lvIterator )->setUnits( lvInvalidResult );
+            ( *lvIterator )->setUnits( lvInvalidResult );
           }
         }
       }
@@ -290,11 +290,11 @@ void EgtExifEditor::cvSaveButton_clicked( )
       lvResult = cvExifEngine->read( lvIterator.value( )->key( ), &isValid );
       if( isValid )
       {
-     ( *lvIterator )->setValue( lvResult );
+        ( *lvIterator )->setValue( lvResult );
       }
       else
       {
-     ( *lvIterator )->setValue( lvInvalidResult );
+        ( *lvIterator )->setValue( lvInvalidResult );
       }
 
       if( lvIterator.value( )->hasUnits( ) )
@@ -303,11 +303,11 @@ void EgtExifEditor::cvSaveButton_clicked( )
         lvResult = cvExifEngine->read( lvIterator.value( )->key( )+"Ref", &isValid );
         if( isValid )
         {
-       ( *lvIterator )->setUnits( lvResult );
+          ( *lvIterator )->setUnits( lvResult );
         }
         else
         {
-       ( *lvIterator )->setUnits( lvInvalidResult );
+          ( *lvIterator )->setUnits( lvInvalidResult );
         }
       }
     }
