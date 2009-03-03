@@ -1,8 +1,26 @@
 /*! \mainpage EasyGeoTagger
 
 \section index_intro Introduction
-\htmlonly<a href="http://biodiversityinformatics.amnh.org/open_source/easygeotagger">EasyGeoTagger</a>\endhtmlonly
-( EasyGT )
+<br><a href="http://biodiversityinformatics.amnh.org/open_source/easygeotagger">EasyGeoTagger ( EasyGT )</a> is an  easy-to-use open source software application for geotagging digital images that runs on Linux, OSX and Windows. Geotagging is the process of embedding geographic coordinates (i.e., latitude and longitude) and other spatial attributes into a digital image. This geographic information can be used to document, for example, the location where the photographer took the image and the direction the camera was pointing. Geotagged images can be used to identify and monitor changes in a landscape over time, which makes EasyGT a powerful tool for conservation and natural resource management initiatives. Our goal in developing EasyGT is to simplify the process of geotagging digital images and to promote photo-monitoring and the effective use of ground-based digital imagery in scientific initiatives focused on identifying and quantifying changes in the Earth's terrestrial and marine environments.
+        
+<br><br>EasyGT can be used as a stand alone application or as a plugin to <a href="http://qgis.org">QuantumGIS (QGIS)</a>, a free and open source desktop geographic information system. EasyGT is currently in the early stages of development and additional  functionality will be available in subsequent releases.
+
+<br><br>Version 0.3.0  currently includes the following capabilities,
+<ul>
+  <li>Preview and tagging of JPG, TIF, PNG and most raw image files (e.g., NEF, CRW )</li>
+  <li>Manual editing of GPS EXIF data</li>
+  <li>Coordinate selection from Google Maps (requires Internet connection)</li>
+  <li>Coordinate selection from custom data layers when used as a QGIS plugin</li>
+  <li>Interactive selection of coordinates from delimited text files</li>
+  <li>Convert raw image files to JPG and copy all EXIF data</li>
+  <li>Scriptable through a built in Python console</li>
+  <li>Simple and flexible plugin interface for extending and adding functionality</li>
+</ul>
+
+<br>EasyGT also comes with  additional plugins that greatly extend the capabilities of QGIS. EasyGT includes a native QGIS data provider and accompanying plugin ( LoadExifDataset ) that allows a directory of geotagged images to be treated as vector ( point ) data source. Together with the <a href="http://biodiversityinformatics.amnh.org/open_source/evis">Event Visualization Tool (eVis)</a>, natural resource managers, conservation practitioners and general enthusiasts have access to powerful suite of free tools for editing, mapping, and displaying digital images in a geographic context.
+
+<br><br>With EasyGT, geotagging is...just easy.
+<br><br>
 
 \section index_python Python Bindings
 EastGT has a built in python console that allows for real-time scripting and interaction with the application. Currently
@@ -19,6 +37,8 @@ the following EasyGT classes have bindings
 <li>EgtPhotoExifEngine</li>
 <li>EgtRawImageReader</li>
 </ul>
+<br><br>
+
 \section index_trac Bug Reporting and Enhancement Requests
 If you think you have found a bug or have an idea for an enhancement, please file a ticket on our <a
 href="https://trac.biodiversiyinformatics.amnh.org/projects/easygeotagger">EasyGT Trac site</a>. When submitting bugs or
