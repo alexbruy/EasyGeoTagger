@@ -91,8 +91,9 @@ void EgtSaveAsJpg::imageLoaded( bool theSuccess )
   if( cvImageFactory.isValid( ) )
   {
     QFileInfo lvFileInfo( cvImageFactory.fileName( ) );
+    QFileInfo lvDestination( lvFileInfo.dir( ).absolutePath( ) );
     //TODO: Make plugin configurable and allow the user to over write the destination path
-    if( lvFileInfo.isWritable( ) )
+    if( lvDestination.isWritable( ) )
     {
       QString lvNewFileName = cvImageFactory.fileName( );
       int lvIndex = cvImageFactory.fileName( ).lastIndexOf( "." );
@@ -141,7 +142,7 @@ void EgtSaveAsJpg::imageLoaded( bool theSuccess )
     }
     else
     {
-      cvOutputConsole.append( "[" + tr( "ERROR" ) + "] " + lvFileInfo.dir( ).absolutePath( ) + tr( " is not writable" ) );
+      cvOutputConsole.append( "[" + tr( "ERROR" ) + "] " + lvDestination.dir( ).absolutePath( ) + tr( " is not writable" ) );
     }
   }
   else
