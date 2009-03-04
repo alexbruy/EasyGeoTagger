@@ -268,8 +268,7 @@ float EgtGpsExifEngine::direction( bool * isValid )
     return 0.0;  
   }  
   
-  int lvDirection = int( lvValue2.toFloat( 0 ) );
-  
+  float lvDirection = lvValue2.toFloat();
   if( isValid ) { *isValid = true; }
   
   return lvDirection;
@@ -1152,10 +1151,11 @@ bool EgtGpsExifEngine::writeAltitude( double theValue )
     return false;
   }  
 
-  double lvValueInt;
-  modf( theValue*99999, &lvValueInt );
-
-  if( !writeTag( "Exif.GPSInfo.GPSAltitude",  QString::number( ( int )fabs( lvValueInt ) ) +"/99999", "Rational" ) )
+ 
+  Exiv2::Rational lvRational = Exiv2::floatToRationalCast (float(fabs(theValue)));
+  std::string lvAltitudeString = Exiv2::toString( lvRational );
+  
+  if( !writeTag( "Exif.GPSInfo.GPSAltitude",QString(lvAltitudeString.c_str()), "Rational" ) )
   {
     return false;
   }
@@ -1193,24 +1193,29 @@ bool EgtGpsExifEngine::writeAreaInformation( QString theValue )
 
   if( theValue.isEmpty( ) ) { return false; }
 
-  QRegExp lvRegExp( "( \\d\\d?\\d?( ?:\\s|$ ) )" ); //Up to three digits separated by spaces
+  QRegExp lvRegExp( "^.*[^\\d|^\\s]+$" ); 
+  if( theValue.count(lvRegExp) > 0){ return false; }
 
-  int lvPos = 0;
+  QStringList lvStringList = theValue.split(" ");
+  
   bool lvOk;
-  int lvValue;
-  QString lvData;
-  while ( ( lvPos = lvRegExp.indexIn( theValue, lvPos ) ) != -1 ) 
+  int lvCurrentValue;
+  QString lvCurrentString;
+  QString lvReturn;
+  for (int i = 0; i < lvStringList.size(); i++)
   {
-    lvValue = lvRegExp.cap( 1 ).toInt( &lvOk );
-    if( lvOk && lvValue < 256 )
+    lvCurrentString = lvStringList.at(i);
+    lvCurrentValue = lvCurrentString.toInt(&lvOk);
+    if( lvOk && lvCurrentValue < 256)
     {
-      lvData += QString::number( lvValue )+" ";
+      lvReturn+= lvCurrentString+" ";
     }
-    lvPos += lvRegExp.matchedLength( );
+    else{ return false; }
   }
-  if( lvData.isEmpty( ) ) { return false; }
 
-  if( !writeTag( "Exif.GPSInfo.GPSAreaInformation", lvData, "Undefined" ) ) //This was of type "Undefined"
+  if( lvReturn.isEmpty() ){ return false; }  
+
+  if( !writeTag( "Exif.GPSInfo.GPSAreaInformation", lvReturn, "Undefined" ) ) //This was of type "Undefined"
   {
     return false;
   }
@@ -1277,10 +1282,10 @@ bool EgtGpsExifEngine::writeDestBearing( float theValue )
 
   if( !isValidImage( ) ) { return false; }
 
-  double lvValueInt;
-  modf( theValue*99999, &lvValueInt );
+  Exiv2::Rational lvRational = Exiv2::floatToRationalCast (float(theValue));
+  std::string lvDestBearingString = Exiv2::toString( lvRational );
 
-  if( !writeTag( "Exif.GPSInfo.GPSDestBearing", QString::number( ( int )fabs( lvValueInt ) )+"/99999" , "Rational" ) )
+  if( !writeTag( "Exif.GPSInfo.GPSDestBearing", QString(lvDestBearingString.c_str()) , "Rational" ) )
   {
     return false;
   }
@@ -1375,10 +1380,10 @@ bool EgtGpsExifEngine::writeDirection( float theValue )
 
   if( !isValidImage( ) ) { return false; }
 
-  double lvValueInt;
-  modf( theValue*99999, &lvValueInt );
+  Exiv2::Rational lvRational = Exiv2::floatToRationalCast ( theValue );
+  std::string lvDirectionString = Exiv2::toString( lvRational );
 
-  if( !writeTag( "Exif.GPSInfo.GPSImgDirection", QString::number( ( int )fabs( lvValueInt ) )+"/99999", "Rational" ) )
+  if( !writeTag( "Exif.GPSInfo.GPSImgDirection", QString( lvDirectionString.c_str() ), "Rational" ) )
   {
     return false;
   }
@@ -1439,10 +1444,10 @@ bool EgtGpsExifEngine::writeDestDistance( double theValue )
 
   if( !isValidImage( ) ) { return false; }
 
-  double lvValueInt;
-  modf( theValue*99999, &lvValueInt );
+  Exiv2::Rational lvRational = Exiv2::floatToRationalCast (float(theValue));
+  std::string lvDestDistanceString = Exiv2::toString( lvRational );
 
-  if( !writeTag( "Exif.GPSInfo.GPSDestDistance", QString( QString::number( ( int )fabs( lvValueInt ) )+"/99999" ), "Rational" ) )
+  if( !writeTag( "Exif.GPSInfo.GPSDestDistance", QString(lvDestDistanceString.c_str()), "Rational" ) )
   {
     return false;
   }
@@ -1460,7 +1465,7 @@ bool EgtGpsExifEngine::writeDestDistance( QString theValue )
 
   bool ok; 
   double lvDestDistance = theValue.toDouble( &ok );
-  if( ok )
+  if( ok && lvDestDistance > 0 )
   {
     return writeDestDistance( lvDestDistance );
   }
@@ -1516,12 +1521,19 @@ bool EgtGpsExifEngine::writeDestLatitude( double theValue )
       return false;
     }
   }
-  
-  if( !writeTag( "Exif.GPSInfo.GPSDestLatitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" ) )
-  {
-    return false;
-  }
+  bool lvOk;
+  Exiv2::Rational lvRational = Exiv2::parseRational (QString::number( fabs(theValue), 'f', 7 ).toStdString().c_str(), lvOk);
+  std::string lvDestLatitudeString =Exiv2::toString( lvRational );
 
+  if( lvOk )
+  {
+    if( !writeTag( "Exif.GPSInfo.GPSDestLatitude",QString( lvDestLatitudeString.c_str() ), "Rational" ) )
+    {
+      return false;
+    }
+  }
+  else{ return false; }
+  
   //Write passed so set the has expected exif flag and return true
   cvHasExpectedExif = true;
   return true;
@@ -1579,10 +1591,16 @@ bool EgtGpsExifEngine::writeDestLongitude( double theValue )
       return false;
     }
   }
-  
-  if( !writeTag( "Exif.GPSInfo.GPSDestLongitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" ) )
-  {
-    return false;
+  bool lvOk;
+  Exiv2::Rational lvRational = Exiv2::parseRational (QString::number( fabs(theValue), 'f', 7 ).toStdString().c_str(), lvOk);
+  std::string lvDestLongitudeString =Exiv2::toString( lvRational );
+
+  if( lvOk )
+  {  
+    if( !writeTag( "Exif.GPSInfo.GPSDestLongitude", QString(lvDestLongitudeString.c_str()), "Rational" ) )
+    {
+      return false;
+    }
   }
 
   //Write passed so set the has expected exif flag and return true
@@ -1621,10 +1639,10 @@ bool EgtGpsExifEngine::writeGpsDOP( double theValue )
 
   if( !isValidImage( ) ) { return false; }
 
-  double lvValueInt;
-  modf( theValue*99999, &lvValueInt );
+  Exiv2::Rational lvRational = Exiv2::floatToRationalCast (float(theValue));
+  std::string lvGpsDopString = Exiv2::toString( lvRational );
 
-  if( !writeTag( "Exif.GPSInfo.GPSDOP",  QString::number( ( int )fabs( lvValueInt ) )+"/99999", "Rational" ) )
+  if( !writeTag( "Exif.GPSInfo.GPSDOP",  QString( lvGpsDopString.c_str() ), "Rational" ) )
   {
     return false;
   }
@@ -1683,10 +1701,16 @@ bool EgtGpsExifEngine::writeLatitude( double theValue )
       return false;
     }
   }
+  bool lvOk;
+  Exiv2::Rational lvRational = Exiv2::parseRational (QString::number( fabs(theValue), 'f', 7 ).toStdString().c_str(), lvOk);
+  std::string lvLatitudeString =Exiv2::toString( lvRational );
 
-  if( ! writeTag( "Exif.GPSInfo.GPSLatitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" ) )
-  {
-    return false;
+  if( lvOk )
+  { 
+    if( ! writeTag( "Exif.GPSInfo.GPSLatitude", QString(lvLatitudeString.c_str()), "Rational" ) )
+    {
+      return false;
+    }
   }
 
   //Write passed so set the has expected exif flag and return true
@@ -1748,10 +1772,16 @@ bool EgtGpsExifEngine::writeLongitude( double theValue )
       return false;
     }
   }
-  
-  if( !writeTag( "Exif.GPSInfo.GPSLongitude", convertToRational( QString::number( theValue, 'f', 7 ) ), "Rational" ) )
-  {
-    return false;
+  bool lvOk;
+  Exiv2::Rational lvRational = Exiv2::parseRational (QString::number( fabs(theValue), 'f', 7 ).toStdString().c_str(), lvOk);
+  std::string lvLongitudeString =Exiv2::toString( lvRational );
+
+  if( lvOk )
+  { 
+    if( !writeTag( "Exif.GPSInfo.GPSLongitude", QString( lvLongitudeString.c_str() ), "Rational" ) )
+    {
+      return false;
+    }
   }
 
   //Write passed so set the has expected exif flag and return true
@@ -1841,24 +1871,29 @@ bool EgtGpsExifEngine::writeProcessingMethod( QString theValue )
 
   if( theValue.isEmpty( ) ) { return false; } 
 
-  QRegExp lvRegExp( "( \\d\\d?\\d?( ?:\\s|$ ) )" ); //Up to three digits separated by spaces
+  QRegExp lvRegExp( "^.*[^\\d|^\\s]+$" ); 
+  if( theValue.count(lvRegExp) > 0){ return false; }
 
-  int lvPos = 0;
+  QStringList lvStringList = theValue.split(" ");
+  
   bool lvOk;
-  int lvValue;
-  QString lvData;
-  while ( ( lvPos = lvRegExp.indexIn( theValue, lvPos ) ) != -1 ) 
+  int lvCurrentValue;
+  QString lvCurrentString;
+  QString lvReturn;
+  for (int i = 0; i < lvStringList.size(); i++)
   {
-    lvValue = lvRegExp.cap( 1 ).toInt( &lvOk );
-    if( lvOk && lvValue < 256 )
+    lvCurrentString = lvStringList.at(i);
+    lvCurrentValue = lvCurrentString.toInt(&lvOk);
+    if( lvOk && lvCurrentValue < 256)
     {
-      lvData += QString::number( lvValue )+" ";
+      lvReturn+= lvCurrentString+" ";
     }
-    lvPos += lvRegExp.matchedLength( );
+    else{ return false; }
   }
-  if( lvData.isEmpty( ) ) { return false; }
 
-  if( !writeTag( "Exif.GPSInfo.GPSProcessingMethod", lvData, "Undefined" ) ) //This was of type "Undefined"
+  if( lvReturn.isEmpty() ){ return false; }       
+
+  if( !writeTag( "Exif.GPSInfo.GPSProcessingMethod", lvReturn, "Undefined" ) ) //This was of type "Undefined"
   {
     return false;
   }
@@ -1898,10 +1933,10 @@ bool EgtGpsExifEngine::writeSpeed( double theValue )
 
   if( !isValidImage( ) ) { return false; }
 
-  double lvValueInt;
-  modf( theValue*99999, &lvValueInt );
+  Exiv2::Rational lvRational = Exiv2::floatToRationalCast (float(theValue));
+  std::string lvSpeedString = Exiv2::toString( lvRational );
 
-  if( !writeTag( "Exif.GPSInfo.GPSSpeed", QString::number( ( int )fabs( lvValueInt ) )+"/99999", "Rational" ) )
+  if( !writeTag( "Exif.GPSInfo.GPSSpeed", QString( lvSpeedString.c_str() ), "Rational" ) )
   {
     return false;
   }
@@ -1919,7 +1954,7 @@ bool EgtGpsExifEngine::writeSpeed( QString theValue )
 
   bool ok; 
   double lvSpeed = theValue.toDouble( &ok );
-  if( ok )
+  if( ok && lvSpeed > 0 )
   {
     return writeSpeed( lvSpeed );
   }
@@ -2061,10 +2096,10 @@ bool EgtGpsExifEngine::writeTrack( float theValue )
 
   if( !isValidImage( ) ) { return false; }
 
-  double lvValueInt;
-  modf( theValue*99999, &lvValueInt );
+  Exiv2::Rational lvRational = Exiv2::floatToRationalCast (float(theValue));
+  std::string lvTrackString = Exiv2::toString( lvRational );
 
-  if( !writeTag( "Exif.GPSInfo.GPSTrack", QString::number( ( int )fabs( lvValueInt ) )+"/99999", "Rational" ) )
+  if( !writeTag( "Exif.GPSInfo.GPSTrack", QString( lvTrackString.c_str() ), "Rational" ) )
   {
     return false;
   }
@@ -2161,36 +2196,7 @@ bool EgtGpsExifEngine::writeVersionID( QString theValue )
  *
  */
 
-/*!
- * \param theDegrees A QString that represents the decimal degrees to be converted to rational format
- * \returns A QString containing the rational value obtained
- */
-QString EgtGpsExifEngine::convertToRational( QString theDegrees )
-{
-  bool ok;
 
-  double lvTheDegrees = fabs( theDegrees.toDouble( &ok ) );
-  if( !ok ) { return ""; }
-    
-  double lvDegrees, lvMinutes, lvSeconds, lvAux;
-  /*decomposes num into its integer and fractional parts.*/
-  lvAux = modf( lvTheDegrees, &lvDegrees );
-  /*lvAux contains the decimal part*/
-  lvAux = modf( lvAux * 60, &lvMinutes );
-	
-  lvSeconds = lvAux * 60;
-	
-  double lvSecondsInt;
-  lvAux = modf( lvSeconds*99999, &lvSecondsInt );
-	
-  QString lvTextDegrees, lvTextMinutes, lvTextSeconds;
-	
-  lvTextDegrees = lvTextDegrees.setNum( lvDegrees ); 
-  lvTextMinutes = lvTextMinutes.setNum( lvMinutes ); 
-  lvTextSeconds = lvTextSeconds.setNum( ( int )lvSecondsInt );
-	
-  return QString( lvTextDegrees + "/1" + " " +lvTextMinutes+ "/1"+ " " +lvTextSeconds+ "/99999" );
-}
 
 void EgtGpsExifEngine::init( )
 {
