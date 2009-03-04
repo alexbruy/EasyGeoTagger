@@ -134,7 +134,9 @@ const Exiv2::Value& EgtExifEngine::readTag( QString theKey )
       EgtDebug( "Valid image, reading..." );
       cvImage->readMetadata( );
       Exiv2::ExifKey lvKey( theKey.toStdString( ) );
+
       Exiv2::ExifData::iterator it = cvImage->exifData( ).findKey( lvKey );
+
       if( it == cvImage->exifData( ).end( ) )
       {
         cvLastError = QString( "key ["+ theKey + "] no found" );
@@ -144,7 +146,8 @@ const Exiv2::Value& EgtExifEngine::readTag( QString theKey )
 
       EgtDebug( QString( "key ["+ theKey + "] found" ) );
       EgtDebug( QString( "Data Type ["+ QString( it->typeName( ) ) +"]" ) );
-      
+         
+      if( 0 == it->count() ){ return cvNotValidValue; }     //The tag exists, but not the data (it is corrupted or something)
       return it->value( );
     }
     catch ( Exiv2::AnyError& e )
@@ -182,6 +185,7 @@ QString EgtExifEngine::readKeyValueAsString( QString theKey )
       }
 
       EgtDebug( QString( "key ["+ theKey + "] found" ) );
+      if( 0 == it->count() ){ return ""; }     //The tag exists, but not the data (it is corrupted or something)
       QString lvIteratorValue( it->value( ).toString( ).c_str( ) );
       return lvIteratorValue;
     }
