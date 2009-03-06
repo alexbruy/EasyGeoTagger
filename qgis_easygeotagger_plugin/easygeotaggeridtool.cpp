@@ -49,7 +49,7 @@ EasyGeoTaggerIdTool::EasyGeoTaggerIdTool( QgsMapCanvas* theCanvas )
   
   //set the default CRS
   cvDestinationCRS = new QgsCoordinateReferenceSystem( );
-  cvDestinationCRS->createFromProj4( "+proj = longlat +ellps = WGS84 +datum = WGS84 +no_defs" );
+  cvDestinationCRS->createFromProj4( "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs" );
 }
 
 /*!
@@ -71,11 +71,12 @@ void EasyGeoTaggerIdTool::canvasReleaseEvent( QMouseEvent* mouseEvent )
     else
     {
       lvTransformer.setSourceCrs( mCanvas->currentLayer( )->srs( ) );
+      qDebug( qPrintable( mCanvas->currentLayer()->srs().toProj4()));
+      qDebug( qPrintable( cvDestinationCRS->toProj4()) );
     }
     
     QgsPoint lvTransformedLocation = lvTransformer.transform( mCanvas->getCoordinateTransform( )->toMapCoordinates( mouseEvent->x( ), mouseEvent->y( ) ) );
     
-    //TODO: If not WGS84 reproject point
     emit keyValuePair( "Egt.GPS.Longitude", QString::number( lvTransformedLocation.x( ) ) );
     emit keyValuePair( "Egt.GPS.Latitude", QString::number( lvTransformedLocation.y( ) ) );
   }

@@ -60,6 +60,20 @@ ENDIF (WIN32)
 
 SET (EGT_DEBUG_MESSAGES FALSE CACHE BOOL "Flag to indicate of debug messages should be displayed")
 
+IF( MSVC )
+  SET (OSGEO4W_BUILD TRUE CACHE BOOL "Flag to set build specific fields for distirbution with OSGeo4W build")
+ELSE ( MSVC )
+  SET (OSGEO4W_BUILD FALSE CACHE BOOL "Flag to set build specific fields for distirbution with OSGeo4W build")
+ENDIF ( MSVC )
+
+IF( OSGEO4W_BUILD )
+  ADD_DEFINITIONS( -DOSGEO4W=1 )
+  ADD_DEFINITIONS( -DPLUGINPATH=\\\"../apps/easygt/plugins\\\" )
+ELSE ( OSGEO4W_BUILD )
+  #ADD Branch for APPLE
+  ADD_DEFINITIONS( -DPLUGINPATH=\\\"/usr/local/lib/easygt\\\" )
+ENDIF ( OSGEO4W_BUILD )
+
 IF (EGT_DEBUG_MESSAGES)
   ADD_DEFINITIONS(-DEGTDEBUG=1)
 ENDIF (EGT_DEBUG_MESSAGES)
