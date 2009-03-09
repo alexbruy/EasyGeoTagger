@@ -34,6 +34,7 @@
 #include <QLibrary>
 #include <QMessageBox>
 
+#include <QCoreApplication>
 
 static const char * const sIdent = "$Id: plugin.cpp 9327 2008-09-14 11:18:44Z jef $";
 static const QString sName = QObject::tr( "EasyGeoTagger" );
@@ -108,7 +109,7 @@ void EasyGeoTagger::run( )
         if( 0 == cvIdTool ) { return; }
       }
 
-      cvEasyGeoTaggerApplication = new EgtApplication( PLUGINPATH );
+      cvEasyGeoTaggerApplication = new EgtApplication( QCoreApplication::instance()->applicationDirPath() + PLUGINPATH );
       if( 0 == cvEasyGeoTaggerApplication ) { return; }
 
       connect( cvIdTool, SIGNAL( keyValuePair( QString, QString ) ), cvEasyGeoTaggerApplication->applicationInterface( ), SLOT( acceptKeyValuePair( QString,QString ) ) );

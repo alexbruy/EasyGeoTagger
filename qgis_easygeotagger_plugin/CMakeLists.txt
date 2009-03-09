@@ -68,10 +68,10 @@ ENDIF ( MSVC )
 
 IF( OSGEO4W_BUILD )
   ADD_DEFINITIONS( -DOSGEO4W=1 )
-  ADD_DEFINITIONS( -DPLUGINPATH=\\\"../apps/easygt/plugins\\\" )
+  ADD_DEFINITIONS( -DPLUGINPATH=\\\"/../../easygt/plugins\\\" )
 ELSE ( OSGEO4W_BUILD )
   #ADD Branch for APPLE
-  ADD_DEFINITIONS( -DPLUGINPATH=\\\"/usr/local/lib/easygt\\\" )
+  ADD_DEFINITIONS( -DPLUGINPATH=\\\"/../lib/easygt\\\" )
 ENDIF ( OSGEO4W_BUILD )
 
 IF (EGT_DEBUG_MESSAGES)

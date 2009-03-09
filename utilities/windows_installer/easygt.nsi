@@ -8,7 +8,7 @@
 Name "EasyGeoTagger"
 
 ; The file to write
-OutFile "easygeotaggerInstaller.exe"
+OutFile "EasyGeoTagger_0_3_0_OSGeo4W.exe"
 
 ; The default installation directory
 InstallDir C:\OSGeo4W
@@ -35,7 +35,7 @@ IfErrors done
 FileWrite $0 "@echo off$\n"
 FileWrite $0 "SET OSGEO4W_ROOT=$INSTDIR$\n"
 FileWrite $0 "@echo off$\n"
-FileWrite $0 "start $\"Easy geotagger$\" /B $\"%OSGEO4W_ROOT%$\"\bin\easygeotagger.exe %*$\n"
+FileWrite $0 "start $\"EasyGeoTagger$\" /B $\"%OSGEO4W_ROOT%$\"\bin\easygeotagger.exe %*$\n"
 FileClose $0
 done:
 
@@ -44,7 +44,7 @@ CreateDirectory "$SMPROGRAMS\EasyGeoTagger"
 
 CreateShortCut "$SMPROGRAMS\EasyGeoTagger\easygt.lnk" "$INSTDIR\bin\easygt.bat" \
   "" "$INSTDIR\apps\easygt\icons\easygt.ico" "" SW_SHOWNORMAL \
-  "" "Easy geo tagger"
+  "" "EasyGeoTagger"
   
 CreateShortCut "$SMPROGRAMS\EasyGeoTagger\uninstall.lnk" "$INSTDIR\UninstallEasyGt.exe" \
   "" "$INSTDIR\apps\easygt\Uninst.exe" "" SW_SHOWNORMAL \
@@ -52,7 +52,7 @@ CreateShortCut "$SMPROGRAMS\EasyGeoTagger\uninstall.lnk" "$INSTDIR\UninstallEasy
   
 CreateShortCut "$DESKTOP\easygt.lnk" "$INSTDIR\bin\easygt.bat" \
   "" "$INSTDIR\apps\easygt\icons\easygt.ico" "" SW_SHOWNORMAL \
-  "" "Easy geo tagger"
+  "" "EasyGeoTagger"
 
 WriteUninstaller $INSTDIR\UninstallEasyGt.exe 
  
