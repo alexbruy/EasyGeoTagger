@@ -66,10 +66,6 @@ ENDIF (PYTHON_BINDINGS)
 
 # set up the install locations
 IF ( WIN32 )
-  #Make this a find routine -- just for the lib
-  #FIND_LIBRARY( EXPAT_LIBRARY NAMES expat PATHS C:/OSGeo4W/lib )
-  #FIND_LIBRARY( ZLIB_LIBRARY NAMES zlib PATHS C:/OSGeo4W/lib )
-
   SET ( CMAKE_INSTALL_PREFIX   ./install )
   SET ( EASYGT_BIN_SUBDIR     . )
   SET ( EASYGT_LIB_SUBDIR     . )
@@ -79,9 +75,9 @@ IF ( WIN32 )
   
   IF( OSGEO4W_BUILD )
     ADD_DEFINITIONS( -DOSGEO4W=1 )
-	ADD_DEFINITIONS( -DPLUGINPATH=\\\"../apps/easygt/plugins\\\" )
+    ADD_DEFINITIONS( -DPLUGINPATH=\\\"../apps/easygt/plugins\\\" )
   ELSE ( OSGEO4W_BUILD )
-	ADD_DEFINITIONS( -DPLUGINPATH=\\\"${EASYGT_PLUGIN_SUBDIR}\\\" )
+    ADD_DEFINITIONS( -DPLUGINPATH=\\\"${EASYGT_PLUGIN_SUBDIR}\\\" )
   ENDIF ( OSGEO4W_BUILD )
   
 ELSE ( WIN32 )
@@ -134,7 +130,7 @@ SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
 
 # the RPATH to be used when installing
-SET(CMAKE_INSTALL_RPATH ".:lib:./lib:./lib/easygt")
+SET(CMAKE_INSTALL_RPATH ".:/usr/lib:/usr/local/lib:/usr/local/lib/easygt:/usr/lib/easygt")
 
 SET( EasyGT_APP_SRCS
      src/main.cpp
