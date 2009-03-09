@@ -27,7 +27,7 @@ IF (WIN32)
       "c:/OSGeo4W/include/easygt"
       "$ENV{LIB_DIR}/include/easygt"
     )
-    SET(EASYGT_PLUGIN_DIR "c:/OSGeo4W/apps/easygt/plugins")
+    #SET(EASYGT_PLUGIN_DIR "c:/OSGeo4W/apps/easygt/plugins")
   ELSE (MSVC)
     FIND_LIBRARY(EASYGT_LIBRARY NAMES easygt PATHS
       c:/msys/local/
@@ -35,7 +35,7 @@ IF (WIN32)
     FIND_PATH(EASYGT_INCLUDE_DIR egtplugininterface.h
       c:/msys/local/include/easygt
     )
-    SET(EASYGT_PLUGIN_DIR "./plugins")
+    #SET(EASYGT_PLUGIN_DIR "./plugins")
   ENDIF (MSVC)
 ELSE (WIN32)
   IF (APPLE)
@@ -77,7 +77,7 @@ IF (EASYGT_INCLUDE_DIR AND EASYGT_LIBRARY AND EASYGT_PLUGIN_DIR)
    SET(EASYGT_FOUND TRUE)
 ENDIF (EASYGT_INCLUDE_DIR AND EASYGT_LIBRARY AND EASYGT_PLUGIN_DIR)
 
-ADD_DEFINITIONS( -DPLUGINPATH=\\\"${EASYGT_PLUGIN_DIR}\\\" )
+#ADD_DEFINITIONS( -DPLUGINPATH=\\\"${EASYGT_PLUGIN_DIR}\\\" )
 
 IF (EASYGT_FOUND)
 
