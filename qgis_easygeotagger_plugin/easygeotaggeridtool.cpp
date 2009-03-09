@@ -71,8 +71,6 @@ void EasyGeoTaggerIdTool::canvasReleaseEvent( QMouseEvent* mouseEvent )
     else
     {
       lvTransformer.setSourceCrs( mCanvas->currentLayer( )->srs( ) );
-      qDebug( qPrintable( mCanvas->currentLayer()->srs().toProj4()));
-      qDebug( qPrintable( cvDestinationCRS->toProj4()) );
     }
     
     QgsPoint lvTransformedLocation = lvTransformer.transform( mCanvas->getCoordinateTransform( )->toMapCoordinates( mouseEvent->x( ), mouseEvent->y( ) ) );
