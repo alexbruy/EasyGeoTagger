@@ -131,13 +131,24 @@ void EgtMainWindow::on_actionAbout_activated( )
 {
   QString lvBody = tr( "<html>"\
                        "<body>"\
-                       "<center><h1>EasyGeoTagger</h1></center><br>"\
+                       "<center><h1>EasyGeoTagger</h1></center>"\
+                       "<strong>Developers:</strong> Peter J. Ersts ( lead developer ), Roberto Garcia-Yunta, Ned Horning<br><br>"\
+                       "This is an early beta release and we expect there to be some issues. Please provide us with feedback,"\
+                       "positive or negative. The more we hear from the you, the users, the better we can make our products. "\
+                       "<br><br>As with any beta, you are incouraged to use copies of your data and never the originals as data "\
+                       "corruption can occur if a bug is encountered. EasyGeoTagger is licensed under GPL v2 and is distributed "\
+                       "in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of "\
+                       "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library General Public License for more details.<br><br>"\
                        "Questions and Comments<br>"\
                        "<a href = \"http://biodiversityinformatics.amnh.org/open_source/easygeotagger/comments.php\">"\
                        "http://biodiversityinformatics.amnh.org/open_source/easygeotagger/comments.php</a><br><br>"\
                        "Bugs!<br>"\
                        "<a href = \"https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger/newticket\">"\
                        "https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger/newticket</a>"\
+                       "<br><br><br><span style=\"font-size: 10px;color: #555555\">This work was made possible through a grant by the the John D. and Catherine T. MacArthur Foundation"\
+                       " with additional support from the Center For Biodiversity and Conservation ( American Museum of "\
+                       "Natural History ), and The Spanish Ministry of Science and Innovation's INTEGRANTS program."\
+                       "</span>"\
                        "</body>"\
                        "</html>"
                      );

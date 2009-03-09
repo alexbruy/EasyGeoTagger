@@ -71,7 +71,7 @@ IF( OSGEO4W_BUILD )
   ADD_DEFINITIONS( -DPLUGINPATH=\\\"/../../easygt/plugins\\\" )
 ELSE ( OSGEO4W_BUILD )
   #ADD Branch for APPLE
-  #Hack for now, need to add flag for /usR/Local or /usr/lib intall
+  #Hack for now, need to add flag for /usr/Local or /usr/lib intall
   ADD_DEFINITIONS( -DPLUGINPATH=\\\"/../../usr/local/lib/easygt\\\" )
 ENDIF ( OSGEO4W_BUILD )
 
