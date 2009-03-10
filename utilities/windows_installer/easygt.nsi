@@ -34,6 +34,7 @@ FileOpen $0 $INSTDIR\bin\easygt.bat" w
 IfErrors done
 FileWrite $0 "@echo off$\n"
 FileWrite $0 "SET OSGEO4W_ROOT=$INSTDIR$\n"
+FileWrite $0 "SET PYTHONHOME=%OSGEO4W_ROOT%\apps\Python25$\n"
 FileWrite $0 "@echo off$\n"
 FileWrite $0 "start $\"EasyGeoTagger$\" /B $\"%OSGEO4W_ROOT%$\"\bin\easygeotagger.exe %*$\n"
 FileClose $0
@@ -42,7 +43,7 @@ done:
 ; Create shortcuts
 CreateDirectory "$SMPROGRAMS\EasyGeoTagger"
 
-CreateShortCut "$SMPROGRAMS\EasyGeoTagger\easygt.lnk" "$INSTDIR\bin\easygt.bat" \
+CreateShortCut "$SMPROGRAMS\EasyGeoTagger\EasyGT.lnk" "$INSTDIR\bin\easygt.bat" \
   "" "$INSTDIR\apps\easygt\icons\easygt.ico" "" SW_SHOWNORMAL \
   "" "EasyGeoTagger"
   
@@ -50,7 +51,7 @@ CreateShortCut "$SMPROGRAMS\EasyGeoTagger\uninstall.lnk" "$INSTDIR\UninstallEasy
   "" "$INSTDIR\apps\easygt\Uninst.exe" "" SW_SHOWNORMAL \
   "" "Uninstall easygeotagger"
   
-CreateShortCut "$DESKTOP\easygt.lnk" "$INSTDIR\bin\easygt.bat" \
+CreateShortCut "$DESKTOP\EasyGT.lnk" "$INSTDIR\bin\easygt.bat" \
   "" "$INSTDIR\apps\easygt\icons\easygt.ico" "" SW_SHOWNORMAL \
   "" "EasyGeoTagger"
 
@@ -61,8 +62,8 @@ SectionEnd
 Section "Uninstall"
   
   Delete $INSTDIR\UninstallEasyGt.exe
-  Delete $DESKTOP\easygt.lnk
-  Delete $SMPROGRAMS\EasyGeoTagger\easygt.lnk
+  Delete $DESKTOP\EasyGT.lnk
+  Delete $SMPROGRAMS\EasyGeoTagger\EasyGT.lnk
   Delete $SMPROGRAMS\EasyGeoTagger\uninstall.lnk
   RMDir $SMPROGRAMS\EasyGeoTagger
   Delete $INSTDIR\bin\easygeotagger.exe
