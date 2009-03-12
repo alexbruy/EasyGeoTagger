@@ -47,7 +47,7 @@ ELSE (WIN32)
     FIND_PATH(EASYGT_INCLUDE_DIR egtplugininterface.h
       /Library/Frameworks.EASYGT.framework/include
       /usr/include/easygt
-      /usr/local/include/eastgt
+      /usr/local/include/easygt
     )
     FIND_PATH(EASYGT_PLUGIN_DIR libgpsexifeditor.so
       /Library/Frameworks.EASYGT.framework/lib/easygt
