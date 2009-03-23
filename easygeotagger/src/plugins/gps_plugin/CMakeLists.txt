@@ -18,6 +18,7 @@ SET( GPS_PLUGIN_SRCS
     egtdelimitedtextfilereader.cpp
     egtgraphicaldelimitedtextfilereader.cpp
     egtreaderfactory.cpp
+    egtgpsdisplaywidget.cpp
    )
 
 
@@ -29,12 +30,15 @@ SET( GPS_PLUGIN_MOC_HDRS
     egtdelimitedtextfilereader.h
     egtgraphicaldelimitedtextfilereader.h
     egtfilereader.h
+    egtgpsdisplaywidget.h
    )
 
 SET( GPS_PLUGIN_UIS
     filetypedialog.ui
     textdelimiter.ui
     columnmeaningdialog.ui
+    egtgpsdisplaywidgetbase.ui
+    egtsynchronize.ui
    )
 
 QT4_WRAP_UI( GPS_PLUGIN_UIS_H ${GPS_PLUGIN_UIS} )

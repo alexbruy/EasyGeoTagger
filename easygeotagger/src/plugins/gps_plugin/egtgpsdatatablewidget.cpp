@@ -30,7 +30,7 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
   cvColumnMeaningDialog = new QDialog( this );
   cvUiColumnMeaning.setupUi( cvColumnMeaningDialog );
 
-  cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"( clear )";
+  cvAvailableFields<<"Longitude"<<"Latitude"<<"Altitude"<<"TimeStamp"<<"( clear )";
 
   cvFileReader = 0;
   cvColumnSelected = 0;
@@ -189,6 +189,10 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
   {
     cvUiColumnMeaning.cbFields->removeItem( lvIndex );
     cvHeadersThatAreSet<<cvColumnSelected;
+    if( "TimeStamp" == lvSelectedItem )
+    {
+      emit timeStampSelected();
+    }
   }
   else
   {

@@ -21,7 +21,7 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#include "egtapplicationinterface.h"
+
 #include "egtgpsplugin.h"
 #include "egtlogger.h"
 
@@ -35,31 +35,9 @@ EgtGpsPlugin::EgtGpsPlugin( )
   cvCategories = QObject::tr( "Coordinate Extraction" );
   cvDescription = QObject::tr( "Reads data from GPS files" );
   cvName = QObject::tr( "GPS Reader" );
+ 
 
-  
-  cvDataTable = new EgtGpsDataTableWidget( );  
-  cvMainWidget.setWindowTitle( cvName );
-  cvMainWidget.setMinimumSize( 250,150 );
-  cvMainWidget.setWindowIcon( QIcon( ":/icons/internet-web-browser.svg" ) );
 
-  QWidget* lvPanel = new QWidget( );
-  QWidget* lvPanelButtons = new QWidget( );
-  lvPanelButtons->setLayout( new QHBoxLayout( ) );
-  lvPanel->setLayout( new QVBoxLayout( ) );
-  lvPanel->layout( )->setContentsMargins( 1, 1, 1, 1 );
-  cvTagButton.setText( tr( "Tag picture" ) );
-  lvPanel->layout( )->addWidget( cvDataTable );
-  lvPanelButtons->layout( )->addWidget( &cvTagButton );
-  cvOpenFileButton.setText( tr( "Open file" ) );
-  lvPanelButtons->layout( )->addWidget( &cvOpenFileButton );
-  lvPanel->layout( )->addWidget( lvPanelButtons );
-
-  connect( &cvTagButton, SIGNAL( clicked( ) ), this, SLOT( cvTagButton_clicked( ) ) );
-  connect( &cvOpenFileButton, SIGNAL( clicked( ) ), this, SLOT( cvOpenFile_clicked( ) ) );
-
-  cvMainWidget.setLayout( new QVBoxLayout( ) );
-  cvMainWidget.layout( )->addWidget( lvPanel );
-  connect( &cvReaderFactory, SIGNAL( fileReaderCreated( EgtFileReader* ) ),this, SLOT( fileReader_set( EgtFileReader* ) ) );
 }
 
 /*
@@ -89,10 +67,13 @@ void EgtGpsPlugin::initPlugin( )
   //Hook listeners into the application interface
   if( 0 != cvApplicationInterface )
   {
-    cvMainWidget.setVisible( false );
+    cvDisplayWidget.setVisible( false );
 
     //connect to application interface
-    connect( this, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
+    connect( &cvDisplayWidget, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
+
+
+cvDisplayWidget.setApplicationInterface( cvApplicationInterface );
   }
 }
 
@@ -101,43 +82,13 @@ void EgtGpsPlugin::initPlugin( )
  * SIGNAL and SLOTS
  *
  */
-void EgtGpsPlugin::cvOpenFile_clicked( )
-{
-  cvReaderFactory.show( );
-}
-
-void EgtGpsPlugin::cvTagButton_clicked( ) 
-{
-  if( cvDataTable->isThereAnyColumnSet( ) )
-  {
-    QMap<QString,QString>* lvMap = cvDataTable->getRowItems( );
-
-    QMapIterator<QString, QString> lvMapIterator( *lvMap );
-    while ( lvMapIterator.hasNext( ) )
-    {
-      lvMapIterator.next( );
-      emit( keyValuePair( "Egt.GPS."+lvMapIterator.key( ),lvMapIterator.value( ) ) );
-    }
-  }
-  else
-  {
-    QMessageBox::critical( cvDataTable, tr( "Error" ),tr( "At least one header must be set" ),QMessageBox::Ok );
-  }
-
-}
-
-
-void EgtGpsPlugin::fileReader_set( EgtFileReader* theFileReader )
-{
-  cvDataTable->setFileReader( theFileReader );
-}
 
 void EgtGpsPlugin::run( )
 {
   EgtDebug( "entered" );
   
   //Build or reshow the plugins GUI component
-  if( cvMainWidget.isVisible( ) )
+  if( cvDisplayWidget.isVisible( ) )
   {
     EgtDebug( "dock is already open and visible" );
     return;
@@ -145,19 +96,11 @@ void EgtGpsPlugin::run( )
 
   EgtDebug( "dock is already open but not visible" );
 
-  cvMainWidget.move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
-  cvMainWidget.show( );
+  cvDisplayWidget.move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
+  cvDisplayWidget.show( );
   EgtDebug( "done" );
 }
 
 
-
-/*
- *
- * PRIVATE FUNCTIONS
- *
- */
-
-
- Q_EXPORT_PLUGIN2( gpsplugin, EgtGpsPlugin );
+Q_EXPORT_PLUGIN2( gpsplugin, EgtGpsPlugin );
 

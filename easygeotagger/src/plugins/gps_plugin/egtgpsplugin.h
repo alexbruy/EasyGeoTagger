@@ -24,10 +24,10 @@
 #ifndef EGTGPSPLUGIN_H
 #define EGTGPSPLUGIN_H
 
-#include "egtgpsdatatablewidget.h"
+#include "egtapplicationinterface.h"
 #include "egtplugininterface.h"
-#include "egtfilereader.h"
-#include "egtreaderfactory.h"
+
+#include "egtgpsdisplaywidget.h"
 
 class EgtGpsPlugin: public EgtPluginInterface
 {
@@ -60,36 +60,11 @@ class EgtGpsPlugin: public EgtPluginInterface
     /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel( ) { }
 
-  private slots:
-
-    /*! \brief Slot called to open a gps file */
-    void cvOpenFile_clicked( );
-    
-    /*! \brief Slot called to tag a picture */
-    void cvTagButton_clicked( );
-    
-    /*! \brief Slot called to set the file reader object to be used */
-    void fileReader_set( EgtFileReader* );
-  signals:
-    /*! \brief Slot called to tag a picture */
-    void keyValuePair( QString, QString );
 
   private:
+    EgtGpsDisplayWidget cvDisplayWidget;
 
-    /*! \brief Instance of the data table which contains the gps data */
-    EgtGpsDataTableWidget* cvDataTable; 
 
-    /*! \brief The main dock window that forms the base for the visual component of this plugin */
-    QWidget cvMainWidget;
-
-    /*! \brief Push button to open a file */
-    QPushButton cvOpenFileButton;
-
-    /*! \brief Instance of the reader factory */
-    EgtReaderFactory cvReaderFactory;
-
-    /*! \brief Push button to tag a picture */
-    QPushButton cvTagButton;
 };
 #endif
 

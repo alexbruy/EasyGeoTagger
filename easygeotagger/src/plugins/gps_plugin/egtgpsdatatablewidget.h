@@ -66,6 +66,8 @@ class EgtGpsDataTableWidget : public QTableWidget
     void cvVerticalHeader_clicked( int );
 
     void on_pbtnOk_clicked( );
+  signals:
+    void timeStampSelected();
 
   private:
     
