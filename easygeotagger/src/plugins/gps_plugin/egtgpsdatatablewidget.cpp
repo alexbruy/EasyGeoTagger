@@ -118,6 +118,7 @@ void EgtGpsDataTableWidget::populateTable( )
        setItem( i, j, lvNewItem );
     }
   }
+  emit timeStampSelected(false);
 }
 
 
@@ -167,6 +168,31 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
       QString lvText;
       lvHeaderItem = horizontalHeaderItem ( lvColumnCount );
       lvText = lvHeaderItem->text( );
+      if( lvText == "TimeStamp" )
+      {  
+         QString lvContent = item( theIndex, lvColumnCount )->text( );
+         //Format checking of the timestamp
+        if( lvContent.size() != 8 )
+        {
+          QMessageBox::critical( this, tr( "Error" ),tr( "The timestamp has an incorrect format" ),QMessageBox::Ok );
+          emit timeStampSelected(false);
+          return;
+        }
+        bool lvExpectedFormat = true;
+        lvExpectedFormat = lvExpectedFormat && ':' == lvContent[2];
+        lvExpectedFormat = lvExpectedFormat && ':' == lvContent[5];
+
+        for( int lvIterator = 0; lvIterator < lvContent.size( ); lvIterator++ )
+        {
+          if( !lvContent[ lvIterator ].isNumber( ) && ':' != lvContent[ lvIterator ] )
+          {
+            QMessageBox::critical( this, tr( "Error" ),tr( "The timestamp has an incorrect format" ),QMessageBox::Ok );
+            emit timeStampSelected(false);
+            return;
+          }
+        }
+        //format checking end
+      }
 
       bool ok;
       lvText.toInt( &ok ); 
@@ -191,13 +217,18 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
     cvHeadersThatAreSet<<cvColumnSelected;
     if( "TimeStamp" == lvSelectedItem )
     {
-      emit timeStampSelected();
+      emit timeStampSelected(true);
     }
   }
   else
   {
     lvSelectedItem = QString::number( cvColumnSelected +1 );
     cvHeadersThatAreSet.removeAll( cvColumnSelected );
+  }
+
+  if( cvUiColumnMeaning.cbFields->itemText( cvUiColumnMeaning.cbFields->count()-1 ) == "TimeStamp" && lvSelectedItem != "TimeStamp" )
+  {//We don't have a timestamp anymore
+    emit timeStampSelected(false);
   }
   //Deleting the previous header
   QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( cvColumnSelected );
