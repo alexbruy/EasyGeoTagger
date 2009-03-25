@@ -35,7 +35,6 @@ EgtGpsPlugin::EgtGpsPlugin( )
   cvCategories = QObject::tr( "Coordinate Extraction" );
   cvDescription = QObject::tr( "Reads data from GPS files" );
   cvName = QObject::tr( "GPS Reader" );
- 
 
 
 }
@@ -103,4 +102,5 @@ void EgtGpsPlugin::run( )
 
 
 Q_EXPORT_PLUGIN2( gpsplugin, EgtGpsPlugin );
+
 

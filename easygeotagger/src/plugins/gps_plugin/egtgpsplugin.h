@@ -68,3 +68,4 @@ class EgtGpsPlugin: public EgtPluginInterface
 };
 #endif
 
+

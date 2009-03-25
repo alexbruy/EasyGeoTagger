@@ -1,0 +1,211 @@
+<ui version="4.0" >
+ <class>EgtSynchronizeDialog</class>
+ <widget class="QDialog" name="EgtSynchronizeDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>477</width>
+    <height>580</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Synchronize</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="2" column="0" colspan="3" >
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="minimumSize" >
+      <size>
+       <width>311</width>
+       <height>61</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>311</width>
+       <height>61</height>
+      </size>
+     </property>
+     <property name="title" >
+      <string>Offset</string>
+     </property>
+     <widget class="QSpinBox" name="sbHours" >
+      <property name="geometry" >
+       <rect>
+        <x>60</x>
+        <y>30</y>
+        <width>54</width>
+        <height>23</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="sbMinutes" >
+      <property name="geometry" >
+       <rect>
+        <x>150</x>
+        <y>30</y>
+        <width>54</width>
+        <height>23</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="sbSeconds" >
+      <property name="geometry" >
+       <rect>
+        <x>240</x>
+        <y>30</y>
+        <width>54</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label" >
+      <property name="geometry" >
+       <rect>
+        <x>210</x>
+        <y>30</y>
+        <width>26</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Sec.</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2" >
+      <property name="geometry" >
+       <rect>
+        <x>120</x>
+        <y>30</y>
+        <width>26</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Min.</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3" >
+      <property name="geometry" >
+       <rect>
+        <x>30</x>
+        <y>30</y>
+        <width>26</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Hrs.</string>
+      </property>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="3" >
+    <widget class="QGroupBox" name="groupBoxPreview" >
+     <property name="minimumSize" >
+      <size>
+       <width>459</width>
+       <height>460</height>
+      </size>
+     </property>
+     <property name="title" >
+      <string>Image Preview</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2" >
+      <item row="0" column="0" colspan="2" >
+       <widget class="QLabel" name="labelPreview" >
+        <property name="maximumSize" >
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Image preview</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="labelInfoTimeStamp" >
+        <property name="maximumSize" >
+         <size>
+          <width>81</width>
+          <height>191</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>Date &amp; Time:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QLabel" name="labelTimeStamp" >
+        <property name="maximumSize" >
+         <size>
+          <width>200</width>
+          <height>17</height>
+         </size>
+        </property>
+        <property name="text" >
+         <string>aaaass</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+     <zorder>labelPreview</zorder>
+     <zorder>labelTimeStamp</zorder>
+     <zorder>labelInfoTimeStamp</zorder>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>EgtSynchronizeDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>EgtSynchronizeDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

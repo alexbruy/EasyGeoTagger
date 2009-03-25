@@ -170,7 +170,7 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
       lvText = lvHeaderItem->text( );
       if( lvText == "TimeStamp" )
       {  
-         QString lvContent = item( theIndex, lvColumnCount )->text( );
+         QString lvContent = item( theIndex, lvColumnCount )->text();
          //Format checking of the timestamp
         if( lvContent.size() != 8 )
         {

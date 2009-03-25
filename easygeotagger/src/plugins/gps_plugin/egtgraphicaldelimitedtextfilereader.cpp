@@ -62,13 +62,11 @@ void EgtGraphicalDelimitedTextFileReader::selectDelimiter( )
       lvParent = lvActiveWindows[i];
     }
   }
-;
+
   QPoint lvPosition = lvParent->pos( );
   //center the window over the parent
   cvSelectDelimiterDialog.move( lvPosition.x( ) + lvParent->width( )/2 - cvSelectDelimiterDialog.width( )/2, lvPosition.y( ) + lvParent->height( )/2 - cvSelectDelimiterDialog.height( )/2 );
-
   cvSelectDelimiterDialog.show( );
-
 }
 
 void EgtGraphicalDelimitedTextFileReader::init( ) //init function
