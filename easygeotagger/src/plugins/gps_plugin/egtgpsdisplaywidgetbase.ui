@@ -1,3 +1,4 @@
+<<<<<<< .working
 <ui version="4.0" >
  <class>EgtGpsDisplayWidgetBase</class>
  <widget class="QWidget" name="EgtGpsDisplayWidgetBase" >
@@ -148,3 +149,203 @@
  <resources/>
  <connections/>
 </ui>
+=======
+<ui version="4.0" >
+ <class>EgtGpsDisplayWidgetBase</class>
+ <widget class="QWidget" name="EgtGpsDisplayWidgetBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>431</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>GPS Reader</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item rowspan="3" row="0" column="0" colspan="3" >
+    <widget class="QWidget" native="1" name="widgetTable" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>381</width>
+       <height>221</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3" >
+    <widget class="QPushButton" name="pbtnOpenFile" >
+     <property name="minimumSize" >
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="focusPolicy" >
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="toolTip" >
+      <string>Open File</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="icon" >
+      <iconset resource="../../app/app.qrc" >
+       <normaloff>:/icons/document-open.svg</normaloff>:/icons/document-open.svg</iconset>
+     </property>
+     <property name="iconSize" >
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>154</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="3" >
+    <widget class="QPushButton" name="pbtnDeleteRow" >
+     <property name="minimumSize" >
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="focusPolicy" >
+      <enum>Qt::ClickFocus</enum>
+     </property>
+     <property name="toolTip" >
+      <string comment="Delete Row" >Delete Row</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="icon" >
+      <iconset resource="../../app/app.qrc" >
+       <normaloff>:/icons/process-stop.svg</normaloff>:/icons/process-stop.svg</iconset>
+     </property>
+     <property name="iconSize" >
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="3" column="0" >
+    <widget class="QGroupBox" name="gbTimeOffset" >
+     <property name="maximumSize" >
+      <size>
+       <width>1000</width>
+       <height>1000</height>
+      </size>
+     </property>
+     <property name="title" >
+      <string>Set Time Offset</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout" >
+      <property name="spacing" >
+       <number>5</number>
+      </property>
+      <property name="leftMargin" >
+       <number>5</number>
+      </property>
+      <property name="topMargin" >
+       <number>2</number>
+      </property>
+      <property name="rightMargin" >
+       <number>5</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="pbtnOffsetPic" >
+        <property name="text" >
+         <string>With Picture</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbtnOffsetManual" >
+        <property name="text" >
+         <string>Manual</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item rowspan="2" row="3" column="3" >
+    <spacer name="verticalSpacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>23</width>
+       <height>52</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="1" >
+    <spacer name="horizontalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>59</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="2" >
+    <widget class="QPushButton" name="pbtnSendCoordinates" >
+     <property name="text" >
+      <string>Send Data to Editor</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../app/app.qrc" />
+ </resources>
+ <connections/>
+</ui>
+>>>>>>> .merge-right.r262

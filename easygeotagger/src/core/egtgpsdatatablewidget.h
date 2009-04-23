@@ -26,9 +26,9 @@
 
 #include "egtfilereader.h"
 
-#include "egtdelimitedtextfilereader.h"
-#include "egtgraphicaldelimitedtextfilereader.h"
-#include "ui_columnmeaningdialog.h"
+//#include "egtdelimitedtextfilereader.h"
+//#include "egtgraphicaldelimitedtextfilereader.h"
+#include "ui_egtkeyselectiondialog.h"
 
 
 #include <QTableWidget>
@@ -51,6 +51,8 @@ class EgtGpsDataTableWidget : public QTableWidget
 
   public slots:
 
+    void deleteRow();
+
     /*! \brief Slot used to set the specific file reader */
     void setFileReader( EgtFileReader* );
 
@@ -65,10 +67,16 @@ class EgtGpsDataTableWidget : public QTableWidget
     /*! \brief Slot used when the vertical header is clicked */
     void cvVerticalHeader_clicked( int );
 
+    
+    /*! \brief Slot used when the user sets the header of a column */
     void on_pbtnOk_clicked( );
+
+    void popUpMenu( QPoint );
   signals:
 
     void timeStampSelected( bool );
+   
+    void rowSelected( bool );
 
   private:
     
@@ -86,7 +94,7 @@ class EgtGpsDataTableWidget : public QTableWidget
 
     /*! \brief Indicates if all the headers are set */
     bool cvHeadersAreSet;
-
+int cvSelectedRow;
     /*! \brief A QList with all the headers that are set so far */
     QList<int> cvHeadersThatAreSet;
 
@@ -97,7 +105,7 @@ class EgtGpsDataTableWidget : public QTableWidget
     QMap<QString,QString> * cvMapItems;
 
     /*! \brief QDesigner object of the dialog with the available fields*/
-    Ui::ColumnMeaningDialog cvUiColumnMeaning;
+    Ui::EgtKeySelectionDialog cvUiKeySelectionDialog;
 
     /*! \brief Pointer to the vertical header */
     QHeaderView *  cvVerticalHeader;
@@ -106,5 +114,6 @@ class EgtGpsDataTableWidget : public QTableWidget
     void populateTable( );
 
 };
+
 #endif
 

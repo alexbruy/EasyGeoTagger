@@ -35,8 +35,11 @@ EgtGpsPlugin::EgtGpsPlugin( )
   cvCategories = QObject::tr( "Coordinate Extraction" );
   cvDescription = QObject::tr( "Reads data from GPS files" );
   cvName = QObject::tr( "GPS Reader" );
+<<<<<<< .working
 
 
+=======
+>>>>>>> .merge-right.r262
 }
 
 /*
@@ -46,7 +49,7 @@ EgtGpsPlugin::EgtGpsPlugin( )
  */
 
 /*!
- * \param theButton pointer to a QPushButton that is to be connect to the  showConfigureationPanel slot
+ * \param theButton pointer to a QPushButton that is to be connect to the  showConfigurationPanel slot
  */
 void EgtGpsPlugin::connectConfigurationButton( QPushButton* theButton )
 {
@@ -69,10 +72,16 @@ void EgtGpsPlugin::initPlugin( )
     cvDisplayWidget.setVisible( false );
 
     //connect to application interface
+<<<<<<< .working
     connect( &cvDisplayWidget, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
 
 
 cvDisplayWidget.setApplicationInterface( cvApplicationInterface );
+=======
+    connect( &cvDisplayWidget, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
+
+    cvDisplayWidget.setApplicationInterface( cvApplicationInterface );
+>>>>>>> .merge-right.r262
   }
 }
 

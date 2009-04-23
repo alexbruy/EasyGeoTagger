@@ -24,6 +24,8 @@ SET( EGT_INSTALL_HDRS
      core/egtpathbuilder.h
      core/egtphotoexifengine.h
      core/egtrawimagereader.h
+     core/egtfilereader.h
+     core/egtgpsdatatablewidget.h
 
    )
 
@@ -34,11 +36,16 @@ SET( EGT_CORE_SRCS
      core/egtpathbuilder.cpp
      core/egtphotoexifengine.cpp
      core/egtrawimagereader.cpp
+     core/egtdelimitedtextfilereader.cpp
+     core/egtgpsdatatablewidget.cpp
    )
 
 SET( EGT_CORE_MOC_HDRS
      core/egtimagefactory.h
      core/egtrawimagereader.h
+     core/egtdelimitedtextfilereader.h
+     core/egtfilereader.h
+     core/egtgpsdatatablewidget.h
    )
 
 SET( EGT_APP_SRCS

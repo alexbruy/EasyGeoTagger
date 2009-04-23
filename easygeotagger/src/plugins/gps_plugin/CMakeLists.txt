@@ -14,8 +14,6 @@ INCLUDE_DIRECTORIES(
 
 SET( GPS_PLUGIN_SRCS
     egtgpsplugin.cpp
-    egtgpsdatatablewidget.cpp
-    egtdelimitedtextfilereader.cpp
     egtgraphicaldelimitedtextfilereader.cpp
     egtreaderfactory.cpp
     egtgpsdisplaywidget.cpp
@@ -25,18 +23,17 @@ SET( GPS_PLUGIN_SRCS
 
 SET( GPS_PLUGIN_MOC_HDRS
     egtgpsplugin.h
-    egtgpsdatatablewidget.h
     egtreaderfactory.h
-    egtdelimitedtextfilereader.h
     egtgraphicaldelimitedtextfilereader.h
-    egtfilereader.h
+    egtgpsdisplaywidget.h
     egtgpsdisplaywidget.h
    )
 
 SET( GPS_PLUGIN_UIS
     filetypedialog.ui
     textdelimiter.ui
-    columnmeaningdialog.ui
+    egtgpsdisplaywidgetbase.ui
+    egtsynchronize.ui
     egtgpsdisplaywidgetbase.ui
     egtsynchronize.ui
    )
