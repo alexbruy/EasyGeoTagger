@@ -57,7 +57,7 @@ void EgtGraphicalDelimitedTextFileReader::selectDelimiter( )
 
   for( int i = 0; i < lvActiveWindows.size( ); i++ )
   {
-    if( tr( "Gps Reader" ) == lvActiveWindows[i]->windowTitle( ) )
+    if( tr( "GPS Reader" ) == lvActiveWindows[i]->windowTitle( ) )
     {
       lvParent = lvActiveWindows[i];
     }

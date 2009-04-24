@@ -26,14 +26,11 @@ SET( GPS_PLUGIN_MOC_HDRS
     egtreaderfactory.h
     egtgraphicaldelimitedtextfilereader.h
     egtgpsdisplaywidget.h
-    egtgpsdisplaywidget.h
    )
 
 SET( GPS_PLUGIN_UIS
     filetypedialog.ui
     textdelimiter.ui
-    egtgpsdisplaywidgetbase.ui
-    egtsynchronize.ui
     egtgpsdisplaywidgetbase.ui
     egtsynchronize.ui
    )
