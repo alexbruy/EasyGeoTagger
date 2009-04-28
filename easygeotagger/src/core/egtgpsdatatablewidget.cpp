@@ -33,7 +33,7 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 
   cvAvailableFields<<"( clear )"<<"Altitude"<<"DateTimeStamp"<<"Latitude"<<"Longitude";
 
-  cvFileReader = 0;
+  cvDataProvider = 0;
   cvColumnSelected = 0;
   cvHeadersAreSet = false;
 
@@ -86,28 +86,33 @@ bool EgtGpsDataTableWidget::isThereAnyColumnSet( )
 
 void EgtGpsDataTableWidget::populateTable( )
 {
-  cvHeadersThatAreSet.clear( );
-  QList<QStringList> lvDataFile = cvFileReader->read( );
+  clear();
+  setRowCount( 0 );
+  setColumnCount( 0 );
 
-  setRowCount( lvDataFile.size( ) );
-  setColumnCount( lvDataFile[0].size( ) );
-  /*Set up the combo box*/
-  cvUiKeySelectionDialog.cbFields->clear( );
-  cvUiKeySelectionDialog.cbFields->insertItems( 0,cvAvailableFields );
   /*Reset the Qlist that contains which headers are set*/
   cvHeadersThatAreSet.clear( );
 
-  if( cvFileReader->hasColumnHeaders( ) ) 
+  if( cvDataProvider == 0 || cvDataProvider->numberOfRecords( ) == 0 || cvDataProvider->numberOfFields( ) == 0 ) { return; }
+  cvDataProvider->reset();
+  setRowCount( cvDataProvider->numberOfRecords( ) );
+  setColumnCount( cvDataProvider->numberOfFields( ) );
+
+  /*Set up the combo box*/
+  cvUiKeySelectionDialog.cbFields->clear( );
+  cvUiKeySelectionDialog.cbFields->insertItems( 0,cvAvailableFields );
+
+  if( cvDataProvider->hasColumnHeaders( ) )
   {
     QStringList lvTags;
-    lvTags = cvFileReader->columnHeaders( );
+    lvTags = cvDataProvider->columnHeaders( );
     setHorizontalHeaderLabels( lvTags );
   }
   else
   {
     QStringList lvDefaultHeader;
  
-    for( int i = 0; i< lvDataFile[0].size( ); i++ )
+    for( int i = 0; i< cvDataProvider->numberOfFields( ); i++ )
     {
       lvDefaultHeader << QString::number( i+1 );
     }
@@ -115,11 +120,13 @@ void EgtGpsDataTableWidget::populateTable( )
     setHorizontalHeaderLabels( lvDefaultHeader );
   }
 
-  for( int i = 0; i < lvDataFile.size( ); i++ )
+  for( int i = 0; i < cvDataProvider->numberOfRecords( ); i++ )
   {
-    for( int j = 0; j < lvDataFile[0].size( ); j++ )
+    QStringList cvRowData = cvDataProvider->next();
+
+    for( int j = 0; j < cvRowData.size( ); j++ )
     {
-      QTableWidgetItem *lvNewItem = new QTableWidgetItem( lvDataFile.at( i ).at( j ) );
+      QTableWidgetItem *lvNewItem = new QTableWidgetItem( cvRowData.at( j ) );
        setItem( i, j, lvNewItem );
     }
   }
@@ -241,10 +248,10 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
   }
   else
   {
-    if( cvFileReader->hasColumnHeaders( ) ) 
+    if( cvDataProvider->hasColumnHeaders( ) )
     {//revert to the original header
       QStringList lvTags;
-      lvTags = cvFileReader->columnHeaders( );
+      lvTags = cvDataProvider->columnHeaders( );
       lvSelectedItem = lvTags.at( cvColumnSelected );
     }
     else
@@ -283,12 +290,12 @@ void EgtGpsDataTableWidget::popUpMenu(QPoint theCoordinates)
   menu.exec(mapToGlobal(theCoordinates));
 }
 
-void EgtGpsDataTableWidget::setFileReader( EgtFileReader* theFileReader )
+void EgtGpsDataTableWidget::setProvider( EgtDataProvider* theProvider )
 {
-  if( 0 != cvFileReader ) { delete cvFileReader; }
+  if( 0 != cvDataProvider ) { delete cvDataProvider; }
 
-  cvFileReader = theFileReader;
-  cvHeadersAreSet = cvFileReader->hasColumnHeaders( );
+  cvDataProvider = theProvider;
+  cvHeadersAreSet = cvDataProvider->hasColumnHeaders( );
 
   populateTable( );
 }

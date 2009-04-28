@@ -1,6 +1,6 @@
 /*
-** File: egtfilereader.h
-** Author( s ): Roberto Garcia Yunta
+** File: egtdataprovider.h
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts@amnh.org )
 ** Creation Date: 2008-12-19
 **
 ** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
@@ -21,27 +21,59 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTFILEREADER_H
-#define EGTFILEREADER_H
+#ifndef EGTDATAPROVIDER_H
+#define EGTDATAPROVIDER_H
 
 #include <QStringList>
 
-class EgtFileReader: public QObject
+class EgtDataProvider : public QObject
 {
   Q_OBJECT
+
   public:
+    enum ErrorType
+    {
+      None,
+      Warning,
+      Fatal
+    };
+
+    EgtDataProvider();
 
     /*! \brief Function that returns the column headers*/
-    virtual QStringList columnHeaders( ) = 0;
+    QStringList columnHeaders( );
 
     /*! \brief Returns whether the file has column headers or not */
-    virtual bool hasColumnHeaders( ) = 0;
+    bool hasColumnHeaders( );
 
-    virtual void init( ) = 0;
+    virtual void init() = 0;
 
-    /*! \brief Function used to read a gps file */
-    virtual QList<QStringList> read( bool* isValid = 0 ) = 0;
-   
+    QStringList next();
+
+    int numberOfFields( );
+
+    int numberOfRecords();
+
+    QStringList previous();
+
+    void reset();
+
+  protected:
+    virtual EgtDataProvider::ErrorType read( ) = 0;
+
+
+    /*! \brief Contains the headers from the file */
+    QStringList cvColumnHeaders;
+
+    int cvCurrentRecord;
+
+    QList< QStringList > cvData;
+
+    /*! \brief Indicates if the file has a header */
+    bool cvHasColumnHeaders;
+
+    int cvNumberOfFields;
+
    
 };
 #endif

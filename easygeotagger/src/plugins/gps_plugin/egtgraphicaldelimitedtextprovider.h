@@ -1,5 +1,5 @@
 /*
-** File: egtgraphicaldelimitedtextfilereader.h
+** File: egtgraphicaldelimitedtextprovider.h
 ** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
@@ -21,19 +21,19 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTGRAPHICALDELIMITEDTEXFILEREADER_H
-#define EGTGRAPHICALDELIMITEDTEXFILEREADER_H
+#ifndef EGTGRAPHICALDELIMITEDTEXPROVIDER_H
+#define EGTGRAPHICALDELIMITEDTEXPROVIDER_H
 
-#include "egtdelimitedtextfilereader.h"
+#include "egtdelimitedtextprovider.h"
 #include "ui_textdelimiter.h"
 
-class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
+class EgtGraphicalDelimitedTextProvider: public EgtDelimitedTextProvider
 {
   Q_OBJECT
 
   public:
     /*! \brief Constuctor */ 
-    EgtGraphicalDelimitedTextFileReader( );
+    EgtGraphicalDelimitedTextProvider( );
 
     /*! \brief Selects the character that will be considered as delimiter when reading a text file */
     void selectDelimiter( );
@@ -66,9 +66,6 @@ class EgtGraphicalDelimitedTextFileReader: public EgtDelimitedTextFileReader
 
     /*! \brief Text edit where the user specifies the delimiter*/
     QTextEdit* cvDelimiterText;
-
-    /*! \brief QList that contains the data from the file to be read*/
-    QList<QStringList> cvFileData;
 
     /*! \brief QDesigner object*/
     Ui::TextDelimiterDialog cvUiTextDelimiter;

@@ -1,5 +1,5 @@
 /*
-** File: egtreaderfactory.cpp
+** File: egtproviderfactory.cpp
 ** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
@@ -21,23 +21,21 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#include "egtreaderfactory.h"
+#include "egtproviderfactory.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QApplication>
 
-EgtReaderFactory::EgtReaderFactory( )
+EgtProviderFactory::EgtProviderFactory( )
 {
-  cvFileReader = 0;
+  cvDataProvider = 0;
 
   cvUiFileType.setupUi( &cvFileTypeDialog );
   cvFileTypeDialog.setWindowIcon( QIcon( ":/icons/document-open.svg" ) );
 
   connect( cvUiFileType.buttonBox, SIGNAL( accepted( ) ), this, SLOT( accept( ) ) );
   connect( cvUiFileType.buttonBox, SIGNAL( rejected( ) ), this, SLOT( reject( ) ) );
-  connect( cvUiFileType.rbDelimitedText, SIGNAL( toggled( bool ) ), this, SLOT( on_rbDelimitedText_toggled( bool ) ) );
-  connect( cvUiFileType.rbGPSFile, SIGNAL( toggled( bool ) ), this, SLOT( on_rbGPSFile_toggled( bool ) ) );
 }
 
 /*
@@ -46,7 +44,7 @@ EgtReaderFactory::EgtReaderFactory( )
  *
  */
 
-void EgtReaderFactory::show( )
+void EgtProviderFactory::show( )
 {
   QWidget* lvActiveWindow = QApplication::activeWindow ( );
   QPoint lvPosition = lvActiveWindow->pos( );
@@ -60,17 +58,17 @@ void EgtReaderFactory::show( )
  * SIGNAL and SLOTS
  *
  */
-void EgtReaderFactory::accept( )
+void EgtProviderFactory::accept( )
 { 
   cvFileTypeDialog.setVisible( false );
   if( cvUiFileType.rbDelimitedText ->isChecked( ) )
   {
-    cvFileReader = new EgtGraphicalDelimitedTextFileReader( );
+    cvDataProvider = new EgtGraphicalDelimitedTextProvider( );
   }
   else if( cvUiFileType.rbGPSFile ->isChecked( ) )
   {
     //Nothing so far
-    cvFileReader = new EgtGraphicalDelimitedTextFileReader( );
+    cvDataProvider = new EgtGraphicalDelimitedTextProvider( );
   }
   else
   {
@@ -79,29 +77,17 @@ void EgtReaderFactory::accept( )
     return;
   }
   
-  connect( cvFileReader, SIGNAL( initializationComplete( ) ), this, SLOT( fileReaderInitialized( ) ) );
-  cvFileReader->init( );
+  connect( cvDataProvider, SIGNAL( initializationComplete( ) ), this, SLOT( dataProviderInitialized( ) ) );
+  cvDataProvider->init( );
 }
 
-void EgtReaderFactory::fileReaderInitialized( )
+void EgtProviderFactory::dataProviderInitialized( )
 {
-  emit( fileReaderCreated( cvFileReader ) );
-}
-
-void EgtReaderFactory::on_rbDelimitedText_toggled( bool theChange )
-{
-/*if( theChange )
-qDebug( "delimited text activated" );*/
-}
-
-void EgtReaderFactory::on_rbGPSFile_toggled( bool theChange )
-{
-/*if( theChange )
-qDebug( "gps activated" );*/
+  emit( dataProviderCreated( cvDataProvider ) );
 }
 
 
-void EgtReaderFactory::reject( )
+void EgtProviderFactory::reject( )
 {
   cvFileTypeDialog.setVisible( false );
 }

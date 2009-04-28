@@ -25,8 +25,8 @@
 #define EGTGPSDISPLAYWIDGET_H
 
 #include "ui_egtsynchronize.h"
-#include "egtfilereader.h"
-#include "egtreaderfactory.h"
+#include "egtdataprovider.h"
+#include "egtproviderfactory.h"
 #include "egtgpsdatatablewidget.h"
 #include "egtapplicationinterface.h"
 #include "egtimagefactory.h"
@@ -73,9 +73,6 @@ class EgtGpsDisplayWidget : public QWidget
     /*! \brief Slot called when the user clicks on the file browser */
     void clicked( const QModelIndex& );
 
-    /*! \brief Slot called to set the file reader object to be used */
-    void fileReader_set( EgtFileReader* );
-
     /*! \brief Slot called to open a gps file */
     void openFile( );
 
@@ -84,6 +81,9 @@ class EgtGpsDisplayWidget : public QWidget
     
     /*! \brief Slot called to tag a picture */
     void sendCoordinates( );
+
+    /*! \brief Slot called to set the data provider */
+    void setDataProvider( EgtDataProvider* );
 
     /*! \brief Slot used to enable/disable the "Send to editor" button and "delete row" button */
     void setSendToEditorButton( bool );
@@ -115,8 +115,8 @@ class EgtGpsDisplayWidget : public QWidget
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
      QWidget cvMainWidget;
 
-    /*! \brief Instance of the reader factory */
-    EgtReaderFactory cvReaderFactory;
+    /*! \brief Instance of the provider factory */
+    EgtProviderFactory cvProviderFactory;
     
     /*! \brief Object used to show the picture preview */
     EgtImageFactory cvImageFactory;

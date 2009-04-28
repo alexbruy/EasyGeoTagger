@@ -68,7 +68,7 @@ EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent )
   connect( ui->pbtnOpenFile, SIGNAL( clicked( ) ), this, SLOT( openFile( ) ) );
   connect( ui->pbtnOffsetManual, SIGNAL( clicked( ) ), this, SLOT( setOffset( ) ) );
   connect( ui->pbtnOffsetPic, SIGNAL( clicked( ) ), this, SLOT( setOffsetPic( ) ) );
-  connect( &cvReaderFactory, SIGNAL( fileReaderCreated( EgtFileReader* ) ),this, SLOT( fileReader_set( EgtFileReader* ) ) );
+  connect( &cvProviderFactory, SIGNAL( dataProviderCreated( EgtDataProvider* ) ),this, SLOT( setDataProvider( EgtDataProvider* ) ) );
   connect( cvSynchronizeUi->buttonBox, SIGNAL( accepted() ),this, SLOT( accepted() ) );
   connect( &cvImageFactory, SIGNAL( imageLoaded( bool ) ), this, SLOT( updatePreview( bool ) ) );
   connect( cvDataTable, SIGNAL( timeStampSelected( bool ) ), this, SLOT( setSynchronizing(bool) ) );
@@ -170,17 +170,9 @@ void EgtGpsDisplayWidget::clicked( const QModelIndex& theIndex )
   if( cvSynchronizeUi->groupBoxOffset->isEnabled() ){ updateOffset(); } //only necessary if syncrhonizing with pic
 }
 
-/*!
- * \param theFileReader Pointer to the actual file reader
- */
-void EgtGpsDisplayWidget::fileReader_set( EgtFileReader* theFileReader )
-{
-  cvDataTable->setFileReader( theFileReader );
-}
-
 void EgtGpsDisplayWidget::openFile( )
 {
-  cvReaderFactory.show( );
+  cvProviderFactory.show( );
 }
 
 void EgtGpsDisplayWidget::openPic()
@@ -284,6 +276,14 @@ void EgtGpsDisplayWidget::sendCoordinates( )
     QMessageBox::critical( cvDataTable, tr( "Error" ),tr( "At least one header must be set" ),QMessageBox::Ok );
   }
 
+}
+
+/*!
+ * \param theProvider Pointer to the actual data provider
+ */
+void EgtGpsDisplayWidget::setDataProvider( EgtDataProvider* theProvider )
+{
+  cvDataTable->setProvider( theProvider );
 }
 
 void EgtGpsDisplayWidget::setOffset()

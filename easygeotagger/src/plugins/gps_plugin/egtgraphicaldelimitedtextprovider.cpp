@@ -1,5 +1,5 @@
 /*
-** File: egtgraphicaldelimitedtextfilereader.cpp
+** File: egtgraphicaldelimitedtextprovider.cpp
 ** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
@@ -21,7 +21,7 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#include "egtgraphicaldelimitedtextfilereader.h"
+#include "egtgraphicaldelimitedtextprovider.h"
 
 
 #include <QVBoxLayout>
@@ -29,7 +29,7 @@
 #include <QMessageBox>
 #include <QApplication>
 
-EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader( ):EgtDelimitedTextFileReader( )
+EgtGraphicalDelimitedTextProvider::EgtGraphicalDelimitedTextProvider( ) : EgtDelimitedTextProvider( )
 {
   cvUiTextDelimiter.setupUi( &cvSelectDelimiterDialog );
   cvSelectDelimiterDialog.setWindowIcon( QIcon( ":/icons/EasyGT.svg" ) );
@@ -50,7 +50,7 @@ EgtGraphicalDelimitedTextFileReader::EgtGraphicalDelimitedTextFileReader( ):EgtD
  *
  */
 
-void EgtGraphicalDelimitedTextFileReader::selectDelimiter( )
+void EgtGraphicalDelimitedTextProvider::selectDelimiter( )
 {
   QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
   QWidget* lvParent = 0;
@@ -69,7 +69,7 @@ void EgtGraphicalDelimitedTextFileReader::selectDelimiter( )
   cvSelectDelimiterDialog.show( );
 }
 
-void EgtGraphicalDelimitedTextFileReader::init( ) //init function
+void EgtGraphicalDelimitedTextProvider::init( ) //init function
 {
   QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
   QWidget* lvParent = 0;
@@ -97,29 +97,29 @@ void EgtGraphicalDelimitedTextFileReader::init( ) //init function
  *
  */
 
-void EgtGraphicalDelimitedTextFileReader::on_cbHeader_changed( )
+void EgtGraphicalDelimitedTextProvider::on_cbHeader_changed( )
 {
   cvHasColumnHeaders = cvUiTextDelimiter.cbHeader->isChecked( );
-  emit delimiterChanged( );
+  delimiterChanged( );
 }
 
-void EgtGraphicalDelimitedTextFileReader::on_leCustom_changed( )
+void EgtGraphicalDelimitedTextProvider::on_leCustom_changed( )
 {
   if( cvUiTextDelimiter.rbtnCustom->isChecked( ) )
   {
     setDelimiter( cvUiTextDelimiter.leCustom->text( ) );
-    emit delimiterChanged( );
+    delimiterChanged( );
   }
 }
 
-void EgtGraphicalDelimitedTextFileReader::reject( )
+void EgtGraphicalDelimitedTextProvider::reject( )
 {
   cvSelectDelimiterDialog.close( );
 }
 
-void EgtGraphicalDelimitedTextFileReader::accept( )
+void EgtGraphicalDelimitedTextProvider::accept( )
 {
-  if( 0 == cvFileData.size( ) )
+  if( 0 == cvData.size( ) )
   {
     QMessageBox::critical( &cvSelectDelimiterDialog, tr( "Error" ),tr( "You must have a valid file" ),QMessageBox::Ok );
   }
@@ -130,7 +130,7 @@ void EgtGraphicalDelimitedTextFileReader::accept( )
   }
 }
 
-void EgtGraphicalDelimitedTextFileReader::on_rbtnBlank_toggled( bool theValue )
+void EgtGraphicalDelimitedTextProvider::on_rbtnBlank_toggled( bool theValue )
 {
   if( theValue )
   {
@@ -139,7 +139,7 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnBlank_toggled( bool theValue )
   }
 }
 
-void EgtGraphicalDelimitedTextFileReader::on_rbtnComma_toggled( bool theValue )
+void EgtGraphicalDelimitedTextProvider::on_rbtnComma_toggled( bool theValue )
 {
   if( theValue )
   {
@@ -148,7 +148,7 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnComma_toggled( bool theValue )
   }
 }
 
-void EgtGraphicalDelimitedTextFileReader::on_rbtnCustom_toggled( bool theValue )
+void EgtGraphicalDelimitedTextProvider::on_rbtnCustom_toggled( bool theValue )
 {
   if( theValue )
   {
@@ -157,7 +157,7 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnCustom_toggled( bool theValue )
   }
 }
 
-void EgtGraphicalDelimitedTextFileReader::on_rbtnPipe_toggled( bool theValue )
+void EgtGraphicalDelimitedTextProvider::on_rbtnPipe_toggled( bool theValue )
 {
   if( theValue )
   {
@@ -172,9 +172,10 @@ void EgtGraphicalDelimitedTextFileReader::on_rbtnPipe_toggled( bool theValue )
  *
  */
 
-void EgtGraphicalDelimitedTextFileReader::delimiterChanged( )
+void EgtGraphicalDelimitedTextProvider::delimiterChanged( )
 {
-  cvFileData = read( );
+
+  reload();
 
   if( !cvLastError.isEmpty( ) )
   {
@@ -185,7 +186,7 @@ void EgtGraphicalDelimitedTextFileReader::delimiterChanged( )
   QString lvHTML = "<table border = \"1\" cellspacing = \"0\" cellpadding = \"0\" ";
   lvHTML += "width = \"100%\">";
 
-  int lvNumRows = ( cvFileData.size( ) > 3 )? 3: cvFileData.size( ); // We just show up to 3 rows
+  int lvNumRows = ( cvData.size( ) > 3 )? 3: cvData.size( ); // We just show up to 3 rows
    
   if( hasColumnHeaders( ) )
   {
@@ -201,9 +202,9 @@ void EgtGraphicalDelimitedTextFileReader::delimiterChanged( )
   for( int i = 0; i < lvNumRows; i++ )
   {
     lvHTML += "<tr>";
-    for( int j = 0; j < cvFileData[0].size( ); j++ )
+    for( int j = 0; j < cvData[0].size( ); j++ )
     {
-      lvHTML = lvHTML+"<td>"+cvFileData.at( i ).at( j )+"</td>";
+      lvHTML = lvHTML+"<td>"+cvData.at( i ).at( j )+"</td>";
     }
     lvHTML += "</tr>";
   }

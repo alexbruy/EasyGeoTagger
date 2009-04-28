@@ -1,0 +1,174 @@
+<!DOCTYPE QtCreatorProject>
+<qtcreator>
+ <data>
+  <variable>RunConfiguration0-CMakeRunConfiguration.Target</variable>
+  <value type="QString" >/home/pete/devel/easygeotagger/trunk/easygeotagger/qtcreator-build/easygeotagger</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-CMakeRunConfiguration.WorkingDirectory</variable>
+  <value type="QString" >/home/pete/devel/easygeotagger/trunk/easygeotagger/qtcreator-build</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-RunConfiguration.name</variable>
+  <value type="QString" >/home/pete/devel/easygeotagger/trunk/easygeotagger/qtcreator-build/easygeotagger</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-type</variable>
+  <value type="QString" >CMakeProjectManager.CMakeRunConfiguration</value>
+ </data>
+ <data>
+  <variable>RunConfiguration1-CMakeRunConfiguration.Target</variable>
+  <value type="QString" >/home/pete/devel/easygeotagger/trunk/easygeotagger/qtcreator-build/easygeotagger</value>
+ </data>
+ <data>
+  <variable>RunConfiguration1-CMakeRunConfiguration.WorkingDirectory</variable>
+  <value type="QString" >/home/pete/devel/easygeotagger/trunk/easygeotagger/qtcreator-build</value>
+ </data>
+ <data>
+  <variable>RunConfiguration1-RunConfiguration.name</variable>
+  <value type="QString" >/home/pete/devel/easygeotagger/trunk/easygeotagger/qtcreator-build/easygeotagger</value>
+ </data>
+ <data>
+  <variable>RunConfiguration1-type</variable>
+  <value type="QString" >CMakeProjectManager.CMakeRunConfiguration</value>
+ </data>
+ <data>
+  <variable>activeRunConfiguration</variable>
+  <value type="int" >0</value>
+ </data>
+ <data>
+  <variable>activebuildconfiguration</variable>
+  <value type="QString" >all</value>
+ </data>
+ <data>
+  <variable>buildConfiguration-all</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >all</value>
+   <value key="buildDirectory" type="QString" >/home/pete/devel/easygeotagger/trunk/easygeotagger/qtcreator-build</value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-all-buildstep0</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >all</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-jpcc2JFOoC,guid=c4e53648238eea5265b6cce249dcb73f</value>
+    <value type="QString" >DESKTOP_SESSION=default</value>
+    <value type="QString" >DESKTOP_STARTUP_ID=</value>
+    <value type="QString" >DISPLAY=:0.0</value>
+    <value type="QString" >GDMSESSION=default</value>
+    <value type="QString" >GDM_LANG=en_US.UTF-8</value>
+    <value type="QString" >GDM_XSERVER_LOCATION=local</value>
+    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
+    <value type="QString" >GNOME_KEYRING_PID=7021</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-KZOTuD/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-5ciO2r/S.gpg-agent:7230:1</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/pete/.gtkrc-1.2-gnome2</value>
+    <value type="QString" >HOME=/home/pete</value>
+    <value type="QString" >LANG=en_US.UTF-8</value>
+    <value type="QString" >LOGNAME=pete</value>
+    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-pete</value>
+    <value type="QString" >PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString" >PWD=/home/pete</value>
+    <value type="QString" >SESSION_MANAGER=local/ausable:/tmp/.ICE-unix/7032</value>
+    <value type="QString" >SHELL=/bin/bash</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-KZOTuD/ssh</value>
+    <value type="QString" >USER=pete</value>
+    <value type="QString" >USERNAME=pete</value>
+    <value type="QString" >WINDOWPATH=7</value>
+    <value type="QString" >XAUTHORITY=/home/pete/.Xauthority</value>
+    <value type="QString" >XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
+    <value type="QString" >XDG_SESSION_COOKIE=27e1dbf705c9bba27f7d5f004717717d-1239201598.553584-954514282</value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList" >
+    <value type="QString" >/home/pete/devel/easygeotagger/trunk/easygeotagger</value>
+    <value type="QString" >-GUnix Makefiles</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString" >/usr/bin/cmake</value>
+   <value key="abstractProcess.enabled" type="bool" >true</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/pete/devel/easygeotagger/trunk/easygeotagger/qtcreator-build</value>
+   <valuelist key="userArguments" type="QVariantList" />
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfiguration-all-buildstep1</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >all</value>
+   <valuelist key="abstractProcess.Environment" type="QVariantList" >
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-jpcc2JFOoC,guid=c4e53648238eea5265b6cce249dcb73f</value>
+    <value type="QString" >DESKTOP_SESSION=default</value>
+    <value type="QString" >DESKTOP_STARTUP_ID=</value>
+    <value type="QString" >DISPLAY=:0.0</value>
+    <value type="QString" >GDMSESSION=default</value>
+    <value type="QString" >GDM_LANG=en_US.UTF-8</value>
+    <value type="QString" >GDM_XSERVER_LOCATION=local</value>
+    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
+    <value type="QString" >GNOME_KEYRING_PID=7021</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-KZOTuD/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/seahorse-5ciO2r/S.gpg-agent:7230:1</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/pete/.gtkrc-1.2-gnome2</value>
+    <value type="QString" >HOME=/home/pete</value>
+    <value type="QString" >LANG=en_US.UTF-8</value>
+    <value type="QString" >LOGNAME=pete</value>
+    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-pete</value>
+    <value type="QString" >PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
+    <value type="QString" >PWD=/home/pete</value>
+    <value type="QString" >SESSION_MANAGER=local/ausable:/tmp/.ICE-unix/7032</value>
+    <value type="QString" >SHELL=/bin/bash</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-KZOTuD/ssh</value>
+    <value type="QString" >USER=pete</value>
+    <value type="QString" >USERNAME=pete</value>
+    <value type="QString" >WINDOWPATH=7</value>
+    <value type="QString" >XAUTHORITY=/home/pete/.Xauthority</value>
+    <value type="QString" >XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/usr/share/gdm/</value>
+    <value type="QString" >XDG_SESSION_COOKIE=27e1dbf705c9bba27f7d5f004717717d-1239201598.553584-954514282</value>
+   </valuelist>
+   <valuelist key="abstractProcess.arguments" type="QVariantList" >
+    <value type="QString" >all</value>
+   </valuelist>
+   <value key="abstractProcess.command" type="QString" >make</value>
+   <value key="abstractProcess.enabled" type="bool" >true</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/pete/devel/easygeotagger/trunk/easygeotagger/qtcreator-build</value>
+   <valuelist key="buildTargets" type="QVariantList" >
+    <value type="QString" >all</value>
+   </valuelist>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildconfigurations</variable>
+  <valuelist type="QVariantList" >
+   <value type="QString" >all</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>buildstep0</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" ></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildstep1</variable>
+  <valuemap type="QVariantMap" >
+   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" ></value>
+  </valuemap>
+ </data>
+ <data>
+  <variable>buildsteps</variable>
+  <valuelist type="QVariantList" >
+   <value type="QString" >CMakeProjectManager.CMakeStep</value>
+   <value type="QString" >CMakeProjectManager.MakeStep</value>
+  </valuelist>
+ </data>
+ <data>
+  <variable>cleansteps</variable>
+  <valuelist type="QVariantList" />
+ </data>
+ <data>
+  <variable>defaultFileEncoding</variable>
+  <value type="QByteArray" >System</value>
+ </data>
+ <data>
+  <variable>project</variable>
+  <valuemap type="QVariantMap" />
+ </data>
+</qtcreator>

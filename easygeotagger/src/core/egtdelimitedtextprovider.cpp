@@ -1,5 +1,5 @@
 /*
-** File: egtdelimitedtextfilereader.cpp
+** File: egtdelimitedtextprovider.cpp
 ** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
@@ -21,19 +21,18 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#include "egtdelimitedtextfilereader.h"
+#include "egtdelimitedtextprovider.h"
 
 #include <QFile>
 #include <QTextStream>
 #include <QApplication>
 #include <QMessageBox>
 
-EgtDelimitedTextFileReader::EgtDelimitedTextFileReader( ):EgtFileReader( )
+EgtDelimitedTextProvider::EgtDelimitedTextProvider( ) : EgtDataProvider( )
 {
   cvDelimiter = ",";
   cvFileName = ""; 
   cvLastError = "";
-  cvHasColumnHeaders = false;
 }
 
 /*
@@ -41,70 +40,70 @@ EgtDelimitedTextFileReader::EgtDelimitedTextFileReader( ):EgtFileReader( )
  * PUBLIC FUNCTIONS
  *
  */
-/*!
- * \return a QString that contains the column headers
- */
-QStringList EgtDelimitedTextFileReader::columnHeaders( )
-{
-  return cvColumnHeaders;
-}
 
 /*!
- * \return a boolean that indicates whether the file has column headers or not
+ * \param theFileName a QString that contains the name of the file to be read
  */
-bool EgtDelimitedTextFileReader::hasColumnHeaders( )
+EgtDataProvider::ErrorType EgtDelimitedTextProvider::setFileName( QString theFileName )
 {
-  return cvHasColumnHeaders; 
+  cvFileName = theFileName;
+  return read();
 }
 
-bool EgtDelimitedTextFileReader::preprocessFile( QString )
+/*!
+ * \param a QString that contains a delimiter
+ */
+void EgtDelimitedTextProvider::setDelimiter( QString theDelimiter )
 {
-  return false;
+  cvDelimiter = theDelimiter;
 }
 
+/*
+ *
+ * PROTECTED FUNCTIONS
+ *
+ */
 /*!
  * \param ok pointer to boolean that indicates whether the read was performed correctly or not
  */
-QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok )
+EgtDataProvider::ErrorType EgtDelimitedTextProvider::read( )
 {
+  cvData.clear();
+  cvLastError = "";
+
   QFile lvFile( cvFileName );
   QStringList lvStringList;
-  QList<QStringList>  lvList;
-
   bool lvError = false;
 
-  int lvNumFields;
-
-  if ( !lvFile.open( QFile::ReadOnly | QFile::Text ) ) 
+  if ( !lvFile.open( QFile::ReadOnly | QFile::Text ) )
   {
-    if ( ok ) { *ok = false; }
     cvLastError = QObject::tr( "Can't read the file" ) + ": " + cvFileName;
-    return lvList;
+    return EgtDataProvider::Fatal;
   }
 
   QTextStream stream( &lvFile );
   QString lvLine;
-  
+
   if( hasColumnHeaders( ) )
   {
-    lvLine = stream.readLine( ); 
+    lvLine = stream.readLine( );
     cvColumnHeaders = lvLine.split( cvDelimiter );
-    lvNumFields = lvLine.split( cvDelimiter ).size( );
+    cvNumberOfFields = lvLine.split( cvDelimiter ).size( );
   }
   else
   {
     lvLine = stream.readLine( );
-    lvList << lvLine.split( cvDelimiter );
-    lvNumFields = lvLine.split( cvDelimiter ).size( );
+    cvData << lvLine.split( cvDelimiter );
+    cvNumberOfFields = lvLine.split( cvDelimiter ).size( );
   }
 
   while( ! stream.atEnd( ) )
   {
     lvLine = stream.readLine( );
-   
-    if( lvLine.split( cvDelimiter ).size( ) == lvNumFields ) 
+
+    if( lvLine.split( cvDelimiter ).size( ) == cvNumberOfFields )
     {
-      lvList << lvLine.split( cvDelimiter );
+      cvData << lvLine.split( cvDelimiter );
     }
     else
     {
@@ -113,26 +112,7 @@ QList<QStringList> EgtDelimitedTextFileReader::read( bool* ok )
     }
   }
 
-  if( !lvError )
-  {
-    cvLastError = "";
-  }
-  return lvList;
-}
+  if( lvError ) { return EgtDataProvider::Warning; }
 
-/*!
- * \param theFileName a QString that contains the name of the file to be read
- */
-void EgtDelimitedTextFileReader::setFileName( QString theFileName )
-{
-  cvFileName = theFileName;
+  return EgtDataProvider::None;
 }
-
-/*!
- * \param a QString that contains a delimiter
- */
-void EgtDelimitedTextFileReader::setDelimiter( QString theDelimiter )
-{
-  cvDelimiter = theDelimiter;
-}
-

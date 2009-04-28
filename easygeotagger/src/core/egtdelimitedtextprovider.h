@@ -1,5 +1,5 @@
 /*
-** File: egtdelimitedtextfilereader.h
+** File: egtdelimitedtextprovider.h
 ** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
@@ -21,52 +21,42 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTDELIMITEDTEXFILEREADER_H
-#define EGTDELIMITEDTEXFILEREADER_H
+#ifndef EGTDELIMITEDTEXPROVIDER_H
+#define EGTDELIMITEDTEXPROVIDER_H
 
-#include "egtfilereader.h"
+#include "egtdataprovider.h"
 
-class EgtDelimitedTextFileReader: public EgtFileReader
+class EgtDelimitedTextProvider: public EgtDataProvider
 {
   Q_OBJECT
 
   public:
 
     /*! \brief Constuctor */
-    EgtDelimitedTextFileReader( );
+    EgtDelimitedTextProvider( );
+
+    virtual void init() {}
     
-    /*! \brief Returns the column headers */
-    virtual QStringList columnHeaders( );
-
-    /*! \brief Returns whether the file has headers or not */
-    virtual bool hasColumnHeaders( );
-
-    /*! \brief Function that performs preprocessing actions */
-    bool preprocessFile( QString );
-
-    /*! \brief Function used to read a gps file */
-    virtual QList<QStringList> read( bool * ok = 0 );
+    EgtDataProvider::ErrorType reload( ) { return read(); }
 
     /*! \brief Function to set the name of the file to be read */
-    void setFileName( QString );
+    EgtDataProvider::ErrorType setFileName( QString );
 
     /*! \brief Function to set the text delimiter */
     void setDelimiter( QString );
 
 
   protected:
-    
-    /*! \brief Contains the headers from the file */
-    QStringList cvColumnHeaders;
+    /*! \brief Generic read function to load the data */
+    EgtDataProvider::ErrorType read( );
+
+    int cvCurrentRecord;
 
     /*! \brief QString that contains the name of the file to be read */
     QString cvFileName; 
 
     /*! \brief QString that contains the delimiter */
     QString cvDelimiter;
-
-    /*! \brief Indicates if the file has a header */
-    bool cvHasColumnHeaders;
 
     /*! \brief Contains the last error occurred */
     QString cvLastError;

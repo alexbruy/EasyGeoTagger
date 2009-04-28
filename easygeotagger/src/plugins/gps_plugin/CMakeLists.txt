@@ -13,19 +13,20 @@ INCLUDE_DIRECTORIES(
 )
 
 SET( GPS_PLUGIN_SRCS
-    egtgpsplugin.cpp
-    egtgraphicaldelimitedtextfilereader.cpp
-    egtreaderfactory.cpp
     egtgpsdisplaywidget.cpp
+    egtgpsplugin.cpp
+    egtgraphicaldelimitedtextprovider.cpp
+    egtproviderfactory.cpp
    )
 
 
 
 SET( GPS_PLUGIN_MOC_HDRS
-    egtgpsplugin.h
-    egtreaderfactory.h
-    egtgraphicaldelimitedtextfilereader.h
     egtgpsdisplaywidget.h
+    egtgpsplugin.h
+    egtgraphicaldelimitedtextprovider.h
+    egtproviderfactory.h
+
    )
 
 SET( GPS_PLUGIN_UIS

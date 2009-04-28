@@ -24,10 +24,8 @@
 #ifndef EGTGPSDATATABLEWIDGET_H
 #define EGTGPSDATATABLEWIDGET_H
 
-#include "egtfilereader.h"
+#include "egtdataprovider.h"
 
-//#include "egtdelimitedtextfilereader.h"
-//#include "egtgraphicaldelimitedtextfilereader.h"
 #include "ui_egtkeyselectiondialog.h"
 
 
@@ -54,7 +52,7 @@ class EgtGpsDataTableWidget : public QTableWidget
     void deleteRow();
 
     /*! \brief Slot used to set the specific file reader */
-    void setFileReader( EgtFileReader* );
+    void setProvider( EgtDataProvider* );
 
   private slots:
 
@@ -80,7 +78,7 @@ class EgtGpsDataTableWidget : public QTableWidget
 
   private:
     
-    /*! \brief Contains all the possible fields that can be used for taggin a picture */
+    /*! \brief Contains all the possible fields that can be used for tagging a picture */
     QStringList cvAvailableFields;
 
     /*! \brief Contains the last column that the user selected */
@@ -90,11 +88,11 @@ class EgtGpsDataTableWidget : public QTableWidget
     QDialog* cvColumnMeaningDialog;
 
     /*! \brief Pointer to the concrete instance of the file reader */
-    EgtFileReader* cvFileReader;
+    EgtDataProvider* cvDataProvider;
 
     /*! \brief Indicates if all the headers are set */
     bool cvHeadersAreSet;
-int cvSelectedRow;
+
     /*! \brief A QList with all the headers that are set so far */
     QList<int> cvHeadersThatAreSet;
 
@@ -103,6 +101,8 @@ int cvSelectedRow;
 
     /*! \brief QMap to store the items of the selected row */
     QMap<QString,QString> * cvMapItems;
+
+    int cvSelectedRow;
 
     /*! \brief QDesigner object of the dialog with the available fields*/
     Ui::EgtKeySelectionDialog cvUiKeySelectionDialog;

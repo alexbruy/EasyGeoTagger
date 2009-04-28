@@ -1,5 +1,5 @@
 /*
-** File: egtfilereaderfactory.h
+** File: egtproviderfactory.h
 ** Author( s ): Roberto Garcia Yunta
 ** Creation Date: 2008-12-19
 **
@@ -21,20 +21,20 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTREADERFACTORY_H
-#define EGTREADERFACTORY_H
+#ifndef EGTPROVIDERFACTORY_H
+#define EGTPROVIDERFACTORY_H
 
-#include "egtgraphicaldelimitedtextfilereader.h"
+#include "egtgraphicaldelimitedtextprovider.h"
 #include "ui_filetypedialog.h"
 
-class EgtReaderFactory: public QObject
+class EgtProviderFactory: public QObject
 {
   Q_OBJECT
 
   public:
 
     /*! \brief Constructor */
-    EgtReaderFactory( );
+    EgtProviderFactory( );
 
     /*! \brief Shows the windows to open a file ( delimited text or gps ) */
     void show( );
@@ -44,22 +44,16 @@ class EgtReaderFactory: public QObject
     /*! \brief Slot used when the user clicks on the ok button of the file type dialog */
     void accept( );
 
-    /*! \brief Slot used to signal the factory that a file reader has been created */
-    void fileReaderInitialized( );
-
-    /*! \brief Slot used when the user clicks on the delimited text radio button */
-    void on_rbDelimitedText_toggled( bool );
-
-    /*! \brief Slot used when the user clicks on the gps file radio button */
-    void on_rbGPSFile_toggled( bool );
+    /*! \brief Slot used to signal the factory that a file provider has been created */
+    void dataProviderInitialized( );
 
     /*! \brief Slot used when the user clicks on the cancel button of the file type dialog */
     void reject( );
 
   private:
 
-    /*! \brief Instance of the concrete file reader to be used */
-    EgtFileReader* cvFileReader;
+    /*! \brief Instance of the concrete file provider to be used */
+    EgtDataProvider* cvDataProvider;
 
     /*! \brief QDialog to let the user select the type of file to be read */
     QDialog cvFileTypeDialog;
@@ -68,7 +62,7 @@ class EgtReaderFactory: public QObject
     Ui::FileTypeDialog cvUiFileType;
 
   signals:
-    /*! \brief Signal to notify that the file reader has been created */
-    void fileReaderCreated( EgtFileReader* );
+    /*! \brief Signal to notify that the data provider has been created */
+    void dataProviderCreated( EgtDataProvider* );
 };
 #endif
