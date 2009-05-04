@@ -28,6 +28,7 @@
 #include "egtplugininterface.h"
 
 #include "egtgpsdisplaywidget.h"
+#include "egtsynchronizedialog.h"
 
 class EgtGpsPlugin: public EgtPluginInterface
 {
@@ -63,6 +64,8 @@ class EgtGpsPlugin: public EgtPluginInterface
 
   private:
     EgtGpsDisplayWidget cvDisplayWidget;
+    EgtSynchronizeDialog cvSynchronizeDialog;
+    EgtGpsDataTableWidget cvDataTableWidget;
 
 
 };

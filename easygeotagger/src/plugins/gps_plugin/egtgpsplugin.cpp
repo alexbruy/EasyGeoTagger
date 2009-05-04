@@ -35,6 +35,8 @@ EgtGpsPlugin::EgtGpsPlugin( )
   cvCategories = QObject::tr( "Coordinate Extraction" );
   cvDescription = QObject::tr( "Reads data from GPS files" );
   cvName = QObject::tr( "GPS Reader" );
+
+    
 }
 
 /*
@@ -43,13 +45,6 @@ EgtGpsPlugin::EgtGpsPlugin( )
  *
  */
 
-/*!
- * \param theButton pointer to a QPushButton that is to be connect to the  showConfigurationPanel slot
- */
-void EgtGpsPlugin::connectConfigurationButton( QPushButton* theButton )
-{
-  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( showConfigurationPanel( ) ) );
-}
 
 /*!
  * \param theButton pointer to a QPushButton that is to be connect to the  run slot
@@ -65,11 +60,20 @@ void EgtGpsPlugin::initPlugin( )
   if( 0 != cvApplicationInterface )
   {
     cvDisplayWidget.setVisible( false );
-
+    cvDisplayWidget.setDataTable( &cvDataTableWidget );
     //connect to application interface
-    connect( &cvDisplayWidget, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
+    connect( &cvDataTableWidget, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
 
     cvDisplayWidget.setApplicationInterface( cvApplicationInterface );
+
+    connect( cvDisplayWidget.cvpbtnOffsetManual, SIGNAL( clicked( ) ), &cvSynchronizeDialog, SLOT( setOffset( ) ) );
+    connect( cvDisplayWidget.cvpbtnOffsetPic, SIGNAL( clicked( ) ), &cvSynchronizeDialog, SLOT( setOffsetPic( ) ) );
+    connect( cvDisplayWidget.cvpbtnDeleteRow, SIGNAL( clicked() ),&cvDataTableWidget, SLOT( deleteRow() ) );
+    connect( cvDisplayWidget.cvpbtnSendCoordinates, SIGNAL( clicked( ) ), &cvDataTableWidget, SLOT( sendCoordinates( ) ) );
+    connect( &cvDataTableWidget, SIGNAL( timeStampSelected( bool ) ), &cvDisplayWidget, SLOT( setSynchronizing(bool) ) );
+    connect( cvDisplayWidget.cvpbtnOffsetManual, SIGNAL( clicked( ) ), &cvSynchronizeDialog, SLOT( setOffset( ) ) );
+    connect( &cvSynchronizeDialog, SIGNAL( offsetSet( int, QString ) ), &cvDataTableWidget, SLOT( setOffsetAndTimeStamp( int, QString ) ) );
+    connect( &cvDataTableWidget, SIGNAL( displayButtonsStatus( bool, bool ) ), &cvDisplayWidget, SLOT( setButtonsStatus( bool, bool ) ) );
   }
 }
 

@@ -25,7 +25,6 @@
 #define EGTGPSDATATABLEWIDGET_H
 
 #include "egtdataprovider.h"
-
 #include "ui_egtkeyselectiondialog.h"
 
 
@@ -54,6 +53,14 @@ class EgtGpsDataTableWidget : public QTableWidget
     /*! \brief Slot used to set the specific file reader */
     void setProvider( EgtDataProvider* );
 
+    void setOffset( int );
+
+    void setPictureDateTimeStamp( QString );
+
+    void setOffsetAndTimeStamp(int, QString);
+
+    void sendCoordinates( );
+
   private slots:
 
      /*! \brief Slot used when a cell of the table is selected */
@@ -70,11 +77,17 @@ class EgtGpsDataTableWidget : public QTableWidget
     void on_pbtnOk_clicked( );
 
     void popUpMenu( QPoint );
+
+     void sendToEditor( bool);
   signals:
 
     void timeStampSelected( bool );
-   
-    void rowSelected( bool );
+
+    /*! \brief Signal used to comunicate with the application interface */
+    void keyValuePair( QString, QString );
+    
+    void displayButtonsStatus( bool, bool );
+
 
   private:
     
@@ -112,6 +125,10 @@ class EgtGpsDataTableWidget : public QTableWidget
 
     /*! \brief Function used to populate the table */
     void populateTable( );
+  
+    int cvOffset;
+
+    QString cvPictureDateTimeStamp;
 
 };
 

@@ -25,6 +25,7 @@
 
 #include <QMessageBox>
 #include <QMenu>
+#include <QDate>
 
 EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 {
@@ -36,6 +37,10 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
   cvDataProvider = 0;
   cvColumnSelected = 0;
   cvHeadersAreSet = false;
+
+  cvOffset= 0;
+
+  cvPictureDateTimeStamp = "";
 
   cvMapItems = new QMap<QString,QString>;
 
@@ -130,8 +135,8 @@ void EgtGpsDataTableWidget::populateTable( )
        setItem( i, j, lvNewItem );
     }
   }
-  emit timeStampSelected( false );
-  emit rowSelected( false );
+  emit timeStampSelected( false ); qDebug("distinto3");
+  sendToEditor( false );
 }
 
 
@@ -145,7 +150,7 @@ void EgtGpsDataTableWidget::cell_selected( int row, int column )
 { 
   QTableWidgetItem * lvItem = item ( row, column );
   double x = lvItem->data( 0 ).toDouble( );
-  emit rowSelected(false);
+   sendToEditor(false);
 }
 
 void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
@@ -189,7 +194,7 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
         if( lvContent.size() != 19 )
         {
           QMessageBox::critical( this, tr( "Error" ),tr( "The datetimestamp has an incorrect format.\n The right format is:\n yyyy:mm:dd hh:mm:ss" ),QMessageBox::Ok );
-          emit timeStampSelected(false);
+          emit timeStampSelected(false); qDebug("distinto4");
           return;
         }
         bool lvExpectedFormat = true;
@@ -204,10 +209,10 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
           if( !lvContent[ lvIterator ].isNumber( ) && ':' != lvContent[ lvIterator ] && ' ' != lvContent[ lvIterator ] )
           {
             QMessageBox::critical( this, tr( "Error" ),tr( "The datetimestamp has an incorrect format.\n The right format is:\n yyyy:mm:dd hh:mm:ss" ),QMessageBox::Ok ); 
-            emit timeStampSelected(false);
+            emit timeStampSelected(false); qDebug("distinto5");
             return;
           }
-          else { emit timeStampSelected(true); }
+          else { emit timeStampSelected(true); qDebug("distinto2"); }
         }
         //format checking end
       }
@@ -220,13 +225,12 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
         cvMapItems->insert( lvText, item( theIndex, lvColumnCount )->text( ) );
       }
     }
-    emit rowSelected(true);
+    sendToEditor(true);
   }
 }
 
 void EgtGpsDataTableWidget::deleteRow()
 { 
-  
   removeRow(cvSelectedRow);
 }
 
@@ -241,10 +245,10 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
     //cvUiKeySelectionDialog.cbFields->removeItem( lvIndex );
     cvHeadersThatAreSet<<cvColumnSelected;
     if( "DateTimeStamp" == lvSelectedItem )
-    {
+    {qDebug("distinto6");
       emit timeStampSelected(true);
     }
-    else { emit timeStampSelected(false); }
+    else { emit timeStampSelected(false); qDebug("distinto1");}
   }
   else
   {
@@ -263,7 +267,7 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
 
   if( cvUiKeySelectionDialog.cbFields->itemText( cvUiKeySelectionDialog.cbFields->count()-1 ) == "DateTimeStamp" && lvSelectedItem != "DateTimeStamp" )
   {//We don't have a timestamp anymore
-    emit timeStampSelected(false);
+    emit timeStampSelected(false); qDebug("distinto2");
   }
   //Deleting the previous header
   QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( cvColumnSelected );
@@ -290,6 +294,99 @@ void EgtGpsDataTableWidget::popUpMenu(QPoint theCoordinates)
   menu.exec(mapToGlobal(theCoordinates));
 }
 
+void EgtGpsDataTableWidget::sendCoordinates( ) 
+{
+  if( isThereAnyColumnSet( ) )
+  {
+    QMap<QString,QString>* lvMap = getRowItems( );
+
+    QMapIterator<QString, QString> lvMapIterator( *lvMap );
+    while ( lvMapIterator.hasNext( ) )
+    {
+      lvMapIterator.next( );
+      if(lvMapIterator.key( ) == "DateTimeStamp")
+      {
+        QString lvValue = lvMapIterator.value();
+
+        int lvCarryOut = 0;
+
+        int lvSeconds = lvValue[17].digitValue()*10;
+        lvSeconds+= lvValue[18].digitValue();
+        lvSeconds+=( ( cvOffset%3600 )%60 );
+
+        lvCarryOut = lvSeconds/60;
+        lvSeconds = lvSeconds%60;
+        if( lvSeconds< 0 )
+        { 
+          lvSeconds+= 60; 
+          lvCarryOut-= 1; 
+        }
+
+        int lvMinutes = lvValue[14].digitValue()*10;
+        lvMinutes+= lvValue[15].digitValue();
+        lvMinutes+=(cvOffset%3600)/60;
+        lvMinutes+= lvCarryOut;
+
+        lvCarryOut = lvMinutes/60;
+        lvMinutes = lvMinutes%60;
+        if( lvMinutes< 0 )
+        { 
+          lvMinutes+= 60; 
+          lvCarryOut-= 1; 
+        }
+
+        int lvHours = lvValue[11].digitValue()*10;
+        lvHours+= lvValue[12].digitValue();
+        lvHours+= cvOffset/3600;
+        lvHours+= lvCarryOut;
+
+        lvCarryOut = lvHours/24;
+        lvHours = lvHours%24;
+        if( lvHours< 0 )
+        { 
+          lvHours+= 60; 
+          lvCarryOut-= 1; 
+        }
+
+        int lvDay = lvValue[8].digitValue()*10;
+        lvDay+= lvValue[9].digitValue();
+
+        int lvMonth = lvValue[5].digitValue()*10;
+        lvMonth+= lvValue[6].digitValue();
+
+        int lvYear = lvValue[0].digitValue()*1000;
+        lvYear+= lvValue[1].digitValue()*100;
+        lvYear+= lvValue[2].digitValue()*10;
+        lvYear+= lvValue[3].digitValue();
+
+        QDate lvDate( lvYear, lvMonth, lvDay ); 
+        lvDate = lvDate.addDays(lvCarryOut);
+
+        QString lvStringHours = lvHours < 10? "0"+QString::number( lvHours ):QString::number( lvHours );
+        QString lvStringMinutes = lvMinutes < 10? "0"+QString::number( lvMinutes ):QString::number( lvMinutes );
+        QString lvStringSeconds= lvSeconds < 10? "0"+QString::number( lvSeconds ):QString::number( lvSeconds );
+
+        QString lvStringYear = QString::number( lvDate.year() );
+        QString lvStringMonth = lvDate.month() < 10? "0"+QString::number( lvDate.month() ): QString::number( lvDate.month() );
+        QString lvStringDay = lvDate.day() < 10? "0"+QString::number( lvDate.day() ): QString::number( lvDate.day() );
+
+        emit( keyValuePair( "Egt.GPS.TimeStamp",lvStringHours+":"+lvStringMinutes+":"+lvStringSeconds ) );
+        emit( keyValuePair( "Egt.GPS.DateStamp",lvStringYear+":"+lvStringMonth+":"+lvStringDay ) ); qDebug("keyvaelue");
+      }
+      else
+      {
+        emit( keyValuePair( "Egt.GPS."+lvMapIterator.key( ),lvMapIterator.value( ) ) );qDebug("keyvaelue2");
+      }
+      
+    }
+  }
+  else
+  {
+    QMessageBox::critical( this, tr( "Error" ),tr( "At least one header must be set" ),QMessageBox::Ok );
+  }
+
+}
+
 void EgtGpsDataTableWidget::setProvider( EgtDataProvider* theProvider )
 {
   if( 0 != cvDataProvider ) { delete cvDataProvider; }
@@ -298,4 +395,51 @@ void EgtGpsDataTableWidget::setProvider( EgtDataProvider* theProvider )
   cvHeadersAreSet = cvDataProvider->hasColumnHeaders( );
 
   populateTable( );
+}
+
+void EgtGpsDataTableWidget::setOffset( int theOffset )
+{
+  cvOffset = theOffset;
+}
+
+void EgtGpsDataTableWidget::setOffsetAndTimeStamp( int theOffset, QString theDateTimeStamp )
+{
+  cvOffset = theOffset;
+  cvPictureDateTimeStamp = theDateTimeStamp;
+}
+void EgtGpsDataTableWidget::setPictureDateTimeStamp( QString theDateTimeStamp )
+{
+  cvPictureDateTimeStamp = theDateTimeStamp;
+}
+
+/*!
+ * \param theStatus boolean that indicates whether the "send to editor" button must be enabled or not
+ */
+void EgtGpsDataTableWidget::sendToEditor( bool theStatus )
+{ 
+  /*ui->pbtnSendCoordinates->setEnabled( theStatus );
+  ui->pbtnDeleteRow->setEnabled( theStatus );*/
+  emit displayButtonsStatus( theStatus, theStatus );
+
+  QMap<QString,QString>* lvMap = getRowItems( );
+  if( theStatus && cvPictureDateTimeStamp != "" )
+  {
+    QMapIterator<QString, QString> lvMapIterator( *lvMap );
+    while ( lvMapIterator.hasNext( ) )
+    {
+      lvMapIterator.next( );
+      if(lvMapIterator.key( ) == "DateTimeStamp" )
+      {
+        QString lvValue = lvMapIterator.value();
+        QDate lvPictureDate( lvValue.mid(0,4).toInt(),lvValue.mid(5,2).toInt(),lvValue.mid(8,2).toInt() );
+        QDate lvTableDate( cvPictureDateTimeStamp.mid(0,4).toInt(),cvPictureDateTimeStamp.mid(5,2).toInt(),cvPictureDateTimeStamp.mid(8,2).toInt() );
+        if( abs(lvTableDate.daysTo( lvPictureDate )) > 1 )
+        {
+          //ui->pbtnSendCoordinates->setEnabled( false );
+          emit displayButtonsStatus( false, theStatus ); 
+          QMessageBox::critical( this, tr( "Error" ),tr( "The dates of the picture and the row don't match" ),QMessageBox::Ok );
+        }
+      }
+    }
+  }
 }

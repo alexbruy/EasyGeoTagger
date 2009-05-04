@@ -17,6 +17,7 @@ SET( GPS_PLUGIN_SRCS
     egtgpsplugin.cpp
     egtgraphicaldelimitedtextprovider.cpp
     egtproviderfactory.cpp
+    egtsynchronizedialog.cpp
    )
 
 
@@ -26,6 +27,7 @@ SET( GPS_PLUGIN_MOC_HDRS
     egtgpsplugin.h
     egtgraphicaldelimitedtextprovider.h
     egtproviderfactory.h
+    egtsynchronizedialog.h
 
    )
 

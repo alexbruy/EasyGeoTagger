@@ -40,8 +40,6 @@ class EgtGpsDisplayWidget;
 namespace Ui
 {
     class EgtGpsDisplayWidgetBase;
-    class EgtSynchronizeDialog;
-    class ExtendedQDialog;
 }
 
 class EgtGpsDisplayWidget : public QWidget
@@ -54,30 +52,36 @@ class EgtGpsDisplayWidget : public QWidget
     /*! \brief Reimplemented function to close the syncrhonization dialog when closing the plugin window */
     void closeEvent( QCloseEvent * );
  
-    /*! \brief Sets the picture selected on the preview label */
-    void loadPreview();
-
     /*! \brief Sets the application interface used to comunicate with the main application */
     void setApplicationInterface(EgtApplicationInterface*);
+
+    /*! \brief Desginer object of the gps plugin interface */
+    Ui::EgtGpsDisplayWidgetBase* ui;
+ 
+    QPushButton* cvpbtnOffsetManual;
+    QPushButton* cvpbtnOffsetPic;
+    QPushButton* cvpbtnDeleteRow;
+    QPushButton* cvpbtnSendCoordinates;
     
   signals:
 
     /*! \brief Signal used to comunicate with the application interface */
     void keyValuePair( QString, QString );
 
+  public slots:
+    /*! \brief Slot used to enable/disable the group box that contains the offset buttons */
+    void setSynchronizing(bool);
+
+     void setDataTable( EgtGpsDataTableWidget* );
+
+     void setButtonsStatus( bool , bool );
+
   private slots:
 
-     /*! \brief Slot that sets the offset when the user clicks "OK" on the synchronize dialog */
-    void accepted();
-
-    /*! \brief Slot called when the user clicks on the file browser */
-    void clicked( const QModelIndex& );
 
     /*! \brief Slot called to open a gps file */
     void openFile( );
 
-    /*! \brief Slot called to open a picture */
-    void openPic();
     
     /*! \brief Slot called to tag a picture */
     void sendCoordinates( );
@@ -85,28 +89,6 @@ class EgtGpsDisplayWidget : public QWidget
     /*! \brief Slot called to set the data provider */
     void setDataProvider( EgtDataProvider* );
 
-    /*! \brief Slot used to enable/disable the "Send to editor" button and "delete row" button */
-    void setSendToEditorButton( bool );
-    
-    /*! \brief Slot called to show the dialog that sets the offset manually */
-    void setOffset();
-
-    /*! \brief Slot called to show the dialog that sets the offset with the help of a picture */
-    void setOffsetPic();
-
-    /*! \brief Slot used to enable/disable the group box that contains the offset buttons */
-    void setSynchronizing(bool);
- 
-    /*! \brief Slot used to update the offset when the user modifies the datetimestamp that sees in the synchronization picture */
-    void updateOffset();
-
-    /*! \brief Slot called when the image is ready to be shown */
-    void updatePreview( bool );
-
-    /*! \brief Slot used to set the status of the preview progress bar */
-    void updateProgress( int, int, int );
-
-   
   private:
 
     /*! \brief Instance of the data table which contains the gps data */
@@ -117,57 +99,11 @@ class EgtGpsDisplayWidget : public QWidget
 
     /*! \brief Instance of the provider factory */
     EgtProviderFactory cvProviderFactory;
-    
-    /*! \brief Object used to show the picture preview */
-    EgtImageFactory cvImageFactory;
 
-    /*! \brief Specifies whether the image to show is valid or not */
-    bool cvValidImage;
-
-    /*! \brief Desginer object of the gps plugin interface */
-    Ui::EgtGpsDisplayWidgetBase* ui;
-
-     /*! \brief Desginer object of the synchronize dialog*/
-    Ui::EgtSynchronizeDialog* cvSynchronizeUi;
-
-     /*! \brief QDialog that shows the synchronize dialog*/
-    Ui::ExtendedQDialog* cvSynchronizeDialog;
-  
      /*! \brief Object to comunicate the plugin with the main application*/
     EgtApplicationInterface* cvApplicationInterface;
 
-    /*! \brief Contains the offset (in seconds) the user specifies*/
-    int cvOffset;
-
-    /*! \brief Object to generate the path to a picture*/
-    EgtPathBuilder cvPathBuilder;
-  
-    /*! \brief Object used to deal with the photo exif metadata of the picture*/
-    EgtPhotoExifEngine cvPhotoExifEngine;
-
-    /*! \brief QString that contains the EXIF datetimestamp of the picture*/
-    QString cvPictureDateTimeStamp;
-
-    
 };
 
-namespace Ui
-{
-    class ExtendedQDialog :public QDialog
-    {
-       public: 
-         ExtendedQDialog(EgtGpsDisplayWidget* theWidget)
-         {
-           cvWidget = theWidget;
-         }
-         /*! \brief Overloaded method. Reimplemented to resize the image preview*/
-         void resizeEvent ( QResizeEvent * event ) 
-         {
-           cvWidget->loadPreview();
-         }
 
-         private:
-           EgtGpsDisplayWidget* cvWidget;
-    };
-}
 #endif // EGTGPSDISPLAYWIDGET_H
