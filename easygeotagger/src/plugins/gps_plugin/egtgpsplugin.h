@@ -29,6 +29,7 @@
 
 #include "egtgpsdisplaywidget.h"
 #include "egtsynchronizedialog.h"
+#include "egtgpsdatatablewidget.h"
 
 class EgtGpsPlugin: public EgtPluginInterface
 {

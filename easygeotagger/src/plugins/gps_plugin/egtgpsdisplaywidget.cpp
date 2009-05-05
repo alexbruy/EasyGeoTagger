@@ -110,7 +110,7 @@ void EgtGpsDisplayWidget::setDataProvider( EgtDataProvider* theProvider )
  * \param theStatus boolean that indicates whether the syncrhonize group box must be enabled or not
  */
 void EgtGpsDisplayWidget::setSynchronizing( bool theStatus )
-{qDebug("algo");
+{
   ui->gbTimeOffset->setEnabled(theStatus);
 }
 

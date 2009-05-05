@@ -135,7 +135,7 @@ void EgtGpsDataTableWidget::populateTable( )
        setItem( i, j, lvNewItem );
     }
   }
-  emit timeStampSelected( false ); qDebug("distinto3");
+  emit timeStampSelected( false ); 
   sendToEditor( false );
 }
 
@@ -194,7 +194,7 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
         if( lvContent.size() != 19 )
         {
           QMessageBox::critical( this, tr( "Error" ),tr( "The datetimestamp has an incorrect format.\n The right format is:\n yyyy:mm:dd hh:mm:ss" ),QMessageBox::Ok );
-          emit timeStampSelected(false); qDebug("distinto4");
+          emit timeStampSelected(false); 
           return;
         }
         bool lvExpectedFormat = true;
@@ -209,10 +209,10 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
           if( !lvContent[ lvIterator ].isNumber( ) && ':' != lvContent[ lvIterator ] && ' ' != lvContent[ lvIterator ] )
           {
             QMessageBox::critical( this, tr( "Error" ),tr( "The datetimestamp has an incorrect format.\n The right format is:\n yyyy:mm:dd hh:mm:ss" ),QMessageBox::Ok ); 
-            emit timeStampSelected(false); qDebug("distinto5");
+            emit timeStampSelected(false); 
             return;
           }
-          else { emit timeStampSelected(true); qDebug("distinto2"); }
+          else { emit timeStampSelected(true);  }
         }
         //format checking end
       }
@@ -245,10 +245,10 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
     //cvUiKeySelectionDialog.cbFields->removeItem( lvIndex );
     cvHeadersThatAreSet<<cvColumnSelected;
     if( "DateTimeStamp" == lvSelectedItem )
-    {qDebug("distinto6");
+    {
       emit timeStampSelected(true);
     }
-    else { emit timeStampSelected(false); qDebug("distinto1");}
+    else { emit timeStampSelected(false); }
   }
   else
   {
@@ -267,7 +267,7 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
 
   if( cvUiKeySelectionDialog.cbFields->itemText( cvUiKeySelectionDialog.cbFields->count()-1 ) == "DateTimeStamp" && lvSelectedItem != "DateTimeStamp" )
   {//We don't have a timestamp anymore
-    emit timeStampSelected(false); qDebug("distinto2");
+    emit timeStampSelected(false); 
   }
   //Deleting the previous header
   QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( cvColumnSelected );
@@ -371,11 +371,11 @@ void EgtGpsDataTableWidget::sendCoordinates( )
         QString lvStringDay = lvDate.day() < 10? "0"+QString::number( lvDate.day() ): QString::number( lvDate.day() );
 
         emit( keyValuePair( "Egt.GPS.TimeStamp",lvStringHours+":"+lvStringMinutes+":"+lvStringSeconds ) );
-        emit( keyValuePair( "Egt.GPS.DateStamp",lvStringYear+":"+lvStringMonth+":"+lvStringDay ) ); qDebug("keyvaelue");
+        emit( keyValuePair( "Egt.GPS.DateStamp",lvStringYear+":"+lvStringMonth+":"+lvStringDay ) );
       }
       else
       {
-        emit( keyValuePair( "Egt.GPS."+lvMapIterator.key( ),lvMapIterator.value( ) ) );qDebug("keyvaelue2");
+        emit( keyValuePair( "Egt.GPS."+lvMapIterator.key( ),lvMapIterator.value( ) ) );
       }
       
     }

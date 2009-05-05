@@ -82,6 +82,10 @@ void EgtGpsPlugin::initPlugin( )
  * SIGNAL and SLOTS
  *
  */
+void EgtGpsPlugin::connectConfigurationButton( QPushButton* theButton )
+{
+  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( showConfigurationPanel( ) ) );
+}
 
 void EgtGpsPlugin::run( )
 {
