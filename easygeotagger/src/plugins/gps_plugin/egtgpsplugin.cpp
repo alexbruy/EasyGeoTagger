@@ -65,15 +65,17 @@ void EgtGpsPlugin::initPlugin( )
     connect( &cvDataTableWidget, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
 
     cvDisplayWidget.setApplicationInterface( cvApplicationInterface );
-
-    connect( cvDisplayWidget.cvpbtnOffsetManual, SIGNAL( clicked( ) ), &cvSynchronizeDialog, SLOT( setOffset( ) ) );
-    connect( cvDisplayWidget.cvpbtnOffsetPic, SIGNAL( clicked( ) ), &cvSynchronizeDialog, SLOT( setOffsetPic( ) ) );
-    connect( cvDisplayWidget.cvpbtnDeleteRow, SIGNAL( clicked() ),&cvDataTableWidget, SLOT( deleteRow() ) );
-    connect( cvDisplayWidget.cvpbtnSendCoordinates, SIGNAL( clicked( ) ), &cvDataTableWidget, SLOT( sendCoordinates( ) ) );
+    cvSynchronizeDialog.setApplicationInterface( cvApplicationInterface );
+    connect( cvDisplayWidget.getPbtnOffsetManual(), SIGNAL( clicked( ) ), &cvSynchronizeDialog, SLOT( setOffset( ) ) );
+    connect( cvDisplayWidget.getPbtnOffsetPic(), SIGNAL( clicked( ) ), &cvSynchronizeDialog, SLOT( setOffsetPic( ) ) );
+    connect( cvDisplayWidget.getPbtnDeleteRow(), SIGNAL( clicked() ),&cvDataTableWidget, SLOT( deleteRow() ) );
+    connect( cvDisplayWidget.getPbtnSendCoordinates(), SIGNAL( clicked( ) ), &cvDataTableWidget, SLOT( sendCoordinates( ) ) );
     connect( &cvDataTableWidget, SIGNAL( timeStampSelected( bool ) ), &cvDisplayWidget, SLOT( setSynchronizing(bool) ) );
-    connect( cvDisplayWidget.cvpbtnOffsetManual, SIGNAL( clicked( ) ), &cvSynchronizeDialog, SLOT( setOffset( ) ) );
+    
     connect( &cvSynchronizeDialog, SIGNAL( offsetSet( int, QString ) ), &cvDataTableWidget, SLOT( setOffsetAndTimeStamp( int, QString ) ) );
     connect( &cvDataTableWidget, SIGNAL( displayButtonsStatus( bool, bool ) ), &cvDisplayWidget, SLOT( setButtonsStatus( bool, bool ) ) );
+
+    connect( &cvDisplayWidget, SIGNAL( closingWindow( ) ), &cvSynchronizeDialog, SLOT( closeWindow( ) ) );
   }
 }
 

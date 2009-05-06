@@ -48,18 +48,23 @@ class EgtGpsDataTableWidget : public QTableWidget
 
   public slots:
 
+    /*! \brief Deletes a row of the table */
     void deleteRow();
+
+    /*! \brief Sends the coordinates through the application interface */
+    void sendCoordinates( );
+
+    /*! \brief Sets the offset*/
+    void setOffset( int );
+
+    /*! \brief Sets the offset and timestamp */
+    void setOffsetAndTimeStamp(int, QString);
+
+    /*! \brief Sets the timestamp */
+    void setPictureDateTimeStamp( QString );
 
     /*! \brief Slot used to set the specific file reader */
     void setProvider( EgtDataProvider* );
-
-    void setOffset( int );
-
-    void setPictureDateTimeStamp( QString );
-
-    void setOffsetAndTimeStamp(int, QString);
-
-    void sendCoordinates( );
 
   private slots:
 
@@ -72,22 +77,25 @@ class EgtGpsDataTableWidget : public QTableWidget
     /*! \brief Slot used when the vertical header is clicked */
     void cvVerticalHeader_clicked( int );
 
-    
     /*! \brief Slot used when the user sets the header of a column */
     void on_pbtnOk_clicked( );
 
+    /*! \brief Slot used to show up a pop up menu, when user right clicks on the vertical header */
     void popUpMenu( QPoint );
 
-     void sendToEditor( bool);
+    /*! \brief Slot that performs error checks when the data is about to be sent to the editor */
+    void sendToEditor( bool);
+
   signals:
 
-    void timeStampSelected( bool );
+    /*! \brief Signal used to set the status of the sendCoordinates and deleteRow buttons */
+    void displayButtonsStatus( bool, bool );
 
     /*! \brief Signal used to comunicate with the application interface */
     void keyValuePair( QString, QString );
-    
-    void displayButtonsStatus( bool, bool );
 
+    /*! \brief Signal used to notify that one column contains a date timestamp */
+    void timeStampSelected( bool );
 
   private:
     
@@ -115,6 +123,13 @@ class EgtGpsDataTableWidget : public QTableWidget
     /*! \brief QMap to store the items of the selected row */
     QMap<QString,QString> * cvMapItems;
 
+    /*! \brief Offset specified by the user in the synchronization dialog */
+    int cvOffset;
+
+    /*! \brief Date time stamp of picture used in the synchronization dialog */
+    QString cvPictureDateTimeStamp;
+
+    /*! \brief Row the user selected */  
     int cvSelectedRow;
 
     /*! \brief QDesigner object of the dialog with the available fields*/
@@ -126,10 +141,6 @@ class EgtGpsDataTableWidget : public QTableWidget
     /*! \brief Function used to populate the table */
     void populateTable( );
   
-    int cvOffset;
-
-    QString cvPictureDateTimeStamp;
-
 };
 
 #endif

@@ -24,16 +24,14 @@
 #ifndef EGTGPSDISPLAYWIDGET_H
 #define EGTGPSDISPLAYWIDGET_H
 
-#include "ui_egtsynchronize.h"
-#include "egtdataprovider.h"
+
 #include "egtproviderfactory.h"
 #include "egtgpsdatatablewidget.h"
 #include "egtapplicationinterface.h"
-#include "egtimagefactory.h"
-#include "egtphotoexifengine.h"
 
 #include <QWidget>
 #include <QCloseEvent>
+#include <QPushButton>
 
 class EgtGpsDisplayWidget;
 
@@ -47,6 +45,7 @@ class EgtGpsDisplayWidget : public QWidget
   Q_OBJECT
 
   public:
+
     EgtGpsDisplayWidget( QWidget* theParent = 0 );
 
     /*! \brief Reimplemented function to close the syncrhonization dialog when closing the plugin window */
@@ -58,12 +57,14 @@ class EgtGpsDisplayWidget : public QWidget
     /*! \brief Desginer object of the gps plugin interface */
     Ui::EgtGpsDisplayWidgetBase* ui;
  
-    QPushButton* cvpbtnOffsetManual;
-    QPushButton* cvpbtnOffsetPic;
-    QPushButton* cvpbtnDeleteRow;
-    QPushButton* cvpbtnSendCoordinates;
-    
+    QPushButton* getPbtnOffsetManual(); 
+    QPushButton* getPbtnOffsetPic(); 
+    QPushButton* getPbtnDeleteRow(); 
+    QPushButton* getPbtnSendCoordinates();
   signals:
+
+    /*!\brief signal emitted when the window is closed*/
+    void closingWindow();
 
     /*! \brief Signal used to comunicate with the application interface */
     void keyValuePair( QString, QString );
@@ -72,9 +73,9 @@ class EgtGpsDisplayWidget : public QWidget
     /*! \brief Slot used to enable/disable the group box that contains the offset buttons */
     void setSynchronizing(bool);
 
-     void setDataTable( EgtGpsDataTableWidget* );
+    void setDataTable( EgtGpsDataTableWidget* );
 
-     void setButtonsStatus( bool , bool );
+    void setButtonsStatus( bool , bool );
 
   private slots:
 

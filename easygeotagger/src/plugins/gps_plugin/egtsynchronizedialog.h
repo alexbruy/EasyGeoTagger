@@ -28,8 +28,6 @@
 #include "ui_egtsynchronize.h"
 #include "egtimagefactory.h"
 #include "egtphotoexifengine.h"
-#include "egtdataprovider.h"
-#include "egtproviderfactory.h"
 #include "egtapplicationinterface.h"
 
 namespace Ui
@@ -42,17 +40,27 @@ class EgtSynchronizeDialog : public QDialog
   Q_OBJECT
   
   public:
+
     EgtSynchronizeDialog( QWidget* theParent = 0 );
 
     /*! \brief Sets the picture selected on the preview label */
     void loadPreview();
 
+     /*!\brief Sets the application iterface*/
+     void setApplicationInterface( EgtApplicationInterface* );
+
   signals:
-    void offsetSet( int, QString );
+     /*!\brief Signal used to send the new offset and, in case it exists, the timestamp of the picture*/
+     void offsetSet( int, QString );
 
   public slots:
+    
+    /*! \brief Slot called when the user accepts the changes made in the synchronize dialog */
     void accepted();
    
+    /*! \brief Slot called to close the synchronize dialog */
+    void closeWindow();
+
     /*! \brief Slot called when the user clicks on the file browser */
    // void clicked( const QModelIndex& );
 
@@ -77,10 +85,12 @@ class EgtSynchronizeDialog : public QDialog
     /*! \brief Slot used to update the offset when the user modifies the datetimestamp that sees in the synchronization picture */
     void updateOffset();
 
+    /*! \brief Overloaded method, reimplemented to resize the preview picture */
     void resizeEvent ( QResizeEvent * event ); 
 
   private:
 
+    /*! \brief  Pointer to the application  interface*/
     EgtApplicationInterface* cvApplicationInterface;
 
     /*! \brief Object used to show the picture preview */
@@ -101,9 +111,8 @@ class EgtSynchronizeDialog : public QDialog
     /*! \brief Specifies whether the image to show is valid or not */
     bool cvValidImage;
 
+    /*! \brief  Qt Designer object*/
     Ui::EgtSynchronizeDialogBase* ui;
-  
-    
 
 };
 #endif // EGTSYNCHRONIZEDIALOG

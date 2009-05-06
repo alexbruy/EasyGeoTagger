@@ -23,6 +23,7 @@
 **/
 
 #include "egtsynchronizedialog.h"
+#include "egtlogger.h"
 
 #include <QCloseEvent>
 #include <QMessageBox>
@@ -35,8 +36,6 @@ EgtSynchronizeDialog::EgtSynchronizeDialog( QWidget* theParent )
   ui->setupUi( this );
   setWindowIcon( QIcon( ":/icons/internet-web-browser.svg" ) );
 
-
-  
   ui->pbtnOpenPic->setIcon( QIcon(":/icons/document-open.svg") );
   ui->rbtnPositive->setChecked(true);
 
@@ -61,6 +60,8 @@ EgtSynchronizeDialog::EgtSynchronizeDialog( QWidget* theParent )
 
 void EgtSynchronizeDialog::loadPreview()
 {
+  EgtDebug( "entered" );
+
   if( cvValidImage )
   {
     ui->labelPreview->setPixmap( QPixmap::fromImage( cvImageFactory.scaleImage( ui->labelPreview->width( ), ui->labelPreview->height( ) ) ) );
@@ -79,6 +80,8 @@ void EgtSynchronizeDialog::loadPreview()
 
 void EgtSynchronizeDialog::accepted()
 { 
+  EgtDebug( "entered" );
+  
   if( ui->groupBoxPreview->isHidden() ){ cvPictureDateTimeStamp = ""; }
   else{ cvPictureDateTimeStamp = cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString( ); }
 
@@ -102,6 +105,12 @@ void EgtSynchronizeDialog::accepted()
   emit offsetSet( cvOffset, cvPictureDateTimeStamp );
 }
 
+void EgtSynchronizeDialog::closeWindow()
+{
+  EgtDebug( "entered" );
+
+  close();
+}
 /*!
  * \param theIndex contains the index of the selected picture in the browser
  */
@@ -117,6 +126,8 @@ void EgtSynchronizeDialog::accepted()
 
 void EgtSynchronizeDialog::openPic()
 {
+  EgtDebug( "entered" );
+
   QString lvFileName = QFileDialog::getOpenFileName( this, tr( "Open Image File" ), "/home", tr( "Image Files (*)" ) );
   
   cvImageFactory.setFile( lvFileName );
@@ -127,6 +138,8 @@ void EgtSynchronizeDialog::openPic()
 
 void EgtSynchronizeDialog::resizeEvent ( QResizeEvent * event ) 
 {
+  EgtDebug( "entered" );
+
   loadPreview(); 
 }
 
@@ -135,6 +148,8 @@ void EgtSynchronizeDialog::resizeEvent ( QResizeEvent * event )
  */
 void EgtSynchronizeDialog::updatePreview( bool isValid )
 {
+  EgtDebug( "entered" );
+
   cvValidImage = isValid;
   loadPreview();
 }
@@ -146,14 +161,24 @@ void EgtSynchronizeDialog::updatePreview( bool isValid )
  */
 void EgtSynchronizeDialog::updateProgress( int theMinimum, int theMaximum, int theProgress )
 {
+  EgtDebug( "entered" );
+
   //TODO: consider if it is better to set these individually
   ui->pbarProgressBar->setMinimum( theMinimum );
   ui->pbarProgressBar->setMaximum( theMaximum );
   ui->pbarProgressBar->setValue( theProgress );
 }
+void EgtSynchronizeDialog::setApplicationInterface( EgtApplicationInterface* theAppInterface )
+{
+  EgtDebug( "entered" );
+
+  cvApplicationInterface = theAppInterface;
+}
 
 void EgtSynchronizeDialog::setOffset()
 {
+  EgtDebug( "entered" );
+
   ui->groupBoxPreview->setVisible( false );
   ui->groupBoxOffset->setEnabled( true );
 
@@ -164,6 +189,8 @@ void EgtSynchronizeDialog::setOffset()
 
 void EgtSynchronizeDialog::setOffsetPic()
 {
+  EgtDebug( "entered" );
+
   ui->groupBoxPreview->setVisible( true );
   ui->groupBoxOffset->setEnabled( false );
 
@@ -174,6 +201,10 @@ void EgtSynchronizeDialog::setOffsetPic()
 
 void EgtSynchronizeDialog::updateOffset()
 {
+  EgtDebug( "entered" );
+
+  if( ui->groupBoxPreview->isHidden() ){ return; }
+
   QDate lvExifDate( cvPictureDateTimeStamp.mid(0,4).toInt(),cvPictureDateTimeStamp.mid(5,2).toInt(),cvPictureDateTimeStamp.mid(8,2).toInt() );
   QDate lvUserDate(ui->sbYear->value(),ui->sbMonth->value() , ui->sbDay->value() );
 
@@ -200,7 +231,7 @@ void EgtSynchronizeDialog::updateOffset()
     }
     else{ lvOffset = 99999; }
 
-    if( lvOffset != 99999 )
+    if( lvOffset != 99999  )
     {
       cvOffset = 0;
 
@@ -218,12 +249,8 @@ void EgtSynchronizeDialog::updateOffset()
       ui->sbHours->setValue(lvOffset/3600);
       ui->sbMinutes->setValue((lvOffset%3600)/60);
       ui->sbSeconds->setValue(((lvOffset%3600)%60));
-      
-
-
     }
     else{ cvOffset = 99999; }
-    
     
 }
 

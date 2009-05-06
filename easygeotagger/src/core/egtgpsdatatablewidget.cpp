@@ -22,6 +22,7 @@
 **
 **/
 #include "egtgpsdatatablewidget.h"
+#include "egtlogger.h"
 
 #include <QMessageBox>
 #include <QMenu>
@@ -39,9 +40,7 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
   cvHeadersAreSet = false;
 
   cvOffset= 0;
-
   cvPictureDateTimeStamp = "";
-
   cvMapItems = new QMap<QString,QString>;
 
   connect( this, SIGNAL( cellClicked( int, int ) ), this, SLOT( cell_selected( int, int ) ) );  
@@ -67,6 +66,8 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 
 QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems( )
 {
+  EgtDebug( "entered" );
+
   return cvMapItems;
 }
 
@@ -78,6 +79,8 @@ QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems( )
 
 bool EgtGpsDataTableWidget::isThereAnyColumnSet( )
 {
+  EgtDebug( "entered" );
+
   if( cvHeadersAreSet ) { return true; }
 
   bool lvReturn = false;
@@ -91,6 +94,8 @@ bool EgtGpsDataTableWidget::isThereAnyColumnSet( )
 
 void EgtGpsDataTableWidget::populateTable( )
 {
+  EgtDebug( "entered" );
+
   clear();
   setRowCount( 0 );
   setColumnCount( 0 );
@@ -148,6 +153,8 @@ void EgtGpsDataTableWidget::populateTable( )
 
 void EgtGpsDataTableWidget::cell_selected( int row, int column )
 { 
+  EgtDebug( "entered" );
+
   QTableWidgetItem * lvItem = item ( row, column );
   double x = lvItem->data( 0 ).toDouble( );
    sendToEditor(false);
@@ -155,6 +162,8 @@ void EgtGpsDataTableWidget::cell_selected( int row, int column )
 
 void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
 {
+  EgtDebug( "entered" );
+
   cvColumnSelected = theIndex;
 
   QTableWidgetItem* lvHeaderItem;
@@ -175,7 +184,10 @@ void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
 }
 
 void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
-{ cvSelectedRow = theIndex;
+{ 
+  EgtDebug( "entered" );
+
+  cvSelectedRow = theIndex;
   delete cvMapItems;
   cvMapItems = new QMap<QString,QString>;
  
@@ -231,11 +243,13 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
 
 void EgtGpsDataTableWidget::deleteRow()
 { 
+  EgtDebug( "entered" );
   removeRow(cvSelectedRow);
 }
 
 void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
 {  
+  EgtDebug( "entered" );
   QString lvSelectedItem = cvUiKeySelectionDialog.cbFields->currentText( );
   
   int lvIndex = cvUiKeySelectionDialog.cbFields->currentIndex( );
@@ -283,6 +297,8 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
 
 void EgtGpsDataTableWidget::popUpMenu(QPoint theCoordinates)
 {
+  EgtDebug( "entered" );
+
   QMenu menu;
   QAction* lvDeleteAction = new QAction( tr("&Delete row..."), this );
   lvDeleteAction->setStatusTip(tr("Delete the selected row"));
@@ -296,6 +312,8 @@ void EgtGpsDataTableWidget::popUpMenu(QPoint theCoordinates)
 
 void EgtGpsDataTableWidget::sendCoordinates( ) 
 {
+  EgtDebug( "entered" );
+
   if( isThereAnyColumnSet( ) )
   {
     QMap<QString,QString>* lvMap = getRowItems( );
@@ -387,36 +405,12 @@ void EgtGpsDataTableWidget::sendCoordinates( )
 
 }
 
-void EgtGpsDataTableWidget::setProvider( EgtDataProvider* theProvider )
-{
-  if( 0 != cvDataProvider ) { delete cvDataProvider; }
-
-  cvDataProvider = theProvider;
-  cvHeadersAreSet = cvDataProvider->hasColumnHeaders( );
-
-  populateTable( );
-}
-
-void EgtGpsDataTableWidget::setOffset( int theOffset )
-{
-  cvOffset = theOffset;
-}
-
-void EgtGpsDataTableWidget::setOffsetAndTimeStamp( int theOffset, QString theDateTimeStamp )
-{
-  cvOffset = theOffset;
-  cvPictureDateTimeStamp = theDateTimeStamp;
-}
-void EgtGpsDataTableWidget::setPictureDateTimeStamp( QString theDateTimeStamp )
-{
-  cvPictureDateTimeStamp = theDateTimeStamp;
-}
-
 /*!
  * \param theStatus boolean that indicates whether the "send to editor" button must be enabled or not
  */
 void EgtGpsDataTableWidget::sendToEditor( bool theStatus )
 { 
+  EgtDebug( "entered" );
   /*ui->pbtnSendCoordinates->setEnabled( theStatus );
   ui->pbtnDeleteRow->setEnabled( theStatus );*/
   emit displayButtonsStatus( theStatus, theStatus );
@@ -443,3 +437,39 @@ void EgtGpsDataTableWidget::sendToEditor( bool theStatus )
     }
   }
 }
+
+void EgtGpsDataTableWidget::setOffset( int theOffset )
+{
+  EgtDebug( "entered" ); 
+ 
+  cvOffset = theOffset;
+}
+
+void EgtGpsDataTableWidget::setOffsetAndTimeStamp( int theOffset, QString theDateTimeStamp )
+{
+  EgtDebug( "entered" );
+  
+  cvOffset = theOffset;
+  cvPictureDateTimeStamp = theDateTimeStamp;
+}
+void EgtGpsDataTableWidget::setPictureDateTimeStamp( QString theDateTimeStamp )
+{
+  EgtDebug( "entered" );
+
+  cvPictureDateTimeStamp = theDateTimeStamp;
+}
+
+void EgtGpsDataTableWidget::setProvider( EgtDataProvider* theProvider )
+{
+  EgtDebug( "entered" );
+
+  if( 0 != cvDataProvider ) { delete cvDataProvider; }
+
+  cvDataProvider = theProvider;
+  cvHeadersAreSet = cvDataProvider->hasColumnHeaders( );
+
+  populateTable( );
+}
+
+
+

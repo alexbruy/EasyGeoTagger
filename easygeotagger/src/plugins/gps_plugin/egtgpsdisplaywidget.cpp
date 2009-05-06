@@ -25,7 +25,6 @@
 
 #include "egtlogger.h"
 #include "ui_egtgpsdisplaywidgetbase.h"
-#include "egtmainwindow.h"
 
 #include <QMessageBox>
 #include <QApplication>
@@ -43,11 +42,6 @@ EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent )
   ui->pbtnSendCoordinates->setEnabled( false );
   ui->pbtnDeleteRow->setEnabled( false );
 
-  cvpbtnOffsetManual = ui->pbtnOffsetManual;
-  cvpbtnOffsetPic = ui -> pbtnOffsetPic;
-  cvpbtnDeleteRow = ui -> pbtnDeleteRow;
-  cvpbtnSendCoordinates = ui-> pbtnSendCoordinates;
-
   connect( ui->pbtnOpenFile, SIGNAL( clicked( ) ), this, SLOT( openFile( ) ) );
   connect( &cvProviderFactory, SIGNAL( dataProviderCreated( EgtDataProvider* ) ),this, SLOT( setDataProvider( EgtDataProvider* ) ) );
 
@@ -58,27 +52,63 @@ EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent )
  * PUBLIC FUNCTIONS
  *
  */
+
 /*!
  * \param theEvent event received when the user closes the window
  */
 void EgtGpsDisplayWidget::closeEvent(QCloseEvent *theEvent)
  {
+    EgtDebug( "entered" );
+  
+    emit closingWindow();
     //cvSynchronizeDialog->close();
     theEvent->accept();
  }
 
+
+QPushButton* EgtGpsDisplayWidget::getPbtnOffsetManual()
+{
+  EgtDebug( "entered" );
+
+  return ui->pbtnOffsetManual;
+}
+
+QPushButton* EgtGpsDisplayWidget::getPbtnOffsetPic()
+{
+  EgtDebug( "entered" );
+
+  return ui->pbtnOffsetPic;
+}
+
+QPushButton* EgtGpsDisplayWidget::getPbtnDeleteRow()
+{
+  EgtDebug( "entered" );
+
+  return ui->pbtnDeleteRow;
+}
+ 
+QPushButton* EgtGpsDisplayWidget::getPbtnSendCoordinates()
+{
+  EgtDebug( "entered" );
+
+  return ui-> pbtnSendCoordinates;
+}
 
 /*!
  * \param theAppInterface contains the actual application interface used to comunicate with the main app.
  */
 void EgtGpsDisplayWidget::setApplicationInterface( EgtApplicationInterface* theAppInterface )
 {
+  EgtDebug( "entered" );
+
   cvApplicationInterface = theAppInterface;
   //connect( cvApplicationInterface, SIGNAL( indexSelected( const QModelIndex& ) ), this, SLOT( clicked( const QModelIndex& ) ) );
 }
 
 void EgtGpsDisplayWidget::setDataTable( EgtGpsDataTableWidget* theDataTable)
 {
+  EgtDebug( "entered" );
+
   cvDataTable = theDataTable;
 
   QVBoxLayout* lvLayout = new QVBoxLayout;
@@ -95,6 +125,8 @@ void EgtGpsDisplayWidget::setDataTable( EgtGpsDataTableWidget* theDataTable)
  */
 void EgtGpsDisplayWidget::openFile( )
 {
+  EgtDebug( "entered" );
+
   cvProviderFactory.show( );
 }
 
@@ -103,6 +135,8 @@ void EgtGpsDisplayWidget::openFile( )
  */
 void EgtGpsDisplayWidget::setDataProvider( EgtDataProvider* theProvider )
 {
+  EgtDebug( "entered" );
+
   cvDataTable->setProvider( theProvider );
 }
 
@@ -111,15 +145,15 @@ void EgtGpsDisplayWidget::setDataProvider( EgtDataProvider* theProvider )
  */
 void EgtGpsDisplayWidget::setSynchronizing( bool theStatus )
 {
+  EgtDebug( "entered" );
+
   ui->gbTimeOffset->setEnabled(theStatus);
 }
 
 void EgtGpsDisplayWidget::setButtonsStatus( bool theStatusOfCoordinates, bool theStatusOfDelete )
 {
+  EgtDebug( "entered" );
+
   ui->pbtnSendCoordinates->setEnabled( theStatusOfCoordinates );
   ui->pbtnDeleteRow->setEnabled( theStatusOfDelete );
 }
-
-
-
-
