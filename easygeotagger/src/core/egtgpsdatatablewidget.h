@@ -41,7 +41,9 @@ class EgtGpsDataTableWidget : public QTableWidget
     EgtGpsDataTableWidget( );
 
     /*! \brief Indicates if the user has set all the columns with a valid value */
-    bool isThereAnyColumnSet( );
+    bool isAnyColumnHeaderSet( );
+
+    bool hasColumnHeader( QString );
 
     /*! \brief Returns a QMap that contains all the items of the selected row */
     QMap<QString,QString>* getRowItems( );
@@ -83,9 +85,6 @@ class EgtGpsDataTableWidget : public QTableWidget
     /*! \brief Slot used to show up a pop up menu, when user right clicks on the vertical header */
     void popUpMenu( QPoint );
 
-    /*! \brief Slot that performs error checks when the data is about to be sent to the editor */
-    void sendToEditor( bool);
-
   signals:
 
     /*! \brief Signal used to set the status of the sendCoordinates and deleteRow buttons */
@@ -93,6 +92,9 @@ class EgtGpsDataTableWidget : public QTableWidget
 
     /*! \brief Signal used to comunicate with the application interface */
     void keyValuePair( QString, QString );
+
+    /*! \brief Signal indicating if a row has been selected or deselected */
+    void rowSelected( bool );
 
     /*! \brief Signal used to notify that one column contains a date timestamp */
     void timeStampSelected( bool );
@@ -111,9 +113,6 @@ class EgtGpsDataTableWidget : public QTableWidget
     /*! \brief Pointer to the concrete instance of the file reader */
     EgtDataProvider* cvDataProvider;
 
-    /*! \brief Indicates if all the headers are set */
-    bool cvHeadersAreSet;
-
     /*! \brief A QList with all the headers that are set so far */
     QList<int> cvHeadersThatAreSet;
 
@@ -131,6 +130,9 @@ class EgtGpsDataTableWidget : public QTableWidget
 
     /*! \brief Row the user selected */  
     int cvSelectedRow;
+
+    /*! \brief Number of headers that have been set */
+    int cvTotalHeadersSet;
 
     /*! \brief QDesigner object of the dialog with the available fields*/
     Ui::EgtKeySelectionDialog cvUiKeySelectionDialog;

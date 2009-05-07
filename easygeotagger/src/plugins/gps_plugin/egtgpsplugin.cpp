@@ -33,10 +33,8 @@
 EgtGpsPlugin::EgtGpsPlugin( )
 {
   cvCategories = QObject::tr( "Coordinate Extraction" );
-  cvDescription = QObject::tr( "Reads data from GPS files" );
-  cvName = QObject::tr( "GPS Reader" );
-
-    
+  cvDescription = QObject::tr( "Load GPS data from files" );
+  cvName = QObject::tr( "GPS Data" );
 }
 
 /*
@@ -63,19 +61,6 @@ void EgtGpsPlugin::initPlugin( )
     cvDisplayWidget.setDataTable( &cvDataTableWidget );
     //connect to application interface
     connect( &cvDataTableWidget, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
-
-    cvDisplayWidget.setApplicationInterface( cvApplicationInterface );
-    cvSynchronizeDialog.setApplicationInterface( cvApplicationInterface );
-    connect( cvDisplayWidget.getPbtnOffsetManual(), SIGNAL( clicked( ) ), &cvSynchronizeDialog, SLOT( setOffset( ) ) );
-    connect( cvDisplayWidget.getPbtnOffsetPic(), SIGNAL( clicked( ) ), &cvSynchronizeDialog, SLOT( setOffsetPic( ) ) );
-    connect( cvDisplayWidget.getPbtnDeleteRow(), SIGNAL( clicked() ),&cvDataTableWidget, SLOT( deleteRow() ) );
-    connect( cvDisplayWidget.getPbtnSendCoordinates(), SIGNAL( clicked( ) ), &cvDataTableWidget, SLOT( sendCoordinates( ) ) );
-    connect( &cvDataTableWidget, SIGNAL( timeStampSelected( bool ) ), &cvDisplayWidget, SLOT( setSynchronizing(bool) ) );
-    
-    connect( &cvSynchronizeDialog, SIGNAL( offsetSet( int, QString ) ), &cvDataTableWidget, SLOT( setOffsetAndTimeStamp( int, QString ) ) );
-    connect( &cvDataTableWidget, SIGNAL( displayButtonsStatus( bool, bool ) ), &cvDisplayWidget, SLOT( setButtonsStatus( bool, bool ) ) );
-
-    connect( &cvDisplayWidget, SIGNAL( closingWindow( ) ), &cvSynchronizeDialog, SLOT( closeWindow( ) ) );
   }
 }
 
@@ -109,5 +94,3 @@ void EgtGpsPlugin::run( )
 
 
 Q_EXPORT_PLUGIN2( gpsplugin, EgtGpsPlugin );
-
-

@@ -37,24 +37,21 @@ EgtGpsDataTableWidget::EgtGpsDataTableWidget( )
 
   cvDataProvider = 0;
   cvColumnSelected = 0;
-  cvHeadersAreSet = false;
+  cvTotalHeadersSet = 0;
 
   cvOffset= 0;
   cvPictureDateTimeStamp = "";
   cvMapItems = new QMap<QString,QString>;
 
-  connect( this, SIGNAL( cellClicked( int, int ) ), this, SLOT( cell_selected( int, int ) ) );  
-
   cvHorizontalHeader = horizontalHeader( );
   connect( cvHorizontalHeader, SIGNAL( sectionClicked( int ) ), this, SLOT( cvHorizontalHeader_clicked( int ) ) ); 
 
   cvVerticalHeader = verticalHeader() ;
-  
   cvVerticalHeader->setContextMenuPolicy(Qt::CustomContextMenu); //to enable the customContextMenuRequested signal
   connect( cvVerticalHeader, SIGNAL( customContextMenuRequested(QPoint) ), this, SLOT( popUpMenu( QPoint ) ) ); 
-
   connect( cvVerticalHeader, SIGNAL( sectionClicked(int) ), this, SLOT( cvVerticalHeader_clicked( int ) ) ); 
 
+  connect( this, SIGNAL( cellClicked( int, int ) ), this, SLOT( cell_selected( int, int ) ) );
   connect( cvUiKeySelectionDialog.pbtnOk, SIGNAL( clicked( ) ), this, SLOT( on_pbtnOk_clicked( ) ) );
 }
 
@@ -77,19 +74,27 @@ QMap<QString,QString>* EgtGpsDataTableWidget::getRowItems( )
  *
  */
 
-bool EgtGpsDataTableWidget::isThereAnyColumnSet( )
+bool EgtGpsDataTableWidget::isAnyColumnHeaderSet( )
 {
   EgtDebug( "entered" );
 
-  if( cvHeadersAreSet ) { return true; }
+  return ( cvTotalHeadersSet > 0 );
+}
 
-  bool lvReturn = false;
-  for( int i = 0; i < columnCount( ); i++ )
+bool EgtGpsDataTableWidget::hasColumnHeader( QString theFieldName )
+{
+  QMap<QString,QString>* lvMap = getRowItems( );
+  QMapIterator<QString, QString> lvMapIterator( *lvMap );
+  while ( lvMapIterator.hasNext( ) )
   {
-    lvReturn = lvReturn || cvHeadersThatAreSet.contains( i );
-  } 
+    lvMapIterator.next( );
+    if(lvMapIterator.key( ).compare( theFieldName, Qt::CaseInsensitive ) )
+    {
+      return true;
+    }
+  }
 
-  return lvReturn;
+  return false;
 }
 
 void EgtGpsDataTableWidget::populateTable( )
@@ -141,7 +146,7 @@ void EgtGpsDataTableWidget::populateTable( )
     }
   }
   emit timeStampSelected( false ); 
-  sendToEditor( false );
+  emit rowSelected( false );
 }
 
 
@@ -157,7 +162,7 @@ void EgtGpsDataTableWidget::cell_selected( int row, int column )
 
   QTableWidgetItem * lvItem = item ( row, column );
   double x = lvItem->data( 0 ).toDouble( );
-   sendToEditor(false);
+  emit rowSelected(false);
 }
 
 void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
@@ -181,6 +186,7 @@ void EgtGpsDataTableWidget::cvHorizontalHeader_clicked( int theIndex )
   }*/
 
   cvColumnMeaningDialog->show( );
+  emit rowSelected( false );
 }
 
 void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
@@ -191,7 +197,7 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
   delete cvMapItems;
   cvMapItems = new QMap<QString,QString>;
  
-  if( isThereAnyColumnSet( ) )
+  if( isAnyColumnHeaderSet( ) )
   {
     QTableWidgetItem* lvHeaderItem;
     for( int lvColumnCount = 0; lvColumnCount < columnCount( ); lvColumnCount++ )
@@ -237,14 +243,17 @@ void EgtGpsDataTableWidget::cvVerticalHeader_clicked( int theIndex )
         cvMapItems->insert( lvText, item( theIndex, lvColumnCount )->text( ) );
       }
     }
-    sendToEditor(true);
   }
+
+  emit rowSelected(true);
 }
 
 void EgtGpsDataTableWidget::deleteRow()
 { 
   EgtDebug( "entered" );
-  removeRow(cvSelectedRow);
+  removeRow( cvSelectedRow );
+  cvSelectedRow = -1;
+  emit rowSelected( false );
 }
 
 void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
@@ -256,7 +265,8 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
 
   if( "( clear )" != lvSelectedItem )
   {
-    //cvUiKeySelectionDialog.cbFields->removeItem( lvIndex );
+    //TODO: check to make sure the value has changed
+    cvTotalHeadersSet++;
     cvHeadersThatAreSet<<cvColumnSelected;
     if( "DateTimeStamp" == lvSelectedItem )
     {
@@ -266,6 +276,8 @@ void EgtGpsDataTableWidget::on_pbtnOk_clicked( )
   }
   else
   {
+    //TODO: check to make sure the value has changed
+    cvTotalHeadersSet--;
     if( cvDataProvider->hasColumnHeaders( ) )
     {//revert to the original header
       QStringList lvTags;
@@ -314,7 +326,7 @@ void EgtGpsDataTableWidget::sendCoordinates( )
 {
   EgtDebug( "entered" );
 
-  if( isThereAnyColumnSet( ) )
+  if( isAnyColumnHeaderSet( ) )
   {
     QMap<QString,QString>* lvMap = getRowItems( );
 
@@ -398,44 +410,6 @@ void EgtGpsDataTableWidget::sendCoordinates( )
       
     }
   }
-  else
-  {
-    QMessageBox::critical( this, tr( "Error" ),tr( "At least one header must be set" ),QMessageBox::Ok );
-  }
-
-}
-
-/*!
- * \param theStatus boolean that indicates whether the "send to editor" button must be enabled or not
- */
-void EgtGpsDataTableWidget::sendToEditor( bool theStatus )
-{ 
-  EgtDebug( "entered" );
-  /*ui->pbtnSendCoordinates->setEnabled( theStatus );
-  ui->pbtnDeleteRow->setEnabled( theStatus );*/
-  emit displayButtonsStatus( theStatus, theStatus );
-
-  QMap<QString,QString>* lvMap = getRowItems( );
-  if( theStatus && cvPictureDateTimeStamp != "" )
-  {
-    QMapIterator<QString, QString> lvMapIterator( *lvMap );
-    while ( lvMapIterator.hasNext( ) )
-    {
-      lvMapIterator.next( );
-      if(lvMapIterator.key( ) == "DateTimeStamp" )
-      {
-        QString lvValue = lvMapIterator.value();
-        QDate lvPictureDate( lvValue.mid(0,4).toInt(),lvValue.mid(5,2).toInt(),lvValue.mid(8,2).toInt() );
-        QDate lvTableDate( cvPictureDateTimeStamp.mid(0,4).toInt(),cvPictureDateTimeStamp.mid(5,2).toInt(),cvPictureDateTimeStamp.mid(8,2).toInt() );
-        if( abs(lvTableDate.daysTo( lvPictureDate )) > 1 )
-        {
-          //ui->pbtnSendCoordinates->setEnabled( false );
-          emit displayButtonsStatus( false, theStatus ); 
-          QMessageBox::critical( this, tr( "Error" ),tr( "The dates of the picture and the row don't match" ),QMessageBox::Ok );
-        }
-      }
-    }
-  }
 }
 
 void EgtGpsDataTableWidget::setOffset( int theOffset )
@@ -466,7 +440,6 @@ void EgtGpsDataTableWidget::setProvider( EgtDataProvider* theProvider )
   if( 0 != cvDataProvider ) { delete cvDataProvider; }
 
   cvDataProvider = theProvider;
-  cvHeadersAreSet = cvDataProvider->hasColumnHeaders( );
 
   populateTable( );
 }

@@ -62,55 +62,50 @@ void EgtSynchronizeDialog::loadPreview()
 {
   EgtDebug( "entered" );
 
-  if( cvValidImage )
+  if( cvImageFactory.isValid() )
   {
     ui->labelPreview->setPixmap( QPixmap::fromImage( cvImageFactory.scaleImage( ui->labelPreview->width( ), ui->labelPreview->height( ) ) ) );
-
-    cvPictureDateTimeStamp = cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString( );
-    ui->labelTimeStamp->setText( cvPictureDateTimeStamp );
-
-    ui->sbYear->setValue( cvPictureDateTimeStamp.mid(0,4).toInt() );
-    ui->sbMonth->setValue( cvPictureDateTimeStamp.mid(5,2).toInt() );
-    ui->sbDay->setValue( cvPictureDateTimeStamp.mid(8,2).toInt() );
-    ui->sbUserHours->setValue( cvPictureDateTimeStamp.mid(11,2).toInt() );
-    ui->sbUserMinutes->setValue( cvPictureDateTimeStamp.mid(14,2).toInt() );
-    ui->sbUserSeconds->setValue( cvPictureDateTimeStamp.mid(17,2).toInt() );
   }
+}
+
+void EgtSynchronizeDialog::showDialog( bool withImage )
+{
+  EgtDebug( "entered" );
+
+  ui->groupBoxPreview->setVisible( withImage );
+  ui->groupBoxOffset->setEnabled( !withImage );
+  show();
+  adjustSize();
 }
 
 void EgtSynchronizeDialog::accepted()
 { 
   EgtDebug( "entered" );
   
-  if( ui->groupBoxPreview->isHidden() ){ cvPictureDateTimeStamp = ""; }
-  else{ cvPictureDateTimeStamp = cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString( ); }
-
-  int lvOffset = ui->sbHours->value()*3600;
-  lvOffset+= ui->sbMinutes->value()*60;
-  lvOffset+= ui->sbSeconds->value();
-  if( 99999 == cvOffset)
+  if( ui->groupBoxPreview->isHidden() )
   {
-    show();
+    cvPictureDateTimeStamp = "";
+  }
+  else
+  {
+    cvPictureDateTimeStamp = cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString( );
+  }
+
+  if( 86400 <= cvOffset)
+  {
     QMessageBox::critical( this, tr( "Error" ),tr( "The offset is greater than 24 hours" ),QMessageBox::Ok );
-    cvOffset = 0;
-    return;
   }
 
   if( ui->rbtnPositive->isChecked() )
-  { 
-    cvOffset = lvOffset;
+  {
+    emit offsetSet( cvOffset, cvPictureDateTimeStamp );
   }
-  else{ cvOffset = -1*lvOffset; }
-  
-  emit offsetSet( cvOffset, cvPictureDateTimeStamp );
+  else
+  {
+    emit offsetSet( cvOffset * -1, cvPictureDateTimeStamp );
+  }
 }
 
-void EgtSynchronizeDialog::closeWindow()
-{
-  EgtDebug( "entered" );
-
-  close();
-}
 /*!
  * \param theIndex contains the index of the selected picture in the browser
  */
@@ -132,8 +127,28 @@ void EgtSynchronizeDialog::openPic()
   
   cvImageFactory.setFile( lvFileName );
   cvPhotoExifEngine.setFile( lvFileName );
-  
-  if( ui->groupBoxOffset->isEnabled() ){ updateOffset(); } //only necessary if syncrhonizing with pic
+
+  if( cvPhotoExifEngine.isValidImageWithExpectedExif() )
+  {
+    cvPictureDateTimeStamp = cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString( );
+    ui->labelTimeStamp->setText( cvPictureDateTimeStamp );
+
+    ui->sbYear->setValue( cvPictureDateTimeStamp.mid(0,4).toInt() );
+    ui->sbMonth->setValue( cvPictureDateTimeStamp.mid(5,2).toInt() );
+    ui->sbDay->setValue( cvPictureDateTimeStamp.mid(8,2).toInt() );
+    ui->sbUserHours->setValue( cvPictureDateTimeStamp.mid(11,2).toInt() );
+    ui->sbUserMinutes->setValue( cvPictureDateTimeStamp.mid(14,2).toInt() );
+    ui->sbUserSeconds->setValue( cvPictureDateTimeStamp.mid(17,2).toInt() );
+  }
+  else
+  {
+    ui->sbYear->setValue( 0 );
+    ui->sbMonth->setValue( 0 );
+    ui->sbDay->setValue( 0 );
+    ui->sbUserHours->setValue( 0 );
+    ui->sbUserMinutes->setValue( 0 );
+    ui->sbUserSeconds->setValue( 0 );
+  }
 }
 
 void EgtSynchronizeDialog::resizeEvent ( QResizeEvent * event ) 
@@ -150,7 +165,6 @@ void EgtSynchronizeDialog::updatePreview( bool isValid )
 {
   EgtDebug( "entered" );
 
-  cvValidImage = isValid;
   loadPreview();
 }
 
@@ -168,36 +182,6 @@ void EgtSynchronizeDialog::updateProgress( int theMinimum, int theMaximum, int t
   ui->pbarProgressBar->setMaximum( theMaximum );
   ui->pbarProgressBar->setValue( theProgress );
 }
-void EgtSynchronizeDialog::setApplicationInterface( EgtApplicationInterface* theAppInterface )
-{
-  EgtDebug( "entered" );
-
-  cvApplicationInterface = theAppInterface;
-}
-
-void EgtSynchronizeDialog::setOffset()
-{
-  EgtDebug( "entered" );
-
-  ui->groupBoxPreview->setVisible( false );
-  ui->groupBoxOffset->setEnabled( true );
-
-  move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
-  show();
-  adjustSize();
-}
-
-void EgtSynchronizeDialog::setOffsetPic()
-{
-  EgtDebug( "entered" );
-
-  ui->groupBoxPreview->setVisible( true );
-  ui->groupBoxOffset->setEnabled( false );
-
-  move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
-  show();
-  adjustSize();
-}
 
 void EgtSynchronizeDialog::updateOffset()
 {
@@ -211,46 +195,33 @@ void EgtSynchronizeDialog::updateOffset()
   QTime lvExifTime( cvPictureDateTimeStamp.mid(11,2).toInt(),cvPictureDateTimeStamp.mid(14,2).toInt(),cvPictureDateTimeStamp.mid(17,2).toInt() );
   QTime lvUserTime(ui->sbUserHours->value(),ui->sbUserMinutes->value() , ui->sbUserSeconds->value() );
 
-  int lvOffset = 99999;
   
-    if( 1 == lvExifDate.daysTo( lvUserDate) )
+    cvOffset = ( 86400 * lvExifDate.daysTo( lvUserDate) ) + lvExifTime.secsTo( lvUserTime );
+    if( cvOffset < 0 )
     {
-      if( lvExifTime.secsTo( lvUserTime ) < 0){ lvOffset =86400+ lvExifTime.secsTo( lvUserTime ); }
-      else{ lvOffset = 99999; }
-    }
-    else
-    if( -1 == lvExifDate.daysTo( lvUserDate) )
-    {
-      if( lvExifTime.secsTo( lvUserTime ) > 0 ){ lvOffset = 86400 - lvExifTime.secsTo( lvUserTime ); }
-      else{ lvOffset = 99999; }
-    }
-    else
-    if( 0 == lvExifDate.daysTo( lvUserDate) )
-    {
-      lvOffset = lvExifTime.secsTo( lvUserTime );
-    }
-    else{ lvOffset = 99999; }
-
-    if( lvOffset != 99999  )
-    {
-      cvOffset = 0;
-
-      if(lvOffset < 0)
-      {
         ui->rbtnPositive->setChecked(false);
         ui->rbtnNegative->setChecked(true);
-        lvOffset = -1*lvOffset;
-      }
-      else
-      {
-        ui->rbtnPositive->setChecked(true);
-        ui->rbtnPositive->setChecked(false);
-      }
-      ui->sbHours->setValue(lvOffset/3600);
-      ui->sbMinutes->setValue((lvOffset%3600)/60);
-      ui->sbSeconds->setValue(((lvOffset%3600)%60));
+        cvOffset *= -1; //store the offset as a positive number until the dialog is closed.
     }
-    else{ cvOffset = 99999; }
+    else
+    {
+      ui->rbtnPositive->setChecked(true);
+      ui->rbtnPositive->setChecked(false);
+    }
+
+    //TODO: replace/fix for multiday offsets
+    if( cvOffset < 86400 )
+    {
+      ui->sbHours->setValue(cvOffset/3600);
+      ui->sbMinutes->setValue((cvOffset%3600)/60);
+      ui->sbSeconds->setValue(((cvOffset%3600)%60));
+    }
+    else
+    {
+      ui->sbHours->setValue( 0 );
+      ui->sbMinutes->setValue( 0 );
+      ui->sbSeconds->setValue( 0 );
+    }
     
 }
 

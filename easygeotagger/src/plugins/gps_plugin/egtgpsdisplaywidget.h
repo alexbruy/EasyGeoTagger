@@ -27,7 +27,7 @@
 
 #include "egtproviderfactory.h"
 #include "egtgpsdatatablewidget.h"
-#include "egtapplicationinterface.h"
+#include "egtsynchronizedialog.h"
 
 #include <QWidget>
 #include <QCloseEvent>
@@ -50,42 +50,30 @@ class EgtGpsDisplayWidget : public QWidget
 
     /*! \brief Reimplemented function to close the syncrhonization dialog when closing the plugin window */
     void closeEvent( QCloseEvent * );
- 
-    /*! \brief Sets the application interface used to comunicate with the main application */
-    void setApplicationInterface(EgtApplicationInterface*);
 
     /*! \brief Desginer object of the gps plugin interface */
     Ui::EgtGpsDisplayWidgetBase* ui;
  
-    QPushButton* getPbtnOffsetManual(); 
-    QPushButton* getPbtnOffsetPic(); 
-    QPushButton* getPbtnDeleteRow(); 
-    QPushButton* getPbtnSendCoordinates();
   signals:
-
-    /*!\brief signal emitted when the window is closed*/
-    void closingWindow();
 
     /*! \brief Signal used to comunicate with the application interface */
     void keyValuePair( QString, QString );
 
   public slots:
     /*! \brief Slot used to enable/disable the group box that contains the offset buttons */
-    void setSynchronizing(bool);
+    void enableSynchronizationButtons( bool );
+
+    void enableButtons( bool );
 
     void setDataTable( EgtGpsDataTableWidget* );
 
-    void setButtonsStatus( bool , bool );
-
   private slots:
+    void on_pbtnSetOffsetWithImage_clicked();
 
+    void on_pbtnSetOffsetManual_clicked();
 
     /*! \brief Slot called to open a gps file */
     void openFile( );
-
-    
-    /*! \brief Slot called to tag a picture */
-    void sendCoordinates( );
 
     /*! \brief Slot called to set the data provider */
     void setDataProvider( EgtDataProvider* );
@@ -96,14 +84,12 @@ class EgtGpsDisplayWidget : public QWidget
     EgtGpsDataTableWidget* cvDataTable; 
 
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
-     QWidget cvMainWidget;
+    QWidget cvMainWidget;
 
     /*! \brief Instance of the provider factory */
     EgtProviderFactory cvProviderFactory;
 
-     /*! \brief Object to comunicate the plugin with the main application*/
-    EgtApplicationInterface* cvApplicationInterface;
-
+    EgtSynchronizeDialog cvSynchronizeDialog;
 };
 
 

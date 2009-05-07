@@ -46,8 +46,8 @@ class EgtSynchronizeDialog : public QDialog
     /*! \brief Sets the picture selected on the preview label */
     void loadPreview();
 
-     /*!\brief Sets the application iterface*/
-     void setApplicationInterface( EgtApplicationInterface* );
+    /*! \brief Slot called to show the dialog that sets the offset manually */
+    void showDialog( bool );
 
   signals:
      /*!\brief Signal used to send the new offset and, in case it exists, the timestamp of the picture*/
@@ -57,9 +57,6 @@ class EgtSynchronizeDialog : public QDialog
     
     /*! \brief Slot called when the user accepts the changes made in the synchronize dialog */
     void accepted();
-   
-    /*! \brief Slot called to close the synchronize dialog */
-    void closeWindow();
 
     /*! \brief Slot called when the user clicks on the file browser */
    // void clicked( const QModelIndex& );
@@ -75,12 +72,6 @@ class EgtSynchronizeDialog : public QDialog
 
     /*! \brief Slot used to set the status of the preview progress bar */
     void updateProgress( int, int, int );
-
-    /*! \brief Slot called to show the dialog that sets the offset manually */
-    void setOffset();
-
-    /*! \brief Slot called to show the dialog that sets the offset with the help of a picture */
-    void setOffsetPic();
 
     /*! \brief Slot used to update the offset when the user modifies the datetimestamp that sees in the synchronization picture */
     void updateOffset();
@@ -107,9 +98,6 @@ class EgtSynchronizeDialog : public QDialog
 
     /*! \brief QString that contains the EXIF datetimestamp of the picture*/
     QString cvPictureDateTimeStamp;
-
-    /*! \brief Specifies whether the image to show is valid or not */
-    bool cvValidImage;
 
     /*! \brief  Qt Designer object*/
     Ui::EgtSynchronizeDialogBase* ui;

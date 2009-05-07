@@ -39,7 +39,7 @@ EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent )
   setWindowIcon( QIcon( ":/icons/internet-web-browser.svg" ) );
 
   ui->gbTimeOffset->setEnabled( false );
-  ui->pbtnSendCoordinates->setEnabled( false );
+  ui->pbtnSendToEditor->setEnabled( false );
   ui->pbtnDeleteRow->setEnabled( false );
 
   connect( ui->pbtnOpenFile, SIGNAL( clicked( ) ), this, SLOT( openFile( ) ) );
@@ -60,54 +60,15 @@ void EgtGpsDisplayWidget::closeEvent(QCloseEvent *theEvent)
  {
     EgtDebug( "entered" );
   
-    emit closingWindow();
-    //cvSynchronizeDialog->close();
+    cvSynchronizeDialog.close();
     theEvent->accept();
  }
-
-
-QPushButton* EgtGpsDisplayWidget::getPbtnOffsetManual()
-{
-  EgtDebug( "entered" );
-
-  return ui->pbtnOffsetManual;
-}
-
-QPushButton* EgtGpsDisplayWidget::getPbtnOffsetPic()
-{
-  EgtDebug( "entered" );
-
-  return ui->pbtnOffsetPic;
-}
-
-QPushButton* EgtGpsDisplayWidget::getPbtnDeleteRow()
-{
-  EgtDebug( "entered" );
-
-  return ui->pbtnDeleteRow;
-}
- 
-QPushButton* EgtGpsDisplayWidget::getPbtnSendCoordinates()
-{
-  EgtDebug( "entered" );
-
-  return ui-> pbtnSendCoordinates;
-}
-
-/*!
- * \param theAppInterface contains the actual application interface used to comunicate with the main app.
- */
-void EgtGpsDisplayWidget::setApplicationInterface( EgtApplicationInterface* theAppInterface )
-{
-  EgtDebug( "entered" );
-
-  cvApplicationInterface = theAppInterface;
-  //connect( cvApplicationInterface, SIGNAL( indexSelected( const QModelIndex& ) ), this, SLOT( clicked( const QModelIndex& ) ) );
-}
 
 void EgtGpsDisplayWidget::setDataTable( EgtGpsDataTableWidget* theDataTable)
 {
   EgtDebug( "entered" );
+
+  if( 0 == theDataTable ) { return; }
 
   cvDataTable = theDataTable;
 
@@ -115,6 +76,10 @@ void EgtGpsDisplayWidget::setDataTable( EgtGpsDataTableWidget* theDataTable)
   ui->widgetTable->setLayout( lvLayout );
   lvLayout->addWidget(cvDataTable);
   lvLayout->setContentsMargins( 1, 1, 1, 1 );
+
+  connect( ui->pbtnDeleteRow, SIGNAL( clicked( ) ), cvDataTable, SLOT( deleteRow( ) ) );
+  connect( cvDataTable, SIGNAL(timeStampSelected(bool)), this, SLOT( enableSynchronizationButtons(bool)) );
+  connect( cvDataTable, SIGNAL( rowSelected( bool ) ), this, SLOT( enableButtons( bool ) ) );
 }
 
 
@@ -123,6 +88,43 @@ void EgtGpsDisplayWidget::setDataTable( EgtGpsDataTableWidget* theDataTable)
  * SIGNAL and SLOTS
  *
  */
+
+
+void EgtGpsDisplayWidget::enableButtons( bool isRowSelected)
+{
+  EgtDebug( "entered" );
+
+  ui->pbtnSendToEditor->setEnabled( isRowSelected );
+  ui->pbtnDeleteRow->setEnabled( isRowSelected );
+
+  if( ! cvDataTable->isAnyColumnHeaderSet() )
+  {
+    ui->pbtnSendToEditor->setEnabled( false );
+  }
+}
+
+/*!
+ * \param theStatus boolean that indicates whether the syncrhonize group box must be enabled or not
+ */
+void EgtGpsDisplayWidget::enableSynchronizationButtons( bool theStatus )
+{
+  EgtDebug( "entered" );
+
+  ui->gbTimeOffset->setEnabled(theStatus);
+}
+
+void EgtGpsDisplayWidget::on_pbtnSetOffsetWithImage_clicked()
+{
+  cvSynchronizeDialog.showDialog( true );
+  cvSynchronizeDialog.move( this->pos() );
+}
+
+void EgtGpsDisplayWidget::on_pbtnSetOffsetManual_clicked()
+{
+  cvSynchronizeDialog.showDialog( false );
+  cvSynchronizeDialog.move( this->pos() );
+}
+
 void EgtGpsDisplayWidget::openFile( )
 {
   EgtDebug( "entered" );
@@ -138,22 +140,4 @@ void EgtGpsDisplayWidget::setDataProvider( EgtDataProvider* theProvider )
   EgtDebug( "entered" );
 
   cvDataTable->setProvider( theProvider );
-}
-
-/*!
- * \param theStatus boolean that indicates whether the syncrhonize group box must be enabled or not
- */
-void EgtGpsDisplayWidget::setSynchronizing( bool theStatus )
-{
-  EgtDebug( "entered" );
-
-  ui->gbTimeOffset->setEnabled(theStatus);
-}
-
-void EgtGpsDisplayWidget::setButtonsStatus( bool theStatusOfCoordinates, bool theStatusOfDelete )
-{
-  EgtDebug( "entered" );
-
-  ui->pbtnSendCoordinates->setEnabled( theStatusOfCoordinates );
-  ui->pbtnDeleteRow->setEnabled( theStatusOfDelete );
 }
