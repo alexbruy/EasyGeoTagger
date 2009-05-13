@@ -24,6 +24,7 @@
 #include "egtgpsdatatable.h"
 #include "egtlogger.h"
 
+#include <QHeaderView>
 #include <QMessageBox>
 #include <QMenu>
 #include <QDate>
