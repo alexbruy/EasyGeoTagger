@@ -58,9 +58,9 @@ void EgtGpsPlugin::initPlugin( )
   if( 0 != cvApplicationInterface )
   {
     cvDisplayWidget.setVisible( false );
-    cvDisplayWidget.setDataTable( &cvDataTableWidget );
+    cvDisplayWidget.setDataTable( &cvGPSDataTable );
     //connect to application interface
-    connect( &cvDataTableWidget, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
+    connect( &cvGPSDataTable, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
   }
 }
 

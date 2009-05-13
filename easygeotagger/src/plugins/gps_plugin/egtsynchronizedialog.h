@@ -50,8 +50,8 @@ class EgtSynchronizeDialog : public QDialog
     void showDialog( bool );
 
   signals:
-     /*!\brief Signal used to send the new offset and, in case it exists, the timestamp of the picture*/
-     void offsetSet( int, QString );
+     /*! \brief Signal used to emit the offset */
+     void offsetSet( int );
 
   public slots:
     
@@ -61,13 +61,11 @@ class EgtSynchronizeDialog : public QDialog
     /*! \brief Slot called when the user clicks on the file browser */
    // void clicked( const QModelIndex& );
 
-    /*! \brief Slot called to open a gps file */
-    void openFile( );
 
-   /*! \brief Slot called to open a picture */
-    void openPic();
+    /*! \brief Slot called to open a picture */
+    void openImage();
 
-   /*! \brief Slot called when the image is ready to be shown */
+    /*! \brief Slot called when the image is ready to be shown */
     void updatePreview( bool );
 
     /*! \brief Slot used to set the status of the preview progress bar */
@@ -87,17 +85,11 @@ class EgtSynchronizeDialog : public QDialog
     /*! \brief Object used to show the picture preview */
     EgtImageFactory cvImageFactory;
 
-    /*! \brief Contains the offset (in seconds) the user specifies*/
-    int cvOffset;
-
     /*! \brief Object to generate the path to a picture*/
     EgtPathBuilder cvPathBuilder;
   
     /*! \brief Object used to deal with the photo exif metadata of the picture*/
     EgtPhotoExifEngine cvPhotoExifEngine;
-
-    /*! \brief QString that contains the EXIF datetimestamp of the picture*/
-    QString cvPictureDateTimeStamp;
 
     /*! \brief  Qt Designer object*/
     Ui::EgtSynchronizeDialogBase* ui;

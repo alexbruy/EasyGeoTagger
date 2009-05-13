@@ -36,7 +36,7 @@ EgtSynchronizeDialog::EgtSynchronizeDialog( QWidget* theParent )
   ui->setupUi( this );
   setWindowIcon( QIcon( ":/icons/internet-web-browser.svg" ) );
 
-  ui->pbtnOpenPic->setIcon( QIcon(":/icons/document-open.svg") );
+  ui->pbtnOpenImage->setIcon( QIcon(":/icons/document-open.svg") );
   ui->rbtnPositive->setChecked(true);
 
   //Set up the progress bar
@@ -45,7 +45,7 @@ EgtSynchronizeDialog::EgtSynchronizeDialog( QWidget* theParent )
   ui->pbarProgressBar->setValue( 0 );
 
   connect( ui->buttonBox, SIGNAL( accepted() ),this, SLOT( accepted() ) );
-  connect( ui->pbtnOpenPic, SIGNAL( clicked() ),this, SLOT( openPic() ) );
+  connect( ui->pbtnOpenImage, SIGNAL( clicked() ),this, SLOT( openImage() ) );
 
   connect( &cvImageFactory, SIGNAL( progress( int, int, int ) ), this, SLOT( updateProgress( int, int, int ) ) );
   connect( &cvImageFactory, SIGNAL( imageLoaded( bool ) ), this, SLOT( updatePreview( bool ) ) );
@@ -53,9 +53,9 @@ EgtSynchronizeDialog::EgtSynchronizeDialog( QWidget* theParent )
   connect( ui->sbYear, SIGNAL( valueChanged( int ) ), this, SLOT( updateOffset() ) );
   connect( ui->sbMonth, SIGNAL( valueChanged( int ) ), this, SLOT( updateOffset() ) );
   connect( ui->sbDay, SIGNAL( valueChanged( int ) ), this, SLOT( updateOffset() ) );
-  connect( ui->sbUserHours, SIGNAL( valueChanged( int ) ), this, SLOT( updateOffset() ) );
-  connect( ui->sbUserMinutes, SIGNAL( valueChanged( int ) ), this, SLOT( updateOffset() ) );
-  connect( ui->sbUserSeconds, SIGNAL( valueChanged( int ) ), this, SLOT( updateOffset() ) );
+  connect( ui->sbHour, SIGNAL( valueChanged( int ) ), this, SLOT( updateOffset() ) );
+  connect( ui->sbMinute, SIGNAL( valueChanged( int ) ), this, SLOT( updateOffset() ) );
+  connect( ui->sbSeconds, SIGNAL( valueChanged( int ) ), this, SLOT( updateOffset() ) );
 }
 
 void EgtSynchronizeDialog::loadPreview()
@@ -72,7 +72,7 @@ void EgtSynchronizeDialog::showDialog( bool withImage )
 {
   EgtDebug( "entered" );
 
-  ui->groupBoxPreview->setVisible( withImage );
+  ui->gbPreview->setVisible( withImage );
   ui->groupBoxOffset->setEnabled( !withImage );
   show();
   adjustSize();
@@ -81,28 +81,24 @@ void EgtSynchronizeDialog::showDialog( bool withImage )
 void EgtSynchronizeDialog::accepted()
 { 
   EgtDebug( "entered" );
-  
-  if( ui->groupBoxPreview->isHidden() )
-  {
-    cvPictureDateTimeStamp = "";
-  }
-  else
-  {
-    cvPictureDateTimeStamp = cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString( );
-  }
 
-  if( 86400 <= cvOffset)
+  int lvOffset = 86400 * ui->sbOffsetDays->value();
+  lvOffset += ui->sbOffsetHours->value() * 3600;
+  lvOffset += ui->sbOffsetMinutes->value() * 60;
+  lvOffset += ui->sbSeconds->value();
+
+  if( 86400 <= lvOffset)
   {
-    QMessageBox::critical( this, tr( "Error" ),tr( "The offset is greater than 24 hours" ),QMessageBox::Ok );
+    QMessageBox::warning( this, tr( "Error" ),tr( "The offset is greater than 24 hours" ),QMessageBox::Ok );
   }
 
   if( ui->rbtnPositive->isChecked() )
   {
-    emit offsetSet( cvOffset, cvPictureDateTimeStamp );
+    emit offsetSet( lvOffset );
   }
   else
   {
-    emit offsetSet( cvOffset * -1, cvPictureDateTimeStamp );
+    emit offsetSet( lvOffset * -1 );
   }
 }
 
@@ -119,7 +115,7 @@ void EgtSynchronizeDialog::accepted()
   if( ui->groupBoxOffset->isEnabled() ){ updateOffset(); } //only necessary if syncrhonizing with pic
 }*/
 
-void EgtSynchronizeDialog::openPic()
+void EgtSynchronizeDialog::openImage()
 {
   EgtDebug( "entered" );
 
@@ -130,24 +126,25 @@ void EgtSynchronizeDialog::openPic()
 
   if( cvPhotoExifEngine.isValidImageWithExpectedExif() )
   {
-    cvPictureDateTimeStamp = cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString( );
-    ui->labelTimeStamp->setText( cvPictureDateTimeStamp );
+    QString lvDateTimeStamp = cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString( );
+    ui->gbPreview->setTitle( tr( "Image preview" ) + ": " + lvDateTimeStamp );
 
-    ui->sbYear->setValue( cvPictureDateTimeStamp.mid(0,4).toInt() );
-    ui->sbMonth->setValue( cvPictureDateTimeStamp.mid(5,2).toInt() );
-    ui->sbDay->setValue( cvPictureDateTimeStamp.mid(8,2).toInt() );
-    ui->sbUserHours->setValue( cvPictureDateTimeStamp.mid(11,2).toInt() );
-    ui->sbUserMinutes->setValue( cvPictureDateTimeStamp.mid(14,2).toInt() );
-    ui->sbUserSeconds->setValue( cvPictureDateTimeStamp.mid(17,2).toInt() );
+    ui->sbYear->setValue( lvDateTimeStamp.mid(0,4).toInt() );
+    ui->sbMonth->setValue( lvDateTimeStamp.mid(5,2).toInt() );
+    ui->sbDay->setValue( lvDateTimeStamp.mid(8,2).toInt() );
+    ui->sbHour->setValue( lvDateTimeStamp.mid(11,2).toInt() );
+    ui->sbMinute->setValue( lvDateTimeStamp.mid(14,2).toInt() );
+    ui->sbSeconds->setValue( lvDateTimeStamp.mid(17,2).toInt() );
   }
   else
   {
+    ui->gbPreview->setTitle( tr( "Image preview" ) );
     ui->sbYear->setValue( 0 );
     ui->sbMonth->setValue( 0 );
     ui->sbDay->setValue( 0 );
-    ui->sbUserHours->setValue( 0 );
-    ui->sbUserMinutes->setValue( 0 );
-    ui->sbUserSeconds->setValue( 0 );
+    ui->sbHour->setValue( 0 );
+    ui->sbMinute->setValue( 0 );
+    ui->sbSeconds->setValue( 0 );
   }
 }
 
@@ -187,21 +184,23 @@ void EgtSynchronizeDialog::updateOffset()
 {
   EgtDebug( "entered" );
 
-  if( ui->groupBoxPreview->isHidden() ){ return; }
+  if( !ui->gbPreview->isHidden() && cvPhotoExifEngine.isValidImageWithExpectedExif() )
+  {
+    QString lvDateTimeStamp = cvPhotoExifEngine.read( "Egt.Photo.DateTimeOriginal" ).toString( );
 
-  QDate lvExifDate( cvPictureDateTimeStamp.mid(0,4).toInt(),cvPictureDateTimeStamp.mid(5,2).toInt(),cvPictureDateTimeStamp.mid(8,2).toInt() );
-  QDate lvUserDate(ui->sbYear->value(),ui->sbMonth->value() , ui->sbDay->value() );
+    QDate lvExifDate( lvDateTimeStamp.mid(0,4).toInt(),lvDateTimeStamp.mid(5,2).toInt(),lvDateTimeStamp.mid(8,2).toInt() );
+    QDate lvUserDate(ui->sbYear->value(),ui->sbMonth->value() , ui->sbDay->value() );
 
-  QTime lvExifTime( cvPictureDateTimeStamp.mid(11,2).toInt(),cvPictureDateTimeStamp.mid(14,2).toInt(),cvPictureDateTimeStamp.mid(17,2).toInt() );
-  QTime lvUserTime(ui->sbUserHours->value(),ui->sbUserMinutes->value() , ui->sbUserSeconds->value() );
+    QTime lvExifTime( lvDateTimeStamp.mid(11,2).toInt(),lvDateTimeStamp.mid(14,2).toInt(),lvDateTimeStamp.mid(17,2).toInt() );
+    QTime lvUserTime(ui->sbHour->value(),ui->sbMinute->value(), ui->sbSeconds->value() );
 
   
-    cvOffset = ( 86400 * lvExifDate.daysTo( lvUserDate) ) + lvExifTime.secsTo( lvUserTime );
-    if( cvOffset < 0 )
+    int lvOffset = ( 86400 * lvExifDate.daysTo( lvUserDate) ) + lvExifTime.secsTo( lvUserTime );
+    if( lvOffset < 0 )
     {
-        ui->rbtnPositive->setChecked(false);
-        ui->rbtnNegative->setChecked(true);
-        cvOffset *= -1; //store the offset as a positive number until the dialog is closed.
+      lvOffset *= -1;
+      ui->rbtnPositive->setChecked(false);
+      ui->rbtnNegative->setChecked(true);
     }
     else
     {
@@ -209,20 +208,13 @@ void EgtSynchronizeDialog::updateOffset()
       ui->rbtnPositive->setChecked(false);
     }
 
-    //TODO: replace/fix for multiday offsets
-    if( cvOffset < 86400 )
-    {
-      ui->sbHours->setValue(cvOffset/3600);
-      ui->sbMinutes->setValue((cvOffset%3600)/60);
-      ui->sbSeconds->setValue(((cvOffset%3600)%60));
-    }
-    else
-    {
-      ui->sbHours->setValue( 0 );
-      ui->sbMinutes->setValue( 0 );
-      ui->sbSeconds->setValue( 0 );
-    }
-    
+    int lvDays = lvOffset / 86400;
+    lvOffset = lvOffset - lvDays * 86400;
+    ui->sbOffsetDays->setValue( lvDays );
+    ui->sbOffsetHours->setValue(lvOffset/3600);
+    ui->sbOffsetMinutes->setValue((lvOffset%3600)/60);
+    ui->sbOffsetSeconds->setValue(((lvOffset%3600)%60));
+  }
 }
 
 

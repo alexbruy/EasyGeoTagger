@@ -1,6 +1,6 @@
 /*
-** File: egtgpsdatatablewidget.h
-** Author( s ): Roberto Garcia Yunta
+** File: egtgpsdatatable.h
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts@amnh.org )
 ** Creation Date: 2008-12-19
 **
 ** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
@@ -21,49 +21,52 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
-#ifndef EGTGPSDATATABLEWIDGET_H
-#define EGTGPSDATATABLEWIDGET_H
+#ifndef EGTGPSDATATABLE_H
+#define EGTGPSDATATABLE_H
 
 #include "egtdataprovider.h"
+#include "egtgpsexifengine.h"
 #include "ui_egtkeyselectiondialog.h"
 
 
 #include <QTableWidget>
-#include <QHeaderView>
+#include <QDateTime>
 
-class EgtGpsDataTableWidget : public QTableWidget
+class EgtGpsDataTable : public QTableWidget
 {
   Q_OBJECT
 
   public:
 
      /*! \brief Constructor */
-    EgtGpsDataTableWidget( );
+    EgtGpsDataTable( );
 
-    /*! \brief Indicates if the user has set all the columns with a valid value */
+    /*! \brief Indicates if the user has set at least column header */
     bool isAnyColumnHeaderSet( );
 
+    /*! \brief Indicates if a specific column header has been set */
     bool hasColumnHeader( QString );
 
-    /*! \brief Returns a QMap that contains all the items of the selected row */
-    QMap<QString,QString>* getRowItems( );
+    /*! \brief Returns a QMap that contains all the key-value pairs of the selected row */
+    QMap<QString,QString> getRow( );
+
+    QMap<QString,QString> getRow( int ) {}
 
   public slots:
 
-    /*! \brief Deletes a row of the table */
+    /*! \brief Broadcasts the key-value pairs in the currently selected row via the application interface */
+    void broadcastRow( );
+
+    void broadcastRow( int ) {}
+
+    /*! \brief Deletes the current row of the table */
     void deleteRow();
 
-    /*! \brief Sends the coordinates through the application interface */
-    void sendCoordinates( );
+    /*! \brief Deletes a row of the table */
+    void deleteRow( int );
 
     /*! \brief Sets the offset*/
     void setOffset( int );
-
-    /*! \brief Sets the offset and timestamp */
-    void setOffsetAndTimeStamp(int, QString);
-
-    /*! \brief Sets the timestamp */
-    void setPictureDateTimeStamp( QString );
 
     /*! \brief Slot used to set the specific file reader */
     void setProvider( EgtDataProvider* );
@@ -74,16 +77,16 @@ class EgtGpsDataTableWidget : public QTableWidget
     void cell_selected( int, int );
 
     /*! \brief Slot used when the horizontal header is clicked */
-    void cvHorizontalHeader_clicked( int );
- 
-    /*! \brief Slot used when the vertical header is clicked */
-    void cvVerticalHeader_clicked( int );
+    void horizontalHeader_clicked( int );
 
     /*! \brief Slot used when the user sets the header of a column */
     void on_pbtnOk_clicked( );
 
     /*! \brief Slot used to show up a pop up menu, when user right clicks on the vertical header */
     void popUpMenu( QPoint );
+
+    /*! \brief Slot used when the vertical header is clicked */
+    void verticalHeader_clicked( int );
 
   signals:
 
@@ -100,33 +103,41 @@ class EgtGpsDataTableWidget : public QTableWidget
     void timeStampSelected( bool );
 
   private:
-    
+
+    /*! \brief Apply the offset to the date time stamp passed in as a QString */
+    QDateTime applyOffset( QString );
+
+    /*! \brief Function used to populate the table */
+    void populateTable( );
+
+
+
     /*! \brief Contains all the possible fields that can be used for tagging a picture */
     QStringList cvAvailableFields;
 
     /*! \brief Contains the last column that the user selected */
     int cvColumnSelected;
 
-    /*! \brief Dialog to show the user all the available fields */
-    QDialog* cvColumnMeaningDialog;
-
     /*! \brief Pointer to the concrete instance of the file reader */
     EgtDataProvider* cvDataProvider;
+
+    /*! \brief Instance of a GPS EXIF engine */
+    EgtGpsExifEngine cvExifEngine;
 
     /*! \brief A QList with all the headers that are set so far */
     QList<int> cvHeadersThatAreSet;
 
-    /*! \brief Pointer to the horizontal header */
-    QHeaderView *  cvHorizontalHeader;
-
-    /*! \brief QMap to store the items of the selected row */
-    QMap<QString,QString> * cvMapItems;
+    /*! \brief Dialog to show the user all the available fields */
+    QDialog* cvHeaderSelectionDialog;
 
     /*! \brief Offset specified by the user in the synchronization dialog */
     int cvOffset;
 
     /*! \brief Date time stamp of picture used in the synchronization dialog */
     QString cvPictureDateTimeStamp;
+
+    /*! \brief QMap to store the items of the selected row */
+    QMap<QString,QString>  cvRowData;
 
     /*! \brief Row the user selected */  
     int cvSelectedRow;
@@ -136,12 +147,6 @@ class EgtGpsDataTableWidget : public QTableWidget
 
     /*! \brief QDesigner object of the dialog with the available fields*/
     Ui::EgtKeySelectionDialog cvUiKeySelectionDialog;
-
-    /*! \brief Pointer to the vertical header */
-    QHeaderView *  cvVerticalHeader;
-
-    /*! \brief Function used to populate the table */
-    void populateTable( );
   
 };
 

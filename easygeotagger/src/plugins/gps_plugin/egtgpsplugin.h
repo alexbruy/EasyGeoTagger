@@ -28,7 +28,7 @@
 #include "egtplugininterface.h"
 
 #include "egtgpsdisplaywidget.h"
-#include "egtgpsdatatablewidget.h"
+#include "egtgpsdatatable.h"
 
 class EgtGpsPlugin: public EgtPluginInterface
 {
@@ -64,7 +64,7 @@ class EgtGpsPlugin: public EgtPluginInterface
 
   private:
     EgtGpsDisplayWidget cvDisplayWidget;
-    EgtGpsDataTableWidget cvDataTableWidget;
+    EgtGpsDataTable cvGPSDataTable;
 
 
 };

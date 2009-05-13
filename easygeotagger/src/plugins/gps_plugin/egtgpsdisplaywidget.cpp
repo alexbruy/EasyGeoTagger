@@ -64,22 +64,25 @@ void EgtGpsDisplayWidget::closeEvent(QCloseEvent *theEvent)
     theEvent->accept();
  }
 
-void EgtGpsDisplayWidget::setDataTable( EgtGpsDataTableWidget* theDataTable)
+void EgtGpsDisplayWidget::setDataTable( EgtGpsDataTable* theDataTable)
 {
   EgtDebug( "entered" );
 
   if( 0 == theDataTable ) { return; }
 
-  cvDataTable = theDataTable;
+  cvGPSDataTable = theDataTable;
 
   QVBoxLayout* lvLayout = new QVBoxLayout;
   ui->widgetTable->setLayout( lvLayout );
-  lvLayout->addWidget(cvDataTable);
+  lvLayout->addWidget(cvGPSDataTable);
   lvLayout->setContentsMargins( 1, 1, 1, 1 );
 
-  connect( ui->pbtnDeleteRow, SIGNAL( clicked( ) ), cvDataTable, SLOT( deleteRow( ) ) );
-  connect( cvDataTable, SIGNAL(timeStampSelected(bool)), this, SLOT( enableSynchronizationButtons(bool)) );
-  connect( cvDataTable, SIGNAL( rowSelected( bool ) ), this, SLOT( enableButtons( bool ) ) );
+  connect( ui->pbtnDeleteRow, SIGNAL( clicked( ) ), cvGPSDataTable, SLOT( deleteRow( ) ) );
+  connect( ui->pbtnSendToEditor, SIGNAL( clicked( ) ), cvGPSDataTable, SLOT( broadcastRow( ) ) );
+  connect( cvGPSDataTable, SIGNAL(timeStampSelected(bool)), this, SLOT( enableSynchronizationButtons(bool)) );
+  connect( cvGPSDataTable, SIGNAL( rowSelected( bool ) ), this, SLOT( enableButtons( bool ) ) );
+  connect( &cvSynchronizeDialog, SIGNAL( offsetSet( int ) ), cvGPSDataTable, SLOT( setOffset( int ) ) );
+
 }
 
 
@@ -97,7 +100,7 @@ void EgtGpsDisplayWidget::enableButtons( bool isRowSelected)
   ui->pbtnSendToEditor->setEnabled( isRowSelected );
   ui->pbtnDeleteRow->setEnabled( isRowSelected );
 
-  if( ! cvDataTable->isAnyColumnHeaderSet() )
+  if( ! cvGPSDataTable->isAnyColumnHeaderSet() )
   {
     ui->pbtnSendToEditor->setEnabled( false );
   }
@@ -139,5 +142,5 @@ void EgtGpsDisplayWidget::setDataProvider( EgtDataProvider* theProvider )
 {
   EgtDebug( "entered" );
 
-  cvDataTable->setProvider( theProvider );
+  cvGPSDataTable->setProvider( theProvider );
 }

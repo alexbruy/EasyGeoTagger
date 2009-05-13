@@ -26,7 +26,7 @@
 
 
 #include "egtproviderfactory.h"
-#include "egtgpsdatatablewidget.h"
+#include "egtgpsdatatable.h"
 #include "egtsynchronizedialog.h"
 
 #include <QWidget>
@@ -65,7 +65,7 @@ class EgtGpsDisplayWidget : public QWidget
 
     void enableButtons( bool );
 
-    void setDataTable( EgtGpsDataTableWidget* );
+    void setDataTable( EgtGpsDataTable* );
 
   private slots:
     void on_pbtnSetOffsetWithImage_clicked();
@@ -81,7 +81,7 @@ class EgtGpsDisplayWidget : public QWidget
   private:
 
     /*! \brief Instance of the data table which contains the gps data */
-    EgtGpsDataTableWidget* cvDataTable; 
+    EgtGpsDataTable* cvGPSDataTable;
 
     /*! \brief The main dock window that forms the base for the visual component of this plugin */
     QWidget cvMainWidget;
@@ -91,6 +91,4 @@ class EgtGpsDisplayWidget : public QWidget
 
     EgtSynchronizeDialog cvSynchronizeDialog;
 };
-
-
 #endif // EGTGPSDISPLAYWIDGET_H

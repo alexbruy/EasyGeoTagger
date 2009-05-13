@@ -62,6 +62,9 @@ public:
   /*! \brief Constructor */
   EgtExifEngine( const QModelIndex& );
 
+  /*! \brief EGT common name corresponding to the EGT key provided provided */
+  QString commonName( QString theKey );
+
   /*! \brief Gets the dependency for an  Egt key
    *
    * \param theKey The Egt keys for which you want the dependency
@@ -80,6 +83,9 @@ public:
 
   /*! \brief Convience method that check both hasExpectedExif( ) and IsValidImage( ) */
   bool isValidImageWithExpectedExif( ) { return cvIsValidImage && cvHasExpectedExif; }
+
+  /*! \brief EGT key corresponding to the common name provided */
+  QString key( QString theCommonName );
 
   /*! \brief Returns a constant reference to the key map list for this engine */
   const QList< EgtExifEngine::KeyMap > &keys( ) { return cvKeys; }

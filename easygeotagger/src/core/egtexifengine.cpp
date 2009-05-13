@@ -60,6 +60,21 @@ EgtExifEngine::EgtExifEngine( const QModelIndex& theIndex )
  *
  */
 
+QString EgtExifEngine::commonName( QString theKey )
+{
+  QList< KeyMap >::iterator lvIterator = cvKeys.begin();
+  while( lvIterator != cvKeys.end() )
+  {
+    if( lvIterator->key.compare( theKey, Qt::CaseInsensitive ) )
+    {
+      return lvIterator->commonName;
+    }
+    lvIterator++;
+  }
+
+  return "";
+}
+
 /*!
  * \param thePartialKey the EXIF key to search for, can be a full key are a left oriented partial key
  * \returns true if the partial key is found
@@ -102,6 +117,25 @@ bool EgtExifEngine::hasKey( QString thePartialKey )
 bool EgtExifEngine::isValidImage( )
 {
   return cvIsValidImage;
+}
+
+/*!
+ * \param theCommonName the common name for which you want the key
+ * \returns the key associated the theCommonName
+ */
+QString EgtExifEngine::key( QString theCommonName )
+{
+    QList< KeyMap >::iterator lvIterator = cvKeys.begin();
+    while( lvIterator != cvKeys.end() )
+    {
+        if( 0 == lvIterator->commonName.compare( theCommonName, Qt::CaseInsensitive ) )
+        {
+            return lvIterator->key;
+        }
+        lvIterator++;
+    }
+
+    return "";
 }
 
 /*!
