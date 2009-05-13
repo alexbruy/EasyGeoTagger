@@ -63,7 +63,7 @@ class EgtGpsPlugin: public EgtPluginInterface
 
 
   private:
-    EgtGpsDisplayWidget cvDisplayWidget;
+    EgtGpsDisplayWidget* cvDisplayWidget;
     EgtGpsDataTable cvGPSDataTable;
 
 

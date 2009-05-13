@@ -57,8 +57,8 @@ void EgtGpsPlugin::initPlugin( )
   //Hook listeners into the application interface
   if( 0 != cvApplicationInterface )
   {
-    cvDisplayWidget.setVisible( false );
-    cvDisplayWidget.setDataTable( &cvGPSDataTable );
+    cvDisplayWidget = new EgtGpsDisplayWidget( 0, &cvGPSDataTable );
+
     //connect to application interface
     connect( &cvGPSDataTable, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
   }
@@ -79,7 +79,7 @@ void EgtGpsPlugin::run( )
   EgtDebug( "entered" );
   
   //Build or reshow the plugins GUI component
-  if( cvDisplayWidget.isVisible( ) )
+  if( cvDisplayWidget->isVisible( ) )
   {
     EgtDebug( "dock is already open and visible" );
     return;
@@ -87,8 +87,8 @@ void EgtGpsPlugin::run( )
 
   EgtDebug( "dock is already open but not visible" );
 
-  cvDisplayWidget.move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
-  cvDisplayWidget.show( );
+  cvDisplayWidget->move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
+  cvDisplayWidget->show( );
   EgtDebug( "done" );
 }
 

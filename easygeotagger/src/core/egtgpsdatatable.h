@@ -31,6 +31,7 @@
 
 #include <QTableWidget>
 #include <QDateTime>
+#include <QSet>
 
 class EgtGpsDataTable : public QTableWidget
 {
@@ -41,6 +42,8 @@ class EgtGpsDataTable : public QTableWidget
      /*! \brief Constructor */
     EgtGpsDataTable( );
 
+    bool clearColumnHeader( int );
+
     /*! \brief Indicates if the user has set at least column header */
     bool isAnyColumnHeaderSet( );
 
@@ -50,20 +53,24 @@ class EgtGpsDataTable : public QTableWidget
     /*! \brief Returns a QMap that contains all the key-value pairs of the selected row */
     QMap<QString,QString> getRow( );
 
-    QMap<QString,QString> getRow( int ) {}
+    QMap<QString,QString> getRow( int );
+
+    bool setColumnHeader( int, QString );
 
   public slots:
 
     /*! \brief Broadcasts the key-value pairs in the currently selected row via the application interface */
     void broadcastRow( );
 
-    void broadcastRow( int ) {}
+    void broadcastRow( int );
 
     /*! \brief Deletes the current row of the table */
     void deleteRow();
 
     /*! \brief Deletes a row of the table */
     void deleteRow( int );
+
+    void selectRow( int );
 
     /*! \brief Sets the offset*/
     void setOffset( int );
@@ -110,6 +117,11 @@ class EgtGpsDataTable : public QTableWidget
     /*! \brief Function used to populate the table */
     void populateTable( );
 
+    /*! \brief Check to see if the DateTimeStamp is valid
+     *  \returns False if the stamp is not valid and true if it is or no DataTimeStamp was found
+     */
+    bool validDateTimeStamp();
+
 
 
     /*! \brief Contains all the possible fields that can be used for tagging a picture */
@@ -125,7 +137,7 @@ class EgtGpsDataTable : public QTableWidget
     EgtGpsExifEngine cvExifEngine;
 
     /*! \brief A QList with all the headers that are set so far */
-    QList<int> cvHeadersThatAreSet;
+    QSet< int > cvColumnHeadersSet;
 
     /*! \brief Dialog to show the user all the available fields */
     QDialog* cvHeaderSelectionDialog;
@@ -141,9 +153,6 @@ class EgtGpsDataTable : public QTableWidget
 
     /*! \brief Row the user selected */  
     int cvSelectedRow;
-
-    /*! \brief Number of headers that have been set */
-    int cvTotalHeadersSet;
 
     /*! \brief QDesigner object of the dialog with the available fields*/
     Ui::EgtKeySelectionDialog cvUiKeySelectionDialog;

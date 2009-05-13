@@ -32,11 +32,12 @@
 #include <QFileDialog>
 
 
-EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent )
+EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent, EgtGpsDataTable* theDataTable )
     : QWidget( theParent ), ui( new Ui::EgtGpsDisplayWidgetBase )
 {
   ui->setupUi( this );
   setWindowIcon( QIcon( ":/icons/internet-web-browser.svg" ) );
+  cvGPSDataTable = theDataTable;
 
   ui->gbTimeOffset->setEnabled( false );
   ui->pbtnSendToEditor->setEnabled( false );
@@ -45,6 +46,19 @@ EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent )
   connect( ui->pbtnOpenFile, SIGNAL( clicked( ) ), this, SLOT( openFile( ) ) );
   connect( &cvProviderFactory, SIGNAL( dataProviderCreated( EgtDataProvider* ) ),this, SLOT( setDataProvider( EgtDataProvider* ) ) );
 
+  if( 0 != cvGPSDataTable )
+  {
+    QVBoxLayout* lvLayout = new QVBoxLayout;
+    ui->widgetTable->setLayout( lvLayout );
+    lvLayout->addWidget(cvGPSDataTable);
+    lvLayout->setContentsMargins( 1, 1, 1, 1 );
+
+    connect( ui->pbtnDeleteRow, SIGNAL( clicked( ) ), cvGPSDataTable, SLOT( deleteRow( ) ) );
+    connect( ui->pbtnSendToEditor, SIGNAL( clicked( ) ), cvGPSDataTable, SLOT( broadcastRow( ) ) );
+    connect( cvGPSDataTable, SIGNAL(timeStampSelected(bool)), this, SLOT( enableSynchronizationButtons(bool)) );
+    connect( cvGPSDataTable, SIGNAL( rowSelected( bool ) ), this, SLOT( enableButtons( bool ) ) );
+    connect( &cvSynchronizeDialog, SIGNAL( offsetSet( int ) ), cvGPSDataTable, SLOT( setOffset( int ) ) );
+  }
 }
 
 /*
@@ -63,28 +77,6 @@ void EgtGpsDisplayWidget::closeEvent(QCloseEvent *theEvent)
     cvSynchronizeDialog.close();
     theEvent->accept();
  }
-
-void EgtGpsDisplayWidget::setDataTable( EgtGpsDataTable* theDataTable)
-{
-  EgtDebug( "entered" );
-
-  if( 0 == theDataTable ) { return; }
-
-  cvGPSDataTable = theDataTable;
-
-  QVBoxLayout* lvLayout = new QVBoxLayout;
-  ui->widgetTable->setLayout( lvLayout );
-  lvLayout->addWidget(cvGPSDataTable);
-  lvLayout->setContentsMargins( 1, 1, 1, 1 );
-
-  connect( ui->pbtnDeleteRow, SIGNAL( clicked( ) ), cvGPSDataTable, SLOT( deleteRow( ) ) );
-  connect( ui->pbtnSendToEditor, SIGNAL( clicked( ) ), cvGPSDataTable, SLOT( broadcastRow( ) ) );
-  connect( cvGPSDataTable, SIGNAL(timeStampSelected(bool)), this, SLOT( enableSynchronizationButtons(bool)) );
-  connect( cvGPSDataTable, SIGNAL( rowSelected( bool ) ), this, SLOT( enableButtons( bool ) ) );
-  connect( &cvSynchronizeDialog, SIGNAL( offsetSet( int ) ), cvGPSDataTable, SLOT( setOffset( int ) ) );
-
-}
-
 
 /*
  *

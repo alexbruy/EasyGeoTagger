@@ -46,15 +46,13 @@ EgtGpsDataTable::EgtGpsDataTable( )
 
   cvDataProvider = 0;
   cvColumnSelected = 0;
-  cvTotalHeadersSet = 0;
-
   cvOffset= 0;
 
   connect( horizontalHeader( ), SIGNAL( sectionClicked( int ) ), this, SLOT( horizontalHeader_clicked( int ) ) );
 
   verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu); //to enable the customContextMenuRequested signal
   connect( verticalHeader(), SIGNAL( customContextMenuRequested(QPoint) ), this, SLOT( popUpMenu( QPoint ) ) );
-  connect( verticalHeader(), SIGNAL( sectionClicked(int) ), this, SLOT( verticalHeader_clicked( int ) ) );
+  connect( verticalHeader(), SIGNAL( sectionClicked( int ) ), this, SLOT( verticalHeader_clicked( int ) ) );
 
   connect( this, SIGNAL( cellClicked( int, int ) ), this, SLOT( cell_selected( int, int ) ) );
   connect( cvUiKeySelectionDialog.pbtnOk, SIGNAL( clicked( ) ), this, SLOT( on_pbtnOk_clicked( ) ) );
@@ -66,9 +64,29 @@ EgtGpsDataTable::EgtGpsDataTable( )
  *
  */
 
+bool EgtGpsDataTable::clearColumnHeader( int theColumn )
+{
+  return setColumnHeader( theColumn, tr( "( clear )" ) );
+}
+
 QMap<QString,QString> EgtGpsDataTable::getRow( )
 {
   EgtDebug( "entered" );
+
+  if( !validDateTimeStamp() )
+  {
+    QMap< QString, QString > lvTemp;
+    return lvTemp;
+  }
+
+  return cvRowData;
+}
+
+QMap<QString,QString> EgtGpsDataTable::getRow( int theRow )
+{
+  EgtDebug( "entered" );
+
+  selectRow( theRow );
 
   return cvRowData;
 }
@@ -77,22 +95,67 @@ bool EgtGpsDataTable::isAnyColumnHeaderSet( )
 {
   EgtDebug( "entered" );
 
-  return ( cvTotalHeadersSet > 0 );
+  return ( cvColumnHeadersSet.size() > 0 );
 }
 
 bool EgtGpsDataTable::hasColumnHeader( QString theFieldName )
 {
- QMapIterator<QString, QString> lvMapIterator( cvRowData );
-  while ( lvMapIterator.hasNext( ) )
+   for( int lvIterator = 0; lvIterator < columnCount(); lvIterator++ )
+   {
+     QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( lvIterator );
+     if( 0 == lvCurrentHeader->text( ).compare( theFieldName, Qt::CaseInsensitive ) )
+     {
+       return true;
+     }
+   }
+
+   return false;
+}
+
+bool EgtGpsDataTable::setColumnHeader( int theColumn, QString theHeader )
+{
+  if( theColumn < 0 || theColumn > columnCount() ) { return false; }
+
+  QString lvTheHeader = theHeader;
+  if( hasColumnHeader( lvTheHeader ) )
   {
-    lvMapIterator.next( );
-    if(lvMapIterator.key( ).compare( theFieldName, Qt::CaseInsensitive ) )
+   return false;
+  }
+
+  if( tr( "( clear )" ) == lvTheHeader )
+  {
+    if( cvDataProvider->hasColumnHeaders( ) )
+    {//revert to the original header
+      lvTheHeader = cvDataProvider->columnHeaders( ).at( theColumn );
+    }
+    else
     {
-      return true;
+      lvTheHeader = QString::number( theColumn +1 );
+    }
+
+    cvColumnHeadersSet.remove( theColumn );
+  }
+  else
+  {
+    cvColumnHeadersSet << theColumn;
+    if( tr( "Date Time Stamp" ) == lvTheHeader )
+    {
+      emit timeStampSelected( true );
+    }
+    else
+    {
+      emit timeStampSelected( false );
     }
   }
 
-  return false;
+  //Deleting the previous header
+  QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( theColumn );
+  if( 0 != lvCurrentHeader )
+  {
+    delete lvCurrentHeader;
+  }
+
+  setHorizontalHeaderItem( theColumn, new QTableWidgetItem( lvTheHeader ) );
 }
 
 /*
@@ -106,6 +169,12 @@ void EgtGpsDataTable::broadcastRow( )
 
   if( isAnyColumnHeaderSet( ) )
   {
+    if( !validDateTimeStamp() )
+    {
+      EgtDebug( "DateTimeStamp was not valid " );
+      return;
+    }
+
     QMapIterator<QString, QString> lvMapIterator( cvRowData );
     while ( lvMapIterator.hasNext( ) )
     {
@@ -128,6 +197,12 @@ void EgtGpsDataTable::broadcastRow( )
   }
 }
 
+void EgtGpsDataTable::broadcastRow( int theRow )
+{
+  selectRow( theRow );
+  broadcastRow();
+}
+
 void EgtGpsDataTable::cell_selected( int row, int column )
 { 
   EgtDebug( "entered" );
@@ -142,16 +217,6 @@ void EgtGpsDataTable::horizontalHeader_clicked( int theIndex )
   EgtDebug( "entered" );
 
   cvColumnSelected = theIndex;
-
-  QTableWidgetItem* lvHeaderItem;
-      
-  QString lvText;
-  lvHeaderItem = horizontalHeaderItem ( theIndex );
-  lvText = lvHeaderItem->text( );
-
-  bool ok;
-  lvText.toInt( &ok ); 
-
   cvHeaderSelectionDialog->show( );
   emit rowSelected( false );
 }
@@ -165,58 +230,26 @@ void EgtGpsDataTable::deleteRow()
 void EgtGpsDataTable::deleteRow( int theRow )
 {
   EgtDebug( "entered" );
-  removeRow( cvSelectedRow );
-  cvSelectedRow = -1;
-  emit rowSelected( false );
+  if( rowCount() != 0 &&  ( theRow >= 0 || theRow < rowCount() ) )
+  {
+    removeRow( theRow );
+    cvSelectedRow = -1;
+    emit rowSelected( false );
+  }
 }
 
 void EgtGpsDataTable::on_pbtnOk_clicked( )
 {  
   EgtDebug( "entered" );
-  QString lvSelectedItem = cvUiKeySelectionDialog.cbFields->currentText( );
-  
-  int lvIndex = cvUiKeySelectionDialog.cbFields->currentIndex( );
+  QString lvHeader = cvUiKeySelectionDialog.cbFields->currentText( );
 
-  if( tr( "( clear )" ) != lvSelectedItem )
+  if( hasColumnHeader( lvHeader ) )
   {
-    //TODO: check to make sure the value has changed
-    cvTotalHeadersSet++;
-    cvHeadersThatAreSet<<cvColumnSelected;
-    if( tr( "Date Time Stamp" ) == lvSelectedItem )
-    {
-      emit timeStampSelected(true);
-    }
-    else { emit timeStampSelected(false); }
-  }
-  else
-  {
-    //TODO: check to make sure the value has changed
-    cvTotalHeadersSet--;
-    if( cvDataProvider->hasColumnHeaders( ) )
-    {//revert to the original header
-      QStringList lvTags;
-      lvTags = cvDataProvider->columnHeaders( );
-      lvSelectedItem = lvTags.at( cvColumnSelected );
-    }
-    else
-    {
-      lvSelectedItem = QString::number( cvColumnSelected +1 );
-      cvHeadersThatAreSet.removeAll( cvColumnSelected );
-    }
+    QMessageBox::critical( this, tr( "Error" ),tr( "Another column has already been set to") + ":" + lvHeader,QMessageBox::Ok );
+    return;
   }
 
-  if( cvUiKeySelectionDialog.cbFields->itemText( cvUiKeySelectionDialog.cbFields->count()-1 ) == tr( "Date Time Stamp" ) && lvSelectedItem != tr( "Date Time Stamp" ) )
-  {//We don't have a timestamp anymore
-    emit timeStampSelected(false); 
-  }
-  //Deleting the previous header
-  QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( cvColumnSelected );
-  if( 0 != lvCurrentHeader )
-  {
-    delete lvCurrentHeader;
-  }
-  
-  setHorizontalHeaderItem( cvColumnSelected, new QTableWidgetItem( lvSelectedItem ) );
+  setColumnHeader( cvColumnSelected, lvHeader );
   
   cvHeaderSelectionDialog->close( );
 }
@@ -234,6 +267,36 @@ void EgtGpsDataTable::popUpMenu(QPoint theCoordinates)
   menu.addAction(lvDeleteAction);
 
   menu.exec(mapToGlobal(theCoordinates));
+}
+
+void EgtGpsDataTable::selectRow( int theRow )
+{
+  EgtDebug( "entered" );
+
+  cvRowData.clear();
+  cvSelectedRow = -1;
+  if( theRow < 0 || theRow > rowCount() )
+  {
+    emit rowSelected( false );
+    return;
+  }
+
+  cvSelectedRow = theRow;
+  if( isAnyColumnHeaderSet( ) )
+  {
+    QTableWidgetItem* lvHeaderItem;
+    QSet< int >::iterator lvIterator = cvColumnHeadersSet.begin();
+    while( lvIterator != cvColumnHeadersSet.end() )
+    {
+      QString lvHeader;
+      lvHeaderItem = horizontalHeaderItem ( *lvIterator );
+      lvHeader = lvHeaderItem->text( );
+      cvRowData.insert( lvHeader, item( theRow, *lvIterator )->text( ) );
+      lvIterator++;
+    }
+  }
+
+  emit rowSelected(true);
 }
 
 void EgtGpsDataTable::setOffset( int theOffset )
@@ -256,60 +319,11 @@ void EgtGpsDataTable::setProvider( EgtDataProvider* theProvider )
 
 void EgtGpsDataTable::verticalHeader_clicked( int theIndex )
 {
-  EgtDebug( "entered" );
-
-  cvSelectedRow = theIndex;
-  cvRowData.clear();
-
-  if( isAnyColumnHeaderSet( ) )
+  selectRow( theIndex );
+  if( !validDateTimeStamp() )
   {
-    QTableWidgetItem* lvHeaderItem;
-    for( int lvColumnCount = 0; lvColumnCount < columnCount( ); lvColumnCount++ )
-    {
-      QString lvText;
-      lvHeaderItem = horizontalHeaderItem ( lvColumnCount );
-      lvText = lvHeaderItem->text( );
-      if( lvText == tr( "Date Time Stamp" ) )
-      {
-         QString lvContent = item( theIndex, lvColumnCount )->text();
-         //Format checking of the timestamp
-        if( lvContent.size() != 19 )
-        {
-          QMessageBox::critical( this, tr( "Error" ),tr( "The date time stamp has an incorrect format.\n The expected format is:\n yyyy:mm:dd hh:mm:ss" ),QMessageBox::Ok );
-          emit timeStampSelected(false);
-          return;
-        }
-        bool lvExpectedFormat = true;
-        lvExpectedFormat = lvExpectedFormat && ':' == lvContent[4];
-        lvExpectedFormat = lvExpectedFormat && ':' == lvContent[7];
-        lvExpectedFormat = lvExpectedFormat && ' ' == lvContent[10];
-        lvExpectedFormat = lvExpectedFormat && ':' == lvContent[13];
-        lvExpectedFormat = lvExpectedFormat && ':' == lvContent[16];
-
-        for( int lvIterator = 0; lvIterator < lvContent.size( ); lvIterator++ )
-        {
-          if( !lvContent[ lvIterator ].isNumber( ) && ':' != lvContent[ lvIterator ] && ' ' != lvContent[ lvIterator ] )
-          {
-            QMessageBox::critical( this, tr( "Error" ),tr( "The date time stamp has an incorrect format.\n The expected format is:\n yyyy:mm:dd hh:mm:ss" ),QMessageBox::Ok );
-            emit timeStampSelected(false);
-            return;
-          }
-          else { emit timeStampSelected(true);  }
-        }
-        //format checking end
-      }
-
-      bool ok;
-      lvText.toInt( &ok );
-
-      if( !ok )
-      {
-        cvRowData.insert( lvText, item( theIndex, lvColumnCount )->text( ) );
-      }
-    }
+    QMessageBox::critical( this, tr( "Error" ),tr( "The date time stamp has an incorrect format.\n The expected format is:\n yyyy:mm:dd hh:mm:ss" ),QMessageBox::Ok );
   }
-
-  emit rowSelected(true);
 }
 
 /*
@@ -335,7 +349,7 @@ void EgtGpsDataTable::populateTable( )
   setColumnCount( 0 );
 
   /*Reset the Qlist that contains which headers are set*/
-  cvHeadersThatAreSet.clear( );
+  cvColumnHeadersSet.clear( );
 
   if( cvDataProvider == 0 || cvDataProvider->numberOfRecords( ) == 0 || cvDataProvider->numberOfFields( ) == 0 ) { return; }
   cvDataProvider->reset();
@@ -378,3 +392,17 @@ void EgtGpsDataTable::populateTable( )
   emit rowSelected( false );
 }
 
+bool EgtGpsDataTable::validDateTimeStamp()
+{
+  if( cvRowData.contains( tr( "Date Time Stamp" ) ) )
+  {
+    EgtDebug( cvRowData[ tr( "Date Time Stamp" ) ] );
+    QDateTime lvDateTime = QDateTime::fromString( cvRowData[ tr( "Date Time Stamp" ) ], "yyyy:MM:dd hh:mm:ss" );
+    if( !lvDateTime.isValid() )
+    {
+      return false;
+    }
+  }
+
+  return true;
+}

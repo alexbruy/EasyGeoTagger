@@ -46,7 +46,7 @@ class EgtGpsDisplayWidget : public QWidget
 
   public:
 
-    EgtGpsDisplayWidget( QWidget* theParent = 0 );
+    EgtGpsDisplayWidget( QWidget* theParent = 0, EgtGpsDataTable* theDataTable = 0);
 
     /*! \brief Reimplemented function to close the syncrhonization dialog when closing the plugin window */
     void closeEvent( QCloseEvent * );
@@ -64,8 +64,6 @@ class EgtGpsDisplayWidget : public QWidget
     void enableSynchronizationButtons( bool );
 
     void enableButtons( bool );
-
-    void setDataTable( EgtGpsDataTable* );
 
   private slots:
     void on_pbtnSetOffsetWithImage_clicked();
