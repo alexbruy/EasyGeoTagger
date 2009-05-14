@@ -63,12 +63,12 @@ void EgtProviderFactory::accept( )
   cvFileTypeDialog.setVisible( false );
   if( cvUiFileType.rbDelimitedText ->isChecked( ) )
   {
-    cvDataProvider = new EgtGraphicalDelimitedTextProvider( );
+    cvDataProvider = new EgtDelimitedTextProvider( );
   }
   else if( cvUiFileType.rbGPSFile ->isChecked( ) )
   {
     //Nothing so far
-    cvDataProvider = new EgtGraphicalDelimitedTextProvider( );
+    cvDataProvider = new EgtDelimitedTextProvider( );
   }
   else
   {
@@ -78,7 +78,7 @@ void EgtProviderFactory::accept( )
   }
   
   connect( cvDataProvider, SIGNAL( initializationComplete( ) ), this, SLOT( dataProviderInitialized( ) ) );
-  cvDataProvider->init( );
+  cvDataProvider->configure( );
 }
 
 void EgtProviderFactory::dataProviderInitialized( )

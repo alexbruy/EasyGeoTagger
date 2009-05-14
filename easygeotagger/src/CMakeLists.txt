@@ -32,6 +32,7 @@ SET( EGT_INSTALL_HDRS
 SET( EGT_CORE_SRCS
      core/egtdataprovider.cpp
      core/egtdelimitedtextprovider.cpp
+     core/egtdelimitedtextconfigurationdialog.cpp
      core/egtexifengine.cpp
      core/egtgpsdatatable.cpp
      core/egtgpsexifengine.cpp
@@ -44,6 +45,7 @@ SET( EGT_CORE_SRCS
 SET( EGT_CORE_MOC_HDRS
      core/egtdataprovider.h
      core/egtdelimitedtextprovider.h
+     core/egtdelimitedtextconfigurationdialog.h
      core/egtgpsdatatable.h
      core/egtimagefactory.h
      core/egtrawimagereader.h

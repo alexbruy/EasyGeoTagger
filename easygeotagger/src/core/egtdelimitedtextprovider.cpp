@@ -26,13 +26,14 @@
 #include <QFile>
 #include <QTextStream>
 #include <QApplication>
-#include <QMessageBox>
+#include <QFileDialog>
 
 EgtDelimitedTextProvider::EgtDelimitedTextProvider( ) : EgtDataProvider( )
 {
   cvDelimiter = ",";
   cvFileName = ""; 
   cvLastError = "";
+  cvConfigurationDialog = 0;
 }
 
 /*
@@ -40,6 +41,48 @@ EgtDelimitedTextProvider::EgtDelimitedTextProvider( ) : EgtDataProvider( )
  * PUBLIC FUNCTIONS
  *
  */
+void EgtDelimitedTextProvider::configure( ) //init function
+{
+
+  QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
+  QWidget* lvParent = 0;
+
+  for( int i = 0; i < lvActiveWindows.size( ); i++ )
+  {
+    if( tr( "Select a file type" ) == lvActiveWindows[i]->windowTitle( ) )
+    {
+      lvParent = lvActiveWindows[i];
+    }
+  }
+
+  QString lvFileName = QFileDialog::getOpenFileName( lvParent, tr( "Open GPS File" ), "/home", tr( "GPS Files ( *.txt *.gps )" ) );
+  if ( "" != lvFileName )
+  {
+    setFileName( lvFileName );
+    cvConfigurationDialog = new EgtDelimitedTextConfigurationDialog( this );
+    showConfigurationDialog( );
+  }
+} 
+
+QString EgtDelimitedTextProvider::lastError()
+{
+  return cvLastError;
+}
+
+void EgtDelimitedTextProvider::notifyInitializationComplete( bool theValue )
+{ 
+  if( theValue ){ emit initializationComplete( ); }
+  cvConfigurationDialog = 0; // We don't need it anymore, we dereference it and it will die
+}
+
+
+/*!
+ * \param a QString that contains a delimiter
+ */
+void EgtDelimitedTextProvider::setDelimiter( QString theDelimiter )
+{
+  cvDelimiter = theDelimiter;
+}
 
 /*!
  * \param theFileName a QString that contains the name of the file to be read
@@ -50,12 +93,28 @@ EgtDataProvider::ErrorType EgtDelimitedTextProvider::setFileName( QString theFil
   return read();
 }
 
-/*!
- * \param a QString that contains a delimiter
- */
-void EgtDelimitedTextProvider::setDelimiter( QString theDelimiter )
+void EgtDelimitedTextProvider::setHasColumnHeaders( bool theValue )
+{ 
+  cvHasColumnHeaders = theValue;
+}
+
+void EgtDelimitedTextProvider::showConfigurationDialog( )
 {
-  cvDelimiter = theDelimiter;
+  QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
+  QWidget* lvParent = 0;
+
+  for( int i = 0; i < lvActiveWindows.size( ); i++ )
+  {
+    if( tr( "GPS Reader" ) == lvActiveWindows[i]->windowTitle( ) )
+    {
+      lvParent = lvActiveWindows[i];
+    }
+  }
+
+  QPoint lvPosition = lvParent->pos( );
+  //center the window over the parent
+  cvConfigurationDialog->move( lvPosition.x( ) + lvParent->width( )/2 - cvConfigurationDialog->width( )/2, lvPosition.y( ) + lvParent->height( )/2 - cvConfigurationDialog->height( )/2 );
+  cvConfigurationDialog->show( );
 }
 
 /*

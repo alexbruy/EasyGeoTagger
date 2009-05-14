@@ -46,7 +46,7 @@ class EgtDataProvider : public QObject
     /*! \brief Returns whether the file has column headers or not */
     bool hasColumnHeaders( );
 
-    virtual void init() = 0;
+    virtual void configure() = 0;
 
     QStringList next();
 

@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>TextDelimiterDialog</class>
- <widget class="QDialog" name="TextDelimiterDialog" >
+ <class>EgtDelimitedTextConfigurationDialogBase</class>
+ <widget class="QDialog" name="EgtDelimitedTextConfigurationDialogBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -18,7 +18,7 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>121</width>
        <height>20</height>
@@ -32,7 +32,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons" >
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -54,7 +54,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>41</width>
           <height>24</height>
@@ -74,7 +74,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>61</width>
           <height>24</height>
@@ -94,7 +94,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>51</width>
           <height>24</height>
@@ -124,7 +124,7 @@
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>41</width>
           <height>24</height>
@@ -168,7 +168,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>TextDelimiterDialog</receiver>
+   <receiver>EgtDelimitedTextConfigurationDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -184,7 +184,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>TextDelimiterDialog</receiver>
+   <receiver>EgtDelimitedTextConfigurationDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >

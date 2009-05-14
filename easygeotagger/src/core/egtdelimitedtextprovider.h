@@ -25,6 +25,9 @@
 #define EGTDELIMITEDTEXPROVIDER_H
 
 #include "egtdataprovider.h"
+#include "egtdelimitedtextconfigurationdialog.h"
+
+class EgtDelimitedTextConfigurationDialog;
 
 class EgtDelimitedTextProvider: public EgtDataProvider
 {
@@ -35,31 +38,48 @@ class EgtDelimitedTextProvider: public EgtDataProvider
     /*! \brief Constuctor */
     EgtDelimitedTextProvider( );
 
-    virtual void init() {}
-    
-    EgtDataProvider::ErrorType reload( ) { return read(); }
+    void configure( );
 
-    /*! \brief Function to set the name of the file to be read */
-    EgtDataProvider::ErrorType setFileName( QString );
+    QString lastError();    
+
+    void notifyInitializationComplete( bool );
+
+    EgtDataProvider::ErrorType reload( ) { return read(); }
 
     /*! \brief Function to set the text delimiter */
     void setDelimiter( QString );
 
+    /*! \brief Function to set the name of the file to be read */
+    EgtDataProvider::ErrorType setFileName( QString );
+
+    void setHasColumnHeaders( bool );
+
+    /*! \brief Selects the character that will be considered as delimiter when reading a text file */
+    void showConfigurationDialog( );
 
   protected:
-    /*! \brief Generic read function to load the data */
-    EgtDataProvider::ErrorType read( );
+
+    EgtDelimitedTextConfigurationDialog* cvConfigurationDialog;
 
     int cvCurrentRecord;
-
-    /*! \brief QString that contains the name of the file to be read */
-    QString cvFileName; 
 
     /*! \brief QString that contains the delimiter */
     QString cvDelimiter;
 
+    /*! \brief QString that contains the name of the file to be read */
+    QString cvFileName; 
+
     /*! \brief Contains the last error occurred */
     QString cvLastError;
+
+    /*! \brief Generic read function to load the data */
+    EgtDataProvider::ErrorType read( );
+
+  signals:
+
+    /*! \brief Signal emited when the user selects a delimiter*/
+    void initializationComplete( );
+ 
 };
 #endif
 

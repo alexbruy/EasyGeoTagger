@@ -24,7 +24,7 @@
 #ifndef EGTPROVIDERFACTORY_H
 #define EGTPROVIDERFACTORY_H
 
-#include "egtgraphicaldelimitedtextprovider.h"
+#include "egtdelimitedtextprovider.h"
 #include "ui_filetypedialog.h"
 
 class EgtProviderFactory: public QObject
