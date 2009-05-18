@@ -66,11 +66,6 @@ void EgtDelimitedTextProvider::configure( ) //init function
   }
 } 
 
-QString EgtDelimitedTextProvider::lastError()
-{
-  return cvLastError;
-}
-
 void EgtDelimitedTextProvider::notifyInitializationComplete( bool isComplete )
 { 
   if( !isComplete )
@@ -81,7 +76,6 @@ void EgtDelimitedTextProvider::notifyInitializationComplete( bool isComplete )
   delete( cvConfigurationDialog );
   cvConfigurationDialog = 0;
 }
-
 
 /*!
  * \param a QString that contains a delimiter

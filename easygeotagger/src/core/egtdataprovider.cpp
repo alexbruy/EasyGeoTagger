@@ -28,17 +28,8 @@ EgtDataProvider::EgtDataProvider()
   cvCurrentRecord = -1;
   cvHasColumnHeaders = false;
   cvNumberOfFields = 0;
+  cvLastError = "";
   cvName = "UNKNOWN";
-}
-
-QStringList EgtDataProvider::columnHeaders( )
-{
-  return cvColumnHeaders;
-}
-
-bool EgtDataProvider::hasColumnHeaders( )
-{
-  return cvHasColumnHeaders;
 }
 
 QStringList EgtDataProvider::next()
@@ -52,16 +43,6 @@ QStringList EgtDataProvider::next()
   return cvData[ cvCurrentRecord ];
 }
 
-int EgtDataProvider::numberOfFields( )
-{
-  return cvNumberOfFields;
-}
-
-int EgtDataProvider::numberOfRecords()
-{
-  return cvData.size();
-}
-
 QStringList EgtDataProvider::previous()
 {
   if( cvData.size() == 0 || cvCurrentRecord <= 0 )
@@ -73,7 +54,3 @@ QStringList EgtDataProvider::previous()
   return cvData[ cvCurrentRecord ];
 }
 
-void EgtDataProvider::reset()
-{
-  cvCurrentRecord = -1;
-}

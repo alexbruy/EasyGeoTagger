@@ -43,7 +43,7 @@ EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent, EgtGpsDataTable* t
   ui->pbtnSendToEditor->setEnabled( false );
   ui->pbtnDeleteRow->setEnabled( false );
 
-  connect( ui->pbtnOpenFile, SIGNAL( clicked( ) ), this, SLOT( selectProvider( ) ) );
+  connect( ui->pbtnSelectDataProvider, SIGNAL( clicked( ) ), this, SLOT( selectProvider( ) ) );
 
   if( 0 != cvGPSDataTable )
   {

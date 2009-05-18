@@ -46,24 +46,26 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
     virtual ~EgtDataProvider() { }
 
     /*! \brief Function that returns the column headers*/
-    QStringList columnHeaders( );
+    QStringList columnHeaders( ) { return cvColumnHeaders; }
 
     /*! \brief Returns whether the file has column headers or not */
-    bool hasColumnHeaders( );
+    bool hasColumnHeaders( ) { return cvHasColumnHeaders; }
 
     virtual void configure() { emit dataProviderReady(); }
+
+    QString lastError() { return cvLastError; }
 
     QString name() { return cvName; }
 
     QStringList next();
 
-    int numberOfFields( );
+    int numberOfFields( ) { return cvNumberOfFields; }
 
-    int numberOfRecords();
+    int numberOfRecords() { return cvData.size(); }
 
     QStringList previous();
 
-    void reset();
+    void reset() { cvCurrentRecord = -1; }
 
   signals:
 
@@ -82,6 +84,8 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
 
     /*! \brief Indicates if the file has a header */
     bool cvHasColumnHeaders;
+
+    QString cvLastError;
 
     QString cvName;
 

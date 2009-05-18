@@ -41,8 +41,6 @@ class EgtDelimitedTextProvider: public EgtDataProvider
 
     void configure( );
 
-    QString lastError();    
-
     void notifyInitializationComplete( bool );
 
     EgtDataProvider::ErrorType reload( ) { return read(); }
@@ -67,9 +65,6 @@ class EgtDelimitedTextProvider: public EgtDataProvider
 
     /*! \brief QString that contains the name of the file to be read */
     QString cvFileName; 
-
-    /*! \brief Contains the last error occurred */
-    QString cvLastError;
 
     /*! \brief Generic read function to load the data */
     EgtDataProvider::ErrorType read( );
