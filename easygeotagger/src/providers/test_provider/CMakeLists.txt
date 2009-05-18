@@ -1,0 +1,40 @@
+IF (WIN32)
+  IF (MSVC)
+    ADD_DEFINITIONS("-DMS_DLL_SPEC=__declspec(dllimport)")
+  ELSE (MSVC)
+    ADD_DEFINITIONS("-UMS_DLL_SPEC \"-DMS_DLL_SPEC=__declspec(dllimport)\"")
+  ENDIF (MSVC)
+ENDIF (WIN32)
+
+INCLUDE( ${QT_USE_FILE} )
+
+INCLUDE_DIRECTORIES(
+  ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+SET( TEST_PROVIDER_SRCS
+    testprovider.cpp
+   )
+
+SET( TEST_PROVIDER_MOC_HDRS
+    testprovider.h
+   )
+
+#SET( TEST_PROVIDER_UIS
+#     options.ui
+#   )
+
+#QT4_WRAP_UI( TEST_PROVIDER_UIS_H ${TEST_PROVIDER_UIS} )
+QT4_AUTOMOC( TEST_PROVIDER_SRCS ${TEST_PROVIDER_SRCS} )
+QT4_WRAP_CPP( TEST_PROVIDER_MOC_SRCS ${TEST_PROVIDER_MOC_HDRS} )
+
+ADD_DEFINITIONS( -DQT_PLUGIN )
+
+ADD_library( testprovider MODULE ${TEST_PROVIDER_SRCS} ${TEST_PROVIDER_MOC_SRCS} ${TEST_PROVIDER_UIS_H})
+
+TARGET_LINK_LIBRARIES( testprovider
+                       ${QT_LIBRARIES}
+                       easygt
+                     )
+
+INSTALL( TARGETS testprovider DESTINATION ${EASYGT_PLUGIN_SUBDIR} )

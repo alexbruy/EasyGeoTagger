@@ -24,8 +24,6 @@
 #ifndef EGTGPSDISPLAYWIDGET_H
 #define EGTGPSDISPLAYWIDGET_H
 
-
-#include "egtproviderfactory.h"
 #include "egtgpsdatatable.h"
 #include "egtsynchronizedialog.h"
 
@@ -59,6 +57,8 @@ class EgtGpsDisplayWidget : public QWidget
     /*! \brief Signal used to comunicate with the application interface */
     void keyValuePair( QString, QString );
 
+    void selectDataProvider();
+
   public slots:
     /*! \brief Slot used to enable/disable the group box that contains the offset buttons */
     void enableSynchronizationButtons( bool );
@@ -70,22 +70,12 @@ class EgtGpsDisplayWidget : public QWidget
 
     void on_pbtnSetOffsetManual_clicked();
 
-    /*! \brief Slot called to open a gps file */
-    void openFile( );
-
-    /*! \brief Slot called to set the data provider */
-    void setDataProvider( EgtDataProvider* );
+    void selectProvider();
 
   private:
 
     /*! \brief Instance of the data table which contains the gps data */
     EgtGpsDataTable* cvGPSDataTable;
-
-    /*! \brief The main dock window that forms the base for the visual component of this plugin */
-    QWidget cvMainWidget;
-
-    /*! \brief Instance of the provider factory */
-    EgtProviderFactory cvProviderFactory;
 
     EgtSynchronizeDialog cvSynchronizeDialog;
 };

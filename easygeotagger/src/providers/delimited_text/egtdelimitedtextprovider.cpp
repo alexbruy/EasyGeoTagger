@@ -24,6 +24,7 @@
 #include "egtdelimitedtextprovider.h"
 
 #include <QFile>
+#include <QtPlugin>
 #include <QTextStream>
 #include <QApplication>
 #include <QFileDialog>
@@ -34,6 +35,7 @@ EgtDelimitedTextProvider::EgtDelimitedTextProvider( ) : EgtDataProvider( )
   cvFileName = ""; 
   cvLastError = "";
   cvConfigurationDialog = 0;
+  cvName = "Delimited Text";
 }
 
 /*
@@ -71,7 +73,8 @@ QString EgtDelimitedTextProvider::lastError()
 
 void EgtDelimitedTextProvider::notifyInitializationComplete( bool theValue )
 { 
-  if( theValue ){ emit initializationComplete( ); }
+  //if( theValue ){ emit initializationComplete( ); }
+  emit dataProviderReady();
   cvConfigurationDialog = 0; // We don't need it anymore, we dereference it and it will die
 }
 
@@ -175,3 +178,5 @@ EgtDataProvider::ErrorType EgtDelimitedTextProvider::read( )
 
   return EgtDataProvider::None;
 }
+
+Q_EXPORT_PLUGIN2( delimitedtextprovider, EgtDelimitedTextProvider );

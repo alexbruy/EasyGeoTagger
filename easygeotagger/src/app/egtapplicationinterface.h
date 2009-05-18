@@ -24,6 +24,8 @@
 #ifndef EGTAPPLICATIONINTERFACE_H
 #define EGTAPPLICATIONINTERFACE_H
 
+#include "egtdataprovidermanager.h"
+
 #include <QMap>
 #include <QPoint>
 #include <QString>
@@ -44,6 +46,10 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     /*! \brief Constructor */
     EgtApplicationInterface( QMainWindow* );
 
+    QStringList availableProviders();
+
+    EgtDataProvider* dataProvider( QString );
+
     QMainWindow* gui( ) { return cvGui; }
 
     /*! \brief get the position of the first visible widget */
@@ -51,6 +57,8 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
 
     /*! \brief Find a particular widget */
     QPoint positionOfWidget( QString );
+
+    void setDataProviderManager( EgtDataProviderManager* theManager ) { cvDataProviderManager = theManager; }
 
   public slots:
     /*! \brief Accepts a key and data data pair for re broadcasting */
@@ -79,7 +87,10 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     void loadPluginRequest( QString );
 
    private:
-     QMainWindow* cvGui;
+
+    EgtDataProviderManager* cvDataProviderManager;
+
+    QMainWindow* cvGui;
 
 };
 #endif

@@ -1,4 +1,4 @@
-SUBDIRS( ui plugins )
+SUBDIRS( ui plugins providers )
 
 IF (WIN32)
   IF (MSVC)
@@ -31,8 +31,6 @@ SET( EGT_INSTALL_HDRS
 
 SET( EGT_CORE_SRCS
      core/egtdataprovider.cpp
-     core/egtdelimitedtextprovider.cpp
-     core/egtdelimitedtextconfigurationdialog.cpp
      core/egtexifengine.cpp
      core/egtgpsdatatable.cpp
      core/egtgpsexifengine.cpp
@@ -44,8 +42,6 @@ SET( EGT_CORE_SRCS
 
 SET( EGT_CORE_MOC_HDRS
      core/egtdataprovider.h
-     core/egtdelimitedtextprovider.h
-     core/egtdelimitedtextconfigurationdialog.h
      core/egtgpsdatatable.h
      core/egtimagefactory.h
      core/egtrawimagereader.h
@@ -54,6 +50,7 @@ SET( EGT_CORE_MOC_HDRS
 SET( EGT_APP_SRCS
     app/egtapplication.cpp
     app/egtapplicationinterface.cpp
+    app/egtdataprovidermanager.cpp
     app/egtexifeditor.cpp
     app/egtexiftagcontrol.cpp
     app/egtexiftaggroup.cpp
@@ -67,6 +64,7 @@ SET( EGT_APP_SRCS
 SET( EGT_APP_MOC_HDRS
     app/egtapplication.h
     app/egtapplicationinterface.h
+    app/egtdataprovidermanager.h
     app/egtexifeditor.h
     app/egtexiftagcontrol.h
     app/egtexiftaggroup.h

@@ -15,7 +15,6 @@ INCLUDE_DIRECTORIES(
 SET( GPS_PLUGIN_SRCS
     egtgpsdisplaywidget.cpp
     egtgpsplugin.cpp
-    egtproviderfactory.cpp
     egtsynchronizedialog.cpp
    )
 
@@ -24,7 +23,6 @@ SET( GPS_PLUGIN_SRCS
 SET( GPS_PLUGIN_MOC_HDRS
     egtgpsdisplaywidget.h
     egtgpsplugin.h
-    egtproviderfactory.h
     egtsynchronizedialog.h
 
    )

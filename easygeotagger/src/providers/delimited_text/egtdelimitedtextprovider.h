@@ -32,6 +32,7 @@ class EgtDelimitedTextConfigurationDialog;
 class EgtDelimitedTextProvider: public EgtDataProvider
 {
   Q_OBJECT
+  Q_INTERFACES( EgtDataProvider )
 
   public:
 
@@ -60,8 +61,6 @@ class EgtDelimitedTextProvider: public EgtDataProvider
   protected:
 
     EgtDelimitedTextConfigurationDialog* cvConfigurationDialog;
-
-    int cvCurrentRecord;
 
     /*! \brief QString that contains the delimiter */
     QString cvDelimiter;

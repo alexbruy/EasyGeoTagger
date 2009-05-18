@@ -43,8 +43,7 @@ EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent, EgtGpsDataTable* t
   ui->pbtnSendToEditor->setEnabled( false );
   ui->pbtnDeleteRow->setEnabled( false );
 
-  connect( ui->pbtnOpenFile, SIGNAL( clicked( ) ), this, SLOT( openFile( ) ) );
-  connect( &cvProviderFactory, SIGNAL( dataProviderCreated( EgtDataProvider* ) ),this, SLOT( setDataProvider( EgtDataProvider* ) ) );
+  connect( ui->pbtnOpenFile, SIGNAL( clicked( ) ), this, SLOT( selectProvider( ) ) );
 
   if( 0 != cvGPSDataTable )
   {
@@ -120,19 +119,7 @@ void EgtGpsDisplayWidget::on_pbtnSetOffsetManual_clicked()
   cvSynchronizeDialog.move( this->pos() );
 }
 
-void EgtGpsDisplayWidget::openFile( )
+void EgtGpsDisplayWidget::selectProvider()
 {
-  EgtDebug( "entered" );
-
-  cvProviderFactory.show( );
-}
-
-/*!
- * \param theProvider Pointer to the actual data provider
- */
-void EgtGpsDisplayWidget::setDataProvider( EgtDataProvider* theProvider )
-{
-  EgtDebug( "entered" );
-
-  cvGPSDataTable->setProvider( theProvider );
+  emit selectDataProvider();
 }

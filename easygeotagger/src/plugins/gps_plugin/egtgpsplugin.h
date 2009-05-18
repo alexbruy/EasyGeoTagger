@@ -24,11 +24,15 @@
 #ifndef EGTGPSPLUGIN_H
 #define EGTGPSPLUGIN_H
 
+#include "ui_filetypedialog.h"
+
 #include "egtapplicationinterface.h"
 #include "egtplugininterface.h"
 
 #include "egtgpsdisplaywidget.h"
 #include "egtgpsdatatable.h"
+
+#include <QDialog>
 
 class EgtGpsPlugin: public EgtPluginInterface
 {
@@ -52,8 +56,7 @@ class EgtGpsPlugin: public EgtPluginInterface
     /*! \brief Return the ability of this plugin to be configured */
     bool isConfigurable( ) { return false; }
 
-  
-  public slots:
+ public slots:
     
     /*! \brief Slot called to activate or launch the plugin */
     void run( );
@@ -61,10 +64,27 @@ class EgtGpsPlugin: public EgtPluginInterface
     /*! \brief Slot to display the condifuration panel */
     void showConfigurationPanel( ) { }
 
+  private slots:
+
+    void selectDataProvider();
+
+    void setDataProvider();
+
+    void showAvailableDataProviders();
 
   private:
+    EgtDataProvider* cvDataProvider;
+
     EgtGpsDisplayWidget* cvDisplayWidget;
+
     EgtGpsDataTable cvGPSDataTable;
+
+    /*! \brief QDialog to let the user select the type of file to be read */
+    QDialog cvFileTypeDialog;
+
+    /*! \brief Desginer object */
+    Ui::FileTypeDialog cvUiFileType;
+
 
 
 };

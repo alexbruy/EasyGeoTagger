@@ -24,9 +24,12 @@
 #ifndef EGTDATAPROVIDER_H
 #define EGTDATAPROVIDER_H
 
+#include <QList>
+#include <QObject>
+#include <QString>
 #include <QStringList>
 
-class EgtDataProvider : public QObject
+class MS_DLL_SPEC EgtDataProvider : public QObject
 {
   Q_OBJECT
 
@@ -40,13 +43,17 @@ class EgtDataProvider : public QObject
 
     EgtDataProvider();
 
+    virtual ~EgtDataProvider() { }
+
     /*! \brief Function that returns the column headers*/
     QStringList columnHeaders( );
 
     /*! \brief Returns whether the file has column headers or not */
     bool hasColumnHeaders( );
 
-    virtual void configure() = 0;
+    virtual void configure() { emit dataProviderReady(); }
+
+    QString name() { return cvName; }
 
     QStringList next();
 
@@ -58,8 +65,12 @@ class EgtDataProvider : public QObject
 
     void reset();
 
+  signals:
+
+    void dataProviderReady();
+
   protected:
-    virtual EgtDataProvider::ErrorType read( ) = 0;
+    virtual EgtDataProvider::ErrorType read( ) { }
 
 
     /*! \brief Contains the headers from the file */
@@ -72,9 +83,11 @@ class EgtDataProvider : public QObject
     /*! \brief Indicates if the file has a header */
     bool cvHasColumnHeaders;
 
-    int cvNumberOfFields;
+    QString cvName;
 
-   
+    int cvNumberOfFields;   
 };
-#endif
 
+Q_DECLARE_INTERFACE( EgtDataProvider, "org.amnh.bif.Plugin.EgtDataProvider/1.0" );
+
+#endif

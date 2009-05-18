@@ -35,6 +35,10 @@ EgtGpsPlugin::EgtGpsPlugin( )
   cvCategories = QObject::tr( "Coordinate Extraction" );
   cvDescription = QObject::tr( "Load GPS data from files" );
   cvName = QObject::tr( "GPS Data" );
+
+  cvUiFileType.setupUi( &cvFileTypeDialog );
+  cvFileTypeDialog.setWindowIcon( QIcon( ":/icons/document-open.svg" ) );
+  connect( cvUiFileType.buttonBox, SIGNAL( accepted( ) ), this, SLOT( selectDataProvider( ) ) );
 }
 
 /*
@@ -61,6 +65,8 @@ void EgtGpsPlugin::initPlugin( )
 
     //connect to application interface
     connect( &cvGPSDataTable, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
+    connect( cvDisplayWidget, SIGNAL( selectDataProvider() ), this, SLOT( showAvailableDataProviders() ) );
+
   }
 }
 
@@ -92,5 +98,29 @@ void EgtGpsPlugin::run( )
   EgtDebug( "done" );
 }
 
+void EgtGpsPlugin::selectDataProvider()
+{
+  if( 0 == cvApplicationInterface) { return; }
+
+  cvFileTypeDialog.setVisible( false );
+  if( cvUiFileType.rbDelimitedText ->isChecked( ) )
+  {
+    cvDataProvider = cvApplicationInterface->dataProvider( "Delimited Text" );
+    connect( cvDataProvider, SIGNAL( dataProviderReady() ), this, SLOT( setDataProvider() ) );
+    cvDataProvider->configure();
+  }
+}
+
+void EgtGpsPlugin::setDataProvider()
+{
+  disconnect( cvDataProvider, SIGNAL( dataProviderReady() ), this, SLOT( setDataProvider() ) );
+  cvGPSDataTable.setProvider( cvDataProvider );
+}
+
+void EgtGpsPlugin::showAvailableDataProviders()
+{
+  EgtDebug( "entered" );
+  cvFileTypeDialog.show();
+}
 
 Q_EXPORT_PLUGIN2( gpsplugin, EgtGpsPlugin );

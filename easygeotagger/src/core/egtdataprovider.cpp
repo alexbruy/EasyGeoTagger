@@ -28,6 +28,7 @@ EgtDataProvider::EgtDataProvider()
   cvCurrentRecord = -1;
   cvHasColumnHeaders = false;
   cvNumberOfFields = 0;
+  cvName = "UNKNOWN";
 }
 
 QStringList EgtDataProvider::columnHeaders( )

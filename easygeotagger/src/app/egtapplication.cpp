@@ -26,6 +26,7 @@
 #include "egtlogger.h"
 #include "egtmainwindow.h"
 #include "egtpluginmanager.h"
+#include "egtdataprovidermanager.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -70,15 +71,27 @@ void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
   
   //Create a new plugin manager and load plugins from the main plugin archive
   cvPluginManager = new EgtPluginManager( cvApplicationInterface, cvGui );
-  if( displaySplash )
+  if( displaySplash && cvPluginManager )
   {
     connect( cvPluginManager, SIGNAL( pluginLoaded( QString ) ), this, SLOT( showSplashScreenMessage( QString ) ) );
   }
 
-  connect( cvGui, SIGNAL( loadPlugins( QString ) ), cvPluginManager, SLOT( loadPlugins( QString ) ) );
-  connect( cvApplicationInterface, SIGNAL( loadPluginRequest( QString ) ), cvPluginManager, SLOT( loadPlugins( QString ) ) );
+  //Create a new provider manager and load providers from the main plugin archive
+  cvProviderManager = new EgtDataProviderManager();
+  if( displaySplash && cvPluginManager )
+  {
+    connect( cvProviderManager, SIGNAL( providerLoaded( QString ) ), this, SLOT( showSplashScreenMessage( QString ) ) );
+  }
 
-  cvPluginManager->loadPlugins( thePluginDirectory );
+  if( cvGui && cvApplicationInterface && cvPluginManager && cvProviderManager )
+  {
+    connect( cvGui, SIGNAL( loadPlugins( QString ) ), cvPluginManager, SLOT( loadPlugins( QString ) ) );
+    connect( cvApplicationInterface, SIGNAL( loadPluginRequest( QString ) ), cvPluginManager, SLOT( loadPlugins( QString ) ) );
+    cvApplicationInterface->setDataProviderManager( cvProviderManager );
+
+    cvPluginManager->loadPlugins( thePluginDirectory );
+    cvProviderManager->loadProviders( thePluginDirectory );
+  }
   
   if( displaySplash )
   {

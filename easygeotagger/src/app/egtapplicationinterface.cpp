@@ -42,6 +42,26 @@ EgtApplicationInterface::EgtApplicationInterface( QMainWindow* theMainWindow )
  * PUBLIC FUNCTIONS
  *
  */
+QStringList EgtApplicationInterface::availableProviders()
+{
+  if( 0!= cvDataProviderManager )
+  {
+    return cvDataProviderManager->availableProviders();
+  }
+
+  return QStringList();
+}
+
+EgtDataProvider* EgtApplicationInterface::dataProvider( QString theProviderName )
+{
+  if( 0!= cvDataProviderManager )
+  {
+    return cvDataProviderManager->provider( theProviderName );
+  }
+
+  return new EgtDataProvider();
+}
+
 QPoint EgtApplicationInterface::positionOfFirstVisibleWidget( )
 {
   //Find the first non hidden widget and open the config dialog

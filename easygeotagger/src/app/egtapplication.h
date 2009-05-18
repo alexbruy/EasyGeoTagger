@@ -26,6 +26,7 @@
 
 class EgtMainWindow;
 class EgtPluginManager;
+class EgtDataProviderManager;
 
 #include "egtapplicationinterface.h"
 
@@ -64,6 +65,9 @@ class MS_DLL_SPEC EgtApplication : public QObject
   
     /*! \brief Pointer to the application interface */
     EgtApplicationInterface* cvApplicationInterface;
+
+    /*! \brief Pointer to the  application's provider manager */
+    EgtDataProviderManager* cvProviderManager;
 
     /*! \brief Pointer to the main GUI component */
     EgtMainWindow* cvGui;
