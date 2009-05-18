@@ -71,11 +71,15 @@ QString EgtDelimitedTextProvider::lastError()
   return cvLastError;
 }
 
-void EgtDelimitedTextProvider::notifyInitializationComplete( bool theValue )
+void EgtDelimitedTextProvider::notifyInitializationComplete( bool isComplete )
 { 
-  //if( theValue ){ emit initializationComplete( ); }
+  if( !isComplete )
+  {
+    cvData.clear();
+  }
   emit dataProviderReady();
-  cvConfigurationDialog = 0; // We don't need it anymore, we dereference it and it will die
+  delete( cvConfigurationDialog );
+  cvConfigurationDialog = 0;
 }
 
 

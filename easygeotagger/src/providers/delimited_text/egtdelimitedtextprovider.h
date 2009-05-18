@@ -73,11 +73,6 @@ class EgtDelimitedTextProvider: public EgtDataProvider
 
     /*! \brief Generic read function to load the data */
     EgtDataProvider::ErrorType read( );
-
-  signals:
-
-    /*! \brief Signal emited when the user selects a delimiter*/
-    void initializationComplete( );
  
 };
 #endif

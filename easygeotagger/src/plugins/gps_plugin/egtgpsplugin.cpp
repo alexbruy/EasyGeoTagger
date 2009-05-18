@@ -39,6 +39,7 @@ EgtGpsPlugin::EgtGpsPlugin( )
   cvUiFileType.setupUi( &cvFileTypeDialog );
   cvFileTypeDialog.setWindowIcon( QIcon( ":/icons/document-open.svg" ) );
   connect( cvUiFileType.buttonBox, SIGNAL( accepted( ) ), this, SLOT( selectDataProvider( ) ) );
+  connect( cvUiFileType.buttonBox, SIGNAL( rejected( ) ), &cvFileTypeDialog, SLOT( reject( ) ) );
 }
 
 /*
