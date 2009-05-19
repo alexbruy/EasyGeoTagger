@@ -24,7 +24,6 @@
 #ifndef EGTGPSPLUGIN_H
 #define EGTGPSPLUGIN_H
 
-#include "ui_filetypedialog.h"
 
 #include "egtapplicationinterface.h"
 #include "egtplugininterface.h"
@@ -80,12 +79,11 @@ class EgtGpsPlugin: public EgtPluginInterface
     EgtGpsDataTable cvGPSDataTable;
 
     /*! \brief QDialog to let the user select the type of file to be read */
-    QDialog cvFileTypeDialog;
+    QDialog cvProviderTypeDialog;
+ 
+    QMap<QString, QRadioButton*> cvAvailableProviders;
 
-    /*! \brief Desginer object */
-    Ui::FileTypeDialog cvUiFileType;
-
-
+    QPushButton cvAcceptButton;
 
 };
 #endif

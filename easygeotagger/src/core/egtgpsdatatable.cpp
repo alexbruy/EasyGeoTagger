@@ -66,6 +66,8 @@ EgtGpsDataTable::EgtGpsDataTable( )
 
 bool EgtGpsDataTable::clearColumnHeader( int theColumn )
 {
+  EgtDebug( "entered" );
+
   return setColumnHeader( theColumn, tr( "( clear )" ) );
 }
 
@@ -100,6 +102,8 @@ bool EgtGpsDataTable::isAnyColumnHeaderSet( )
 
 bool EgtGpsDataTable::hasColumnHeader( QString theFieldName )
 {
+   EgtDebug( "entered" );
+
    for( int lvIterator = 0; lvIterator < columnCount(); lvIterator++ )
    {
      QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( lvIterator );
@@ -114,6 +118,8 @@ bool EgtGpsDataTable::hasColumnHeader( QString theFieldName )
 
 bool EgtGpsDataTable::setColumnHeader( int theColumn, QString theHeader )
 {
+  EgtDebug( "entered" );
+
   if( theColumn < 0 || theColumn > columnCount() ) { return false; }
 
   QString lvTheHeader = theHeader;
@@ -199,6 +205,8 @@ void EgtGpsDataTable::broadcastRow( )
 
 void EgtGpsDataTable::broadcastRow( int theRow )
 {
+  EgtDebug( "entered" );
+
   selectRow( theRow );
   broadcastRow();
 }
@@ -334,7 +342,7 @@ void EgtGpsDataTable::verticalHeader_clicked( int theIndex )
 
 QDateTime EgtGpsDataTable::applyOffset( QString theDateTimeStamp )
 {
-    EgtDebug( "enetered" );
+    EgtDebug( "entered" );
 
     QDateTime lvNewDateTime = QDateTime::fromString( theDateTimeStamp, "yyyy:MM:dd hh:mm:ss" );
     return lvNewDateTime.addSecs( cvOffset );

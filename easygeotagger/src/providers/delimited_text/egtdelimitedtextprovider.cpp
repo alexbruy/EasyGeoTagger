@@ -36,6 +36,7 @@ EgtDelimitedTextProvider::EgtDelimitedTextProvider( ) : EgtDataProvider( )
   cvLastError = "";
   cvConfigurationDialog = 0;
   cvName = "Delimited Text";
+  cvConfigurationDialog = new EgtDelimitedTextConfigurationDialog( this );
 }
 
 /*
@@ -61,7 +62,7 @@ void EgtDelimitedTextProvider::configure( ) //init function
   if ( "" != lvFileName )
   {
     setFileName( lvFileName );
-    cvConfigurationDialog = new EgtDelimitedTextConfigurationDialog( this );
+    
     showConfigurationDialog( );
   }
 } 
@@ -73,8 +74,6 @@ void EgtDelimitedTextProvider::notifyInitializationComplete( bool isComplete )
     cvData.clear();
   }
   emit dataProviderReady();
-  delete( cvConfigurationDialog );
-  cvConfigurationDialog = 0;
 }
 
 /*!

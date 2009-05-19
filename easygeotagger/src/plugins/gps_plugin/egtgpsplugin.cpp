@@ -36,10 +36,16 @@ EgtGpsPlugin::EgtGpsPlugin( )
   cvDescription = QObject::tr( "Load GPS data from files" );
   cvName = QObject::tr( "GPS Data" );
 
-  cvUiFileType.setupUi( &cvFileTypeDialog );
-  cvFileTypeDialog.setWindowIcon( QIcon( ":/icons/document-open.svg" ) );
-  connect( cvUiFileType.buttonBox, SIGNAL( accepted( ) ), this, SLOT( selectDataProvider( ) ) );
-  connect( cvUiFileType.buttonBox, SIGNAL( rejected( ) ), &cvFileTypeDialog, SLOT( reject( ) ) );
+  cvProviderTypeDialog.setLayout( new QVBoxLayout( ) );
+  cvProviderTypeDialog.layout( )->setContentsMargins( 1, 1, 1, 1 );
+  cvProviderTypeDialog.layout( )->setSpacing( 0 );
+
+  cvProviderTypeDialog.setWindowTitle( tr( "Available Providers" ) );
+  cvProviderTypeDialog.setMinimumWidth( 215 );
+  cvProviderTypeDialog.setWindowIcon( QIcon( ":/icons/document-open.svg" ) );
+
+  cvAcceptButton.setText( tr("Ok") );
+  connect( &cvAcceptButton, SIGNAL( clicked( ) ), this, SLOT( selectDataProvider( ) ) );
 }
 
 /*
@@ -103,13 +109,22 @@ void EgtGpsPlugin::selectDataProvider()
 {
   if( 0 == cvApplicationInterface) { return; }
 
-  cvFileTypeDialog.setVisible( false );
-  if( cvUiFileType.rbDelimitedText ->isChecked( ) )
+  cvProviderTypeDialog.setVisible( false );
+
+  QMap<QString, QRadioButton*>::const_iterator lvIterator = cvAvailableProviders.constBegin();
+  while ( lvIterator != cvAvailableProviders.constEnd() ) 
   {
-    cvDataProvider = cvApplicationInterface->dataProvider( "Delimited Text" );
-    connect( cvDataProvider, SIGNAL( dataProviderReady() ), this, SLOT( setDataProvider() ) );
-    cvDataProvider->configure();
-  }
+    if( lvIterator.value()->isChecked() )
+    {
+      cvDataProvider = cvApplicationInterface->dataProvider( lvIterator.key() );
+      connect( cvDataProvider, SIGNAL( dataProviderReady() ), this, SLOT( setDataProvider() ) );
+
+      cvDataProvider->configure();
+
+      lvIterator = cvAvailableProviders.constEnd();
+    }
+    else{ lvIterator++; } 
+   }
 }
 
 void EgtGpsPlugin::setDataProvider()
@@ -121,7 +136,35 @@ void EgtGpsPlugin::setDataProvider()
 void EgtGpsPlugin::showAvailableDataProviders()
 {
   EgtDebug( "entered" );
-  cvFileTypeDialog.show();
+
+  QMap<QString, QRadioButton*>::const_iterator lvIterator = cvAvailableProviders.constBegin();
+  while ( lvIterator != cvAvailableProviders.constEnd() ) 
+  {
+    cvProviderTypeDialog.layout( )->removeWidget( lvIterator.value() );
+    lvIterator++; 
+  }
+
+  cvAvailableProviders.clear();
+  cvProviderTypeDialog.layout( )->removeWidget( &cvAcceptButton );
+
+  QStringList lvDataProviders = cvApplicationInterface->availableProviders();
+
+  for (int i = 0; i < lvDataProviders.size(); i++)
+  {
+    cvAvailableProviders[ lvDataProviders.at(i) ] = new QRadioButton( lvDataProviders.at(i) );
+
+    cvProviderTypeDialog.layout( )->addWidget( cvAvailableProviders[ lvDataProviders.at(i) ] );
+  }
+
+  QFrame lvOkFrame;
+  lvOkFrame.setLayout( new QHBoxLayout( ) );
+  ( ( QHBoxLayout* )lvOkFrame.layout( ) )->insertStretch( -1, 1 );
+  lvOkFrame.layout( )->addWidget(&cvAcceptButton);
+
+  cvProviderTypeDialog.layout( )->addWidget( &cvAcceptButton );
+
+  cvProviderTypeDialog.move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
+  cvProviderTypeDialog.show();
 }
 
 Q_EXPORT_PLUGIN2( gpsplugin, EgtGpsPlugin );

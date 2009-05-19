@@ -48,7 +48,6 @@ void EgtDelimitedTextConfigurationDialog::accepted( )
   {
     cvProvider->notifyInitializationComplete( true ); 
   }
-  deleteLater();
   
 }
 
@@ -106,7 +105,6 @@ void EgtDelimitedTextConfigurationDialog::on_rbtnPipe_toggled( bool theValue )
 void EgtDelimitedTextConfigurationDialog::rejected( )
 {
   cvProvider->notifyInitializationComplete( false );
-  deleteLater();
 }
 
 /*
