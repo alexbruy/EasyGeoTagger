@@ -25,6 +25,7 @@
 #define EGTAPPLICATIONINTERFACE_H
 
 #include "egtdataprovidermanager.h"
+#include "egtmainwindow.h"
 
 #include <QMap>
 #include <QPoint>
@@ -32,6 +33,8 @@
 #include <QObject>
 #include <QModelIndex>
 #include <QMainWindow>
+
+class EgtPluginManager;
 
 /*! \brief EasyGeoTagger application interface
  *
@@ -44,10 +47,12 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
 
   public:
     /*! \brief Constructor */
-    EgtApplicationInterface( QMainWindow* );
+    EgtApplicationInterface( );
 
-    QStringList availableProviders();
+    /*! \brief Wrapper for the EgtDataProviderManager::avilableProviders( ) */
+    QStringList availableProviders( );
 
+    /*! \brief Wrapper for the EgtDataProviderManager::dataProvider( ) */
     EgtDataProvider* dataProvider( QString );
 
     QMainWindow* gui( ) { return cvGui; }
@@ -58,7 +63,14 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     /*! \brief Find a particular widget */
     QPoint positionOfWidget( QString );
 
+    /*! \brief Set a pointer to the main window */
+    void setGui( EgtMainWindow* theMainWindow );
+
+    /*! \brief Set the data provider manager */
     void setDataProviderManager( EgtDataProviderManager* theManager ) { cvDataProviderManager = theManager; }
+
+    /*! \brief Set the application plugin manager */
+    void setPluginManager( EgtPluginManager* thePluginManager ) { cvPluginManager = thePluginManager; }
 
   public slots:
     /*! \brief Accepts a key and data data pair for re broadcasting */
@@ -77,9 +89,6 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     /* \brief Signal to broadcast a mouse click event in the file browser */
     void indexSelected( const QModelIndex& );
 
-    /* \brief Signal to relay requests to refresh the file browser */
-    void fileBrowserRefreshRequest( );
-
     /*! \brief Rebroadcasts key and tag data pair */
     void keyValuePair( QString, QString );
 
@@ -87,10 +96,10 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     void loadPluginRequest( QString );
 
    private:
-
+    EgtMainWindow* cvGui;
     EgtDataProviderManager* cvDataProviderManager;
+    EgtPluginManager* cvPluginManager;
 
-    QMainWindow* cvGui;
 
 };
 #endif

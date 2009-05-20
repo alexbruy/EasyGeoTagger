@@ -27,10 +27,6 @@
 #include "egtversion.h"
 #include "egtitemdelegate.h"
 
-#include <exiv2/image.hpp>
-#include <exiv2/exif.hpp>
-#include <cassert>
-
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -87,6 +83,11 @@ EgtMainWindow::EgtMainWindow( QWidget* theParent )
  * PUBLIC FUNCTIONS
  *
  */
+void EgtMainWindow::refreshFileBrowser( )
+{
+ ( ( QDirModel* )cvUi->tvFileBrowser->model( ) )->refresh( );
+}
+
 void EgtMainWindow::setPluginToolBox( QToolBox* theToolBox )
 {
   //TODO: Need to free all of the panels and the tool box if it exists?
@@ -96,7 +97,7 @@ void EgtMainWindow::setPluginToolBox( QToolBox* theToolBox )
 
 /*
  *
- * SIGNAL and SLOTS
+ * PRIVATE FUNCTIONS
  *
  */
 /*!
@@ -145,7 +146,7 @@ void EgtMainWindow::on_actionAbout_activated( )
                        "Bugs!<br>"\
                        "<a href = \"https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger/newticket\">"\
                        "https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger/newticket</a>"\
-                       "<br><br><br><span style=\"font-size: 10px;color: #555555\">This work was made possible through a grant by the the John D. and Catherine T. MacArthur Foundation"\
+                       "<br><br><br><span style = \"font-size: 10px;color: #555555\">This work was made possible through a grant by the the John D. and Catherine T. MacArthur Foundation"\
                        " with additional support from the Center For Biodiversity and Conservation ( American Museum of "\
                        "Natural History ), and The Spanish Ministry of Science and Innovation's INTEGRANTS program."\
                        "</span>"\
@@ -155,6 +156,7 @@ void EgtMainWindow::on_actionAbout_activated( )
   cvWebBrowser.setHtml( lvBody );
   cvWebBrowser.setWindowIcon( QIcon( ":/icons/internet-web-browser.svg" ) );
   cvWebBrowser.setWindowTitle( tr( "About - EasyGeoTagger" ) );
+  cvWebBrowser.move( this->pos( ) );
   cvWebBrowser.show( );
 }
 
@@ -190,11 +192,6 @@ void EgtMainWindow::on_actionLoadSingle_activated( )
 
     emit loadPlugins( lvFile );
   }
-}
-
-void EgtMainWindow::refreshFileBrowser( )
-{
- ( ( QDirModel* )cvUi->tvFileBrowser->model( ) )->refresh( );
 }
 
 /*!

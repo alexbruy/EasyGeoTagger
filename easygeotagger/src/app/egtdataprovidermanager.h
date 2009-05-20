@@ -1,6 +1,6 @@
 /*
 ** File: egtdataprovidermanager.h
-** Author( s ): Peter J. Ersts ( ersts@amnh.org ), Roberto Garcia-Yunta
+** Author( s ): Peter J. Ersts ( ersts at amnh.org ), Roberto Garcia-Yunta
 ** Creation Date: 2009-05-15
 **
 ** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
@@ -29,28 +29,30 @@
 #include <QMap>
 #include <QStringList>
 
+/*! \brief EasyGeoTagger data provider manager
+ *
+ * The provider manager is responsible for loading data provider plugins and acts as a provider factory
+ */
 class MS_DLL_SPEC EgtDataProviderManager : public QObject
 {
   Q_OBJECT 
   
   public:
 
-    EgtDataProviderManager();
+    /*! \brief Constructor */
+    EgtDataProviderManager( );
 
-    ~EgtDataProviderManager();
+    /*! \brief Destructor */
+    ~EgtDataProviderManager( );
 
+    /*! \brief Get the names of the data providers currently registered with the provider manager */
     QStringList availableProviders( );
 
+    /*! \brief Create a new instance of a data provider */
     EgtDataProvider* provider( QString );
 
-    /*! \brief Load all plugins in a directory */
-    void loadAllProviders( QString );
-
-    /*! \brief Load a single plugin */
-    bool loadSingleProvider( QString );
-
   public slots:
-    /*! \brief Load a plugin or all plugins in a directory */
+    /*! \brief Load a providers or all providers in a directory */
     void loadProviders( QString );
 
   signals:
@@ -59,8 +61,15 @@ class MS_DLL_SPEC EgtDataProviderManager : public QObject
 
 
   private:
-    QString cvDefaultProviderPath;
+    /*! \brief Load all providers in a directory */
+    void loadAllProviders( QString );
 
+    /*! \brief Load a single provider */
+    bool loadSingleProvider( QString );
+
+
+
+    QString cvDefaultProviderPath;
     QMap < QString, QString > cvProviders;
 
 };

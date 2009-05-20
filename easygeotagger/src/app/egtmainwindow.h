@@ -26,8 +26,8 @@
 
 #include "ui_egtmainwindowgui.h"
 
-#include "egtimagefactory.h"
 #include "egtpathbuilder.h"
+#include "egtimagefactory.h"
 #include "egtphotoexifengine.h"
 
 #include <QWebView>

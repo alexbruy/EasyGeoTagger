@@ -86,6 +86,24 @@ EgtExifTagControl::EgtExifTagControl( QString theKey, QString theDisplayName, QS
 
 }
 
+/*
+ *
+ * PUBLIC FUNCTIONS
+ *
+ */
+bool EgtExifTagControl::isEnabled( )
+{
+  return cvEnabled.isChecked( );
+}
+
+/*!
+ * \param enabled Flag indicating if the control is enabled, associated with the config panel
+ */
+void EgtExifTagControl::setEnabled( bool enabled )
+{
+  cvEnabled.setChecked( enabled );
+}
+
 /*!
  * \param theValue as pipe delimited list of options
  */
@@ -108,19 +126,6 @@ void EgtExifTagControl::setUnits( QString const &theValue )
 void EgtExifTagControl::setUnits( QVariant const &theValue )
 {
   setUnits( theValue.toString( ) );
-}
-
-bool EgtExifTagControl::isEnabled( )
-{
-  return cvEnabled.isChecked( );
-}
-
-/*!
- * \param enabled Flag indicating if the control is enabled, associated with the config panel
- */
-void EgtExifTagControl::setEnabled( bool enabled )
-{
-  cvEnabled.setChecked( enabled );
 }
 
 /*!
@@ -172,7 +177,7 @@ void EgtExifTagControl::setVisible( bool show )
 
 /*
  *
- * SIGNAL and SLOTS
+ * PRIVATE FUNCTIONS
  *
  */
 void EgtExifTagControl::cvDiscardButton_clicked( )

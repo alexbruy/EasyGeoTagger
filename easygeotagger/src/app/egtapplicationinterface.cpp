@@ -22,19 +22,17 @@
 **
 **/
 #include "egtapplicationinterface.h"
+#include "egtpluginmanager.h"
 #include "egtlogger.h"
 
 #include <QWidgetList>
 #include <QApplication>
 
-EgtApplicationInterface::EgtApplicationInterface( QMainWindow* theMainWindow )
+EgtApplicationInterface::EgtApplicationInterface( )
 {
-    cvGui = theMainWindow;
-    if( 0 != cvGui )
-    {
-      connect( cvGui, SIGNAL( fileBrowserItemSelected( const QModelIndex& ) ), this, SLOT( acceptModelIndexSelections( const QModelIndex& ) ) );
-      connect( this, SIGNAL( fileBrowserRefreshRequest( ) ), cvGui, SLOT( refreshFileBrowser( ) ) );
-    }
+  cvGui = 0;
+  cvDataProviderManager = 0;
+  cvPluginManager = 0;
 }
 
 /*
@@ -42,16 +40,35 @@ EgtApplicationInterface::EgtApplicationInterface( QMainWindow* theMainWindow )
  * PUBLIC FUNCTIONS
  *
  */
-QStringList EgtApplicationInterface::availableProviders()
+void EgtApplicationInterface::acceptModelIndexSelections( const QModelIndex& theIndex )
+{
+  EgtDebug( "Received model index selection signal" );
+  emit( indexSelected( theIndex ) );
+}
+
+void EgtApplicationInterface::acceptKeyValuePair( QString theKey, QString theData )
+{
+  EgtDebug( "Received key: "+ theKey +"\tCargo: "+ theData );
+  emit keyValuePair( theKey, theData );
+}
+
+/*!
+ * \param thePath the fully qualified name of the shared library or directory of providers to load
+ */
+QStringList EgtApplicationInterface::availableProviders( )
 {
   if( 0!= cvDataProviderManager )
   {
-    return cvDataProviderManager->availableProviders();
+    return cvDataProviderManager->availableProviders( );
   }
 
-  return QStringList();
+  return QStringList( );
 }
 
+/*!
+ * \param theProviderName The name of the provider you would like to load
+ * \returns A new instance of a data provider
+ */
 EgtDataProvider* EgtApplicationInterface::dataProvider( QString theProviderName )
 {
   if( 0!= cvDataProviderManager )
@@ -59,9 +76,20 @@ EgtDataProvider* EgtApplicationInterface::dataProvider( QString theProviderName 
     return cvDataProviderManager->provider( theProviderName );
   }
 
-  return new EgtDataProvider();
+  return new EgtDataProvider( );
 }
 
+void EgtApplicationInterface::loadPlugins( QString thePath )
+{
+  if( 0 != cvPluginManager )
+  {
+    cvPluginManager->loadPlugins( thePath );
+  }
+}
+
+/*!
+ * \returns The screen location of the first visisble widget
+ */
 QPoint EgtApplicationInterface::positionOfFirstVisibleWidget( )
 {
   //Find the first non hidden widget and open the config dialog
@@ -78,6 +106,7 @@ QPoint EgtApplicationInterface::positionOfFirstVisibleWidget( )
 
 /*!
  * \param theWidgetTitle the title of the widget you want to look for. *NOTE: this should already be the translated version of the string
+ * \returns The screen location of the widget
  */
 QPoint EgtApplicationInterface::positionOfWidget( QString theWidgetTitle )
 {
@@ -94,31 +123,20 @@ QPoint EgtApplicationInterface::positionOfWidget( QString theWidgetTitle )
   return QPoint( 0, 0 );
 }
 
-/*
- *
- * PUBLIC SLOTS
- *
- */
-void EgtApplicationInterface::acceptModelIndexSelections( const QModelIndex& theIndex )
-{
-  EgtDebug( "Received model index selection signal" );
-  emit( indexSelected( theIndex ) );
-}
-
-void EgtApplicationInterface::acceptKeyValuePair( QString theKey, QString theData )
-{
-  EgtDebug( "Received key: "+ theKey +"\tCargo: "+ theData );
-  emit keyValuePair( theKey, theData );
-}
-
-void EgtApplicationInterface::loadPlugins( QString thePath )
-{
-  EgtDebug( "Received load plugin request: "+ thePath );
-  emit loadPluginRequest( thePath );
-}
-
 void EgtApplicationInterface::refreshFileBrowser( )
 {
-  EgtDebug( "Received file browser refresh request" );
-  emit( fileBrowserRefreshRequest( ) );
+  if( 0 != cvGui )
+  {
+    cvGui->refreshFileBrowser( );
+  }
+}
+
+
+void EgtApplicationInterface::setGui( EgtMainWindow* theMainWindow )
+{
+  cvGui = theMainWindow;
+  if( 0 != cvGui )
+    {
+      connect( cvGui, SIGNAL( fileBrowserItemSelected( const QModelIndex& ) ), this, SLOT( acceptModelIndexSelections( const QModelIndex& ) ) );
+    }
 }

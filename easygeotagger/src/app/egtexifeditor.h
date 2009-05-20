@@ -23,6 +23,7 @@
 **/
 #ifndef EGTEXIFEDITOR_H
 #define EGTEXIFEDITOR_H
+
 #include "egtexiftagcontrol.h"
 #include "egtexiftaggroup.h"
 #include "egtexifengine.h"

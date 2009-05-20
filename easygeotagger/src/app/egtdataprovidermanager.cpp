@@ -1,6 +1,6 @@
 /*
 ** File: egtdataprovidermanager.cpp
-** Author( s ): Peter J. Ersts ( ersts@amnh.org ), Roberto Garcia-Yunta
+** Author( s ): Peter J. Ersts ( ersts at amnh.org ), Roberto Garcia-Yunta
 ** Creation Date: 2009-05-15
 **
 ** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
@@ -43,7 +43,7 @@ EgtDataProviderManager::EgtDataProviderManager( )
 #endif
 }
 
-EgtDataProviderManager::~EgtDataProviderManager()
+EgtDataProviderManager::~EgtDataProviderManager( )
 {
 }
 
@@ -57,10 +57,71 @@ EgtDataProviderManager::~EgtDataProviderManager()
 QStringList EgtDataProviderManager::availableProviders( )
 {
   EgtDebug( "entered" );
-  QList < QString > lvKeys = cvProviders.keys();
+  QList < QString > lvKeys = cvProviders.keys( );
   qSort( lvKeys );
   return lvKeys;
 }
+
+/*!
+ * \param thePath the fully qualified name of the shared library or directory of providers to load
+ */
+void EgtDataProviderManager::loadProviders( QString thePath )
+{
+  EgtDebug( "entered" );
+  EgtDebug( "Received: " + thePath );
+
+  //If the path is blank bail
+  if( thePath == "" )
+  {
+    return;
+  }
+
+  QFileInfo lvFileInfo( thePath );
+  if( lvFileInfo.isDir( ) || !lvFileInfo.exists( ) )
+  {
+    loadAllProviders( thePath );
+  }
+  else
+  {
+    loadSingleProvider( thePath );
+  }
+}
+
+/*!
+ * \param theProviderName The name of the provider you would like to load
+ * \returns A new instance of a data provider
+ */
+EgtDataProvider* EgtDataProviderManager::provider( QString theProviderName )
+{
+  EgtDebug( "entered" );
+
+  if( cvProviders.contains( theProviderName ) )
+  {
+    //Create an instance of a plugin loader the attempt to open the library
+    QPluginLoader lvPluginLoader( cvProviders[ theProviderName ] );
+    QObject* lvPlugin = lvPluginLoader.instance( );
+    if ( lvPlugin )
+    {
+      //If the library is a plugin, see if it has an EgtDataProvider
+      EgtDataProvider* lvInterface = qobject_cast<EgtDataProvider *>( lvPlugin );
+      if( lvInterface )
+      {
+        return lvInterface;
+      }
+    }
+    EgtDebug( "Count not create instance of provider ["+ cvProviders[ theProviderName ] +"]" );
+    return new EgtDataProvider( );
+  }
+
+  EgtDebug( "Request for unknown data provider ["+ cvProviders[ theProviderName ] +"]" ) ;
+  return new EgtDataProvider( );
+}
+
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
 
 /*!
  * \param theDirectory the fully qualified name of the directory containing providers to load
@@ -101,31 +162,6 @@ void EgtDataProviderManager::loadAllProviders( QString theDirectory )
 }
 
 /*!
- * \param thePath the fully qualified name of the shared library or directory of providers to load
- */
-void EgtDataProviderManager::loadProviders( QString thePath )
-{
-  EgtDebug( "entered" );
-  EgtDebug( "Received: " + thePath );
-
-  //If the path is blank bail
-  if( thePath == "" )
-  {
-    return;
-  }
-
-  QFileInfo lvFileInfo( thePath );
-  if( lvFileInfo.isDir( ) || !lvFileInfo.exists( ) )
-  {
-    loadAllProviders( thePath );
-  }
-  else
-  {
-    loadSingleProvider( thePath );
-  }
-}
-
-/*!
  * \param theLibrary the fully qualified filename for the provider library to load
  * \returns true of the provider is successfully loaded, otherwise returns false
  */
@@ -143,7 +179,7 @@ bool EgtDataProviderManager::loadSingleProvider( QString theLibrary )
     if( lvInterface )
     {
       cvProviders[ lvInterface->name( ) ] = theLibrary;
-      emit providerLoaded( tr( "Provider") +": "+ lvInterface->name( ) );
+      emit providerLoaded( tr( "Provider" ) +": "+ lvInterface->name( ) );
       EgtDebug( "loaded provider ["+ lvInterface->name( ) +"]" );
     }
     else
@@ -160,30 +196,3 @@ bool EgtDataProviderManager::loadSingleProvider( QString theLibrary )
 
   return true;
 }
-
-EgtDataProvider* EgtDataProviderManager::provider( QString theProviderName )
-{
-  EgtDebug( "entered" );
-
-  if( cvProviders.contains( theProviderName ) )
-  {
-    //Create an instance of a plugin loader the attempt to open the library
-    QPluginLoader lvPluginLoader( cvProviders[ theProviderName ] );
-    QObject* lvPlugin = lvPluginLoader.instance( );
-    if ( lvPlugin )
-    {
-      //If the library is a plugin, see if it has an EgtDataProvider
-      EgtDataProvider* lvInterface = qobject_cast<EgtDataProvider *>( lvPlugin );
-      if( lvInterface )
-      {
-        return lvInterface;
-      }
-    }
-    EgtDebug( "Count not create instance of provider ["+ cvProviders[ theProviderName ] +"]" );
-    return new EgtDataProvider();
-  }
-
-  EgtDebug( "Request for unknown data provider ["+ cvProviders[ theProviderName ] +"]" ) ;
-  return new EgtDataProvider();
-}
-

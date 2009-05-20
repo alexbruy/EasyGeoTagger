@@ -46,15 +46,6 @@ class MS_DLL_SPEC EgtPluginManager : public QObject
     /*! \brief Constructor */
     EgtPluginManager( EgtApplicationInterface*, EgtMainWindow* );
 
-    /*! \brief Update plugin display dock widget in the main window */
-    void updateGui( );
-
-    /*! \brief Load all plugins in a directory */
-    void loadAllPlugins( QString );
-
-    /*! \brief Load a single plugin */
-    bool loadSinglePlugin( QString );
-
   public slots:
     /*! \brief Load a plugin or all plugins in a directory */
     void loadPlugins( QString );
@@ -64,6 +55,17 @@ class MS_DLL_SPEC EgtPluginManager : public QObject
     void pluginLoaded( QString );  
     
   private:
+    /*! \brief Load all plugins in a directory */
+    void loadAllPlugins( QString );
+
+    /*! \brief Load a single plugin */
+    bool loadSinglePlugin( QString );
+
+    /*! \brief Update plugin display dock widget in the main window */
+    void updateGui( );
+
+
+
     /*! \brief Collection of available plugins. Collection are build based on category    QMap< Category, QMap< pluginName, pluginDisplay > > */
     PLUGINCOLLECTION cvPluginDisplayCollection;
     

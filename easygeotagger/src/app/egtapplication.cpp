@@ -40,7 +40,18 @@ EgtApplication::EgtApplication( QString thePluginDirectory, bool displaySplash )
 {
   init( thePluginDirectory, displaySplash );
 }
-
+/*
+ *
+ * PUBLIC FUNCTIONS
+ *
+ */
+void EgtApplication::show( )
+{
+  if( 0 != cvGui )
+  {
+    cvGui->show( );
+  }
+}
 /*
  *
  * PRIVATE FUNCTIONS
@@ -54,6 +65,7 @@ void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
 {
   EgtDebug( "entered" );
   cvSplashScreen = 0;
+  cvApplicationInterface = 0;
 
   //Show splash screen
   if( displaySplash )
@@ -63,21 +75,25 @@ void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
     cvSplashScreen->showMessage( tr( "Loading plugins..." ), Qt::AlignHCenter | Qt::AlignBottom );
   }
 
+  //Create a new application interface and gui
+  cvApplicationInterface = new EgtApplicationInterface( );
+  if( 0 == cvApplicationInterface ) { exit( 0 ); }
+
   //Create a new main window
   cvGui = new EgtMainWindow( );
-  
-  //Create a new application interface and gui
-  cvApplicationInterface = new EgtApplicationInterface( cvGui );
+  cvApplicationInterface->setGui( cvGui );
   
   //Create a new plugin manager and load plugins from the main plugin archive
   cvPluginManager = new EgtPluginManager( cvApplicationInterface, cvGui );
+  cvApplicationInterface->setPluginManager( cvPluginManager );
   if( displaySplash && cvPluginManager )
   {
     connect( cvPluginManager, SIGNAL( pluginLoaded( QString ) ), this, SLOT( showSplashScreenMessage( QString ) ) );
   }
 
   //Create a new provider manager and load providers from the main plugin archive
-  cvProviderManager = new EgtDataProviderManager();
+  cvProviderManager = new EgtDataProviderManager( );
+  cvApplicationInterface->setDataProviderManager( cvProviderManager );
   if( displaySplash && cvPluginManager )
   {
     connect( cvProviderManager, SIGNAL( providerLoaded( QString ) ), this, SLOT( showSplashScreenMessage( QString ) ) );
@@ -86,8 +102,6 @@ void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
   if( cvGui && cvApplicationInterface && cvPluginManager && cvProviderManager )
   {
     connect( cvGui, SIGNAL( loadPlugins( QString ) ), cvPluginManager, SLOT( loadPlugins( QString ) ) );
-    connect( cvApplicationInterface, SIGNAL( loadPluginRequest( QString ) ), cvPluginManager, SLOT( loadPlugins( QString ) ) );
-    cvApplicationInterface->setDataProviderManager( cvProviderManager );
 
     cvPluginManager->loadPlugins( thePluginDirectory );
     cvProviderManager->loadProviders( thePluginDirectory );
@@ -113,11 +127,6 @@ void EgtApplication::init( QString thePluginDirectory, bool displaySplash )
     delete cvSplashScreen;
     cvSplashScreen = 0;
   }
-}
-
-void EgtApplication::show( )
-{
-  cvGui->show( );
 }
 
 void EgtApplication::showSplashScreenMessage( QString theMessage )

@@ -36,7 +36,7 @@ EgtItemDelegate::EgtItemDelegate( )
 
 /*
  *
- * SIGNAL and SLOTS
+ * PUBLIC FUNCTIONS
  *
  */
 
@@ -55,11 +55,6 @@ void EgtItemDelegate::displayGpsExifAvailability( int theState )
   }
 }
 
-/*
- *
- * PRIVATE FUNCTIONS
- *
- */
 void EgtItemDelegate::paint( QPainter* thePainter, const QStyleOptionViewItem& theOption, const QModelIndex& theIndex ) const
 {
 

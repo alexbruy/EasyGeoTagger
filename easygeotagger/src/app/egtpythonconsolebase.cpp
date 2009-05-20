@@ -99,36 +99,12 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
   }
 }
 
-/*!
- * \param theCommand the python code to execute
- * \returns success or failure or the code execution
+
+/*
+ *
+ * PUBLIC FUNCTIONS
+ *
  */
-bool  EgtPythonConsoleBase::runCommand( QString theCommand )
-{
-  if( !cvPythonFound ) { return false; }
-
-  PyRun_String( qPrintable( theCommand ), Py_single_input, cvDictionary, cvDictionary );//Py_file_input
-  return ( PyErr_Occurred( ) == 0 );
-}
-
-void EgtPythonConsoleBase::on_pbtnRun_clicked( )
-{
-  if( !cvPythonFound ) { return; }
-
-  EgtDebug( QString( "run python command\n%1" ).arg( teInput->toPlainText( ) ) );
-
-  tbOutput->append( ">>"+( teInput->toPlainText( ) ).replace( "\n","\n>>" ) );
-  
-  if( !runCommand( teInput->toPlainText( ) ) )
-  {
-    QString className, errorText;
-    getError( className, errorText );
-    tbOutput->append( className );
-    tbOutput->append( errorText );
-  }
-  teInput->setText( "" );
-}
-
 /*!
  * This method was taken from the QGIS project ( www.qgis.org ), the original source code can be found at
  * https://svn.osgeo.org/qgis/trunk/qgis/src/python/qgspythonutilsimpl.cpp
@@ -200,4 +176,34 @@ QString EgtPythonConsoleBase::getTypeAsString( PyObject* obj )
     Py_XDECREF( s );
     return str;
   }
+}
+
+void EgtPythonConsoleBase::on_pbtnRun_clicked( )
+{
+  if( !cvPythonFound ) { return; }
+
+  EgtDebug( QString( "run python command\n%1" ).arg( teInput->toPlainText( ) ) );
+
+  tbOutput->append( ">>"+( teInput->toPlainText( ) ).replace( "\n","\n>>" ) );
+
+  if( !runCommand( teInput->toPlainText( ) ) )
+  {
+    QString className, errorText;
+    getError( className, errorText );
+    tbOutput->append( className );
+    tbOutput->append( errorText );
+  }
+  teInput->setText( "" );
+}
+
+/*!
+ * \param theCommand the python code to execute
+ * \returns success or failure or the code execution
+ */
+bool  EgtPythonConsoleBase::runCommand( QString theCommand )
+{
+  if( !cvPythonFound ) { return false; }
+
+  PyRun_String( qPrintable( theCommand ), Py_single_input, cvDictionary, cvDictionary );//Py_file_input
+  return ( PyErr_Occurred( ) == 0 );
 }

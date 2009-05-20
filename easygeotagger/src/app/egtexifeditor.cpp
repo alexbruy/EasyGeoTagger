@@ -195,6 +195,35 @@ void EgtExifEditor::loadExifData( bool hasTagData )
   }
 }
 
+/*!
+ * \param theKey Egt key to receive the incoming data
+ * \param theValue the data for the Egt key
+ * \param setCachedValue Flag to indicate if the new data should be considered the fall back data if the user should change the value in the editor
+ */
+void EgtExifEditor::setTagData( QString theKey, QString theValue, bool setCachedValue )
+{
+  if( cvTagControls.contains( theKey ) )
+  {
+    cvTagControls[ theKey ]->setValue( theValue, setCachedValue );
+  }
+}
+
+/*!
+ * \param theKey Egt key to receive the incoming data
+ * \param theValue the data for the Egt key
+ * \param setCachedValue Flag to indicate if the new data should be considered the fall back data if the user should change the value in the editor
+ */
+void EgtExifEditor::setTagData( QString theKey, QVariant theValue, bool setCachedValue )
+{
+  if( cvTagControls.contains( theKey ) )
+  {
+    cvTagControls[ theKey ]->setValue( theValue, setCachedValue );
+  }
+}
+
+/*!
+ * \param thePoint The screen location where there dialog should appear
+ */
 void EgtExifEditor::showConfigurationDialog( QPoint thePoint )
 {
    cvConfigurationDialog.move( thePoint );
@@ -203,7 +232,7 @@ void EgtExifEditor::showConfigurationDialog( QPoint thePoint )
 
 /*
  *
- * SIGNAL and SLOTS
+ * PRIVATE FUNCTIONS
  *
  */
 
@@ -334,28 +363,3 @@ void EgtExifEditor::tagGroupActivated( QStringList theKeys )
   }
 }
 
-/*!
- * \param theKey Egt key to receive the incoming data
- * \param theValue the data for the Egt key
- * \param setCachedValue Flag to indicate if the new data should be considered the fall back data if the user should change the value in the editor
- */
-void EgtExifEditor::setTagData( QString theKey, QString theValue, bool setCachedValue )
-{
-  if( cvTagControls.contains( theKey ) )
-  {
-    cvTagControls[ theKey ]->setValue( theValue, setCachedValue );
-  }
-}
-
-/*!
- * \param theKey Egt key to receive the incoming data
- * \param theValue the data for the Egt key
- * \param setCachedValue Flag to indicate if the new data should be considered the fall back data if the user should change the value in the editor
- */
-void EgtExifEditor::setTagData( QString theKey, QVariant theValue, bool setCachedValue )
-{
-  if( cvTagControls.contains( theKey ) )
-  {
-    cvTagControls[ theKey ]->setValue( theValue, setCachedValue );
-  }
-}

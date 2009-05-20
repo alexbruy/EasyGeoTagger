@@ -54,7 +54,45 @@ EgtPluginManager::EgtPluginManager( EgtApplicationInterface* theApplicationInter
  * PUBLIC FUNCTIONS
  *
  */
+/*!
+ * \param thePath the fully qualified name of the shared library or directory of plugins to load
+ */
+void EgtPluginManager::loadPlugins( QString thePath )
+{
+  EgtDebug( "entered" );
+  EgtDebug( "Received: " + thePath );
 
+  //Check to make sure we have a valid application interface
+  if( 0 == cvApplicationInterface || 0 == cvGui )
+  {
+    EgtDebug( "Application interface or main window was null...bailing" );
+    return;
+  }
+
+  //If the path is blank bail
+  if( thePath == "" )
+  {
+    return;
+  }
+
+  QFileInfo lvFileInfo( thePath );
+  if( lvFileInfo.isDir( ) || !lvFileInfo.exists( ) )
+  {
+    loadAllPlugins( thePath );
+  }
+  else
+  {
+    loadSinglePlugin( thePath );
+  }
+  updateGui( );
+}
+
+
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
 /*!
  * \param theDirectory the fully qualified name of the directory containing plugins to load
  */
@@ -98,39 +136,6 @@ void EgtPluginManager::loadAllPlugins( QString theDirectory )
   {
     loadSinglePlugin( pluginDirectory.absoluteFilePath( *lvIterator ) );
   }
-}
-
-/*!
- * \param thePath the fully qualified name of the shared library or directory of plugins to load
- */
-void EgtPluginManager::loadPlugins( QString thePath )
-{
-  EgtDebug( "entered" );
-  EgtDebug( "Received: " + thePath );
-
-  //Check to make sure we have a valid application interface
-  if( 0 == cvApplicationInterface || 0 == cvGui )
-  {
-    EgtDebug( "Application interface or main window was null...bailing" );
-    return;
-  }
-
-  //If the path is blank bail
-  if( thePath == "" )
-  {
-    return;
-  }
-
-  QFileInfo lvFileInfo( thePath );
-  if( lvFileInfo.isDir( ) || !lvFileInfo.exists( ) )
-  {
-    loadAllPlugins( thePath );
-  }
-  else
-  {
-    loadSinglePlugin( thePath );
-  }
-  updateGui( );
 }
 
 /*!

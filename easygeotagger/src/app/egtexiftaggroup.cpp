@@ -44,6 +44,11 @@ EgtExifTagGroup::EgtExifTagGroup( QString theLabel )
   connect( &cvActivate, SIGNAL( clicked( ) ), this, SLOT( cvActivate_clicked( ) ) );
 }
 
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
 void EgtExifTagGroup::cvActivate_clicked( )
 {
   emit( tagGroupActivated( cvKeys.toList( ) ) );
