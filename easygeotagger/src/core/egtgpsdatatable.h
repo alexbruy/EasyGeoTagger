@@ -1,6 +1,6 @@
 /*
 ** File: egtgpsdatatable.h
-** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts@amnh.org )
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-12-19
 **
 ** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
@@ -30,10 +30,11 @@
 
 
 #include <QTableWidget>
+#include <QStringList>
 #include <QDateTime>
-#include <QSet>
+#include <QMap>
 
-class EgtGpsDataTable : public QTableWidget
+class MS_DLL_SPEC EgtGpsDataTable : public QTableWidget
 {
   Q_OBJECT
 
@@ -42,19 +43,22 @@ class EgtGpsDataTable : public QTableWidget
      /*! \brief Constructor */
     EgtGpsDataTable( );
 
-    bool clearColumnHeader( int );
+    /*! \brief Resets a column header */
+    void clearColumnHeader( int );
 
     /*! \brief Indicates if the user has set at least column header */
     bool isAnyColumnHeaderSet( );
 
     /*! \brief Indicates if a specific column header has been set */
-    bool hasColumnHeader( QString );
+    bool isColumnHeaderSet( QString );
 
     /*! \brief Returns a QMap that contains all the key-value pairs of the selected row */
-    QMap<QString,QString> getRow( );
+    QMap<QString,QString> rowData( );
 
-    QMap<QString,QString> getRow( int );
+    /*! \brief Returns a QMap that contains all the key-value pairs of the specified row */
+    QMap<QString,QString> rowData( int );
 
+    /*! \brief Set the column header for a specified row */
     bool setColumnHeader( int, QString );
 
   public slots:
@@ -62,20 +66,22 @@ class EgtGpsDataTable : public QTableWidget
     /*! \brief Broadcasts the key-value pairs in the currently selected row via the application interface */
     void broadcastRow( );
 
+    /*! \brief Broadcasts the key-value pairs in the specified row via the application interface */
     void broadcastRow( int );
 
     /*! \brief Deletes the current row of the table */
-    void deleteRow();
+    void deleteRow( );
 
     /*! \brief Deletes a row of the table */
     void deleteRow( int );
 
+    /*! \brief Select a row and make it the current row */
     void selectRow( int );
 
     /*! \brief Sets the offset*/
     void setOffset( int );
 
-    /*! \brief Slot used to set the specific file reader */
+    /*! \brief Set the table's data provider */
     void setProvider( EgtDataProvider* );
 
   private slots:
@@ -120,7 +126,7 @@ class EgtGpsDataTable : public QTableWidget
     /*! \brief Check to see if the DateTimeStamp is valid
      *  \returns False if the stamp is not valid and true if it is or no DataTimeStamp was found
      */
-    bool validDateTimeStamp();
+    bool validDateTimeStamp( );
 
 
 
@@ -136,8 +142,8 @@ class EgtGpsDataTable : public QTableWidget
     /*! \brief Instance of a GPS EXIF engine */
     EgtGpsExifEngine cvExifEngine;
 
-    /*! \brief A QList with all the headers that are set so far */
-    QSet< int > cvColumnHeadersSet;
+    /*! \brief A QMap with all the headers that are set so far */
+    QMap< QString, int > cvColumnHeadersSet;
 
     /*! \brief Dialog to show the user all the available fields */
     QDialog* cvHeaderSelectionDialog;

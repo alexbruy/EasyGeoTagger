@@ -55,13 +55,13 @@ public:
   /*! \brief Returns the bearing to the destination point */
   double destBearing( bool * isValid = 0 );
 
-  /*! \brief Returns the reference used for the bearing to the destination point((M)agnetic or (T)rue north pole) */
+  /*! \brief Returns the reference used for the bearing to the destination point( ( M )agnetic or ( T )rue north pole ) */
   QString destBearingRef( bool * isValid = 0 );
 
   /*! \brief Returns the distance to the destination point */
   double destDistance( bool * isValid = 0 );
 
-  /*! \brief Returns the reference used for the destination distance.((k)ilometers, (M)iles or k(N)ots) */
+  /*! \brief Returns the reference used for the destination distance.( ( k )ilometers, ( M )iles or k( N )ots ) */
   QString destDistanceRef( bool * isValid = 0 );
 
   /*! \brief Returns the latitude of the destination point*/
@@ -76,7 +76,7 @@ public:
   /*! \brief Returns the direction of the image when it was captured */
   float direction( bool * isValid = 0 );
 
-  /*! \brief Returns the reference used for the direction to the destination point((M)agnetic or (T)rue north pole) */
+  /*! \brief Returns the reference used for the direction to the destination point( ( M )agnetic or ( T )rue north pole ) */
   QString directionRef( bool * isValid = 0 );
 
   /*! \brief Returns the GPS DOP ( data degree of precision )*/
@@ -115,7 +115,7 @@ public:
   /*! \brief Returns the longitude */
   double speed( bool * isValid = 0 );
 
-  /*! \brief Returns the Reference used to measure the speed. (K)ilometer, (M)iles or k(N)ots */
+  /*! \brief Returns the Reference used to measure the speed. ( K )ilometer, ( M )iles or k( N )ots */
   QString speedRef( bool * isValid = 0 );
 
   /*! \brief Returns the status of the GPS receiver when the picture was taken */
@@ -127,7 +127,7 @@ public:
   /*! \brief Returns the direction of the GPS receiver movement*/
   double track( bool * isValid = 0 );
  
-  /*! \brief Returns the Reference used to measure the track. (M)agnetic or (T)rue north pole */
+  /*! \brief Returns the Reference used to measure the track. ( M )agnetic or ( T )rue north pole */
   QString trackRef( bool * isValid = 0 );
 
   /*! \brief Returns the version of the GPS */

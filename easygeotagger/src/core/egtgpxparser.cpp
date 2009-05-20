@@ -1,5 +1,5 @@
 
-bool EgtGpxParser::startDocument()
+bool EgtGpxParser::startDocument( )
 {
   cvInGpx = false;
   return true;
@@ -19,7 +19,7 @@ bool EgtGpxParser::startElement( const QString&, const QString&, const QString &
   {
     QString elevation, time, longitude, latitude;
 
-    for( int i=0; i<attrs.count(); i++ )
+    for( int i = 0; i<attrs.count( ); i++ )
     {
       QStringList lvRowData;
       if( attrs.localName( i ) == "ele" )
@@ -40,12 +40,12 @@ bool EgtGpxParser::startElement( const QString&, const QString&, const QString &
   return true;
 }
 
-QList<QStringList> EgtGpxParser::data()
+QList<QStringList> EgtGpxParser::data( )
 {
   return cvFileData;
 }
 
-void EgtGpxParser::reset()
+void EgtGpxParser::reset( )
 {
-  cvFileData.clear();
+  cvFileData.clear( );
 }

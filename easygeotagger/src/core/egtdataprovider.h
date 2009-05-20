@@ -1,6 +1,6 @@
 /*
 ** File: egtdataprovider.h
-** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts@amnh.org )
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-12-19
 **
 ** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
@@ -29,6 +29,13 @@
 #include <QString>
 #include <QStringList>
 
+/*! \brief Base Data Provider
+ *
+ * This class is the base data provider and plugin interface
+ *
+ * \todo Update next( ) and previous( ) to return QMap< fieldName, QString > or QMap< fieldName, QVariant >
+ * \todo Update internal strage of data to reflect the above changes
+ */
 class MS_DLL_SPEC EgtDataProvider : public QObject
 {
   Q_OBJECT
@@ -41,48 +48,57 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
       Fatal
     };
 
-    EgtDataProvider();
+    /*! \brief Constructor */
+    EgtDataProvider( );
 
-    virtual ~EgtDataProvider() { }
+    virtual ~EgtDataProvider( ) { }
 
-    /*! \brief Function that returns the column headers*/
+    /*! \brief Returns the column headers*/
     QStringList columnHeaders( ) { return cvColumnHeaders; }
 
-    /*! \brief Returns whether the file has column headers or not */
+    /*! \brief Does the data file have column headers */
     bool hasColumnHeaders( ) { return cvHasColumnHeaders; }
 
-    virtual void configure() { emit dataProviderReady(); }
+    /*! \brief Entry point for derived classes so they can graphically display their options */
+    virtual void configure( ) { emit dataProviderReady( ); }
 
-    QString lastError() { return cvLastError; }
+    /*! \returns the last error message */
+    QString lastError( ) { return cvLastError; }
 
-    QString name() { return cvName; }
+    /*! \returns the proivders name */
+    QString name( ) { return cvName; }
 
-    QStringList next();
+    /*! \brief Get the next row of data */
+    QStringList next( );
 
+    /*! \returns the number of fields */
     int numberOfFields( ) { return cvNumberOfFields; }
 
-    int numberOfRecords() { return cvData.size(); }
+    /*! \returns the number of records the provider currently has loaded */
+    int numberOfRecords( ) { return cvData.size( ); }
 
-    QStringList previous();
+    /*! \brief the the revious row of data */
+    QStringList previous( );
 
-    void reset() { cvCurrentRecord = -1; }
+    /*! \brief Reset the proivder back to the first record */
+    void reset( ) { cvCurrentRecord = -1; }
 
   signals:
-
-    void dataProviderReady();
+    void dataProviderReady( );
 
   protected:
+    /*! \brief Read function to be implemented by the derrived classes */
     virtual EgtDataProvider::ErrorType read( ) { }
 
 
-    /*! \brief Contains the headers from the file */
+
+
     QStringList cvColumnHeaders;
 
     int cvCurrentRecord;
 
     QList< QStringList > cvData;
 
-    /*! \brief Indicates if the file has a header */
     bool cvHasColumnHeaders;
 
     QString cvLastError;

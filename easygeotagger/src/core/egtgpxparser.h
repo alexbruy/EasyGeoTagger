@@ -3,13 +3,13 @@
 class EgtGpxParser : public QXmlDefaultHandler
 {
 public:
-  bool startDocument();
+  bool startDocument( );
   bool endElement( const QString&, const QString&, const QString &name );
 
   bool startElement( const QString&, const QString&, const QString&, const QXmlAttributes& );
 
-  QList<QStringList> data();
-  void reset();
+  QList<QStringList> data( );
+  void reset( );
 
 private:
   

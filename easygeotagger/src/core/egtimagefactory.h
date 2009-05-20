@@ -99,6 +99,8 @@ class MS_DLL_SPEC EgtImageFactory : public QObject
     /*! \brief Read/open the base image as a tiff */
     void readTiff( QString );
     
+
+
     /*! \brief The name of the current image file, may or may not be a valid image */
     QString cvFileName;
 

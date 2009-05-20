@@ -860,7 +860,7 @@ double EgtGpsExifEngine::speed( bool * isValid )
 
 /*!
  * \param isValid if the access to the picture was successful
- * \returns the speed ref.((K)ilometers, (M)iles or k(N)ots)
+ * \returns the speed ref.( ( K )ilometers, ( M )iles or k( N )ots )
  */
 QString EgtGpsExifEngine::speedRef( bool * isValid )
 {

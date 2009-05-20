@@ -1,6 +1,6 @@
 /*
 ** File: egtdataprovider.cpp
-** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts@amnh.org )
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2008-12-19
 **
 ** Copyright ( c ) 2008, American Museum of Natural History. All rights reserved.
@@ -23,7 +23,7 @@
 **/
 #include "egtdataprovider.h"
 
-EgtDataProvider::EgtDataProvider()
+EgtDataProvider::EgtDataProvider( )
 {
   cvCurrentRecord = -1;
   cvHasColumnHeaders = false;
@@ -32,22 +32,33 @@ EgtDataProvider::EgtDataProvider()
   cvName = "UNKNOWN";
 }
 
-QStringList EgtDataProvider::next()
+/*
+ *
+ * PUBLIC FUNCTIONS
+ *
+ */
+/*!
+ * \returns a QStringList with the next row of data
+ */
+QStringList EgtDataProvider::next( )
 {
-  if( cvData.size() == 0 || cvCurrentRecord == cvData.size() - 1)
+  if( cvData.size( ) == 0 || cvCurrentRecord == cvData.size( ) - 1 )
   {
-    return QStringList();
+    return QStringList( );
   }
 
   cvCurrentRecord++;
   return cvData[ cvCurrentRecord ];
 }
 
-QStringList EgtDataProvider::previous()
+/*!
+ * \returns a QStringList with the prevvious row of data
+ */
+QStringList EgtDataProvider::previous( )
 {
-  if( cvData.size() == 0 || cvCurrentRecord <= 0 )
+  if( cvData.size( ) == 0 || cvCurrentRecord <= 0 )
   {
-    return QStringList();
+    return QStringList( );
   }
 
   cvCurrentRecord--;

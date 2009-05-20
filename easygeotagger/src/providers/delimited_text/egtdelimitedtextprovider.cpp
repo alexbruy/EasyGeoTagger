@@ -77,7 +77,7 @@ void EgtDelimitedTextProvider::notifyInitializationComplete( bool isComplete )
 }
 
 /*!
- * \param a QString that contains a delimiter
+ * \param theDelimiter a QString that contains a delimiter
  */
 void EgtDelimitedTextProvider::setDelimiter( QString theDelimiter )
 {
@@ -121,9 +121,6 @@ void EgtDelimitedTextProvider::showConfigurationDialog( )
  *
  * PROTECTED FUNCTIONS
  *
- */
-/*!
- * \param ok pointer to boolean that indicates whether the read was performed correctly or not
  */
 EgtDataProvider::ErrorType EgtDelimitedTextProvider::read( )
 {

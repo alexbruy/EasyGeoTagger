@@ -62,8 +62,8 @@ EgtExifEngine::EgtExifEngine( const QModelIndex& theIndex )
 
 QString EgtExifEngine::commonName( QString theKey )
 {
-  QList< KeyMap >::iterator lvIterator = cvKeys.begin();
-  while( lvIterator != cvKeys.end() )
+  QList< KeyMap >::iterator lvIterator = cvKeys.begin( );
+  while( lvIterator != cvKeys.end( ) )
   {
     if( lvIterator->key.compare( theKey, Qt::CaseInsensitive ) )
     {
@@ -125,8 +125,8 @@ bool EgtExifEngine::isValidImage( )
  */
 QString EgtExifEngine::key( QString theCommonName )
 {
-    QList< KeyMap >::iterator lvIterator = cvKeys.begin();
-    while( lvIterator != cvKeys.end() )
+    QList< KeyMap >::iterator lvIterator = cvKeys.begin( );
+    while( lvIterator != cvKeys.end( ) )
     {
         if( 0 == lvIterator->commonName.compare( theCommonName, Qt::CaseInsensitive ) )
         {
@@ -181,7 +181,7 @@ const Exiv2::Value& EgtExifEngine::readTag( QString theKey )
       EgtDebug( QString( "key ["+ theKey + "] found" ) );
       EgtDebug( QString( "Data Type ["+ QString( it->typeName( ) ) +"]" ) );
          
-      if( 0 == it->count() ){ return cvNotValidValue; }     //The tag exists, but not the data (it is corrupted or something)
+      if( 0 == it->count( ) ) { return cvNotValidValue; }     //The tag exists, but not the data ( it is corrupted or something )
       return it->value( );
     }
     catch ( Exiv2::AnyError& e )
@@ -219,7 +219,7 @@ QString EgtExifEngine::readKeyValueAsString( QString theKey )
       }
 
       EgtDebug( QString( "key ["+ theKey + "] found" ) );
-      if( 0 == it->count() ){ return ""; }     //The tag exists, but not the data (it is corrupted or something)
+      if( 0 == it->count( ) ) { return ""; }     //The tag exists, but not the data ( it is corrupted or something )
       QString lvIteratorValue( it->value( ).toString( ).c_str( ) );
       return lvIteratorValue;
     }

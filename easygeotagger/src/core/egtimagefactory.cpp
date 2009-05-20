@@ -59,17 +59,6 @@ EgtImageFactory::~EgtImageFactory( )
   }
 }
 
-void EgtImageFactory::init( )
-{
-  cvOriginalImage = QImage( );
-  cvHasBeenResized = false;
-  cvHasThumbnail = false;
-  cvIsValidImage = false;
-  
-  connect( &cvRawImageReader, SIGNAL( progress( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
-  connect( &cvRawImageReader, SIGNAL( finished( bool ) ),this , SLOT( rawImageLoaded( bool ) ) );
-}
-
 /*
  *
  * PUBLIC FUNCTIONS
@@ -215,6 +204,17 @@ void EgtImageFactory::setFile( QModelIndex theIndex )
  * PRIVATE FUNCTIONS
  *
  */
+
+void EgtImageFactory::init( )
+{
+  cvOriginalImage = QImage( );
+  cvHasBeenResized = false;
+  cvHasThumbnail = false;
+  cvIsValidImage = false;
+
+  connect( &cvRawImageReader, SIGNAL( progress( int, int, int ) ),this , SLOT( reEmitProgress( int, int, int ) ) );
+  connect( &cvRawImageReader, SIGNAL( finished( bool ) ),this , SLOT( rawImageLoaded( bool ) ) );
+}
 
 /*!
  * \param theImageFileName absolute path and filename of the image to open
