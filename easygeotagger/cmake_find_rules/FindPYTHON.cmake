@@ -10,23 +10,39 @@
 FIND_PROGRAM (PYTHON_BINARY python PATHS
   /usr/bin
   /usr/local/bin
+  c:/python2.6
   c:/python2.5
   )
 
 FIND_PATH(PYTHON_INCLUDE_DIR Python.h
-  /usr/local/include/python2.5/
+  /usr/include/python2.6/
   /usr/include/python2.5/
   #MSVC
   "c:/OSGeo4W/include"
+  "c:/Python26/include"
   "c:/Python25/include"
   "$ENV{LIB_DIR}/include/PYTHON"
   #mingw
   c:/msys/local/include/PYTHON
   )
 
-FIND_LIBRARY(PYTHON_LIBRARY NAMES python2.5 PATHS 
+SET( PYTHON_PACKAGES python2.6/dist-packages )
+FIND_LIBRARY(PYTHON_LIBRARY NAMES python2.6 PATHS
   /usr/local/lib 
   /usr/lib 
+  #MSVC
+  "c:/OSGeo4W/lib"
+  "c:/Python26/lib"
+  "$ENV{LIB_DIR}/lib"
+  #mingw
+  c:/msys/local/lib
+  )
+
+IF (NOT PYTHON_LIBRARY)
+SET( PYTHON_PACKAGES python2.5/site-packages )
+FIND_LIBRARY(PYTHON_LIBRARY NAMES python2.5 PATHS
+  /usr/local/lib
+  /usr/lib
   #MSVC
   "c:/OSGeo4W/lib"
   "c:/Python25/lib"
@@ -34,6 +50,8 @@ FIND_LIBRARY(PYTHON_LIBRARY NAMES python2.5 PATHS
   #mingw
   c:/msys/local/lib
   )
+ENDIF (NOT PYTHON_LIBRARY)
+
 
 IF (PYTHON_INCLUDE_DIR AND PYTHON_LIBRARY AND PYTHON_BINARY)
    SET(PYTHON_FOUND TRUE)

@@ -17,19 +17,19 @@ class EgtImageFactory : QObject
     EgtImageFactory( QModelIndex );
 
     /*! \brief Destructor */
-    ~EgtImageFactory();
+    ~EgtImageFactory( );
 
     /*! \brief Is the image factory currently working with a valid image */
-    bool isValid();
+    bool isValid( );
 
     /*! \brief Accessor for the name of the current image file, may or may not be a valid image */
-    QString fileName();
+    QString fileName( );
 
     /*! \brief Returns the a copy of the current resize image */
-    QImage scaledImage( bool* isValid=0 ) const;
+    QImage scaledImage( bool* isValid = 0 ) const;
 
     /*! \brief Returns a copy of the image resized to the specified dimensions */
-    QImage scaleImage( int, int, bool* isValid=0 );
+    QImage scaleImage( int, int, bool* isValid = 0 );
 
     /*! \brief Set the image file name */
     void setFile( QString );

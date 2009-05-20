@@ -24,8 +24,7 @@
 #ifndef EGTAPPLICATIONINTERFACE_H
 #define EGTAPPLICATIONINTERFACE_H
 
-#include "egtdataprovidermanager.h"
-#include "egtmainwindow.h"
+#include "egtdataprovider.h"
 
 #include <QMap>
 #include <QPoint>
@@ -34,7 +33,9 @@
 #include <QModelIndex>
 #include <QMainWindow>
 
+class EgtMainWindow;
 class EgtPluginManager;
+class EgtDataProviderManager;
 
 /*! \brief EasyGeoTagger application interface
  *
@@ -55,7 +56,7 @@ class MS_DLL_SPEC EgtApplicationInterface : public QObject
     /*! \brief Wrapper for the EgtDataProviderManager::dataProvider( ) */
     EgtDataProvider* dataProvider( QString );
 
-    QMainWindow* gui( ) { return cvGui; }
+    QMainWindow* gui( );
 
     /*! \brief get the position of the first visible widget */
     QPoint positionOfFirstVisibleWidget( );

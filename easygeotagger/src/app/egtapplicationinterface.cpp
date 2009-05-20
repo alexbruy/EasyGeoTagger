@@ -22,7 +22,9 @@
 **
 **/
 #include "egtapplicationinterface.h"
+#include "egtdataprovidermanager.h"
 #include "egtpluginmanager.h"
+#include "egtmainwindow.h"
 #include "egtlogger.h"
 
 #include <QWidgetList>
@@ -77,6 +79,11 @@ EgtDataProvider* EgtApplicationInterface::dataProvider( QString theProviderName 
   }
 
   return new EgtDataProvider( );
+}
+
+QMainWindow* EgtApplicationInterface::gui( )
+{
+  return cvGui;
 }
 
 void EgtApplicationInterface::loadPlugins( QString thePath )

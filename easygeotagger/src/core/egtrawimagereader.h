@@ -60,6 +60,10 @@ class MS_DLL_SPEC EgtRawImageReader : public QThread
     /*! \brief Set the absolute path and filename of the raw image to open */
     void setFile( QString );
 
+  signals:
+    void progress( int, int, int );
+    void finished( bool );
+
   private:
     /*! \brief Performs previous operation on the raw file before reading it */
     bool processRaw( QString );
@@ -82,11 +86,6 @@ class MS_DLL_SPEC EgtRawImageReader : public QThread
     
     /*! \brief LibRaw object to handle the raw data */
     LibRaw cvRawProcessor;
-
-    
-  signals:
-    void progress( int, int, int );
-    void finished( bool );
 
 };
 

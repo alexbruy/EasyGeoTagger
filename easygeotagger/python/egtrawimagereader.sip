@@ -6,25 +6,29 @@ class EgtRawImageReader : QThread
 #include <egtrawimagereader.h>
 %End
 
-  public:
+    public:
     /*! \brief Constructor */
-    EgtRawImageReader();
+    EgtRawImageReader( );
 
     /*! \brief Destructor */
-    ~EgtRawImageReader();
+    ~EgtRawImageReader( );
 
     /*! \brief Set the abort flag to true and terminate the thread */
-    void abort();
+    void abort( );
 
     /*! \brief Return the raw image */
-    QImage image() const;
+    QImage image( ) const;
 
      /*! \brief Releases the memory used for the raw image */
-    bool recycle();
+    bool recycle( );
 
     /*! \brief Required thread function */
-    void run();
+    void run( );
 
     /*! \brief Set the absolute path and filename of the raw image to open */
     void setFile( QString );
+
+  signals:
+    void progress( int, int, int );
+    void finished( bool );
 };

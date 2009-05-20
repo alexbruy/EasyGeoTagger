@@ -14,7 +14,7 @@ class EgtExifEditor : QObject
     void addTagGroup( EgtExifTagGroup* );
 
     /*! \brief Get a pointer to the editing widget */
-    QWidget* editorWidget();
+    QWidget* editorWidget( );
 
     /*! \brief Load all exif tags */
     void loadExifData( bool );

@@ -5,6 +5,7 @@
 
 %Include egtapplication.sip
 %Include egtapplicationinterface.sip
+%Include egtdataprovider.sip
 %Include egtexifeditor.sip
 %Include egtexifengine.sip
 %Include egtexiftaggroup.sip

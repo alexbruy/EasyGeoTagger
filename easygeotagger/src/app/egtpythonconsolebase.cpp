@@ -46,22 +46,22 @@ EgtPythonConsoleBase::EgtPythonConsoleBase( EgtApplicationInterface* theInterfac
 
   //Check for the python libs to prevent segfaults if python is not available on the user's system
 #ifdef WIN32
-  QLibrary lvPythonLibrary2_4( "python25.dll" );
-  QLibrary lvPythonLibrary2_5( "python24.dll" );
+  QLibrary lvPythonLibrary2_6( "python26.dll" );
+  QLibrary lvPythonLibrary2_5( "python25.dll" );
 #else
-  QLibrary lvPythonLibrary2_4( "python2.5" );
-  QLibrary lvPythonLibrary2_5( "python2.4" );
+  QLibrary lvPythonLibrary2_6( "python2.6" );
+  QLibrary lvPythonLibrary2_5( "python2.5" );
 #endif
   cvPythonFound = false;
-  if( lvPythonLibrary2_5.load( ) )
+  if( lvPythonLibrary2_6.load( ) )
+  {
+    cvPythonFound = true;
+    EgtDebug( "Found Python 2.6" );
+  }
+  else if( lvPythonLibrary2_5.load( ) )
   {
     cvPythonFound = true;
     EgtDebug( "Found Python 2.5" );
-  }
-  else if( lvPythonLibrary2_4.load( ) )
-  {
-    cvPythonFound = true;
-    EgtDebug( "Found Python 2.4" );
   }
 
   //If python was found initiate the environment
