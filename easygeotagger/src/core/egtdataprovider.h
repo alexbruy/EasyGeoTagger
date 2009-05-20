@@ -88,7 +88,7 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
 
   protected:
     /*! \brief Read function to be implemented by the derrived classes */
-    virtual EgtDataProvider::ErrorType read( ) { }
+    virtual EgtDataProvider::ErrorType read( ) { return EgtDataProvider::None; }
 
 
 
