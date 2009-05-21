@@ -1,4 +1,4 @@
-SUBDIRS( ui plugins providers )
+SUBDIRS( ui plugins providers gpsbabel )
 
 IF (WIN32)
   IF (MSVC)
