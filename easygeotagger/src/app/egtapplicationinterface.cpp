@@ -54,9 +54,6 @@ void EgtApplicationInterface::acceptKeyValuePair( QString theKey, QString theDat
   emit keyValuePair( theKey, theData );
 }
 
-/*!
- * \param thePath the fully qualified name of the shared library or directory of providers to load
- */
 QStringList EgtApplicationInterface::availableProviders( )
 {
   if( 0!= cvDataProviderManager )
@@ -86,6 +83,9 @@ QMainWindow* EgtApplicationInterface::gui( )
   return cvGui;
 }
 
+/*!
+ * \param thePath the fully qualified name of the shared library or directory of providers to load
+ */
 void EgtApplicationInterface::loadPlugins( QString thePath )
 {
   if( 0 != cvPluginManager )

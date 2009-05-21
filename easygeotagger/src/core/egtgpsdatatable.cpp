@@ -24,6 +24,8 @@
 #include "egtgpsdatatable.h"
 #include "egtlogger.h"
 
+#include "ui_egtkeyselectiondialog.h"
+
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QMenu>
@@ -32,7 +34,8 @@
 EgtGpsDataTable::EgtGpsDataTable( )
 {
   cvHeaderSelectionDialog = new QDialog( this );
-  cvUiKeySelectionDialog.setupUi( cvHeaderSelectionDialog );
+  cvUiKeySelectionDialog = new Ui::EgtKeySelectionDialog( );
+  cvUiKeySelectionDialog->setupUi( cvHeaderSelectionDialog );
 
   cvAvailableFields << tr( "( clear )" ) << tr( "Date Time Stamp" );
   QList< EgtExifEngine::KeyMap > lvKeyMap = cvExifEngine.keys( );
@@ -55,7 +58,7 @@ EgtGpsDataTable::EgtGpsDataTable( )
   connect( verticalHeader( ), SIGNAL( sectionClicked( int ) ), this, SLOT( verticalHeader_clicked( int ) ) );
 
   connect( this, SIGNAL( cellClicked( int, int ) ), this, SLOT( cell_selected( int, int ) ) );
-  connect( cvUiKeySelectionDialog.pbtnOk, SIGNAL( clicked( ) ), this, SLOT( on_pbtnOk_clicked( ) ) );
+  connect( cvUiKeySelectionDialog->pbtnOk, SIGNAL( clicked( ) ), this, SLOT( on_pbtnOk_clicked( ) ) );
 }
 
 /*
@@ -318,7 +321,7 @@ void EgtGpsDataTable::deleteRow( )
 void EgtGpsDataTable::on_pbtnOk_clicked( )
 {
   EgtDebug( "entered" );
-  QString lvHeader = cvUiKeySelectionDialog.cbFields->currentText( );
+  QString lvHeader = cvUiKeySelectionDialog->cbFields->currentText( );
 
   if( isColumnHeaderSet( lvHeader ) )
   {
@@ -365,8 +368,8 @@ void EgtGpsDataTable::populateTable( )
   setColumnCount( cvDataProvider->numberOfFields( ) );
 
   /*Set up the combo box*/
-  cvUiKeySelectionDialog.cbFields->clear( );
-  cvUiKeySelectionDialog.cbFields->insertItems( 0,cvAvailableFields );
+  cvUiKeySelectionDialog->cbFields->clear( );
+  cvUiKeySelectionDialog->cbFields->insertItems( 0,cvAvailableFields );
 
   if( cvDataProvider->hasColumnHeaders( ) )
   {

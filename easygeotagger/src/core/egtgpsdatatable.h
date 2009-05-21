@@ -26,13 +26,16 @@
 
 #include "egtdataprovider.h"
 #include "egtgpsexifengine.h"
-#include "ui_egtkeyselectiondialog.h"
-
 
 #include <QTableWidget>
 #include <QStringList>
 #include <QDateTime>
 #include <QMap>
+
+namespace Ui
+{
+  class EgtKeySelectionDialog;
+}
 
 class MS_DLL_SPEC EgtGpsDataTable : public QTableWidget
 {
@@ -161,7 +164,7 @@ class MS_DLL_SPEC EgtGpsDataTable : public QTableWidget
     int cvSelectedRow;
 
     /*! \brief QDesigner object of the dialog with the available fields*/
-    Ui::EgtKeySelectionDialog cvUiKeySelectionDialog;
+    Ui::EgtKeySelectionDialog* cvUiKeySelectionDialog;
   
 };
 
