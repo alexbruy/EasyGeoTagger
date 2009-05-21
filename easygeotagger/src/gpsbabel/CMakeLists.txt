@@ -1,0 +1,57 @@
+PROJECT(GpsBabel)
+
+cmake_minimum_required(VERSION 2.4)
+if(COMMAND cmake_policy)
+  cmake_policy(SET CMP0003 OLD)
+  cmake_policy(SET CMP0005 OLD)
+endif(COMMAND cmake_policy)
+
+
+# set path to additional CMake modules
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_find_rules ${CMAKE_MODULE_PATH})
+
+IF (NOT WIN32)
+  FIND_PACKAGE(LIBMATH REQUIRED)
+  IF (NOT LIBMATH_FOUND)
+    MESSAGE (SEND_ERROR "LIBMATH dependency was not found!")
+  ENDIF (NOT LIBMATH_FOUND)
+ENDIF (NOT WIN32)
+
+FIND_PACKAGE(ZLIB REQUIRED)
+IF (NOT ZLIB_FOUND)
+  MESSAGE (SEND_ERROR "ZLIB dependency was not found!")
+ENDIF (NOT ZLIB_FOUND)
+
+FIND_PACKAGE(EXPAT REQUIRED)
+IF (NOT EXPAT_FOUND)
+  MESSAGE (SEND_ERROR "EXPAT dependency was not found!")
+ENDIF (NOT EXPAT_FOUND)
+
+FIND_PACKAGE(LIBUSB REQUIRED)
+IF (NOT LIBUSB_FOUND)
+  MESSAGE (SEND_ERROR "LIBUSB dependency was not found!")
+ENDIF (NOT LIBUSB_FOUND)
+
+  
+
+INCLUDE_DIRECTORIES(
+  ${ZLIB_INCLUDE_DIR}
+  ${EXPAT_INCLUDE_DIR}
+  ${LIBUSB_INCLUDE_DIR}
+  ${GpsBabel_SOURCE_DIR}
+  ${GpsBabel_SOURCE_DIR}/src
+  ${CMAKE_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+SUBDIRS( src )
+
+# use, i.e. don't skip the full RPATH for the build tree
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
+
+# the RPATH to be used when installing
+#SET(CMAKE_INSTALL_RPATH ".:lib:./lib:./lib/easygt")
