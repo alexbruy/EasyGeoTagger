@@ -126,7 +126,7 @@ sbp.c
 mmo.c 
 skyforce.c
 #
-gpsbabelinterface.c
+egtgpsbabelinterface.c
 
 )
 
@@ -236,4 +236,4 @@ include_directories (${GPSBABEL_SOURCE_DIR} ${GPSBABEL_SOURCE_DIR}/jeeps )
 ADD_LIBRARY(easygpsbabel SHARED ${LIBOBJS_SRCS} ${GBSER_SRCS} ${PALM_DB_SRCS} ${JEEPS_SRCS} ${SHAPE_SRCS} ${ALL_FMTS_SRCS} ${FILTERS_SRCS} )
 TARGET_LINK_LIBRARIES( easygpsbabel ${LIBMATH_LIBRARY} ${EXPAT_LIBRARY} ${ZLIB_LIBRARY} ${LIBUSB_LIBRARY} )
 
-INSTALL( TARGETS easygpsbabel DESTINATION ${EASYGT_LIB_SUBDIR} )
+INSTALL( TARGETS easygpsbabel DESTINATION ${EASYGT_PLUGIN_SUBDIR} )

@@ -1,21 +1,28 @@
 /*
-    Copyright (C) 2002-2005 Robert Lipe, robertlipe@usa.net
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
-
- */
+** File: egtgpsbabelinterface.c
+** Author( s ): Roberto Garcia Yunta
+** Creation Date: 2009-05-21
+**
+** Copyright ( c ) 2009, American Museum of Natural History. All rights reserved.
+**
+** This library/program is free software; you can redistribute it
+** and/or modify it under the terms of the GNU Library General Public
+** License as published by the Free Software Foundation; either
+** version 2 of the License, or ( at your option ) any later version.
+**
+** This library/program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Library General Public License for more details.
+**
+** This work was made possible through a grant by the the John D. and
+** Catherine T. MacArthur Foundation with additional support from the
+** Center For Biodiversity and Conservation and The Spanish Ministry of
+** Science and Innovation's INTEGRANTS program.
+**
+** This file is a modified vesion of the file main.c written by Robert Lipe,
+** Copyright ( c ) 2002-2005 Robert Lipe, robertlipe@usa.net
+**/
 
 
 #include "defs.h"
@@ -29,7 +36,7 @@
 #include <signal.h>
 
 #define MYNAME "main"
-
+/*Function directly copied from main.c*/
 void signal_handler(int sig);
 
 typedef struct arg_stack_s {
@@ -39,6 +46,7 @@ typedef struct arg_stack_s {
 	struct arg_stack_s *prev;
 } arg_stack_t;
 
+/*Function directly copied from main.c*/
 static arg_stack_t
 *push_args(arg_stack_t *stack, const int argn, const int argc, char *argv[])
 {
@@ -52,6 +60,7 @@ static arg_stack_t
 	return res;
 }
 
+/*Function directly copied from main.c*/
 static arg_stack_t
 *pop_args(arg_stack_t *stack, int *argn, int *argc, char **argv[])
 {
@@ -75,6 +84,7 @@ static arg_stack_t
 	return res;
 }
 
+/*Function directly copied from main.c*/
 static void
 load_args(const char *filename, int *argc, char **argv[])
 {
@@ -117,6 +127,7 @@ load_args(const char *filename, int *argc, char **argv[])
 	*argv = argv2;
 }
 
+/*Function directly copied from main.c*/
 static void
 usage(const char *pname, int shorter )
 {
@@ -173,6 +184,7 @@ usage(const char *pname, int shorter )
 	}
 }
 
+/*Function directly copied from main.c*/
 static void 
 spec_usage( const char *vec ) {
 	printf( "\n" );
@@ -181,6 +193,7 @@ spec_usage( const char *vec ) {
 	printf( "\n" );
 }
 
+/*Function directly copied from main.c*/
 static void
 print_extended_info(void)
 {
@@ -221,7 +234,7 @@ print_extended_info(void)
 
 
 
-
+/*Function added to provide an easy interface to call the execute function*/
 int convert(const char* theInputFile, const char* theInputType, const char* theOutputFile, const char* theOutputType, const char* theErrorFile, const char* theInfoFile)
 { 
   /* Redirecting stderr and stdout to files. So we can handle them */
@@ -263,7 +276,7 @@ int convert(const char* theInputFile, const char* theInputType, const char* theO
   fclose (stdout);
 }
 
-
+/*Former main function*/
 int
 execute(int argc, char *argv[])
 {
@@ -610,6 +623,7 @@ execute(int argc, char *argv[])
 	return 0;//exit(0);
 }
 
+/*Function directly copied from main.c*/
 void signal_handler(int sig)
 {
 	tracking_status.request_terminate = 1;
