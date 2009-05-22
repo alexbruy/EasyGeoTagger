@@ -93,7 +93,7 @@ void EgtDataProviderManager::loadProviders( QString thePath )
  */
 EgtDataProvider* EgtDataProviderManager::provider( QString theProviderName )
 {
-  EgtDebug( "entered" );
+  EgtDebug( "entered");
 
   if( cvProviders.contains( theProviderName ) )
   {

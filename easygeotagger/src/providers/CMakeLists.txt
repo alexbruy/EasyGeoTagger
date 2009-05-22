@@ -1,1 +1,1 @@
-SUBDIRS( delimited_text )
+SUBDIRS( delimited_text kml gpx )

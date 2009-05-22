@@ -61,16 +61,22 @@ EgtGpsPlugin::EgtGpsPlugin( )
  */
 void EgtGpsPlugin::connectRunButton( QPushButton* theButton )
 {
+  EgtDebug( "entered" );
+
   connect( theButton, SIGNAL( clicked( ) ), this, SLOT( run( ) ) );
 }
 
 void EgtGpsPlugin::connectConfigurationButton( QPushButton* theButton )
 {
+  EgtDebug( "entered" );
+
   connect( theButton, SIGNAL( clicked( ) ), this, SLOT( showConfigurationPanel( ) ) );
 }
 
 void EgtGpsPlugin::initPlugin( )
 {
+  EgtDebug( "entered" );
+
   //Hook listeners into the application interface
   if( 0 != cvApplicationInterface )
   {
@@ -116,6 +122,8 @@ void EgtGpsPlugin::interpolateTable()
 
 void EgtGpsPlugin::selectDataProvider()
 {
+  EgtDebug( "entered" );
+
   if( 0 == cvApplicationInterface) { return; }
 
   cvProviderTypeDialog.setVisible( false );
@@ -138,6 +146,8 @@ void EgtGpsPlugin::selectDataProvider()
 
 void EgtGpsPlugin::setDataProvider()
 {
+  EgtDebug( "entered" );
+
   disconnect( cvDataProvider, SIGNAL( dataProviderReady() ), this, SLOT( setDataProvider() ) );
   cvGPSDataTable.setProvider( cvDataProvider );
 }

@@ -22,6 +22,7 @@
 **
 **/
 #include "egtdelimitedtextprovider.h"
+#include "egtlogger.h"
 
 #include <QFile>
 #include <QtPlugin>
@@ -46,6 +47,7 @@ EgtDelimitedTextProvider::EgtDelimitedTextProvider( ) : EgtDataProvider( )
  */
 void EgtDelimitedTextProvider::configure( ) //init function
 {
+  EgtDebug( "entered" );
 
   QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
   QWidget* lvParent = 0;
@@ -69,6 +71,8 @@ void EgtDelimitedTextProvider::configure( ) //init function
 
 void EgtDelimitedTextProvider::notifyInitializationComplete( bool isComplete )
 { 
+  EgtDebug( "entered" );
+
   if( !isComplete )
   {
     cvData.clear();
@@ -81,6 +85,8 @@ void EgtDelimitedTextProvider::notifyInitializationComplete( bool isComplete )
  */
 void EgtDelimitedTextProvider::setDelimiter( QString theDelimiter )
 {
+  EgtDebug( "entered" );
+
   cvDelimiter = theDelimiter;
 }
 
@@ -89,17 +95,23 @@ void EgtDelimitedTextProvider::setDelimiter( QString theDelimiter )
  */
 EgtDataProvider::ErrorType EgtDelimitedTextProvider::setFileName( QString theFileName )
 {
+  EgtDebug( "entered" );
+
   cvFileName = theFileName;
   return read();
 }
 
 void EgtDelimitedTextProvider::setHasColumnHeaders( bool theValue )
 { 
+  EgtDebug( "entered" );
+
   cvHasColumnHeaders = theValue;
 }
 
 void EgtDelimitedTextProvider::showConfigurationDialog( )
 {
+  EgtDebug( "entered" );
+
   QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
   QWidget* lvParent = 0;
 
@@ -124,6 +136,8 @@ void EgtDelimitedTextProvider::showConfigurationDialog( )
  */
 EgtDataProvider::ErrorType EgtDelimitedTextProvider::read( )
 {
+  EgtDebug( "entered" );
+
   cvData.clear();
   cvLastError = "";
 
