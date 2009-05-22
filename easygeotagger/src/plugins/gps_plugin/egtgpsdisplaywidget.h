@@ -59,16 +59,18 @@ class EgtGpsDisplayWidget : public QWidget
 
     void selectDataProvider();
 
-  public slots:
-    /*! \brief Slot used to enable/disable the group box that contains the offset buttons */
-    void enableSynchronizationButtons( bool );
-
-    void enableButtons( bool );
+    void interpolateTable();
 
   private slots:
+    void enableButtons(  );
+
+    void interpolateButtonClicked();
+
     void on_pbtnSetOffsetWithImage_clicked();
 
     void on_pbtnSetOffsetManual_clicked();
+
+    void rowSelected( bool );
 
     void selectProvider();
 

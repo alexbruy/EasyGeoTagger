@@ -42,8 +42,10 @@ EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent, EgtGpsDataTable* t
   ui->gbTimeOffset->setEnabled( false );
   ui->pbtnSendToEditor->setEnabled( false );
   ui->pbtnDeleteRow->setEnabled( false );
+  ui->pbtnInterpolate->setEnabled( false );
 
   connect( ui->pbtnSelectDataProvider, SIGNAL( clicked( ) ), this, SLOT( selectProvider( ) ) );
+  connect( ui->pbtnInterpolate, SIGNAL( clicked( ) ), this, SLOT( interpolateButtonClicked( ) ) );
 
   if( 0 != cvGPSDataTable )
   {
@@ -54,8 +56,8 @@ EgtGpsDisplayWidget::EgtGpsDisplayWidget( QWidget* theParent, EgtGpsDataTable* t
 
     connect( ui->pbtnDeleteRow, SIGNAL( clicked( ) ), cvGPSDataTable, SLOT( deleteRow( ) ) );
     connect( ui->pbtnSendToEditor, SIGNAL( clicked( ) ), cvGPSDataTable, SLOT( broadcastRow( ) ) );
-    connect( cvGPSDataTable, SIGNAL(timeStampSelected(bool)), this, SLOT( enableSynchronizationButtons(bool)) );
-    connect( cvGPSDataTable, SIGNAL( rowSelected( bool ) ), this, SLOT( enableButtons( bool ) ) );
+    connect( cvGPSDataTable, SIGNAL(headersChanged( ) ), this, SLOT( enableButtons( ) ) );
+    connect( cvGPSDataTable, SIGNAL( rowSelected( bool ) ), this, SLOT( rowSelected( bool ) ) );
     connect( &cvSynchronizeDialog, SIGNAL( offsetSet( int ) ), cvGPSDataTable, SLOT( setOffset( int ) ) );
   }
 }
@@ -77,34 +79,55 @@ void EgtGpsDisplayWidget::closeEvent(QCloseEvent *theEvent)
     theEvent->accept();
  }
 
-/*
- *
- * SIGNAL and SLOTS
- *
- */
-
-
-void EgtGpsDisplayWidget::enableButtons( bool isRowSelected)
+void EgtGpsDisplayWidget::enableButtons( )
 {
   EgtDebug( "entered" );
 
-  ui->pbtnSendToEditor->setEnabled( isRowSelected );
-  ui->pbtnDeleteRow->setEnabled( isRowSelected );
+  ui->pbtnSendToEditor->setEnabled( cvGPSDataTable->isRowSelected( ) );
+  ui->pbtnDeleteRow->setEnabled( cvGPSDataTable->isRowSelected( ) );
 
-  if( ! cvGPSDataTable->isAnyColumnHeaderSet() )
+  if( !cvGPSDataTable->isAnyColumnHeaderSet() )
   {
     ui->pbtnSendToEditor->setEnabled( false );
+  }
+
+  if( cvGPSDataTable->isColumnHeaderSet( tr( "Date Time Stamp" ) ) )
+  {
+    ui->gbTimeOffset->setEnabled( true );
+
+    if( cvGPSDataTable->isColumnHeaderSet( tr( "Latitude" ) ) && cvGPSDataTable->isColumnHeaderSet( tr( "Longitude" ) ) )
+    {
+      ui->pbtnInterpolate->setEnabled( true );
+    }
+    else
+    {
+      ui->pbtnInterpolate->setEnabled( false );
+    }
+  }
+  else
+  {
+    ui->pbtnInterpolate->setEnabled( false );
+    ui->gbTimeOffset->setEnabled( false );
   }
 }
 
 /*!
  * \param theStatus boolean that indicates whether the syncrhonize group box must be enabled or not
  */
-void EgtGpsDisplayWidget::enableSynchronizationButtons( bool theStatus )
+void EgtGpsDisplayWidget::rowSelected( bool theStatus )
 {
   EgtDebug( "entered" );
+  enableButtons( );
+}
 
-  ui->gbTimeOffset->setEnabled(theStatus);
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
+void EgtGpsDisplayWidget::interpolateButtonClicked()
+{
+  emit interpolateTable();
 }
 
 void EgtGpsDisplayWidget::on_pbtnSetOffsetWithImage_clicked()

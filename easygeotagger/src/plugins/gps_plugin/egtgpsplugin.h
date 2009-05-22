@@ -65,6 +65,8 @@ class EgtGpsPlugin: public EgtPluginInterface
 
   private slots:
 
+    void interpolateTable();
+
     void selectDataProvider();
 
     void setDataProvider();

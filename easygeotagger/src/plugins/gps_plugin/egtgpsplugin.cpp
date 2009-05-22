@@ -63,6 +63,11 @@ void EgtGpsPlugin::connectRunButton( QPushButton* theButton )
   connect( theButton, SIGNAL( clicked( ) ), this, SLOT( run( ) ) );
 }
 
+void EgtGpsPlugin::connectConfigurationButton( QPushButton* theButton )
+{
+  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( showConfigurationPanel( ) ) );
+}
+
 void EgtGpsPlugin::initPlugin( )
 {
   //Hook listeners into the application interface
@@ -73,24 +78,15 @@ void EgtGpsPlugin::initPlugin( )
     //connect to application interface
     connect( &cvGPSDataTable, SIGNAL( keyValuePair( QString, QString ) ), cvApplicationInterface, SLOT( acceptKeyValuePair( QString, QString ) ) );
     connect( cvDisplayWidget, SIGNAL( selectDataProvider() ), this, SLOT( showAvailableDataProviders() ) );
+    connect( cvDisplayWidget, SIGNAL( interpolateTable() ), this, SLOT( interpolateTable() ) );
 
   }
-}
-
-/*
- *
- * SIGNAL and SLOTS
- *
- */
-void EgtGpsPlugin::connectConfigurationButton( QPushButton* theButton )
-{
-  connect( theButton, SIGNAL( clicked( ) ), this, SLOT( showConfigurationPanel( ) ) );
 }
 
 void EgtGpsPlugin::run( )
 {
   EgtDebug( "entered" );
-  
+
   //Build or reshow the plugins GUI component
   if( cvDisplayWidget->isVisible( ) )
   {
@@ -103,6 +99,18 @@ void EgtGpsPlugin::run( )
   cvDisplayWidget->move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
   cvDisplayWidget->show( );
   EgtDebug( "done" );
+}
+
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
+
+void EgtGpsPlugin::interpolateTable()
+{
+  EgtDebug( "entered" );
+  cvGPSDataTable.interpolate();
 }
 
 void EgtGpsPlugin::selectDataProvider()

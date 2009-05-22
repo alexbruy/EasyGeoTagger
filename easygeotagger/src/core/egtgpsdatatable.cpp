@@ -21,6 +21,7 @@
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
+#include "egtsphericalfunctionengine.h"
 #include "egtgpsdatatable.h"
 #include "egtlogger.h"
 
@@ -46,10 +47,10 @@ EgtGpsDataTable::EgtGpsDataTable( )
       lvIterator++;
   }
 
-
   cvDataProvider = 0;
   cvColumnSelected = 0;
   cvOffset = 0;
+  cvSelectedRow = -1;
 
   connect( horizontalHeader( ), SIGNAL( sectionClicked( int ) ), this, SLOT( horizontalHeader_clicked( int ) ) );
 
@@ -112,7 +113,28 @@ void EgtGpsDataTable::clearColumnHeader( int theColumn )
 {
   EgtDebug( "entered" );
 
-  setColumnHeader( theColumn, tr( "( clear )" ) );
+  if( theColumn < 0 || theColumn > columnCount( ) ) { return; }
+
+  cvColumnHeadersSet.remove( cvColumnHeadersSet.key( theColumn ) );
+  QString lvTheHeader;
+  if( cvDataProvider->hasColumnHeaders( ) )
+  {//revert to the original header
+    lvTheHeader = cvDataProvider->columnHeaders( ).at( theColumn );
+  }
+  else
+  {
+    lvTheHeader = QString::number( theColumn +1 );
+  }
+
+  //Deleting the previous header
+  QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( theColumn );
+  if( 0 != lvCurrentHeader )
+  {
+    delete lvCurrentHeader;
+  }
+
+  setHorizontalHeaderItem( theColumn, new QTableWidgetItem( lvTheHeader ) );
+  emit headersChanged();
 }
 
 void EgtGpsDataTable::deleteRow( int theRow )
@@ -124,6 +146,27 @@ void EgtGpsDataTable::deleteRow( int theRow )
     cvSelectedRow = -1;
     emit rowSelected( false );
   }
+}
+
+bool EgtGpsDataTable::interpolate()
+{
+  EgtDebug( "entered" );
+
+  qDebug() << cvColumnHeadersSet.keys();
+
+  if( !isColumnHeaderSet( tr( "Date Time Stamp" ) ) )
+  {
+    return false;
+  }
+
+  sortItems( cvColumnHeadersSet[ tr( "Date Time Stamp" ) ] );
+
+  SphericalFunctionEngine lvSFE;
+  double* lvCoordinates = lvSFE.calculateIntermediateGreatCirclePoints( 0.0, 0.0, 80.0, 80.0, .5 );
+  qDebug() << lvCoordinates[0] << "\t" << lvCoordinates[1];
+
+
+
 }
 
 /*!
@@ -219,40 +262,23 @@ bool EgtGpsDataTable::setColumnHeader( int theColumn, QString theHeader )
    return false;
   }
 
-  if( tr( "( clear )" ) == lvTheHeader )
-  {
-    if( cvDataProvider->hasColumnHeaders( ) )
-    {//revert to the original header
-      lvTheHeader = cvDataProvider->columnHeaders( ).at( theColumn );
-    }
-    else
-    {
-      lvTheHeader = QString::number( theColumn +1 );
-    }
+  clearColumnHeader( theColumn );
 
-    cvColumnHeadersSet.remove( cvColumnHeadersSet.key( theColumn ) );
-  }
-  else
+  if( tr( "( clear )" ) != lvTheHeader )
   {
     cvColumnHeadersSet.insert( theHeader, theColumn );
-    if( tr( "Date Time Stamp" ) == lvTheHeader )
+
+    //Deleting the previous header
+    QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( theColumn );
+    if( 0 != lvCurrentHeader )
     {
-      emit timeStampSelected( true );
+      delete lvCurrentHeader;
     }
-    else
-    {
-      emit timeStampSelected( false );
-    }
+
+    setHorizontalHeaderItem( theColumn, new QTableWidgetItem( lvTheHeader ) );
+    emit headersChanged();
   }
 
-  //Deleting the previous header
-  QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( theColumn );
-  if( 0 != lvCurrentHeader )
-  {
-    delete lvCurrentHeader;
-  }
-
-  setHorizontalHeaderItem( theColumn, new QTableWidgetItem( lvTheHeader ) );
   return true;
 }
 
@@ -303,19 +329,20 @@ void EgtGpsDataTable::cell_selected( int row, int column )
   emit rowSelected( false );
 }
 
+void EgtGpsDataTable::deleteRow( )
+{
+  EgtDebug( "entered" );
+  deleteRow( cvSelectedRow );
+}
+
 void EgtGpsDataTable::horizontalHeader_clicked( int theIndex )
 {
   EgtDebug( "entered" );
 
   cvColumnSelected = theIndex;
   cvHeaderSelectionDialog->show( );
+  cvSelectedRow = -1;
   emit rowSelected( false );
-}
-
-void EgtGpsDataTable::deleteRow( )
-{
-  EgtDebug( "entered" );
-  deleteRow( cvSelectedRow );
 }
 
 void EgtGpsDataTable::on_pbtnOk_clicked( )

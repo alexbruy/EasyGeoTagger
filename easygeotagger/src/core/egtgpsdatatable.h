@@ -49,11 +49,17 @@ class MS_DLL_SPEC EgtGpsDataTable : public QTableWidget
     /*! \brief Resets a column header */
     void clearColumnHeader( int );
 
+    /*! \brief Interpolates between existsing rows that when Data Time Stamp, Latitude, and Longitude are set to provide an entry for each second */
+    bool interpolate();
+
     /*! \brief Indicates if the user has set at least column header */
     bool isAnyColumnHeaderSet( );
 
     /*! \brief Indicates if a specific column header has been set */
     bool isColumnHeaderSet( QString );
+
+    /*! \returns true of a table row is currently selected */
+    bool isRowSelected() { return -1 != cvSelectedRow; }
 
     /*! \brief Returns a QMap that contains all the key-value pairs of the selected row */
     QMap<QString,QString> rowData( );
@@ -87,6 +93,21 @@ class MS_DLL_SPEC EgtGpsDataTable : public QTableWidget
     /*! \brief Set the table's data provider */
     void setProvider( EgtDataProvider* );
 
+
+  signals:
+
+    /*! \brief Signal used to set the status of the sendCoordinates and deleteRow buttons */
+    void headersChanged( );
+
+    /*! \brief Signal used to comunicate with the application interface */
+    void keyValuePair( QString, QString );
+
+    /*! \brief Signal indicating if a row has been selected or deselected */
+    void rowSelected( bool );
+
+    /*! \brief Signal used to notify that one column contains a date timestamp */
+    void timeStampSelected( bool );
+
   private slots:
 
      /*! \brief Slot used when a cell of the table is selected */
@@ -103,20 +124,6 @@ class MS_DLL_SPEC EgtGpsDataTable : public QTableWidget
 
     /*! \brief Slot used when the vertical header is clicked */
     void verticalHeader_clicked( int );
-
-  signals:
-
-    /*! \brief Signal used to set the status of the sendCoordinates and deleteRow buttons */
-    void displayButtonsStatus( bool, bool );
-
-    /*! \brief Signal used to comunicate with the application interface */
-    void keyValuePair( QString, QString );
-
-    /*! \brief Signal indicating if a row has been selected or deselected */
-    void rowSelected( bool );
-
-    /*! \brief Signal used to notify that one column contains a date timestamp */
-    void timeStampSelected( bool );
 
   private:
 

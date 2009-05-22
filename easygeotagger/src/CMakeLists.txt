@@ -37,6 +37,7 @@ SET( EGT_CORE_SRCS
      core/egtimagefactory.cpp
      core/egtpathbuilder.cpp
      core/egtphotoexifengine.cpp
+     core/egtsphericalfunctionengine.cpp
      core/egtrawimagereader.cpp
    )
 
