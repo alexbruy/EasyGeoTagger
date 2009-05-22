@@ -56,11 +56,14 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
     /*! \brief Returns the column headers*/
     QStringList columnHeaders( ) { return cvColumnHeaders; }
 
+    /*! \brief Entry point for derived classes so they can graphically display their options */
+    virtual void configure( ) { emit dataProviderReady( ); }
+
     /*! \brief Does the data file have column headers */
     bool hasColumnHeaders( ) { return cvHasColumnHeaders; }
 
-    /*! \brief Entry point for derived classes so they can graphically display their options */
-    virtual void configure( ) { emit dataProviderReady( ); }
+    /*! \brief Create a new uninitialized instance of this provider */
+    virtual EgtDataProvider* instance( ) { return new EgtDataProvider(); }
 
     /*! \returns the last error message */
     QString lastError( ) { return cvLastError; }

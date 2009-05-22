@@ -70,7 +70,7 @@ class MS_DLL_SPEC EgtDataProviderManager : public QObject
 
 
     QString cvDefaultProviderPath;
-    QMap < QString, QString > cvProviders;
+    QMap < QString, EgtDataProvider* > cvProviders;
 
 };
 #endif

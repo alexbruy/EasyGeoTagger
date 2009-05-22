@@ -41,6 +41,8 @@ class EgtDelimitedTextProvider: public EgtDataProvider
 
     void configure( );
 
+    EgtDataProvider* instance( ) { return new EgtDelimitedTextProvider(); }
+
     void notifyInitializationComplete( bool );
 
     EgtDataProvider::ErrorType reload( ) { return read(); }
