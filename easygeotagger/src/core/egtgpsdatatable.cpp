@@ -59,7 +59,8 @@ EgtGpsDataTable::EgtGpsDataTable( )
   connect( verticalHeader( ), SIGNAL( sectionClicked( int ) ), this, SLOT( verticalHeader_clicked( int ) ) );
 
   connect( this, SIGNAL( cellClicked( int, int ) ), this, SLOT( cell_selected( int, int ) ) );
-  connect( cvUiKeySelectionDialog->pbtnOk, SIGNAL( clicked( ) ), this, SLOT( on_pbtnOk_clicked( ) ) );
+  connect( cvUiKeySelectionDialog->buttonBox, SIGNAL( accepted( ) ), this, SLOT( on_pbtnOk_clicked( ) ) );
+  connect( cvUiKeySelectionDialog->buttonBox, SIGNAL( rejected( ) ), cvHeaderSelectionDialog, SLOT( reject( ) ) );
 }
 
 /*
@@ -152,20 +153,66 @@ bool EgtGpsDataTable::interpolate()
 {
   EgtDebug( "entered" );
 
-  qDebug() << cvColumnHeadersSet.keys();
-
-  if( !isColumnHeaderSet( tr( "Date Time Stamp" ) ) )
+  if( !isColumnHeaderSet( tr( "Date Time Stamp" ) ) && !isColumnHeaderSet( tr( "Latitude" ) ) && !isColumnHeaderSet( tr( "Longitude" ) ) )
   {
     return false;
   }
 
+  int lvRowCount = rowCount();
+  if( lvRowCount < 2 )
+  {
+    return false;
+  }
+
+  //Sort the table
   sortItems( cvColumnHeadersSet[ tr( "Date Time Stamp" ) ] );
 
   SphericalFunctionEngine lvSFE;
-  double* lvCoordinates = lvSFE.calculateIntermediateGreatCirclePoints( 0.0, 0.0, 80.0, 80.0, .5 );
-  qDebug() << lvCoordinates[0] << "\t" << lvCoordinates[1];
+  for( int lvRowRunner = 0; lvRowRunner < lvRowCount - 1; lvRowRunner++ )
+  {
+    QDateTime lvEnd = QDateTime::fromString( item( lvRowRunner + 1, cvColumnHeadersSet[ tr( "Date Time Stamp" ) ] )->text(), "yyyy:MM:dd hh:mm:ss" );
+    QDateTime lvStart = QDateTime::fromString( item( lvRowRunner, cvColumnHeadersSet[ tr( "Date Time Stamp" ) ] )->text(), "yyyy:MM:dd hh:mm:ss" );
+
+    //If either time is invalid or they are more than 24 hours apart, do no try to interpolate
+    int lvDeltaTime = lvStart.secsTo( lvEnd );
+    if( !lvEnd.isValid() || !lvStart.isValid() || lvDeltaTime > 84600 )
+    {
+      continue;
+    }
+
+    double lvStepSize = 1.0 / ( double )lvDeltaTime;
+    double lvLatitudeEnd = item( lvRowRunner + 1, cvColumnHeadersSet[ tr( "Latitude" ) ] )->text().toDouble();
+    double lvLatitudeStart = item( lvRowRunner, cvColumnHeadersSet[ tr( "Latitude" ) ] )->text().toDouble();
+    double lvLongitudeEnd = item( lvRowRunner + 1, cvColumnHeadersSet[ tr( "Longitude" ) ] )->text().toDouble();
+    double lvLongitudeStart = item( lvRowRunner, cvColumnHeadersSet[ tr( "Longitude" ) ] )->text().toDouble();
+    for( int lvIterator = 1; lvIterator < lvDeltaTime; lvIterator++ )
+    {
+      insertRow( rowCount( ) );
+      int lvNewRow = rowCount( ) - 1;
+
+      //Fill in the rows items
+      QTableWidgetItem* lvNewItem;
+      for( int lvColumnRunner = 0; lvColumnRunner < columnCount( ); lvColumnRunner++ )
+      {
+        lvNewItem = new QTableWidgetItem();
+        setItem( lvNewRow, lvColumnRunner, lvNewItem );
+      }
+
+      double* lvCoordinates = lvSFE.calculateIntermediateGreatCirclePoints( lvLongitudeStart, lvLatitudeStart, lvLongitudeEnd, lvLatitudeEnd, ( double )lvIterator * lvStepSize );
+      item( lvNewRow, cvColumnHeadersSet[ tr( "Longitude" ) ] )->setText( QString::number( lvCoordinates[0], 'f', 7 ) );
+      item( lvNewRow, cvColumnHeadersSet[ tr( "Latitude" ) ] )->setText( QString::number( lvCoordinates[1], 'f', 7 ) );
+      item( lvNewRow, cvColumnHeadersSet[ tr( "Date Time Stamp" ) ] )->setText( lvStart.addSecs( lvIterator ).toString( "yyyy:MM:dd hh:mm:ss" ) );
+      delete lvCoordinates;
+    }
+  }
 
 
+
+
+
+
+  //Resort the table to get all of the new entries where they should be
+  sortItems( cvColumnHeadersSet[ tr( "Date Time Stamp" ) ] );
 
 }
 
@@ -233,11 +280,15 @@ void EgtGpsDataTable::selectRow( int theRow )
   cvSelectedRow = theRow;
   if( isAnyColumnHeaderSet( ) )
   {
-    QTableWidgetItem* lvHeaderItem;
+    QTableWidgetItem* lvItem;
     QMap< QString, int >::iterator lvIterator = cvColumnHeadersSet.begin( );
     while( lvIterator != cvColumnHeadersSet.end( ) )
     {
-      cvRowData.insert( lvIterator.key( ), item( theRow, lvIterator.value( ) )->text( ) );
+      lvItem = item( theRow, lvIterator.value( ) );
+      if( 0 != lvItem && !lvItem->text().isEmpty( ) )
+      {
+        cvRowData.insert( lvIterator.key( ), lvItem->text( ) );
+      }
       lvIterator++;
     }
   }

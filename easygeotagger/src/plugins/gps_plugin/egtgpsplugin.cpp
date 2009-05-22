@@ -44,8 +44,9 @@ EgtGpsPlugin::EgtGpsPlugin( )
   cvProviderTypeDialog.setMinimumWidth( 215 );
   cvProviderTypeDialog.setWindowIcon( QIcon( ":/icons/document-open.svg" ) );
 
-  cvAcceptButton.setText( tr("Ok") );
-  connect( &cvAcceptButton, SIGNAL( clicked( ) ), this, SLOT( selectDataProvider( ) ) );
+  cvButtonBox.setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+  connect( &cvButtonBox, SIGNAL( accepted( ) ), this, SLOT( selectDataProvider( ) ) );
+  connect( &cvButtonBox, SIGNAL( rejected( ) ), &cvProviderTypeDialog, SLOT( reject( ) ) );
 }
 
 /*
@@ -149,11 +150,12 @@ void EgtGpsPlugin::showAvailableDataProviders()
   while ( lvIterator != cvAvailableProviders.constEnd() ) 
   {
     cvProviderTypeDialog.layout( )->removeWidget( lvIterator.value() );
+    delete lvIterator.value();
     lvIterator++; 
   }
 
   cvAvailableProviders.clear();
-  cvProviderTypeDialog.layout( )->removeWidget( &cvAcceptButton );
+  cvProviderTypeDialog.layout( )->removeWidget( &cvButtonBox );
 
   QStringList lvDataProviders = cvApplicationInterface->availableProviders();
 
@@ -167,9 +169,9 @@ void EgtGpsPlugin::showAvailableDataProviders()
   QFrame lvOkFrame;
   lvOkFrame.setLayout( new QHBoxLayout( ) );
   ( ( QHBoxLayout* )lvOkFrame.layout( ) )->insertStretch( -1, 1 );
-  lvOkFrame.layout( )->addWidget(&cvAcceptButton);
+  lvOkFrame.layout( )->addWidget( &cvButtonBox );
 
-  cvProviderTypeDialog.layout( )->addWidget( &cvAcceptButton );
+  cvProviderTypeDialog.layout( )->addWidget( &cvButtonBox );
 
   cvProviderTypeDialog.move( cvApplicationInterface->positionOfFirstVisibleWidget( ) );
   cvProviderTypeDialog.show();

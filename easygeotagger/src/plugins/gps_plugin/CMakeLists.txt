@@ -28,7 +28,6 @@ SET( GPS_PLUGIN_MOC_HDRS
    )
 
 SET( GPS_PLUGIN_UIS
-    filetypedialog.ui
     egtgpsdisplaywidgetbase.ui
     egtsynchronize.ui
    )

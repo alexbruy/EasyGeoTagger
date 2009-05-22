@@ -32,6 +32,7 @@
 #include "egtgpsdatatable.h"
 
 #include <QDialog>
+#include <QDialogButtonBox>
 
 class EgtGpsPlugin: public EgtPluginInterface
 {
@@ -85,7 +86,7 @@ class EgtGpsPlugin: public EgtPluginInterface
  
     QMap<QString, QRadioButton*> cvAvailableProviders;
 
-    QPushButton cvAcceptButton;
+    QDialogButtonBox cvButtonBox;
 
 };
 #endif

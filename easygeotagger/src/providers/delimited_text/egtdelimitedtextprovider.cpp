@@ -105,15 +105,15 @@ void EgtDelimitedTextProvider::showConfigurationDialog( )
 
   for( int i = 0; i < lvActiveWindows.size( ); i++ )
   {
-    if( tr( "GPS Reader" ) == lvActiveWindows[i]->windowTitle( ) )
+    if( tr( "Data Table" ) == lvActiveWindows[i]->windowTitle( ) )
     {
       lvParent = lvActiveWindows[i];
+      QPoint lvPosition = lvParent->pos( );
+      //center the window over the parent
+      cvConfigurationDialog->move( lvPosition.x( ) + lvParent->width( )/2 - cvConfigurationDialog->width( )/2, lvPosition.y( ) + lvParent->height( )/2 - cvConfigurationDialog->height( )/2 );
     }
   }
 
-  QPoint lvPosition = lvParent->pos( );
-  //center the window over the parent
-  cvConfigurationDialog->move( lvPosition.x( ) + lvParent->width( )/2 - cvConfigurationDialog->width( )/2, lvPosition.y( ) + lvParent->height( )/2 - cvConfigurationDialog->height( )/2 );
   cvConfigurationDialog->show( );
 }
 

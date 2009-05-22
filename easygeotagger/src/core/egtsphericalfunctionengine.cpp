@@ -88,6 +88,18 @@ double* SphericalFunctionEngine::calculateIntermediateGreatCirclePoints( double 
   double* position = new double[2];
   position[0] = toDegrees( atan2( y, x ) );
   position[1] = toDegrees( atan2( z, sqrt( ( x * x ) + ( y * y ) ) ) );
+
+  //Differs from the Java version -- some rounding errors when points are the same
+  if( ( longitudePoint1 - longitudePoint2 ) < 0.0000000001 )
+  {
+    position[0] = longitudePoint1;
+  }
+  if( ( latitudePoint1 - latitudePoint2 ) < 0.0000000001 )
+  {
+    position[1] = latitudePoint1;
+  }
+  //end
+
   return position;
 }
 
