@@ -41,7 +41,7 @@ EgtKmlProvider::EgtKmlProvider( ) : EgtGpsProvider( )
 {
   cvFileName = ""; 
   cvLastError = "";
-  cvName = "Kml";
+  cvName = "KML";
   cvFileType = "kml";
   //cvConfigurationDialog = 0;
 }

@@ -41,7 +41,7 @@ EgtGpxProvider::EgtGpxProvider( ) : EgtGpsProvider( )
 {
   cvFileName = ""; 
   cvLastError = "";
-  cvName = "Gpx";
+  cvName = "GPX";
   cvFileType = "gpx";
   //cvConfigurationDialog = 0;
 }

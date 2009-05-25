@@ -29,6 +29,7 @@
 
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QBrush>
 #include <QMenu>
 #include <QDate>
 
@@ -307,15 +308,14 @@ bool EgtGpsDataTable::setColumnHeader( int theColumn, QString theHeader )
 
   if( theColumn < 0 || theColumn > columnCount( ) ) { return false; }
 
-  QString lvTheHeader = theHeader;
-  if( isColumnHeaderSet( lvTheHeader ) )
+  if( isColumnHeaderSet( theHeader ) )
   {
    return false;
   }
 
   clearColumnHeader( theColumn );
 
-  if( tr( "( clear )" ) != lvTheHeader )
+  if( tr( "( clear )" ) != theHeader )
   {
     cvColumnHeadersSet.insert( theHeader, theColumn );
 
@@ -326,7 +326,10 @@ bool EgtGpsDataTable::setColumnHeader( int theColumn, QString theHeader )
       delete lvCurrentHeader;
     }
 
-    setHorizontalHeaderItem( theColumn, new QTableWidgetItem( lvTheHeader ) );
+    QTableWidgetItem* lvNewHeader = new QTableWidgetItem( theHeader );
+    lvNewHeader->setForeground( QBrush( Qt::green ) );
+    setHorizontalHeaderItem( theColumn, lvNewHeader );
+
     emit headersChanged();
   }
 
