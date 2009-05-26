@@ -48,6 +48,10 @@ class EgtGpsProvider: public EgtDataProvider
 
     QString cvFileType;
 
+    EgtDataProvider::ErrorType convert( QString, QString, QString& );
+
+    EgtDataProvider::ErrorType readGpx( QString );
+
     /*! \brief Generic read function to load the data */
     EgtDataProvider::ErrorType read( );
 

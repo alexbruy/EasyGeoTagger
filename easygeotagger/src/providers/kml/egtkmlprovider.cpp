@@ -65,12 +65,20 @@ void EgtKmlProvider::configure( ) //init function
     }
   }
 
-  QString lvFileName = QFileDialog::getOpenFileName( lvParent, tr( "Open GPS File" ), "/home", tr( "KML Files ( *.kml  )" ) );
-  if ( "" != lvFileName )
+  QFileDialog lvFileDialog( lvParent, tr( "Open KML File" ), "/home", tr( "KML Files ( *.kml  )" ) );
+  lvFileDialog.setFileMode( QFileDialog::ExistingFile ); // A single existing file
+  QStringList lvFileNames;
+  if ( lvFileDialog.exec() ){ lvFileNames = lvFileDialog.selectedFiles(); }
+  if( ! lvFileNames.isEmpty() )
   {
-    setFileName( lvFileName );
+    QString lvFileName = lvFileNames[0];
+
+    if ( "" != lvFileName )
+    {
+      setFileName( lvFileName );
     
-    showConfigurationDialog( );
+      showConfigurationDialog( );
+    }
   }
 } 
 

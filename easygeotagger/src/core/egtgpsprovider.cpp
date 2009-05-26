@@ -96,35 +96,29 @@ EgtDataProvider::ErrorType EgtGpsProvider::setFileName( QString theFileName )
  * PROTECTED FUNCTIONS
  *
  */
-EgtDataProvider::ErrorType EgtGpsProvider::read( )
+EgtDataProvider::ErrorType EgtGpsProvider::convert( QString theFileToConvert, QString theConvertedFile, QString& theConvertedFileName)
 {
   EgtDebug( "entered" );
 
-  cvData.clear();
-  cvLastError = "";
-  cvHasColumnHeaders = true; /*A GPX file always has headers*/
-
-  QFile lvFile( cvFileName );
-  QStringList lvStringList;
+  if( cvFileType == "gpx" )
+  {
+    theConvertedFileName = theFileToConvert;
+    return EgtDataProvider::None;
+  }
 
   QTemporaryFile lvErrorFile;
   QTemporaryFile lvInfoFile;
-  QTemporaryFile lvTempFile;
 
   int lvErrorCode = 0;
 
-  if ( !lvFile.open( QFile::ReadOnly | QFile::Text ) ) 
-  {
-    cvLastError = QObject::tr( "Can't read the file" ) + ": " + cvFileName;
-    return EgtDataProvider::Fatal;
-  }
-
-  if( lvErrorFile.open() && lvInfoFile.open() && lvTempFile.open() && cvFileType != "gpx" )
+  if( lvErrorFile.open() && lvInfoFile.open() )
   {
     if( cvConvert )
     {
-      lvErrorCode = cvConvert(cvFileName.toStdString().c_str(), cvFileType.toStdString().c_str(), lvTempFile.fileName().toStdString().c_str(), "gpx", lvErrorFile.fileName().toStdString().c_str(),
-        lvInfoFile.fileName().toStdString().c_str());
+      lvErrorCode = cvConvert( theFileToConvert.toStdString().c_str(), cvFileType.toStdString().c_str(), theConvertedFile.toStdString().c_str(), "gpx", lvErrorFile.fileName().toStdString().c_str(),
+        lvInfoFile.fileName().toStdString().c_str() ); 
+
+      theConvertedFileName = theConvertedFile;
     }
     else
     {
@@ -132,14 +126,13 @@ EgtDataProvider::ErrorType EgtGpsProvider::read( )
       return EgtDataProvider::Fatal;
     }
   }
-
   switch( lvErrorCode )
   {
     case -1:
     { 
       cvLastError = QObject::tr( "Error converting with gpsbabel" ) + ": " + cvFileName +"\n"; 
 
-      QTextStream lvInput(&lvErrorFile);
+      QTextStream lvInput( &lvErrorFile );
       while ( !lvInput.atEnd() )
       {
         QString lvLine = lvInput.readLine();
@@ -153,27 +146,49 @@ EgtDataProvider::ErrorType EgtGpsProvider::read( )
     break;
     /*TODO: Create more error codes if needed and handle them*/
   }
+  return EgtDataProvider::None;
+}
+
+EgtDataProvider::ErrorType EgtGpsProvider::read( )
+{
+  EgtDebug( "entered" );
+
+  cvData.clear();
+  cvLastError = "";
+  cvHasColumnHeaders = true; /*A GPX file always has headers*/
+
+  QTemporaryFile lvTempFile;
+  QString lvOutputFile;
+
+  if( lvTempFile.open() )
+  {
+    EgtDataProvider::ErrorType lvErrorCode = convert( cvFileName, lvTempFile.fileName(), lvOutputFile );
+
+    if( EgtDataProvider::None != lvErrorCode ){ return lvErrorCode; }
+  }
+  else
+  {
+    cvLastError = QObject::tr( "Can't open temporary file" );
+    return EgtDataProvider::Fatal;
+  }
+
+  return readGpx( lvOutputFile );
+}
+
+EgtDataProvider::ErrorType EgtGpsProvider::readGpx( QString theGpxFile )
+{
+  EgtDebug( "entered" );
 
   EgtGpxParser lvHandler;
 
-  if( cvFileType != "gpx" )
-  {
-    QXmlInputSource lvXmlSource( &lvTempFile );
+  QFile lvFile( theGpxFile );
+  QXmlInputSource lvXmlSource( &lvFile );
 
-    QXmlSimpleReader lvReader;
-    lvReader.setContentHandler( &lvHandler );
+  QXmlSimpleReader lvReader;
+  lvReader.setContentHandler( &lvHandler );
 
-    lvReader.parse( lvXmlSource );
-  }
-  else //we just use as input the original file
-  {
-    QXmlInputSource lvXmlSource( &lvFile );
+  lvReader.parse( lvXmlSource );
 
-    QXmlSimpleReader lvReader;
-    lvReader.setContentHandler( &lvHandler );
-
-    lvReader.parse( lvXmlSource );
-  }
 
   cvData = lvHandler.data();
   cvNumberOfFields= lvHandler.numberOfFields();

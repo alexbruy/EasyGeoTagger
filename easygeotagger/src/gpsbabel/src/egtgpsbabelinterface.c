@@ -267,13 +267,15 @@ int convert(const char* theInputFile, const char* theInputType, const char* theO
   else //CATCH
   {
     fprintf(stderr,"[FATAL] Error Thrown\n");
-    fclose (stderr);
-    fclose (stdout);
+
+
+fclose (stderr);  
+fclose (stdout); 
     return -1;
   }
 
-  fclose (stderr);
-  fclose (stdout);
+fclose (stderr); 
+fclose (stdout);
 }
 
 /*Former main function*/
