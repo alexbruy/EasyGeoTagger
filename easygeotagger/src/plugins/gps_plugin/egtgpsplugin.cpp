@@ -148,8 +148,17 @@ void EgtGpsPlugin::setDataProvider()
 {
   EgtDebug( "entered" );
 
-  disconnect( cvDataProvider, SIGNAL( dataProviderReady() ), this, SLOT( setDataProvider() ) );
-  cvGPSDataTable.setProvider( cvDataProvider );
+  if( 0 == cvDataProvider ) { return; }
+
+  if( cvDataProvider->isValid( ) )
+  {
+    disconnect( cvDataProvider, SIGNAL( dataProviderReady() ), this, SLOT( setDataProvider() ) );
+    cvGPSDataTable.setProvider( cvDataProvider );
+  }
+  else
+  {
+    QMessageBox::critical( cvApplicationInterface->gui(), tr( "Error" ), tr( "An error occurred initializing the provider" ) + ":\n\n" + cvDataProvider->lastError( ), QMessageBox::Ok );
+  }
 }
 
 void EgtGpsPlugin::showAvailableDataProviders()

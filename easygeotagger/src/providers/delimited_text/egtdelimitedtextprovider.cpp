@@ -138,6 +138,7 @@ EgtDataProvider::ErrorType EgtDelimitedTextProvider::read( )
 {
   EgtDebug( "entered" );
 
+  cvValid = false;
   cvData.clear();
   cvLastError = "";
 
@@ -182,6 +183,7 @@ EgtDataProvider::ErrorType EgtDelimitedTextProvider::read( )
     }
   }
 
+  cvValid = true;
   if( lvError ) { return EgtDataProvider::Warning; }
 
   return EgtDataProvider::None;

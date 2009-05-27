@@ -65,6 +65,9 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
     /*! \brief Create a new uninitialized instance of this provider */
     virtual EgtDataProvider* instance( ) { return new EgtDataProvider(); }
 
+    /*! \brief Is the provider valid */
+    bool isValid() { return cvValid; }
+
     /*! \returns the last error message */
     QString lastError( ) { return cvLastError; }
 
@@ -108,7 +111,9 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
 
     QString cvName;
 
-    int cvNumberOfFields;   
+    int cvNumberOfFields;
+
+    bool cvValid;
 };
 
 Q_DECLARE_INTERFACE( EgtDataProvider, "org.amnh.bif.Plugin.EgtDataProvider/1.0" );

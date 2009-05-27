@@ -25,6 +25,12 @@ class EgtDataProvider : QObject
     /*! \brief Does the data file have column headers */
     bool hasColumnHeaders( );
 
+    /*! \brief Create a new uninitialized instance of this provider */
+    virtual EgtDataProvider* instance( );
+
+    /*! \brief Is the provider valid */
+    bool isValid();
+
     /*! \brief Entry point for derived classes so they can graphically display their options */
     virtual void configure( );
 

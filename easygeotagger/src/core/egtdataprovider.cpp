@@ -27,6 +27,7 @@ EgtDataProvider::EgtDataProvider( )
 {
   cvCurrentRecord = -1;
   cvHasColumnHeaders = false;
+  cvValid = false;
   cvNumberOfFields = 0;
   cvLastError = "";
   cvName = "UNKNOWN";

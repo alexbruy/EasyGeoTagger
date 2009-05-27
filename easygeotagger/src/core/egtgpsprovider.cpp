@@ -153,6 +153,7 @@ EgtDataProvider::ErrorType EgtGpsProvider::read( )
 {
   EgtDebug( "entered" );
 
+  cvValid = false;
   cvData.clear();
   cvLastError = "";
   cvHasColumnHeaders = true; /*A GPX file always has headers*/
@@ -196,5 +197,6 @@ EgtDataProvider::ErrorType EgtGpsProvider::readGpx( QString theGpxFile )
 
   cvColumnHeaders = lvHandler.headers();
 
+  cvValid = true;
   return EgtDataProvider::None;
 }
