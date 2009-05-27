@@ -31,6 +31,12 @@
 class EgtGpxParser : public QXmlDefaultHandler
 {
   public:
+    enum DataType
+    {
+      WayPoints,
+      Tracks,
+      Routes
+    };
 
     EgtGpxParser();
  
@@ -48,9 +54,13 @@ class EgtGpxParser : public QXmlDefaultHandler
 
     bool startDocument();
 
+    void setDataType( EgtGpxParser::DataType );
+
     bool startElement( const QString&, const QString&, const QString&, const QXmlAttributes& );
   
   private:
+
+    EgtGpxParser::DataType cvDataType;
 
     QString cvElementName;
 
@@ -59,6 +69,8 @@ class EgtGpxParser : public QXmlDefaultHandler
     QStringList cvHeader;
 
     bool cvInActualData;
+
+    QMap<EgtGpxParser::DataType, QString> cvMapDataTypes;
 
     QMap<QString, QString> cvMapGpxElements;
 

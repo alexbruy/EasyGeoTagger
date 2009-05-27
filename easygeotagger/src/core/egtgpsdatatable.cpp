@@ -451,7 +451,7 @@ void EgtGpsDataTable::populateTable( )
   /*Set up the combo box*/
   cvUiKeySelectionDialog->cbFields->clear( );
   cvUiKeySelectionDialog->cbFields->insertItems( 0,cvAvailableFields );
-
+ EgtDebug( "uno" );
   if( cvDataProvider->hasColumnHeaders( ) )
   {
     QStringList lvTags;
@@ -469,7 +469,7 @@ void EgtGpsDataTable::populateTable( )
 
     setHorizontalHeaderLabels( lvDefaultHeader );
   }
-
+ EgtDebug( "dos" );
   for( int i = 0; i < cvDataProvider->numberOfRecords( ); i++ )
   {
     QStringList cvRowData = cvDataProvider->next( );
@@ -480,6 +480,7 @@ void EgtGpsDataTable::populateTable( )
        setItem( i, j, lvNewItem );
     }
   }
+ EgtDebug( "tres" );
   emit timeStampSelected( false );
   emit rowSelected( false );
 }

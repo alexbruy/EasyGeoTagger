@@ -27,6 +27,8 @@
 
 #include "egtdataprovider.h"
 
+#include <QTemporaryFile>
+
 class EgtGpsProvider: public EgtDataProvider
 {
 
@@ -48,14 +50,19 @@ class EgtGpsProvider: public EgtDataProvider
 
     QString cvFileType;
 
-    EgtDataProvider::ErrorType convert( QString, QString, QString& );
-
-    EgtDataProvider::ErrorType readGpx( QString );
-
     /*! \brief Generic read function to load the data */
     EgtDataProvider::ErrorType read( );
 
-typedef int (*ConvertFunction)(const char*, const char*, const char*, const char*, const char*, const char*);
-ConvertFunction cvConvert;
+    typedef int (*ConvertFunction)(const char*, const char*, const char*, const char*, const char*, const char*);
+    ConvertFunction cvConvert;
+
+  private:
+
+    QTemporaryFile cvConvertTempFile;
+
+    EgtDataProvider::ErrorType convert( QString, QString, QString& );
+
+    EgtDataProvider::ErrorType readGpx( QString );
+    
 };
 #endif

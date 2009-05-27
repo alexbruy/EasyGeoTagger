@@ -34,7 +34,7 @@
 #include <QTextStream>
 #include <QApplication>
 #include <QMessageBox>
-#include <QTemporaryFile>
+#include <QCoreApplication>
 #include <QFileDialog>
 #include <QLibrary>
 
@@ -47,12 +47,12 @@ EgtGpsProvider::EgtGpsProvider( ) : EgtDataProvider( )
 
 #ifdef WIN32
 #  ifdef OSGEO4W
-    QLibrary lvLibrary( "/../apps/easygt/easygpsbabel.dll" ); //TODO: find out the right path
+    QLibrary lvLibrary( QCoreApplication::instance( )->applicationDirPath( ) + "/../apps/easygt/plugins/easygpsbabel.dll" ); //TODO: find out the right path
 #  else
-     QLibrary lvLibrary( "/plugins/easygpsbabel.dll");
+     QLibrary lvLibrary( QCoreApplication::instance( )->applicationDirPath( ) + "/plugins/easygpsbabel.dll");
 #  endif
 #else
-   QLibrary lvLibrary( "/usr/local/lib/easygt/easygpsbabel" );
+   QLibrary lvLibrary( QCoreApplication::instance( )->applicationDirPath( ) + "/../lib/easygt/easygpsbabel" ); 
 #endif
 
  cvConvert = (ConvertFunction) lvLibrary.resolve("convert");
@@ -157,12 +157,12 @@ EgtDataProvider::ErrorType EgtGpsProvider::read( )
   cvLastError = "";
   cvHasColumnHeaders = true; /*A GPX file always has headers*/
 
-  QTemporaryFile lvTempFile;
+  
   QString lvOutputFile;
 
-  if( lvTempFile.open() )
+  if( cvConvertTempFile.open() )
   {
-    EgtDataProvider::ErrorType lvErrorCode = convert( cvFileName, lvTempFile.fileName(), lvOutputFile );
+    EgtDataProvider::ErrorType lvErrorCode = convert( cvFileName, cvConvertTempFile.fileName(), lvOutputFile );
 
     if( EgtDataProvider::None != lvErrorCode ){ return lvErrorCode; }
   }
@@ -181,12 +181,13 @@ EgtDataProvider::ErrorType EgtGpsProvider::readGpx( QString theGpxFile )
 
   EgtGpxParser lvHandler;
 
-  QFile lvFile( theGpxFile );
+  QFile lvFile( theGpxFile ); //TODO: check if the file exists
   QXmlInputSource lvXmlSource( &lvFile );
 
   QXmlSimpleReader lvReader;
   lvReader.setContentHandler( &lvHandler );
 
+  lvHandler.setDataType( EgtGpxParser::Tracks );
   lvReader.parse( lvXmlSource );
 
 

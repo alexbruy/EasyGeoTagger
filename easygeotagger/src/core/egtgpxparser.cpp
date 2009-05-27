@@ -7,8 +7,13 @@ EgtGpxParser::EgtGpxParser()
   cvMapGpxElements["lat"] = "Latitude";
   cvMapGpxElements["time"] = "DateTimeStamp";
 
+  cvMapDataTypes[ EgtGpxParser::WayPoints ] = "wpt";
+  cvMapDataTypes[ EgtGpxParser::Tracks ] = "trkpt";
+  cvMapDataTypes[ EgtGpxParser::Routes ] = "rtept";
+
   cvElementName = "";
   cvInActualData =false;
+  cvDataType = EgtGpxParser::Tracks;
 }
 
 bool EgtGpxParser::characters ( const QString & ch )
@@ -33,8 +38,7 @@ QList<QStringList> EgtGpxParser::data()
 
 bool EgtGpxParser::endElement( const QString&, const QString &localname, const QString &name )
 {
-  if( 0 == name.compare("wpt", Qt::CaseInsensitive ) || 0 == name.compare("rtept", Qt::CaseInsensitive ) 
-      || 0 == name.compare("trkpt", Qt::CaseInsensitive ) )
+  if( 0 == name.compare( cvMapDataTypes[ cvDataType ], Qt::CaseInsensitive ) )
   {
     cvFileData<<cvRowData; 
 
@@ -58,6 +62,11 @@ void EgtGpxParser::reset()
   cvHeader.clear();
 }
 
+void EgtGpxParser::setDataType( EgtGpxParser::DataType theDataType )
+{
+  cvDataType = theDataType;
+}
+
 bool EgtGpxParser::startDocument()
 {
   return true;
@@ -65,8 +74,7 @@ bool EgtGpxParser::startDocument()
 
 bool EgtGpxParser::startElement( const QString&, const QString&, const QString &name, const QXmlAttributes &attrs )
 {
-  if( 0 == name.compare("wpt", Qt::CaseInsensitive ) || 0 == name.compare("rtept", Qt::CaseInsensitive ) 
-      || 0 == name.compare("trkpt", Qt::CaseInsensitive ) )
+  if( 0 == name.compare( cvMapDataTypes[ cvDataType ], Qt::CaseInsensitive ) )
   {
     for( int i=0; i<attrs.count(); i++ )
     {
