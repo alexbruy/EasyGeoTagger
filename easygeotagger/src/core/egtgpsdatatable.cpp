@@ -207,14 +207,9 @@ bool EgtGpsDataTable::interpolate()
     }
   }
 
-
-
-
-
-
   //Resort the table to get all of the new entries where they should be
   sortItems( cvColumnHeadersSet[ tr( "Date Time Stamp" ) ] );
-
+	return true;
 }
 
 /*!
