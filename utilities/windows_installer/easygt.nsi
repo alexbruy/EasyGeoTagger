@@ -8,7 +8,7 @@
 Name "EasyGeoTagger"
 
 ; The file to write
-OutFile "EasyGeoTagger_0_3_0_OSGeo4W.exe"
+OutFile "EasyGeoTagger_0_4_0_OSGeo4W.exe"
 
 ; The default installation directory
 InstallDir C:\OSGeo4W
