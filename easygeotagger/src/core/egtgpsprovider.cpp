@@ -52,7 +52,7 @@ EgtGpsProvider::EgtGpsProvider( ) : EgtDataProvider( )
      QLibrary lvLibrary( QCoreApplication::instance( )->applicationDirPath( ) + "/plugins/easygpsbabel.dll");
 #  endif
 #else
-   QLibrary lvLibrary( QCoreApplication::instance( )->applicationDirPath( ) + "/../lib/easygt/easygpsbabel" ); 
+   QLibrary lvLibrary( QCoreApplication::instance( )->applicationDirPath( ) + "/../lib/easygt/libgpsbabel" );
 #endif
 
  cvConvert = (ConvertFunction) lvLibrary.resolve("convert");
