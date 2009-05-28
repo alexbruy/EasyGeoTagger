@@ -9,6 +9,8 @@ HAVE_LIBUSB
 */
 #ifdef WIN32
 
+#define HAVE_LIBEXPAT 1
+
 /* 0 for most-used character sets */
 #undef CET_WANTED
 
@@ -20,27 +22,24 @@ HAVE_LIBUSB
 
 /* Defined if you have libexpat */
 //#undef HAVE_LIBEXPAT
-#define HAVE_LIBEXPAT
+
 /* Define to 1 if you have the `m' library (-lm). */
 #undef HAVE_LIBM
 
 /* Defined if you have libusb */
-//#undef HAVE_LIBUSB
-#define HAVE_LIBUSB
+#undef HAVE_LIBUSB
 
 /* Define to 1 if you have the `z' library (-lz). */
 #undef HAVE_LIBZ
 
 /* Define to 1 if you have the `nanosleep' function. */
-//#undef HAVE_NANOSLEEP
-#define HAVE_NANOSLEEP
+#undef HAVE_NANOSLEEP
 
 /* Define to 1 if you have the `sleep' function. */
 #undef HAVE_SLEEP
 
 /* Define if we have va_copy */
-//#undef HAVE_VA_COPY/**/
-#define HAVE_VA_COPY
+#undef HAVE_VA_COPY/**/
 
 /* Define if we have __va_copy */
 #undef HAVE___VA_COPY/**/
@@ -81,6 +80,7 @@ HAVE_LIBUSB
 
 /* 1 to inhibit our use of zlib. */
 #undef ZLIB_INHIBITED
+
 
 #else
 

@@ -23,7 +23,6 @@
 **/
 #include "egtgpsprovider.h"
 
-#include "egtgpsbabelinterface.h"
 
 
 #include "egtgpxparser.h"

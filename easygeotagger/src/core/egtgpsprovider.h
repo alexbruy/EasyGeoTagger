@@ -24,12 +24,12 @@
 #ifndef EGTGPSPROVIDER_H
 #define EGTGPSPROVIDER_H
 
-
 #include "egtdataprovider.h"
+#include "egtgpsbabelinterface.h"
 
 #include <QTemporaryFile>
 
-class EgtGpsProvider: public EgtDataProvider
+class MS_DLL_SPEC EgtGpsProvider: public EgtDataProvider
 {
 
   public:
