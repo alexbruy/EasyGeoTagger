@@ -53,7 +53,7 @@ class MS_DLL_SPEC EgtGpsProvider: public EgtDataProvider
     /*! \brief Generic read function to load the data */
     EgtDataProvider::ErrorType read( );
 
-    typedef int (*ConvertFunction)(const char*, const char*, const char*, const char*, const char*, const char*);
+    typedef int (*ConvertFunction)(const char*, const char*, const char*, const char*, const char*, const char*, const char*);
     ConvertFunction cvConvert;
 
   private:

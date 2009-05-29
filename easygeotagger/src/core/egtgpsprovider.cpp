@@ -54,7 +54,7 @@ EgtGpsProvider::EgtGpsProvider( ) : EgtDataProvider( )
    QLibrary lvLibrary( QCoreApplication::instance( )->applicationDirPath( ) + "/../lib/easygt/libgpsbabel" );
 #endif
 
- cvConvert = (ConvertFunction) lvLibrary.resolve("convert");
+ cvConvert = (ConvertFunction) lvLibrary.resolve("convertWithOptions");
 
 }
 
@@ -115,7 +115,7 @@ EgtDataProvider::ErrorType EgtGpsProvider::convert( QString theFileToConvert, QS
     if( cvConvert )
     {
       lvErrorCode = cvConvert( theFileToConvert.toStdString().c_str(), cvFileType.toStdString().c_str(), theConvertedFile.toStdString().c_str(), "gpx", lvErrorFile.fileName().toStdString().c_str(),
-        lvInfoFile.fileName().toStdString().c_str() ); 
+        lvInfoFile.fileName().toStdString().c_str(),QString("").toStdString().c_str() ); 
 
       theConvertedFileName = theConvertedFile;
     }

@@ -31,6 +31,7 @@
 
 class EgtKmlProvider: public EgtGpsProvider
 {
+  Q_OBJECT
   Q_INTERFACES( EgtDataProvider )
 
   public:

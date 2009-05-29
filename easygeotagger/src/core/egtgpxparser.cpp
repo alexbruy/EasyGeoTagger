@@ -20,7 +20,18 @@ bool EgtGpxParser::characters ( const QString & ch )
 {
   if( cvInActualData && cvElementName!= "" )
   {
-    cvRowData.insert( cvHeader.indexOf( cvElementName ), ch );
+    if( 0 == cvElementName.compare( "DateTimeStamp", Qt::CaseInsensitive ) ) 
+    {
+      QString lvContent = ch;
+      lvContent.replace("T"," ");
+      lvContent.replace("Z"," ");
+      lvContent.replace("-",":");
+      cvRowData.insert( cvHeader.indexOf( cvElementName ), lvContent.trimmed() );
+    }
+    else
+    {
+      cvRowData.insert( cvHeader.indexOf( cvElementName ), ch );
+    }
   }
 
   return true;

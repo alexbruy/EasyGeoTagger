@@ -232,7 +232,49 @@ print_extended_info(void)
 }
 
 
+int convertWithOptions(const char* theInputFile, const char* theInputType, const char* theOutputFile, const char* theOutputType, const char* theErrorFile, const char* theInfoFile, const char* theOptions)
+{
+/* Redirecting stderr and stdout to files. So we can handle them */
+  FILE *stream, *stream2 ;
+  if((stream = freopen(theErrorFile, "w", stderr)) == NULL)
+  {
+    return -1;
+  }
+  if((stream2 = freopen(theInfoFile, "w", stdout)) == NULL)
+  {
+    return -1;
+  }
 
+  if (!setjmp(jb)) //TRY
+  {
+    const char* input[10];
+    input[0] ="gpsbabel";
+    input[1] ="-i";
+    input[2] =theInputType;
+    input[3] ="-f";
+    input[4] =theInputFile;
+    input[5] ="-o";
+    input[6] =theOutputType;
+    input[7] ="-F";
+    input[8] =theOutputFile;
+    input[9] =theOptions;
+
+    execute(10, input);
+    return 0;
+  }
+  else //CATCH
+  {
+    fprintf(stderr,"[FATAL] Error Thrown\n");
+
+
+fclose (stderr);  
+fclose (stdout); 
+    return -1;
+  }
+
+fclose (stderr); 
+fclose (stdout);
+}
 
 /*Function added to provide an easy interface to call the execute function*/
 int convert(const char* theInputFile, const char* theInputType, const char* theOutputFile, const char* theOutputType, const char* theErrorFile, const char* theInfoFile)
@@ -267,10 +309,8 @@ int convert(const char* theInputFile, const char* theInputType, const char* theO
   else //CATCH
   {
     fprintf(stderr,"[FATAL] Error Thrown\n");
-
-
-fclose (stderr);  
-fclose (stdout); 
+    fclose (stderr);  
+    fclose (stdout); 
     return -1;
   }
 
