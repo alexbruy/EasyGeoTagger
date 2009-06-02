@@ -233,6 +233,19 @@ QMap< QString, QString > EgtGpxParser::parseWayPoint( QDomNode theWayPoint )
     {
       cvHeaders << lvTags.value();
       lvWayPointData[ lvTags.value() ] = lvElement.text();
+      //Sanatize the time stamps some gpx are in format yyyy-mm-ddThh:mm:ssZ
+      if( 0 == lvTags.value().compare( QObject::tr( "Date Time Stamp" ), Qt::CaseInsensitive ) )
+      {
+        QString lvTemp = lvWayPointData[ lvTags.value() ];
+        lvTemp[4] = ':';
+        lvTemp[7] = ':';
+        lvTemp[10] = ' ';
+        if( 19 == lvTemp.length() )
+        {
+          lvTemp.chop( 1 );
+        }
+        lvWayPointData[ lvTags.value() ] = lvTemp;
+      }
     }
   }
 
