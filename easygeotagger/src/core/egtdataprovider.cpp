@@ -26,7 +26,6 @@
 EgtDataProvider::EgtDataProvider( )
 {
   cvCurrentRecord = -1;
-  cvHasColumnHeaders = false;
   cvValid = false;
   cvNumberOfFields = 0;
   cvLastError = "";
@@ -38,14 +37,15 @@ EgtDataProvider::EgtDataProvider( )
  * PUBLIC FUNCTIONS
  *
  */
+
 /*!
  * \returns a QStringList with the next row of data
  */
-QStringList EgtDataProvider::next( )
+QMap< QString, QString > EgtDataProvider::next( )
 {
   if( cvData.size( ) == 0 || cvCurrentRecord == cvData.size( ) - 1 )
   {
-    return QStringList( );
+    return QMap< QString, QString >( );
   }
 
   cvCurrentRecord++;
@@ -55,14 +55,27 @@ QStringList EgtDataProvider::next( )
 /*!
  * \returns a QStringList with the prevvious row of data
  */
-QStringList EgtDataProvider::previous( )
+QMap< QString, QString > EgtDataProvider::previous( )
 {
   if( cvData.size( ) == 0 || cvCurrentRecord <= 0 )
   {
-    return QStringList( );
+    return QMap< QString, QString >( );
   }
 
   cvCurrentRecord--;
   return cvData[ cvCurrentRecord ];
 }
 
+/*
+ *
+ * PROTECTED FUNCTIONS
+ *
+ */
+void EgtDataProvider::initialized( bool isComplete )
+{
+  if( !isComplete )
+  {
+    cvData.clear(); //TODO: See if it necessary to explicityly clear each map too
+  }
+  emit dataProviderReady();
+}

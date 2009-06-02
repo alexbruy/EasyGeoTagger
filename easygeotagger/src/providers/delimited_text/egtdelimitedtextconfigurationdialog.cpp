@@ -46,7 +46,7 @@ void EgtDelimitedTextConfigurationDialog::accepted( )
   }
   else
   {
-    cvProvider->notifyInitializationComplete( true ); 
+    cvProvider->configurationComplete( true );
   }
   
 }
@@ -104,7 +104,7 @@ void EgtDelimitedTextConfigurationDialog::on_rbtnPipe_toggled( bool theValue )
 
 void EgtDelimitedTextConfigurationDialog::rejected( )
 {
-  cvProvider->notifyInitializationComplete( false );
+  cvProvider->configurationComplete( false );
 }
 
 /*
@@ -127,25 +127,23 @@ void EgtDelimitedTextConfigurationDialog::delimiterChanged( )
 
   int lvNumRows = ( cvProvider->numberOfRecords() > 3 )? 3: cvProvider->numberOfRecords(); // We just show up to 3 rows 
    
-  if( cvProvider->hasColumnHeaders( ) )
+
+  QStringList lvHeader = cvProvider->columnHeaders();
+  lvHTML += "<tr bgcolor = \"#4AB02A\">";
+  for( int i = 0; i < lvHeader.size( ); i++ )
   {
-    QStringList lvHeader = cvProvider->columnHeaders(); 
-    lvHTML += "<tr bgcolor = \"#4AB02A\">";
-    for( int i = 0; i < lvHeader.size( ); i++ )
-    {
-      lvHTML = lvHTML+"<td>"+lvHeader.at( i )+"</td>";
-    }
-    lvHTML += "</tr>";
+    lvHTML = lvHTML+"<td>"+lvHeader.at( i )+"</td>";
   }
+  lvHTML += "</tr>";
 
   for( int i = 0; i < lvNumRows; i++ )
   {
-    QStringList lvCurrentRecord = cvProvider->next(); 
+    QMap< QString, QString > lvCurrentRecord = cvProvider->next();
       
     lvHTML += "<tr>";
     for( int j = 0; j < cvProvider->numberOfFields(); j++ )
     {
-      lvHTML = lvHTML+"<td>"+lvCurrentRecord.at( j )+"</td>"; 
+      lvHTML = lvHTML+"<td>"+lvCurrentRecord.value( lvHeader[ j ], "" )+"</td>";
     }
     lvHTML += "</tr>";
   }

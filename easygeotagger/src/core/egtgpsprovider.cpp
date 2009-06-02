@@ -64,19 +64,6 @@ EgtGpsProvider::EgtGpsProvider( ) : EgtDataProvider( )
  *
  */
 
-
-void EgtGpsProvider::initialized( bool isComplete )
-{ 
-  EgtDebug( "entered" );
-
-  if( !isComplete )
-  {
-    cvData.clear();
-  }
-  emit dataProviderReady();
-}
-
-
 /*!
  * \param theFileName a QString that contains the name of the file to be read
  */
@@ -152,9 +139,8 @@ EgtDataProvider::ErrorType EgtGpsProvider::read( )
 
   cvValid = false;
   cvData.clear();
+  cvColumnHeaders.clear();
   cvLastError = "";
-  cvHasColumnHeaders = true; /*A GPX file always has headers*/
-
   
   QString lvOutputFile;
 
@@ -178,26 +164,9 @@ EgtDataProvider::ErrorType EgtGpsProvider::readGpx( QString theGpxFile )
   EgtDebug( "entered" );
 
   EgtGpxParser lvParser;
-  cvColumnHeaders.clear();
-
-  QList< QMap< QString, QString > > lvData = lvParser.parse( cvFeatureType, theGpxFile );
-  //cvData = lvParser.parse( cvFeatureType, theGpxFile );
+  cvData = lvParser.parse( cvFeatureType, theGpxFile );
   cvColumnHeaders << lvParser.headers();
   cvNumberOfFields= lvParser.headers().size();
-
-  //HACK - to get to work with wrong QStringList approach
-  for( int lvListRunner = 0; lvListRunner < lvData.size(); lvListRunner++ )
-  {
-    QStringList lvNewList;
-    QMap< QString, QString > lvMap = lvData.at( lvListRunner );
-    QListIterator< QString > lvIterator( cvColumnHeaders );
-    while( lvIterator.hasNext() )
-    {
-      lvNewList << lvMap.value( lvIterator.next(), "" );
-    }
-    cvData << lvNewList;
-  }
-  //end HACK
 
   cvValid = true;
   return EgtDataProvider::None;

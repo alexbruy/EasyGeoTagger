@@ -26,8 +26,8 @@
 
 #include <QFile>
 #include <QtPlugin>
+#include <QStringList>
 #include <QTextStream>
-#include <QApplication>
 #include <QFileDialog>
 
 EgtDelimitedTextProvider::EgtDelimitedTextProvider( ) : EgtDataProvider( )
@@ -35,7 +35,7 @@ EgtDelimitedTextProvider::EgtDelimitedTextProvider( ) : EgtDataProvider( )
   cvDelimiter = ",";
   cvFileName = ""; 
   cvLastError = "";
-  cvConfigurationDialog = 0;
+  cvHasColumnHeaders = false;
   cvName = "Delimited Text";
   cvConfigurationDialog = new EgtDelimitedTextConfigurationDialog( this );
 }
@@ -45,39 +45,36 @@ EgtDelimitedTextProvider::EgtDelimitedTextProvider( ) : EgtDataProvider( )
  * PUBLIC FUNCTIONS
  *
  */
-void EgtDelimitedTextProvider::configure( ) //init function
+void EgtDelimitedTextProvider::configure( QPoint theScreenLocation )
 {
   EgtDebug( "entered" );
 
-  QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
-  QWidget* lvParent = 0;
-
-  for( int i = 0; i < lvActiveWindows.size( ); i++ )
+  QStringList lvFileNames;
+  QFileDialog lvFileDialog( 0, tr( "Open Text File" ), "/home", tr( "Text Files ( *.txt *.csv )" ) );
+  lvFileDialog.setFileMode( QFileDialog::ExistingFile ); // A single existing file
+  lvFileDialog.move( theScreenLocation );
+  if ( lvFileDialog.exec() )
   {
-    if( tr( "Select a file type" ) == lvActiveWindows[i]->windowTitle( ) )
+    lvFileNames = lvFileDialog.selectedFiles();
+  }
+
+  if( ! lvFileNames.isEmpty() )
+  {
+    QString lvFileName = lvFileNames[0];
+
+    if ( "" != lvFileName )
     {
-      lvParent = lvActiveWindows[i];
+      setFileName( lvFileName );
+
+      cvConfigurationDialog->move( theScreenLocation );
+      cvConfigurationDialog->show( );
     }
   }
-
-  QString lvFileName = QFileDialog::getOpenFileName( lvParent, tr( "Open GPS File" ), "/home", tr( "GPS Files ( *.txt *.gps )" ) );
-  if ( "" != lvFileName )
+  else
   {
-    setFileName( lvFileName );
-    
-    showConfigurationDialog( );
+    cvLastError = tr( "User canceled initialization" );
+    initialized( false );
   }
-} 
-
-void EgtDelimitedTextProvider::notifyInitializationComplete( bool isComplete )
-{ 
-  EgtDebug( "entered" );
-
-  if( !isComplete )
-  {
-    cvData.clear();
-  }
-  emit dataProviderReady();
 }
 
 /*!
@@ -108,27 +105,6 @@ void EgtDelimitedTextProvider::setHasColumnHeaders( bool theValue )
   cvHasColumnHeaders = theValue;
 }
 
-void EgtDelimitedTextProvider::showConfigurationDialog( )
-{
-  EgtDebug( "entered" );
-
-  QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
-  QWidget* lvParent = 0;
-
-  for( int i = 0; i < lvActiveWindows.size( ); i++ )
-  {
-    if( tr( "Data Table" ) == lvActiveWindows[i]->windowTitle( ) )
-    {
-      lvParent = lvActiveWindows[i];
-      QPoint lvPosition = lvParent->pos( );
-      //center the window over the parent
-      cvConfigurationDialog->move( lvPosition.x( ) + lvParent->width( )/2 - cvConfigurationDialog->width( )/2, lvPosition.y( ) + lvParent->height( )/2 - cvConfigurationDialog->height( )/2 );
-    }
-  }
-
-  cvConfigurationDialog->show( );
-}
-
 /*
  *
  * PROTECTED FUNCTIONS
@@ -140,6 +116,7 @@ EgtDataProvider::ErrorType EgtDelimitedTextProvider::read( )
 
   cvValid = false;
   cvData.clear();
+  cvColumnHeaders.clear();
   cvLastError = "";
 
   QFile lvFile( cvFileName );
@@ -153,28 +130,45 @@ EgtDataProvider::ErrorType EgtDelimitedTextProvider::read( )
   }
 
   QTextStream stream( &lvFile );
-  QString lvLine;
+  QString lvNewData;
 
-  if( hasColumnHeaders( ) )
+  lvNewData = stream.readLine( );
+  //If the user indicates there are headers, split first line right into cvColumnHeaders
+  if( cvHasColumnHeaders )
   {
-    lvLine = stream.readLine( );
-    cvColumnHeaders = lvLine.split( cvDelimiter );
-    cvNumberOfFields = lvLine.split( cvDelimiter ).size( );
+    cvColumnHeaders = lvNewData.split( cvDelimiter );
+    cvNumberOfFields = cvColumnHeaders.size( );
   }
   else
   {
-    lvLine = stream.readLine( );
-    cvData << lvLine.split( cvDelimiter );
-    cvNumberOfFields = lvLine.split( cvDelimiter ).size( );
+    //If not make up some headers, and load the first line
+    QStringList lvFirstRow = lvNewData.split( cvDelimiter );
+    QMap< QString, QString > lvData;
+    cvNumberOfFields = lvFirstRow.size( );
+    for( int lvRunner = 0; lvRunner < cvNumberOfFields; lvRunner++ )
+    {
+      cvColumnHeaders << QString::number( lvRunner + 1 );
+      lvData[ QString::number( lvRunner ) ] = lvFirstRow[ lvRunner ];
+    }
+
+    cvData << lvData;
   }
 
   while( ! stream.atEnd( ) )
   {
-    lvLine = stream.readLine( );
+    lvNewData = stream.readLine( );
+    QStringList lvIndividualFields = lvNewData.split( cvDelimiter );
 
-    if( lvLine.split( cvDelimiter ).size( ) == cvNumberOfFields )
+    if( lvIndividualFields.size( ) == cvNumberOfFields )
     {
-      cvData << lvLine.split( cvDelimiter );
+      //Load each row into the map, assuming the same order as the headers
+      QMap< QString, QString > lvData;
+      for( int lvRunner = 0; lvRunner < cvNumberOfFields; lvRunner++ )
+      {
+        lvData[ cvColumnHeaders[ lvRunner ] ] = lvIndividualFields[ lvRunner ];
+      }
+
+      cvData << lvData;
     }
     else
     {
@@ -185,7 +179,7 @@ EgtDataProvider::ErrorType EgtDelimitedTextProvider::read( )
 
   cvValid = true;
   if( lvError ) { return EgtDataProvider::Warning; }
-
+qDebug() << "here";
   return EgtDataProvider::None;
 }
 

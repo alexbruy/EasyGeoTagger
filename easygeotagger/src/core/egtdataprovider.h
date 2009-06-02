@@ -24,6 +24,7 @@
 #ifndef EGTDATAPROVIDER_H
 #define EGTDATAPROVIDER_H
 
+#include <QMap>
 #include <QList>
 #include <QPoint>
 #include <QObject>
@@ -34,8 +35,6 @@
  *
  * This class is the base data provider and plugin interface
  *
- * \todo Update next( ) and previous( ) to return QMap< fieldName, QString > or QMap< fieldName, QVariant >
- * \todo Update internal strage of data to reflect the above changes
  */
 class MS_DLL_SPEC EgtDataProvider : public QObject
 {
@@ -60,9 +59,6 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
     /*! \brief Entry point for derived classes so they can graphically display their options */
     virtual void configure( QPoint thePoint ) { emit dataProviderReady( ); }
 
-    /*! \brief Does the data file have column headers */
-    bool hasColumnHeaders( ) { return cvHasColumnHeaders; }
-
     /*! \brief Create a new uninitialized instance of this provider */
     virtual EgtDataProvider* instance( ) { return new EgtDataProvider(); }
 
@@ -76,7 +72,7 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
     QString name( ) { return cvName; }
 
     /*! \brief Get the next row of data */
-    QStringList next( );
+    QMap< QString, QString > next( );
 
     /*! \returns the number of fields */
     int numberOfFields( ) { return cvNumberOfFields; }
@@ -85,7 +81,7 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
     int numberOfRecords( ) { return cvData.size( ); }
 
     /*! \brief the the revious row of data */
-    QStringList previous( );
+    QMap< QString, QString > previous( );
 
     /*! \brief Reset the proivder back to the first record */
     void reset( ) { cvCurrentRecord = -1; }
@@ -97,16 +93,14 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
     /*! \brief Read function to be implemented by the derrived classes */
     virtual EgtDataProvider::ErrorType read( ) { return EgtDataProvider::None; }
 
-
+    void initialized( bool );
 
 
     QStringList cvColumnHeaders;
 
     int cvCurrentRecord;
 
-    QList< QStringList > cvData;
-
-    bool cvHasColumnHeaders;
+    QList< QMap< QString, QString > > cvData;
 
     QString cvLastError;
 

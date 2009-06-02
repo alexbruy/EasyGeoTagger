@@ -119,15 +119,10 @@ void EgtGpsDataTable::clearColumnHeader( int theColumn )
   if( theColumn < 0 || theColumn > columnCount( ) ) { return; }
 
   cvColumnHeadersSet.remove( cvColumnHeadersSet.key( theColumn ) );
+
+  //revert to the original header
   QString lvTheHeader;
-  if( cvDataProvider->hasColumnHeaders( ) )
-  {//revert to the original header
-    lvTheHeader = cvDataProvider->columnHeaders( ).at( theColumn );
-  }
-  else
-  {
-    lvTheHeader = QString::number( theColumn +1 );
-  }
+  lvTheHeader = cvDataProvider->columnHeaders( ).at( theColumn );
 
   //Deleting the previous header
   QTableWidgetItem* lvCurrentHeader = horizontalHeaderItem ( theColumn );
@@ -444,32 +439,21 @@ void EgtGpsDataTable::populateTable( )
   setRowCount( cvDataProvider->numberOfRecords( ) );
   setColumnCount( cvDataProvider->numberOfFields( ) );
 
-  if( cvDataProvider->hasColumnHeaders( ) )
-  {
-    QStringList lvTags;
-    lvTags = cvDataProvider->columnHeaders( );
-    setHorizontalHeaderLabels( lvTags );
-  }
-  else
-  {
-    QStringList lvDefaultHeader;
+  //Set the Horizontal headers
+  QStringList lvHeaders = cvDataProvider->columnHeaders( );
+  setHorizontalHeaderLabels( lvHeaders );
 
-    for( int i = 0; i< cvDataProvider->numberOfFields( ); i++ )
+  //Add data to the table
+  for( int lvRow = 0; lvRow < cvDataProvider->numberOfRecords( ); lvRow++ )
+  {
+    QMap< QString, QString > lvRowData = cvDataProvider->next( );
+    QListIterator< QString > lvIterator( lvHeaders );
+    int lvColumn = 0;
+    while( lvIterator.hasNext() )
     {
-      lvDefaultHeader << QString::number( i+1 );
-    }
-
-    setHorizontalHeaderLabels( lvDefaultHeader );
-  }
-
-  for( int i = 0; i < cvDataProvider->numberOfRecords( ); i++ )
-  {
-    QStringList cvRowData = cvDataProvider->next( );
-
-    for( int j = 0; j < cvRowData.size( ); j++ )
-    {
-      QTableWidgetItem *lvNewItem = new QTableWidgetItem( cvRowData.at( j ) );
-       setItem( i, j, lvNewItem );
+      QTableWidgetItem *lvNewItem = new QTableWidgetItem( lvRowData.value( lvIterator.next(), "" ) );
+      setItem( lvRow, lvColumn, lvNewItem );
+      lvColumn++;
     }
   }
 

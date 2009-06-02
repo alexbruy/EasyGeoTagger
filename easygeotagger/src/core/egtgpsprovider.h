@@ -52,8 +52,6 @@ class MS_DLL_SPEC EgtGpsProvider: public EgtDataProvider
 
     EgtGpxParser::FeatureTypes cvFeatureType;
 
-    void initialized( bool );
-
     /*! \brief Generic read function to load the data */
     EgtDataProvider::ErrorType read( );
 

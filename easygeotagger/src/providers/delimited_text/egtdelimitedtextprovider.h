@@ -27,8 +27,13 @@
 #include "egtdataprovider.h"
 #include "egtdelimitedtextconfigurationdialog.h"
 
+#include <QPoint>
+
 class EgtDelimitedTextConfigurationDialog;
 
+/*!
+ * \todo This class needs some cleaning up
+ */
 class EgtDelimitedTextProvider: public EgtDataProvider
 {
   Q_OBJECT
@@ -39,11 +44,13 @@ class EgtDelimitedTextProvider: public EgtDataProvider
     /*! \brief Constuctor */
     EgtDelimitedTextProvider( );
 
-    void configure( );
+    void configure( QPoint );
+
+    void configurationComplete( bool isGood ) { initialized( isGood ); }
+
+    bool hasColumnHeaders() { return cvHasColumnHeaders; }
 
     EgtDataProvider* instance( ) { return new EgtDelimitedTextProvider(); }
-
-    void notifyInitializationComplete( bool );
 
     EgtDataProvider::ErrorType reload( ) { return read(); }
 
@@ -55,9 +62,6 @@ class EgtDelimitedTextProvider: public EgtDataProvider
 
     void setHasColumnHeaders( bool );
 
-    /*! \brief Selects the character that will be considered as delimiter when reading a text file */
-    void showConfigurationDialog( );
-
   protected:
 
     EgtDelimitedTextConfigurationDialog* cvConfigurationDialog;
@@ -67,6 +71,8 @@ class EgtDelimitedTextProvider: public EgtDataProvider
 
     /*! \brief QString that contains the name of the file to be read */
     QString cvFileName; 
+
+    bool cvHasColumnHeaders;
 
     /*! \brief Generic read function to load the data */
     EgtDataProvider::ErrorType read( );
