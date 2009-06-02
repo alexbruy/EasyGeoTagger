@@ -22,17 +22,14 @@ class EgtDataProvider : QObject
     /*! \brief Returns the column headers*/
     QStringList columnHeaders( );
 
-    /*! \brief Does the data file have column headers */
-    bool hasColumnHeaders( );
+    /*! \brief Entry point for derived classes so they can graphically display their options */
+    virtual void configure( QPoint thePoint );
 
     /*! \brief Create a new uninitialized instance of this provider */
     virtual EgtDataProvider* instance( );
 
     /*! \brief Is the provider valid */
     bool isValid();
-
-    /*! \brief Entry point for derived classes so they can graphically display their options */
-    virtual void configure( );
 
     /*! \returns the last error message */
     QString lastError( );
@@ -41,7 +38,7 @@ class EgtDataProvider : QObject
     QString name( );
 
     /*! \brief Get the next row of data */
-    QStringList next( );
+    QMap< QString, QString > next( );
 
     /*! \returns the number of fields */
     int numberOfFields( );
@@ -50,7 +47,7 @@ class EgtDataProvider : QObject
     int numberOfRecords( );
 
     /*! \brief the the revious row of data */
-    QStringList previous( );
+    QMap< QString, QString > previous( );
 
     /*! \brief Reset the proivder back to the first record */
     void reset( );
@@ -61,5 +58,7 @@ class EgtDataProvider : QObject
   protected:
     /*! \brief Read function to be implemented by the derrived classes */
     virtual EgtDataProvider::ErrorType read( );
+
+    void initialized( bool );
 
 };

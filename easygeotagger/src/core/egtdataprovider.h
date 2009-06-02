@@ -57,7 +57,7 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
     QStringList columnHeaders( ) { return cvColumnHeaders; }
 
     /*! \brief Entry point for derived classes so they can graphically display their options */
-    virtual void configure( QPoint thePoint ) { emit dataProviderReady( ); }
+    virtual void configure( QPoint thePoint ) { thePoint.x();/* SIP muffler */ emit dataProviderReady( ); }
 
     /*! \brief Create a new uninitialized instance of this provider */
     virtual EgtDataProvider* instance( ) { return new EgtDataProvider(); }

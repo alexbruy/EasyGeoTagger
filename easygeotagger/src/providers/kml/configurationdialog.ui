@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../app/app.qrc">
+    <normaloff>:/icons/EasyGT.svg</normaloff>:/icons/EasyGT.svg</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
@@ -59,7 +63,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../app/app.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
