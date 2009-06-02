@@ -1,6 +1,6 @@
 /*
 ** File: egtgpsprovider.h
-** Author( s ): Roberto Garcia Yunta
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2009-05-22
 **
 ** Copyright ( c ) 2009, American Museum of Natural History. All rights reserved.
@@ -24,6 +24,7 @@
 #ifndef EGTGPSPROVIDER_H
 #define EGTGPSPROVIDER_H
 
+#include "egtgpxparser.h"
 #include "egtdataprovider.h"
 #include "egtgpsbabelinterface.h"
 
@@ -37,18 +38,21 @@ class MS_DLL_SPEC EgtGpsProvider: public EgtDataProvider
     /*! \brief Constuctor */
     EgtGpsProvider( );
 
-    void notifyInitializationComplete( bool );
-
     EgtDataProvider::ErrorType reload( ) { return read(); }
 
     /*! \brief Function to set the name of the file to be read */
-    EgtDataProvider::ErrorType setFileName( QString );
+    void setFileName( QString );
+
   protected:
 
     /*! \brief QString that contains the name of the file to be read */
     QString cvFileName; 
 
     QString cvFileType;
+
+    EgtGpxParser::FeatureTypes cvFeatureType;
+
+    void initialized( bool );
 
     /*! \brief Generic read function to load the data */
     EgtDataProvider::ErrorType read( );

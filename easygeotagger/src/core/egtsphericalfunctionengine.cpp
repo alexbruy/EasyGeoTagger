@@ -56,7 +56,7 @@ SphericalFunctionEngine::SphericalFunctionEngine( )
 
 /**
  * Constructor
- * @param value	Radius of spherical representation of the earth.  Currently assumed to be in meeters.
+ * @param theRadius The radius of spherical representation of the earth.  Currently assumed to be in meeters.
  */
 SphericalFunctionEngine::SphericalFunctionEngine( double theRadius )
 {

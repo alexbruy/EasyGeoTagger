@@ -1,6 +1,6 @@
 /*
 ** File: egtgpsprovider.cpp
-** Author( s ): Roberto Garcia Yunta
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2009-05-22
 **
 ** Copyright ( c ) 2009, American Museum of Natural History. All rights reserved.
@@ -23,9 +23,6 @@
 **/
 #include "egtgpsprovider.h"
 
-
-
-#include "egtgpxparser.h"
 #include "egtlogger.h"
 
 #include <QtPlugin>
@@ -42,6 +39,7 @@ EgtGpsProvider::EgtGpsProvider( ) : EgtDataProvider( )
   cvFileName = ""; 
   cvFileType ="";
   cvLastError = "";
+  cvFeatureType = EgtGpxParser::Tracks;
 
 
 #ifdef WIN32
@@ -67,7 +65,7 @@ EgtGpsProvider::EgtGpsProvider( ) : EgtDataProvider( )
  */
 
 
-void EgtGpsProvider::notifyInitializationComplete( bool isComplete )
+void EgtGpsProvider::initialized( bool isComplete )
 { 
   EgtDebug( "entered" );
 
@@ -82,12 +80,11 @@ void EgtGpsProvider::notifyInitializationComplete( bool isComplete )
 /*!
  * \param theFileName a QString that contains the name of the file to be read
  */
-EgtDataProvider::ErrorType EgtGpsProvider::setFileName( QString theFileName )
+void EgtGpsProvider::setFileName( QString theFileName )
 {
   EgtDebug( "entered" );
 
   cvFileName = theFileName;
-  return read();
 }
 
 /*
@@ -99,6 +96,7 @@ EgtDataProvider::ErrorType EgtGpsProvider::convert( QString theFileToConvert, QS
 {
   EgtDebug( "entered" );
 
+  //TODO: This should actually look at the contents of the file to make sure it is a GPX file
   if( cvFileType == "gpx" )
   {
     theConvertedFileName = theFileToConvert;
@@ -179,22 +177,27 @@ EgtDataProvider::ErrorType EgtGpsProvider::readGpx( QString theGpxFile )
 {
   EgtDebug( "entered" );
 
-  EgtGpxParser lvHandler;
+  EgtGpxParser lvParser;
+  cvColumnHeaders.clear();
 
-  QFile lvFile( theGpxFile ); //TODO: check if the file exists
-  QXmlInputSource lvXmlSource( &lvFile );
+  QList< QMap< QString, QString > > lvData = lvParser.parse( cvFeatureType, theGpxFile );
+  //cvData = lvParser.parse( cvFeatureType, theGpxFile );
+  cvColumnHeaders << lvParser.headers();
+  cvNumberOfFields= lvParser.headers().size();
 
-  QXmlSimpleReader lvReader;
-  lvReader.setContentHandler( &lvHandler );
-
-  lvHandler.setDataType( EgtGpxParser::Tracks );
-  lvReader.parse( lvXmlSource );
-
-
-  cvData = lvHandler.data();
-  cvNumberOfFields= lvHandler.numberOfFields();
-
-  cvColumnHeaders = lvHandler.headers();
+  //HACK - to get to work with wrong QStringList approach
+  for( int lvListRunner = 0; lvListRunner < lvData.size(); lvListRunner++ )
+  {
+    QStringList lvNewList;
+    QMap< QString, QString > lvMap = lvData.at( lvListRunner );
+    QListIterator< QString > lvIterator( cvColumnHeaders );
+    while( lvIterator.hasNext() )
+    {
+      lvNewList << lvMap.value( lvIterator.next(), "" );
+    }
+    cvData << lvNewList;
+  }
+  //end HACK
 
   cvValid = true;
   return EgtDataProvider::None;

@@ -1,37 +1,41 @@
 /*
 ** File: egtgpxparser.h
-** Author( s ): Roberto Garcia-Yunta
+** Author( s ): Peter J. Ersts ( ersts at amnh.org ), Roberto Garcia-Yunta
 ** Creation Date: 2009-05-08
 **
 ** Copyright ( c ) 2008-2009, American Museum of Natural History. All rights reserved.
-** 
-** This library/program is free software; you can redistribute it 
+**
+** This library/program is free software; you can redistribute it
 ** and/or modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or ( at your option ) any later version.
-** 
+**
 ** This library/program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
 **
-** This work was made possible through a grant by the the John D. and 
-** Catherine T. MacArthur Foundation with additional support from the 
-** Center For Biodiversity and Conservation and The Spanish Ministry of 
+** This work was made possible through a grant by the the John D. and
+** Catherine T. MacArthur Foundation with additional support from the
+** Center For Biodiversity and Conservation and The Spanish Ministry of
 ** Science and Innovation's INTEGRANTS program.
 **
 **/
 #ifndef EGTGPXPARSER_H
 #define EGTGPXPARSER_H
 
-#include <QtXml>
-#include <QXmlDefaultHandler>
+#include <QMap>
+#include <QSet>
+#include <QList>
+#include <QString>
+#include <QDomNode>
+#include <QStringList>
+#include <QDomDocument>
 
-
-class EgtGpxParser : public QXmlDefaultHandler
+class EgtGpxParser
 {
   public:
-    enum DataType
+    enum FeatureTypes
     {
       WayPoints,
       Tracks,
@@ -39,41 +43,37 @@ class EgtGpxParser : public QXmlDefaultHandler
     };
 
     EgtGpxParser();
+
+    QList< QString > headers( );
+
+    QString lastError( ) { return cvLastError; }
+
+    const QList< QMap< QString, QString> > &parse( EgtGpxParser::FeatureTypes );
+
+    const QList< QMap< QString, QString> > &parse( EgtGpxParser::FeatureTypes, QString );
+
+    void setFileName( QString theFileName ) { cvFileName = theFileName; }
  
-    bool characters ( const QString & );
-
-    QList<QStringList> data();
-
-    bool endElement( const QString&, const QString&, const QString& );
-
-    QStringList headers();
-
-    int numberOfFields();
-
-    void reset();
-
-    bool startDocument();
-
-    void setDataType( EgtGpxParser::DataType );
-
-    bool startElement( const QString&, const QString&, const QString&, const QXmlAttributes& );
   
   private:
 
-    EgtGpxParser::DataType cvDataType;
+    void parseRoutes( );
+    void parseTracks( );
+    void parseWayPoints();
+    QMap< QString, QString > parseWayPoint( QDomNode );
 
-    QString cvElementName;
 
-    QList<QStringList>  cvFileData;
 
-    QStringList cvHeader;
+    QList< QMap< QString, QString> >  cvData;
 
-    bool cvInActualData;
+    QDomDocument cvGpxDocument;
 
-    QMap<EgtGpxParser::DataType, QString> cvMapDataTypes;
+    QString cvFileName;
 
-    QMap<QString, QString> cvMapGpxElements;
+    QSet< QString > cvHeaders;
 
-    QStringList cvRowData;
+    QString cvLastError;
+
+    QMap<QString, QString> cvGpxWayPointTags;
 };
 #endif

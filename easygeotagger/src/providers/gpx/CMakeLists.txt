@@ -21,9 +21,10 @@ SET( GPX_MOC_HDRS
    )
 
 SET( GPX_UIS
+     configurationdialog.ui
    )
 
-QT4_WRAP_UI( GPX_TEXT_UIS_H ${GPX_TEXT_UIS} )
+QT4_WRAP_UI( GPX_UIS_H ${GPX_UIS} )
 QT4_AUTOMOC( ${GPX_SRCS} )
 QT4_WRAP_CPP( GPX_MOC_SRCS ${GPX_MOC_HDRS} )
 

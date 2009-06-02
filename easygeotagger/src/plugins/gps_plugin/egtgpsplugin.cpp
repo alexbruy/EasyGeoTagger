@@ -136,7 +136,7 @@ void EgtGpsPlugin::selectDataProvider()
       cvDataProvider = cvApplicationInterface->dataProvider( lvIterator.key() );
       connect( cvDataProvider, SIGNAL( dataProviderReady() ), this, SLOT( setDataProvider() ) );
 
-      cvDataProvider->configure();
+      cvDataProvider->configure( cvApplicationInterface->positionOfFirstVisibleWidget() );
 
       lvIterator = cvAvailableProviders.constEnd();
     }

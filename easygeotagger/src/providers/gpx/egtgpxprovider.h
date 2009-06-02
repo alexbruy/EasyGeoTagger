@@ -1,6 +1,6 @@
 /*
 ** File: egtgpxprovider.h
-** Author( s ): Roberto Garcia Yunta
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2009-05-22
 **
 ** Copyright ( c ) 2009, American Museum of Natural History. All rights reserved.
@@ -24,11 +24,15 @@
 #ifndef EGTGPXPROVIDER_H
 #define EGTGPXPROVIDER_H
 
-
+#include <QDialog>
 
 #include "egtgpsprovider.h"
+#include "ui_configurationdialog.h"
 
-
+namespace Ui
+{
+  class ConfigurationDialog;
+}
 
 class EgtGpxProvider: public EgtGpsProvider
 {
@@ -40,17 +44,17 @@ class EgtGpxProvider: public EgtGpsProvider
     /*! \brief Constuctor */
     EgtGpxProvider( );
 
-    void configure( );
+    void configure( QPoint );
 
     EgtDataProvider* instance( ) { return new EgtGpxProvider(); }
 
-    /*! \brief Selects the character that will be considered as delimiter when reading a text file */
-    void showConfigurationDialog( );
+  private slots:
+    void cancel();
+    void finishConfiguration();
 
-  protected:
-
-    //EgtKmlConfigurationDialog* cvConfigurationDialog;
-
+  private:
+    QDialog cvConfigurationDialog;
+    Ui::ConfigurationDialog* ui;
  
 };
 #endif

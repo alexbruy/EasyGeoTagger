@@ -1,6 +1,6 @@
 /*
-** File: egtkmlprovider.cpp
-** Author( s ): Roberto Garcia Yunta
+** File: egtgpxprovider.cpp
+** Author( s ): Roberto Garcia Yunta, Peter J. Ersts ( ersts at amnh.org )
 ** Creation Date: 2009-05-22
 **
 ** Copyright ( c ) 2009, American Museum of Natural History. All rights reserved.
@@ -23,19 +23,11 @@
 **/
 #include "egtgpxprovider.h"
 
-#include "egtgpsbabelinterface.h"
-
-
 #include "egtgpxparser.h"
 #include "egtlogger.h"
 
 #include <QtPlugin>
-#include <QFile>
-#include <QTextStream>
-#include <QApplication>
-#include <QMessageBox>
 #include <QFileDialog>
-#include <QTemporaryFile>
 
 EgtGpxProvider::EgtGpxProvider( ) : EgtGpsProvider( )
 {
@@ -43,7 +35,10 @@ EgtGpxProvider::EgtGpxProvider( ) : EgtGpsProvider( )
   cvLastError = "";
   cvName = "GPX";
   cvFileType = "gpx";
-  //cvConfigurationDialog = 0;
+  ui = new Ui::ConfigurationDialog();
+  ui->setupUi( &cvConfigurationDialog );
+  connect( ui->buttonBox, SIGNAL( rejected() ), this, SLOT( cancel() ) );
+  connect( ui->buttonBox, SIGNAL( accepted() ), this, SLOT( finishConfiguration() ) );
 }
 
 /*
@@ -51,25 +46,20 @@ EgtGpxProvider::EgtGpxProvider( ) : EgtGpsProvider( )
  * PUBLIC FUNCTIONS
  *
  */
-void EgtGpxProvider::configure( ) //init function
+void EgtGpxProvider::configure( QPoint theScreenLocation )
 {
   EgtDebug( "entered" );
 
-  QWidgetList lvActiveWindows = QApplication::topLevelWidgets( );
-  QWidget* lvParent = 0;
 
-  for( int i = 0; i < lvActiveWindows.size( ); i++ )
+  QStringList lvFileNames;
+  QFileDialog lvFileDialog( 0, tr( "Open GPX File" ), "/home", tr( "GPX Files ( *.gpx  )" ) );
+  lvFileDialog.setFileMode( QFileDialog::ExistingFile ); // A single existing file
+  lvFileDialog.move( theScreenLocation );
+  if ( lvFileDialog.exec() )
   {
-    if( tr( "Available Providers" ) == lvActiveWindows[i]->windowTitle( ) )
-    {
-      lvParent = lvActiveWindows[i];
-    }
+    lvFileNames = lvFileDialog.selectedFiles();
   }
 
-  QFileDialog lvFileDialog( lvParent, tr( "Open GPX File" ), "/home", tr( "GPX Files ( *.gpx  )" ) );
-  lvFileDialog.setFileMode( QFileDialog::ExistingFile ); // A single existing file
-  QStringList lvFileNames;
-  if ( lvFileDialog.exec() ){ lvFileNames = lvFileDialog.selectedFiles(); }
   if( ! lvFileNames.isEmpty() )
   {
     QString lvFileName = lvFileNames[0];
@@ -78,18 +68,44 @@ void EgtGpxProvider::configure( ) //init function
     {
       setFileName( lvFileName );
     
-      showConfigurationDialog( );
+      cvConfigurationDialog.move( theScreenLocation );
+      cvConfigurationDialog.show( );
     }
+  }
+  else
+  {
+    cvLastError = tr( "User canceled initialization" );
+    initialized( false );
   }
 } 
 
-
-void EgtGpxProvider::showConfigurationDialog( )
+/*
+ *
+ * PRIVATE FUNCTIONS
+ *
+ */
+void EgtGpxProvider::cancel()
 {
-  EgtDebug( "entered" );
-
-  notifyInitializationComplete( true );
+  cvLastError = tr( "User canceled initialization" );
+  initialized( false );
 }
 
+void EgtGpxProvider::finishConfiguration()
+{
+  if( ui->rbtnRoute->isChecked() )
+  {
+    cvFeatureType = EgtGpxParser::Routes;
+  }
+  else if( ui->rbtnTrack->isChecked() )
+  {
+    cvFeatureType = EgtGpxParser::Tracks;
+  }
+  else
+  {
+    cvFeatureType = EgtGpxParser::WayPoints;
+  }
+
+  initialized( EgtDataProvider::None ==  read() );
+}
 
 Q_EXPORT_PLUGIN2( gpxprovider, EgtGpxProvider );

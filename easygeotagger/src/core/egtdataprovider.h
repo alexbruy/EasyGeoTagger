@@ -25,6 +25,7 @@
 #define EGTDATAPROVIDER_H
 
 #include <QList>
+#include <QPoint>
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -57,7 +58,7 @@ class MS_DLL_SPEC EgtDataProvider : public QObject
     QStringList columnHeaders( ) { return cvColumnHeaders; }
 
     /*! \brief Entry point for derived classes so they can graphically display their options */
-    virtual void configure( ) { emit dataProviderReady( ); }
+    virtual void configure( QPoint thePoint ) { emit dataProviderReady( ); }
 
     /*! \brief Does the data file have column headers */
     bool hasColumnHeaders( ) { return cvHasColumnHeaders; }
