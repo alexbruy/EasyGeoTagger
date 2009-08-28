@@ -1,0 +1,875 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <info>
+    <title>EasyGeoTagger (EasyGT) User's Guide - [DRAFT]</title>
+
+    <subtitle>DRAFT: For use with EasyGeoTagger beta version 0.4.0</subtitle>
+
+    <mediaobject>
+      <imageobject role="fo-fop">
+        <imagedata depth="100%" fileref="Screenshots/TitlePage.png"
+                   scalefit="1" width="100%"></imagedata>
+      </imageobject>
+
+      <imageobject role="html">
+        <imagedata fileref="Screenshots/TitlePage_htm.png"></imagedata>
+      </imageobject>
+    </mediaobject>
+  </info>
+
+  <para>This document was generated <?dbtimestamp format="Y-m-d H:M:S"?>.</para>
+
+  <section>
+    <title>About EasyGT</title>
+
+    <para>EasyGeoTagger ( EasyGT ) is an open source software application for
+    geotagging digital images that runs on Linux, OSX and Windows. Geotagging
+    is the process of embedding geographic coordinates ( i.e., latitude and
+    longitude ) and other spatial attributes into a digital image. This
+    geographic information can be used to document, for example, the location
+    where the photographer took the image and the direction the camera was
+    pointing. Geotagged images can be used to identify and monitor changes in
+    a landscape over time, which makes EasyGT a powerful tool for conservation
+    and natural resource management initiatives. Our goal in developing EasyGT
+    is to simplify the process of geotagging digital images and to promote
+    photo-monitoring and the effective use of ground-based digital imagery in
+    scientific initiatives focused on identifying and quantifying changes in
+    the Earth's terrestrial and marine environments</para>
+
+    <para>EasyGT also comes with additional plugins that greatly extend the
+    capabilities of <link xlink:href="http://www.qgis.org/">QuantumGIS ( QGIS
+    )</link>, a free and open source desktop geographic information system.
+    EasyGT includes a native QGIS data provider and accompanying plugin (
+    LoadExifDataset ) that allows a directory of geotagged images to be
+    treated as vector (i.e., point ) data source. Together with the <link
+    xlink:href="http://biodiversityinformatics.amnh.org/open_source/evis/">Event
+    Visualization Tool ( eVis )</link>, natural resource managers,
+    conservation practitioners and general enthusiasts have access to powerful
+    suite of free tools for editing, mapping, and displaying digital images in
+    a geographic context.</para>
+
+    <para>With EasyGT, geotagging is...just easy.</para>
+  </section>
+
+  <section>
+    <title>Conventions used in this guide</title>
+
+    <para><itemizedlist>
+        <listitem>
+          <para>Pulldown menu commands appear in <guimenuitem>bold
+          italics</guimenuitem></para>
+        </listitem>
+
+        <listitem>
+          <para>Sequential pulldown menu commands are concatenated using
+          "&gt;" (i.e., <menuchoice>
+              <guimenu>File</guimenu>
+
+              <guimenuitem>Open</guimenuitem>
+            </menuchoice>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Window and dialog titles and titles or headings for parameter
+          input objects (radio buttons, text boxes, drop-down menus) are in
+          <guilabel>bold </guilabel> (i.e., <guilabel>Mode</guilabel>:
+          dropdown list)</para>
+        </listitem>
+
+        <listitem>
+          <para>Window and dialog tabs will be in <guilabel>bold</guilabel>
+          but they will be followed by “tab” (i.e., Click on the
+          <guilabel>Channels</guilabel> tab)</para>
+        </listitem>
+
+        <listitem>
+          <para>Parameter inputs (either typed in or selected from a list) are
+          printed using a <userinput>bold Courier font</userinput> (i.e.,
+          Enter <userinput>My Project</userinput> into the <guilabel>Project
+          Name</guilabel> text box</para>
+        </listitem>
+
+        <listitem>
+          <para>The term "click" will be used to specify a
+          <mousebutton>left</mousebutton>-mouse click and "right click" will
+          be used to specify a <mousebutton>right</mousebutton>-mouse
+          click.</para>
+        </listitem>
+      </itemizedlist></para>
+  </section>
+
+  <section>
+    <title>Installing EasyGT</title>
+
+    <para><variablelist>
+        <varlistentry>
+          <term><emphasis role="bold">Ubuntu</emphasis></term>
+
+          <listitem>
+            <para>A Ubuntu stand alone binary is not yet available. You can
+            however easily build EasyGeoTagger from source by following the
+            directions on the <link
+            xlink:href="https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger">EasyGeoTagger
+            Trac site</link>.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term><emphasis role="bold">Windows XP and Vista -
+          OSGeo4W</emphasis></term>
+
+          <listitem>
+            <para>In order to use EasyGT with the OSGeo4W distribution, you
+            will need to make sure several packages are installed</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>Start the OSGeo4W setup program</para>
+              </listitem>
+
+              <listitem>
+                <para>Select Advanced Install</para>
+              </listitem>
+
+              <listitem>
+                <para>Answer the subsequent of the questions based on your
+                setup until you get to the "Select Packages" screen</para>
+              </listitem>
+
+              <listitem>
+                <para>Make sure the following packages are installed under the
+                "Lib" tree</para>
+
+                <orderedlist>
+                  <listitem>
+                    <para>Exiv2</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>SIP</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>PyQt4</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Python-win32</para>
+                  </listitem>
+                </orderedlist>
+              </listitem>
+            </itemizedlist>
+
+            <para>Double click on the EasyGeoTagger_0_3_0_OSGeo4W.exe and
+            select the root folder of your OSGeo4W install.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term><emphasis role="bold">Windows XP and Vista - Stand alone
+          application</emphasis></term>
+
+          <listitem>
+            <para>A Windows stand alone binary is not yet available.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term><emphasis role="bold">Mac OSX</emphasis></term>
+
+          <listitem>
+            <para>A Mac OSX binary is not yet available.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist></para>
+  </section>
+
+  <section xml:id="sec6">
+    <title>Using EasyGT</title>
+
+    <para>EasyGT can be used as a stand alone application or as a QGIS
+    plugin.</para>
+
+    <section>
+      <title>Using EasyGT as a stand alone application</title>
+
+      <para></para>
+
+      <variablelist>
+        <varlistentry>
+          <term><emphasis role="bold">Ubuntu</emphasis></term>
+
+          <listitem>
+            <para>To launch EasyGT, open a terminal and type, <emphasis
+            role="bold">easygeotagger</emphasis></para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term><emphasis role="bold">Windows XP and Vista -
+          OSGeo4W</emphasis></term>
+
+          <listitem>
+            <para>Double click the EasyGT shortcut on your desktop, or select
+            <menuchoice>
+                <guiicon>Start</guiicon>
+
+                <guimenuitem>EasyGeoTagger</guimenuitem>
+
+                <guisubmenu>EasyGT</guisubmenu>
+              </menuchoice></para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term><emphasis role="bold">Windows XP and Vista - Stand alone
+          application</emphasis></term>
+
+          <listitem>
+            <para>A Windows stand alone binary is not yet available.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term><emphasis role="bold">Mac OSX</emphasis></term>
+
+          <listitem>
+            <para>A Mac OSX binary is not available in this release.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section>
+      <title>Using EasyGT as a QGIS plugin</title>
+
+      <para>The EasyGT QGIS plugin offers the same functionality that the
+      stand alone version but allows you to transmit coordinates to the EXIF
+      editor by clicking on the map canvas. EasyGT also includes a native data
+      provider and accompanying plugin ( LoadExifDataset ) that allows a
+      directory of geotagged images to be treated as vector ( point ) data
+      source.</para>
+
+      <para><variablelist>
+          <varlistentry>
+            <term><emphasis role="bold">Ubuntu</emphasis></term>
+
+            <listitem>
+              <para>If you have followed the build instruction on the wiki,
+              simply start QGIS!</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><emphasis role="bold">Windows XP and Vista -
+            OSGeo4W</emphasis></term>
+
+            <listitem>
+              <para>This requires that <link
+              xlink:href="http://trac.osgeo.org/osgeo4w/">OSGeo4W</link> is
+              installed on your computer. Start QGIS by double clicking the
+              desktop icon or select <menuchoice>
+                  <guiicon>Start</guiicon>
+
+                  <guimenuitem>OSGeo4W</guimenuitem>
+
+                  <guimenuitem>Quantum GIS 1.0</guimenuitem>
+                </menuchoice></para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><emphasis role="bold">Windows XP and Vista - MinGW
+            Build</emphasis></term>
+
+            <listitem>
+              <para>A MinGW build of QGIS is not yet available.</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term><emphasis role="bold">Mac OSX</emphasis></term>
+
+            <listitem>
+              <para>A Mac OSX binary is not yet available.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist></para>
+    </section>
+
+    <section>
+      <title>Understanding the interface</title>
+
+      <para>The EasyGT interface consists of menu items, a file browser, an
+      image preview window, and a plugin selection area.</para>
+
+      <screenshot>
+        <info>
+          <title>EasyGT interface</title>
+        </info>
+
+        <mediaobject>
+          <imageobject role="fo-fop">
+            <imagedata fileref="Screenshots/EasyGT_Window300_text.png"
+                       format="" scalefit="1" width="6in"></imagedata>
+          </imageobject>
+
+          <imageobject role="html">
+            <imagedata fileref="Screenshots/EasyGT_Window300_text_htm.png"></imagedata>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <orderedlist numeration="upperalpha">
+        <listitem>
+          <para><emphasis>Menu items </emphasis>– The <guimenu>File</guimenu>
+          menu can be used to exit EasyGT. The <guimenu>Plugin</guimenu> menu
+          provides the ability to load new plugins without having to restart
+          the application.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>File browser </emphasis> – The <guilabel>file
+          browser </guilabel>dialog is used to select directories and specific
+          image files to be processed. A checkbox labeled <guilabel>Highlight
+          GPS EXIF Availability</guilabel> below the <guilabel>file
+          browser</guilabel> dialog will color files green if geotagging
+          information exists in the file and all other image files will be
+          colored red. When highlighting is activated there may be a slight
+          delay in highlighting files as well as browsing, which will vary
+          between computers. The data and time information stored with the
+          image is also displayed under the file browser. Clicking on an image
+          will display it in the <guilabel>Image Preview</guilabel> window and
+          will select it for processing by a plugin.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Image preview window</emphasis> – When an image file
+          with a format recognized by EasyGT is highlighted in the file
+          browser it will be displayed in the <guilabel>Image Preview
+          </guilabel>window. A progress bar under the <guilabel>image
+          preview</guilabel> window displays the display progress. This is
+          particularly helpful with large images.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Plugin panel</emphasis> – To select a plugin click
+          on the plugin group description button to display the plugins in
+          that group. To active the plugin click on the button with the plugin
+          name. This version has three plugin groups: Coordinate Extraction,
+          EXIF Editors, and Utilities.</para>
+        </listitem>
+      </orderedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Plugin description</title>
+
+    <para>EasyGT relies on plugins to provide its functionality. Plugins are
+    grouped by functionality. In this version of EasyGT there are three plugin
+    groups: Coordinate Extraction, EXIF Editors, and Utilities. Within each
+    group there can be multiple plugins and each has a brief description of
+    what it does. As EasyGT development continues more plugins will be
+    added.</para>
+
+    <section>
+      <title>EXIF editor</title>
+
+      <para>There is one plugin related to editing EXIF data.</para>
+
+      <section>
+        <title>GPS EXIF editor</title>
+
+        <para>The GPS EXIF Editor plugin is the interface to add and edit EXIF
+        information (i.e., metadata stored with the image). This plugin must
+        be activated for other plugins that update or edit EXIF information to
+        work.</para>
+
+        <para>Clicking on the <guibutton>GPS EXIF Editor</guibutton> button
+        opens a data entry form on the right-side of the EasyGT window.</para>
+
+        <screenshot>
+          <info>
+            <title>EXIF editor pane</title>
+          </info>
+
+          <mediaobject>
+            <imageobject role="fo-fop">
+              <imagedata fileref="Screenshots/EXIF_FieldEditor.png"
+                         scalefit="1" width="3in"></imagedata>
+            </imageobject>
+
+            <imageobject role="html">
+              <imagedata fileref="Screenshots/EXIF_FieldEditor_htm.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>To modify the fields displayed in the form click on the
+        Configure icon <guiicon><inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="Screenshots/ConfigureIcon.png"></imagedata>
+            </imageobject>
+          </inlinemediaobject></guiicon> to open the
+        <guilabel>Configure</guilabel> dialog.</para>
+
+        <para>Data can be typed directly into the fields or other plugins can
+        be used to transmit information to the editor from files or maps. When
+        data in an editor field changes, the X (_____NEED IMAGE_____) icon
+        will become active. Clicking this icon will discard the current
+        changes.</para>
+
+        <para>To save the EXIF data in the <guilabel>GPS EXIF
+        Editor</guilabel>, into the currently selected image, click on the
+        <guibutton>Save</guibutton> button.</para>
+
+        <screenshot>
+          <info>
+            <title>Configure dialog</title>
+          </info>
+
+          <mediaobject>
+            <imageobject role="fo-fop">
+              <imagedata fileref="Screenshots/EXIFConfigureOptions.png"
+                         scalefit="1" width="2.5in"></imagedata>
+            </imageobject>
+
+            <imageobject role="html">
+              <imagedata fileref="Screenshots/EXIFConfigureOptions_htm.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>Default selections can be made by clicking on one of the
+        <guilabel>Tag Groups </guilabel>at the top of the dialog or customized
+        selections can be made by checking or un-checking the checkboxes for
+        the individual tags. When the tag selection is done click on
+        <guilabel>OK</guilabel> to close the <guilabel>Configure</guilabel>
+        dialog and display the selected fields in the <guilabel>GPS EXIF
+        Editor</guilabel> pane.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Coordinate extraction</title>
+
+      <para>Coordinate extraction plugins all data from alternative sources to
+      be selected and transmitted to the editor plugins.</para>
+
+      <section>
+        <title>Google Map</title>
+
+        <para>Clicking on the Google Map plugin opens a window that displays a
+        map if the computer is connected to the Internet. The controls in the
+        upper right corner of the map window allow you to display a map, a
+        satellite image, or a hybrid with a satellite image background with
+        map layers overlaid. The controls in the upper left corner of the
+        window control zooming (<guibutton>+ </guibutton>and
+        <guibutton>-</guibutton> buttons) and panning using the arrow buttons.
+        You can also zoom into an area by double-clicking with the
+        <mousebutton>left</mousebutton> mouse button. To pan you can click and
+        hold the <mousebutton>left</mousebutton> mouse button then drag the
+        image. To record the latitude and longitude coordinates for a point
+        <mousebutton>right</mousebutton>-click on the point of interest and
+        the coordinates will appear in the text boxes below the image. Click
+        on the<guibutton> Save Coordinates </guibutton>button at the bottom of
+        the Google Map window insert the coordinates into the <guilabel>GPS
+        EXIF Editor</guilabel>. As long as the <guilabel>GPS EXIF
+        Editor</guilabel> pane is open and you have selected a valid image to
+        be geotagged you will see these coordinates appear in the “Longitude”
+        and “Latitude” fields.</para>
+
+        <para><screenshot>
+            <info>
+              <title>Google Map</title>
+            </info>
+
+            <mediaobject>
+              <imageobject role="fo-fop">
+                <imagedata fileref="Screenshots/GoogleMapWindow.png"
+                           scalefit="1" width="4in"></imagedata>
+              </imageobject>
+
+              <imageobject role="html">
+                <imagedata fileref="Screenshots/GoogleMapWindow_htm.png"
+                           scalefit="1" width="4in"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </screenshot></para>
+      </section>
+
+      <section>
+        <title>GPS Data</title>
+
+        <para>Currently the GPS data reader will allow you to read in a
+        delimited text, GPX, or KML file with routes, waypoints or track data.
+        You can load your GPS data into the <guilabel>Data Table</guilabel>
+        window by clicking on the <guibutton>GPS Data</guibutton> plugin
+        button. To open a GPS file click on the <guibutton>Open
+        File</guibutton> icon <guiicon><inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="Screenshots/OpenIcon.png"></imagedata>
+            </imageobject>
+          </inlinemediaobject></guiicon> in the upper right corner of the
+        <guilabel>Data Table</guilabel> window. This will open a small dialog
+        listing the three data providers currently supported: Delimited Text,
+        GPX, and KML.</para>
+
+        <para><screenshot>
+            <info>
+              <title>Select feature type</title>
+            </info>
+
+            <mediaobject>
+              <imageobject role="fo-fop">
+                <imagedata fileref="Screenshots/GPS_FeatureTypeDialog.png"
+                           scalefit="1" width="3in"></imagedata>
+              </imageobject>
+
+              <imageobject role="html">
+                <imagedata fileref="Screenshots/GPS_FeatureTypeDialog_htm.png"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </screenshot></para>
+
+        <para>Select the radio button that corresponds to your data type then
+        click on the <guibutton>OK</guibutton> button. This will open a
+        <guilabel>file selection</guilabel> dialog. After selecting the file
+        you want to use click on the <guibutton>Open</guibutton> button.
+        Another dialog will open that allows you to select the feature type
+        (Route, Track, or Way Point) you want to use or reader specific
+        options. After making your selections click on the
+        <guibutton>OK</guibutton> button to load the GPS data from the file
+        into the <guilabel>Data Table</guilabel> window.</para>
+
+        <para><screenshot>
+            <info>
+              <title>Data table window</title>
+            </info>
+
+            <mediaobject>
+              <imageobject role="fo-fop">
+                <imagedata fileref="Screenshots/DataTableGreenHead.png"
+                           scalefit="1" width="4in"></imagedata>
+              </imageobject>
+
+              <imageobject role="html">
+                <imagedata fileref="Screenshots/DataTableGreenHead_htm.png"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </screenshot></para>
+
+        <para>Rows of data can be removed from the table by clicking on the
+        row number in the column on the left side of the table and then click
+        on the <guibutton>Delete Row</guibutton> icon
+        <guiicon><inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="Screenshots/DeleteRow.png"></imagedata>
+            </imageobject>
+          </inlinemediaobject></guiicon>.</para>
+
+        <para>Each column has a default heading but the column heading must be
+        assigned to or associated with EXIF fields before further processing.
+        To set a column heading click on the heading and then select the
+        correct field from the Available Fields dropdown menu. When a heading
+        in the <guilabel>Data Table</guilabel> is set the heading label is
+        colored green.</para>
+
+        <para>If the Date Time Stamp heading is set the <guibutton>Set Time
+        Offset</guibutton> buttons become active. By setting an offset it is
+        possible to correct discrepancies in time between the GPS data and
+        time data stored with an image. The time offset can be set manually or
+        by using an image of a GPS receiver that shows the time and date
+        displayed on the GPS receiver’s screen. Keep in mind that the GPS
+        receiver records UTC time and this may differ from what is actually
+        displayed.</para>
+
+        <para>To set the time offset manually click on the
+        <guibutton>Manual</guibutton> button at the bottom of the
+        <guilabel>Data Table</guilabel>. This will open the
+        <guilabel>Synchronize</guilabel> dialog.</para>
+
+        <para><screenshot>
+            <info>
+              <title>Synchronize time manually</title>
+            </info>
+
+            <mediaobject>
+              <imageobject role="fo-fop">
+                <imagedata fileref="Screenshots/TimeStampSynchronize.png"
+                           scalefit="1" width="4in"></imagedata>
+              </imageobject>
+
+              <imageobject role="html">
+                <imagedata fileref="Screenshots/TimeStampSynchronize_htm.png"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </screenshot></para>
+
+        <para>To set the time offset using a picture of a GPS receiver screen
+        that displays the time click on the <guibutton>With
+        Picture</guibutton> button. This will open the
+        <guilabel>Synchronize</guilabel> dialog with an option to display an
+        image. Click on the File Open icon <guiicon><inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="Screenshots/OpenIcon.png"></imagedata>
+            </imageobject>
+          </inlinemediaobject></guiicon> to open the <guilabel>Open Image
+        File</guilabel> window. Select the image that you want to use for
+        synchronization and click the <guibutton>Open</guibutton> button. The
+        image will be displayed in the <guilabel>Synchronize</guilabel> window
+        and the time data recorded with the image (this is based on the clock
+        inside the camera that acquired the image) will be displayed above the
+        image. Use the text boxes below the image to enter the time (UTC)
+        recorded by the GPS receiver. If this time displayed has been adjusted
+        for local time then it will be necessary to account for the difference
+        between UTC and local time.</para>
+
+        <para><screenshot>
+            <info>
+              <title>Synchronize time using a picture</title>
+            </info>
+
+            <mediaobject>
+              <imageobject role="fo-fop">
+                <imagedata fileref="Screenshots/TimeStampSyncWithPhoto.png"
+                           scalefit="1" width="4in"></imagedata>
+              </imageobject>
+
+              <imageobject role="html">
+                <imagedata fileref="Screenshots/TimeStampSyncWithPhoto_htm.png"></imagedata>
+              </imageobject>
+            </mediaobject>
+          </screenshot></para>
+
+        <para>To send the data from a row in the Data Table window to the
+        EasyGeoTagger GPS EXIF Editor (see section 5.1.1) first select the row
+        by clicking on the column number on the left side of the table. When
+        the row is selected click the <guibutton>Send Row to
+        Editor</guibutton> button and the data in the columns which have had
+        their headers set and are displayed as green header for the selected
+        row will be sent to the current editor.</para>
+
+        <para>The data table also has an Interpolate feature. If you set the
+        <guilabel>Latitude</guilabel>, <guilabel>Longitude</guilabel>, and
+        <guilabel>Date Time Stamp</guilabel> fields, the
+        <guibutton>interpolate</guibutton> button will become active. Clicking
+        the <guibutton>interpolate</guibutton> button will cause the table to
+        be sorted by Date Time Stamp, then new entries will be inserted
+        between existing entries so there is an entry in the table for every
+        second. On the <guilabel>Latitude</guilabel>,
+        <guilabel>Longitude</guilabel> and <guilabel>Date Time
+        Stamp</guilabel> fields will be interpolated, all other fields will
+        remain blank. Interpolation can take some time, so be patient.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Utilities</title>
+
+      <para></para>
+
+      <section>
+        <title>EXIF to CSV</title>
+
+        <para>This plugin creates a comma separated values (CSV) formatted
+        file from a directory of geotagged images. The CSV file will included
+        GPS-related attributes from the image EXIF information for each image
+        in a directory that has GPS EXIF attributes. To select a directory you
+        can either select a file in the <guilabel>EasyGT file
+        browser</guilabel> or just select a directory. In either case the
+        output CSV file will include attributes from all of the images in the
+        directory. The output CSV file name will be: Dir_Export_Date_Time.csv
+        where: Dir = The name of the directory, Export = The word “Export”,
+        Date = The date the CSV file was created in YYYYMMDD format, Time =
+        The time the CSV file was created in HHMMSS format.</para>
+      </section>
+
+      <section>
+        <title>Save as JPEG</title>
+
+        <para>This plugin will convert the currently selected image to a JPG
+        and copy any EXIF data in the original image. The process is collision
+        proof. If the image is already a JPG a new version will be created to
+        prevent overwriting an existing image.</para>
+      </section>
+
+      <section>
+        <title>Python Console</title>
+
+        <para>The Python console allows real time Python scripting of EasyGT.
+        Your Python code can be a single line command or multi line.</para>
+
+        <screenshot>
+          <info>
+            <title>Python console</title>
+          </info>
+
+          <mediaobject>
+            <imageobject role="fo-fop">
+              <imagedata fileref="Screenshots/PythonWindow.png" scalefit="1"
+                         version="" width="4in"></imagedata>
+            </imageobject>
+
+            <imageobject role="html">
+              <imagedata fileref="Screenshots/PythonWindow_htm.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>QGIS enhancements</title>
+
+    <para>When using EasyGT via a plugin in QGIS there is some additional
+    functionality not available from the stand alone version. This includes
+    the capability of getting coordinates from a layer displayed in QGIS and
+    automatically displaying the location of all geotagged images in a
+    directory. Before using EasyGT with QGIS it is necessary to install and
+    configure the QGIS EasyGeoTagger and LoadExifDataset plugins using the
+    process described in Section 4.2.</para>
+
+    <section>
+      <title>Display locations of geotagged images in a directory as a QGIS
+      layer</title>
+
+      <para>Click on the <guibutton>LoadExifDataset</guibutton> icon
+      <guiicon><inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="Screenshots/LoadExifDatasetIcon.png"></imagedata>
+          </imageobject>
+        </inlinemediaobject></guiicon> or select
+      <guimenu>LoadExifDataset</guimenu> from the QGIS plugins menu. The
+      <guilabel>Load EXIF Layer</guilabel> dialog will open. To select a
+      directory you can either select a file or a directory. In either case,
+      when you click on the <guilabel>OK</guilabel> button the location of the
+      coordinates for all of the geotagged images in the selected directory
+      (or the directory of the file you selected) will be displayed in the
+      QGIS map canvas and the layer will be visible in the QGIS legend.</para>
+
+      <para><screenshot>
+          <info>
+            <title>Load EXIF Layer</title>
+          </info>
+
+          <mediaobject>
+            <imageobject role="fo-fop">
+              <imagedata fileref="Screenshots/LoadEXIF_LayerWindow.png"
+                         scalefit="1" width="6in"></imagedata>
+            </imageobject>
+
+            <imageobject role="html">
+              <imagedata fileref="Screenshots/LoadEXIF_LayerWindow_htm.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </screenshot></para>
+    </section>
+
+    <section>
+      <title>Collecting coordinates from a QGIS layer</title>
+
+      <para>Click on the <guibutton>EasyGeoTagger </guibutton>icon
+      <guiicon><inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="Screenshots/EasyGT_Icon.png"></imagedata>
+          </imageobject>
+        </inlinemediaobject></guiicon> or select
+      <guimenuitem>EasyGeoTagger</guimenuitem> from the QGIS plugins menu. The
+      <guilabel>EasyGeoTagger</guilabel> interface and the <guilabel>Auto
+      arrange/Activate</guilabel> buttons will appear.</para>
+
+      <para><screenshot>
+          <info>
+            <title>Auto arrange</title>
+          </info>
+
+          <mediaobject>
+            <imageobject role="fo-fop">
+              <imagedata fileref="Screenshots/AutoArrange.png" scalefit="1"
+                         width="4in"></imagedata>
+            </imageobject>
+
+            <imageobject role="html">
+              <imagedata fileref="Screenshots/AutoArrange_htm.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </screenshot>Click on the <guilabel>Auto arrange</guilabel> button to
+      automatically arrange the windows so they fit on the screen with all of
+      them being visible. You can manually move or resize the windows although
+      there is a minimum size for each window. To add coordinates to an image
+      you must first navigate to the image you want to add coordinates to
+      using the file browser in the <guilabel>EasyGT file browser</guilabel>.
+      When selected it will be displayed in the image preview window. Next,
+      click on the <guilabel>EXIF Editors</guilabel> plugin button in the
+      EasyGT plugin section and then click on the <guilabel>GPS EXIF
+      Editor</guilabel> button to open the editor on the right side of the
+      EasyGT interface. Click on the <guilabel>Activate button</guilabel> in
+      the <guilabel>Auto arrange/Active</guilabel> dialog to activate the link
+      between EasyGT and QGIS. Now when you click on the QGIS map canvas the
+      coordinates (latitude and longitude) will be displayed in the
+      <guilabel>GPS EXIF Editor</guilabel> dialog.</para>
+
+      <para><screenshot>
+          <info>
+            <title>EasyGT QGIS plugin</title>
+          </info>
+
+          <mediaobject>
+            <imageobject role="fo-fop">
+              <imagedata fileref="Screenshots/QGIS_EasyGTPlugin.png" format=""
+                         scalefit="1" width="6in"></imagedata>
+            </imageobject>
+
+            <imageobject role="html">
+              <imagedata fileref="Screenshots/QGIS_EasyGTPlugin_htm.png"></imagedata>
+            </imageobject>
+          </mediaobject>
+        </screenshot></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Citations</title>
+
+    <para>If you cite this document we ask that you include the following
+    information:</para>
+
+    <para>Horning, N., P. Ersts. 2009. EasyGT (0.4.0) User's Guide. American
+    Museum of Natural History, Center for Biodiversity and Conservation.
+    Available from http://biodiversityinformatics.amnh.org/. (accessed on
+    today’s date).</para>
+  </section>
+
+  <section>
+    <title>License</title>
+
+    <para>This exercise is licensed under a <link
+    xlink:href="http://creativecommons.org/licenses/by-sa/3.0/us/">Creative
+    Commons Attribution-Share Alike 3.0 License</link>. You are free to alter
+    the work, copy, distribute, and transmit the document under the following
+    conditions:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>You must attribute the work in the manner specified by the
+        author or licensor (but not in any way that suggests that they endorse
+        you or your use of the work).</para>
+      </listitem>
+
+      <listitem>
+        <para>If you alter, transform, or build upon this work, you may
+        distribute the resulting work only under the same, similar or a
+        compatible license.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</article>
