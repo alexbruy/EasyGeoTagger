@@ -112,7 +112,7 @@
           <term><emphasis role="bold">Ubuntu</emphasis></term>
 
           <listitem>
-            <para>A Ubuntu stand alone binary is not yet available. You can
+            <para>An Ubuntu stand alone binary is not yet available. You can
             however easily build EasyGeoTagger from source by following the
             directions on the <link
             xlink:href="https://trac.biodiversityinformatics.amnh.org/projects/easygeotagger">EasyGeoTagger
@@ -138,8 +138,8 @@
               </listitem>
 
               <listitem>
-                <para>Answer the subsequent of the questions based on your
-                setup until you get to the "Select Packages" screen</para>
+                <para>Answer the subsequent questions based on your setup
+                until you get to the "Select Packages" screen</para>
               </listitem>
 
               <listitem>
@@ -206,8 +206,8 @@
           <term><emphasis role="bold">Ubuntu</emphasis></term>
 
           <listitem>
-            <para>To launch EasyGT, open a terminal and type, <emphasis
-            role="bold">easygeotagger</emphasis></para>
+            <para>To launch EasyGT, open a terminal and type,
+            <userinput>easygeotagger</userinput></para>
           </listitem>
         </varlistentry>
 
@@ -353,8 +353,8 @@
           <para><emphasis>Image preview window</emphasis> – When an image file
           with a format recognized by EasyGT is highlighted in the file
           browser it will be displayed in the <guilabel>Image Preview
-          </guilabel>window. A progress bar under the <guilabel>image
-          preview</guilabel> window displays the display progress. This is
+          </guilabel>window. A progress bar under the <guilabel>Image
+          Preview</guilabel> window displays the display progress. This is
           particularly helpful with large images.</para>
         </listitem>
 
@@ -422,9 +422,13 @@
 
         <para>Data can be typed directly into the fields or other plugins can
         be used to transmit information to the editor from files or maps. When
-        data in an editor field changes, the X (_____NEED IMAGE_____) icon
-        will become active. Clicking this icon will discard the current
-        changes.</para>
+        data in an editor field changes, the X icon
+        <guiicon><inlinemediaobject>
+            <imageobject>
+              <imagedata fileref="Screenshots/EXIF_FieldEditorIcon.png"></imagedata>
+            </imageobject>
+          </inlinemediaobject></guiicon> will become active. Clicking this
+        icon will discard the current changes.</para>
 
         <para>To save the EXIF data in the <guilabel>GPS EXIF
         Editor</guilabel>, into the currently selected image, click on the
@@ -460,8 +464,8 @@
     <section>
       <title>Coordinate extraction</title>
 
-      <para>Coordinate extraction plugins all data from alternative sources to
-      be selected and transmitted to the editor plugins.</para>
+      <para>Coordinate extraction plugins work with data from alternative
+      sources and transmit it to the editor plugin.</para>
 
       <section>
         <title>Google Map</title>
@@ -469,8 +473,8 @@
         <para>Clicking on the Google Map plugin opens a window that displays a
         map if the computer is connected to the Internet. The controls in the
         upper right corner of the map window allow you to display a map, a
-        satellite image, or a hybrid with a satellite image background with
-        map layers overlaid. The controls in the upper left corner of the
+        satellite image, or a hybrid view with a satellite image background
+        with map layers overlaid. The controls in the upper left corner of the
         window control zooming (<guibutton>+ </guibutton>and
         <guibutton>-</guibutton> buttons) and panning using the arrow buttons.
         You can also zoom into an area by double-clicking with the
@@ -484,7 +488,7 @@
         EXIF Editor</guilabel>. As long as the <guilabel>GPS EXIF
         Editor</guilabel> pane is open and you have selected a valid image to
         be geotagged you will see these coordinates appear in the “Longitude”
-        and “Latitude” fields.</para>
+        and “Latitude” fields below the map.</para>
 
         <para><screenshot>
             <info>
