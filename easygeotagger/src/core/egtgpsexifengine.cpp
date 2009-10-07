@@ -2080,7 +2080,7 @@ bool EgtGpsExifEngine::writeStatus( QString theValue )
 }
 
 /*!
- *\param theString a QString containing the time stamp to be written to the exif metadata. the format is ""hh:mm:ss"
+ *\param theString a QString containing the time stamp to be written to the exif metadata. the format is hh:mm:ss
  *\returns a boolean that indicates whether the operation was succcessful or not
  */
 bool EgtGpsExifEngine::writeTimeStamp( QString theString )
